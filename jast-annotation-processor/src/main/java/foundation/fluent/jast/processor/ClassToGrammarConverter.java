@@ -7,7 +7,6 @@ import foundation.fluent.jast.grammar.Symbol;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.TypeMirror;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class ClassToGrammarConverter {
     private final Map<String, Symbol> symbolMap = new HashMap<>();
 
     Symbol of(TypeMirror mirror) {
-        return symbolMap.computeIfAbsent(mirror.toString(), key -> new Symbol());
+        return symbolMap.computeIfAbsent(mirror.toString(), key -> new Symbol() {});
     }
 
     Rule ruleOf(ExecutableElement method) {

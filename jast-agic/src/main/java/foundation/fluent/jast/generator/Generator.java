@@ -33,7 +33,6 @@ public class Generator {
         processingSets.add(itemSet(grammar.rulesFor(grammar.getStart()).stream().map(rule -> new LrItem(0, rule, emptySet())).collect(toSet())));
         while(!processingSets.isEmpty()) {
             LrItemSet set = processingSets.poll();
-            Map<Symbol, Queue<LrItem>> subsets = new HashMap<>();
             set.transitionSymbols().forEach(symbol -> {
                 LrItemSet nextSet = itemSet(set.itemsFollowing(symbol));
                 if(itemSets.add(nextSet)) {
