@@ -1,6 +1,6 @@
 package foundation.fluent.jast.sample.parser;
 
-import foundation.fluent.jast.sample.ast.Root;
+import foundation.fluent.jast.sample.ast.Expression;
 import foundation.fluent.jast.sample.states.InitialState;
 import foundation.fluent.jast.sample.states.StateVisitor;
 import foundation.fluent.jast.sample.tokens.Token;
@@ -16,7 +16,7 @@ public class ParserTest {
 
     @Test
     public void testParse() {
-        Root root = new Parser<StateVisitor, Token>(new InitialState()).parse(new LinkedList<>(asList(
+        Expression expression = new Parser<StateVisitor, Token>(new InitialState()).parse(new LinkedList<>(asList(
                 LPAR,
                 LPAR,
                 IDENT,
@@ -32,6 +32,6 @@ public class ParserTest {
                 RPAR,
                 END
         ))).result();
-        System.out.println(root);
+        System.out.println(expression);
     }
 }

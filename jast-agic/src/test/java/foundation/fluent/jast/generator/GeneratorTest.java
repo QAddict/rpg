@@ -9,7 +9,7 @@ import static foundation.fluent.jast.generator.RuleBuilder.rule;
 
 public class GeneratorTest {
 
-    public enum Symbols implements Symbol { S, ε, A, a }
+    public enum Symbols implements Symbol { S, A, a }
 
     @Test
     public void testParser() {

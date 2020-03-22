@@ -1,15 +1,10 @@
 package foundation.fluent.jast.sample.ast;
 
-import foundation.fluent.jast.common.End;
 import foundation.fluent.jast.common.LPar;
 import foundation.fluent.jast.common.Plus;
 import foundation.fluent.jast.common.RPar;
 
 public class AstFactory {
-
-    public static Root root(Expression expression, End end) {
-        return new Root(expression);
-    }
 
     public static Expression expression(LPar l, Expression expression, RPar r) {
         return expression;

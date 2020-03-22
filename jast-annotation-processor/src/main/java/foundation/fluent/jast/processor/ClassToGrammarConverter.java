@@ -29,10 +29,8 @@ public class ClassToGrammarConverter {
     }
 
     Grammar grammar(ExecutableElement startRule) {
-        return new Grammar(
+        return Grammar.grammar(
                 of(startRule.getReturnType()),
-                emptySet(),
-                emptySet(),
                 methodsIn(startRule.getEnclosingElement().getEnclosedElements()).stream().map(this::ruleOf).collect(toSet())
         );
     }

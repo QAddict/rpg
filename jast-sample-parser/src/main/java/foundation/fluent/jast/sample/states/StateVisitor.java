@@ -7,7 +7,6 @@ import foundation.fluent.jast.common.RPar;
 import foundation.fluent.jast.parser.State;
 import foundation.fluent.jast.sample.ast.Expression;
 import foundation.fluent.jast.sample.ast.Identifier;
-import foundation.fluent.jast.sample.ast.Root;
 
 public class StateVisitor implements State {
 
@@ -39,15 +38,11 @@ public class StateVisitor implements State {
         return visitAny(symbol).visit(symbol);
     }
 
-    public StateVisitor visit(Root symbol) {
-        return visitAny(symbol).visit(symbol);
-    }
-
     public boolean accepted() {
         return false;
     }
 
-    public Root result() {
+    public Expression result() {
         throw new IllegalStateException(getClass().getSimpleName() + ": Result not available.");
     }
 

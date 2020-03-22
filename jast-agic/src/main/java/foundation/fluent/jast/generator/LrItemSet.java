@@ -1,28 +1,37 @@
 package foundation.fluent.jast.generator;
 
-import foundation.fluent.jast.grammar.Symbol;
-
 import java.util.*;
+
+import static java.util.stream.Collectors.joining;
 
 public class LrItemSet {
 
-    private final SortedSet<LrItem> closure;
-    private final Map<Symbol, Set<LrItem>> transitions = new HashMap<>();
-
-    public LrItemSet(Set<LrItem> base) {
-        this.closure = new TreeSet<>(base);
-    }
+    private final Set<LrItem> closure = new HashSet<>();
 
     public boolean add(LrItem item) {
         return this.closure.add(item);
     }
 
-    public Set<Symbol> transitionSymbols() {
-        return transitions.keySet();
+    public Set<LrItem> getItems() {
+        return closure;
     }
 
-    public Set<LrItem> itemsFollowing(Symbol symbol) {
-        return Collections.emptySet();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LrItemSet that = (LrItemSet) o;
+        return Objects.equals(closure, that.closure);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(closure);
+    }
+
+    @Override
+    public String toString() {
+        return closure.stream().map(Objects::toString).collect(joining(", "));
     }
 
 }
