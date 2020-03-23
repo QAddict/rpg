@@ -7,7 +7,7 @@ import static java.util.stream.Collectors.joining;
 public class LrItemSet {
 
     private final String name;
-    private final Set<LrItem> closure = new HashSet<>();
+    private final Set<LrItem> closure = new LinkedHashSet<>();
 
     public LrItemSet(String name) {
         this.name = name;

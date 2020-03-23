@@ -3,7 +3,7 @@ package foundation.fluent.jast.parser;
 import java.util.Deque;
 import java.util.function.UnaryOperator;
 
-public class Parser<S extends State, T extends UnaryOperator<S>> {
+public class Parser<S extends StateBase, T extends UnaryOperator<S>> {
 
     private final S initialState;
 

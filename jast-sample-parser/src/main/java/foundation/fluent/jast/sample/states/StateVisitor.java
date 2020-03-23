@@ -4,11 +4,11 @@ import foundation.fluent.jast.common.End;
 import foundation.fluent.jast.common.LPar;
 import foundation.fluent.jast.common.Plus;
 import foundation.fluent.jast.common.RPar;
-import foundation.fluent.jast.parser.State;
+import foundation.fluent.jast.parser.StateBase;
 import foundation.fluent.jast.sample.ast.Expression;
 import foundation.fluent.jast.sample.ast.Identifier;
 
-public class StateVisitor implements State {
+public class StateVisitor implements StateBase {
 
     public StateVisitor visitAny(Object object) {
         throw new IllegalStateException(getClass().getSimpleName() + ": Unexpected " + object.getClass().getSimpleName());

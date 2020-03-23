@@ -2,10 +2,7 @@ package foundation.fluent.jast.generator;
 
 import foundation.fluent.jast.grammar.Symbol;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
@@ -13,8 +10,8 @@ import static java.util.stream.Collectors.joining;
 public class LrParser {
 
     private final LrItemSet start;
-    private final Set<LrItemSet> sets = new HashSet<>();
-    private final Map<LrItemSet, Map<Symbol, LrAction>> actions = new HashMap<>();
+    private final Set<LrItemSet> sets = new LinkedHashSet<>();
+    private final Map<LrItemSet, Map<Symbol, LrAction>> actions = new LinkedHashMap<>();
 
     public LrParser(LrItemSet start) {
         this.start = start;
@@ -34,7 +31,7 @@ public class LrParser {
 
     private void action(LrItemSet from, Symbol symbol, LrAction action) {
         Map<Symbol, LrAction> actionMap = actions.computeIfAbsent(from, k -> new HashMap<>());
-        if(actionMap.containsKey(symbol)) throw new IllegalStateException("Conflict at: " + from + " for symbol: " + symbol);
+        if(actionMap.containsKey(symbol)) throw new IllegalStateException("Conflict at: " + from + " for symbol: " + symbol + "\n\nCurrent parser state:\n" + this);
         actionMap.put(symbol, action);
     }
 
@@ -47,6 +44,10 @@ public class LrParser {
 
     }
 
+    public Map<Symbol, LrAction> actionsFor(LrItemSet set) {
+        return actions.get(set);
+    }
+
     @Override
     public String toString() {
         return sets.stream().map(Object::toString).collect(joining("\n")) + "\n\n" +
@@ -54,8 +55,6 @@ public class LrParser {
     }
 
     public void accept(LrItemSet itemSet, LrItem lrItem) {
-        action(itemSet, new Symbol() {
-            @Override public String toString() { return ""; }
-        }, new LrAction.Accept(lrItem));
+        action(itemSet, Symbol.any, new LrAction.Accept(lrItem));
     }
 }

@@ -8,6 +8,7 @@ import foundation.fluent.jast.util.MapOfSets;
 import java.util.*;
 
 import static foundation.fluent.jast.generator.LrItem.lrItem;
+import static foundation.fluent.jast.grammar.Symbol.any;
 import static foundation.fluent.jast.grammar.Symbol.ε;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
@@ -33,14 +34,17 @@ public class Generator {
             for(Symbol symbol : grammar.getNonTerminals()) {
                 for(Rule rule : grammar.rulesFor(symbol)) {
                     if(rule.getRight().isEmpty()) {
-                        first.add(symbol, ε);
-                    } else for(Symbol s : rule.getRight()) {
-                        Set<Symbol> symbols = first.get(s);
-                        changed = first.add(symbol, symbols);
-                        if(!symbols.contains(ε)) {
-                            first.get(symbol).remove(ε);
-                            break;
+                        changed |= first.add(symbol, ε);
+                    } else {
+                        Set<Symbol> symbols = new LinkedHashSet<>();
+                        for(Symbol s : rule.getRight()) {
+                            symbols.addAll(first.get(s));
+                            if(!symbols.contains(ε)) {
+                                symbols.remove(ε);
+                                break;
+                            }
                         }
+                        changed |= first.add(symbol, symbols);
                     }
                 }
             }
@@ -49,7 +53,7 @@ public class Generator {
 
     public LrParser parser() {
         Queue<LrItemSet> processingSets = new LinkedList<>();
-        LrItemSet start = closure("0", grammar.rulesFor(grammar.getStart()).stream().map(rule -> lrItem(rule, emptySet())).collect(toSet()));
+        LrItemSet start = closure(any, grammar.rulesFor(grammar.getStart()).stream().map(rule -> lrItem(rule, emptySet())).collect(toSet()));
         LrParser parser = new LrParser(start);
         parser.addState(start);
         processingSets.add(start);
@@ -68,7 +72,7 @@ public class Generator {
                 }
             });
             transitions.forEach((transitionSymbol, baseSet) -> {
-                LrItemSet nextSet = closure("" + transitionSymbol + counters.compute(transitionSymbol, (s, i) -> isNull(i) ? 1 : i+1), baseSet);
+                LrItemSet nextSet = closure(transitionSymbol, baseSet);
                 parser.transition(set, transitionSymbol, nextSet);
                 if(parser.addState(nextSet)) {
                     processingSets.add(nextSet);
@@ -78,8 +82,8 @@ public class Generator {
         return parser;
     }
 
-    public LrItemSet closure(String name, Set<LrItem> base) {
-        LrItemSet lr1ItemSet = new LrItemSet(name);
+    public LrItemSet closure(Symbol symbol, Set<LrItem> base) {
+        LrItemSet lr1ItemSet = new LrItemSet("" + symbol + counters.compute(symbol, (s, i) -> isNull(i) ? 1 : i+1));
         Queue<LrItem> queue = new ArrayDeque<>(base);
         while(!queue.isEmpty()) {
             LrItem item = queue.poll();

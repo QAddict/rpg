@@ -3,6 +3,7 @@ package foundation.fluent.jast.grammar;
 import foundation.fluent.jast.util.MapOfSets;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -23,8 +24,8 @@ public class Grammar {
     }
 
     public static Grammar grammar(Symbol start, Set<Rule> rules) {
-        Set<Symbol> nonTerminals = rules.stream().map(Rule::getLeft).collect(toSet());
-        Set<Symbol> terminals = rules.stream().flatMap(rule -> rule.getRight().stream()).filter(symbol -> !nonTerminals.contains(symbol)).collect(toSet());
+        Set<Symbol> nonTerminals = rules.stream().map(Rule::getLeft).collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<Symbol> terminals = rules.stream().flatMap(rule -> rule.getRight().stream()).filter(symbol -> !nonTerminals.contains(symbol)).collect(Collectors.toCollection(LinkedHashSet::new));
         return new Grammar(start, terminals, nonTerminals, rules);
     }
 

@@ -9,31 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jast-annotation-processor</artifactId>
+    <artifactId>jast-sample-language</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>foundation.fluent.api</groupId>
-            <artifactId>jast-agic</artifactId>
+            <artifactId>jast-annotation-processor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>foundation.fluent.api</groupId>
-            <artifactId>jast-common</artifactId>
+            <artifactId>jast-parser</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <compilerArgument>-proc:none</compilerArgument>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

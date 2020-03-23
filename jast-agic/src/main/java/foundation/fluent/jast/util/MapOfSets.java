@@ -7,7 +7,7 @@ import static java.util.Collections.emptySet;
 
 public final class MapOfSets<K, V> {
 
-    private final Map<K, Set<V>> map = new HashMap<>();
+    private final Map<K, Set<V>> map = new LinkedHashMap<>();
 
     public Set<V> get(K key) {
         return getOrDefault(key, emptySet());
@@ -18,11 +18,11 @@ public final class MapOfSets<K, V> {
     }
 
     public boolean add(K key, V value) {
-        return map.computeIfAbsent(key, k -> new HashSet<>()).add(value);
+        return map.computeIfAbsent(key, k -> new LinkedHashSet<>()).add(value);
     }
 
     public boolean add(K key, Collection<V> value) {
-        return map.computeIfAbsent(key, k -> new HashSet<>()).addAll(value);
+        return map.computeIfAbsent(key, k -> new LinkedHashSet<>()).addAll(value);
     }
     public void forEach(BiConsumer<? super K, ? super Set<V>> consumer) {
         map.forEach(consumer);
