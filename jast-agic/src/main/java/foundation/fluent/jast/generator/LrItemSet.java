@@ -40,7 +40,7 @@ public class LrItemSet {
 
     @Override
     public String toString() {
-        return name + ": " + closure.stream().map(Objects::toString).collect(joining(", "));
+        return name + closure.stream().map(Objects::toString).collect(joining("\n\t", ": {\n\t", "\n}"));
     }
 
 }

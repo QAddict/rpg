@@ -1,12 +1,14 @@
 package foundation.fluent.jast.generator;
 
 import foundation.fluent.jast.grammar.Grammar;
+import foundation.fluent.jast.grammar.Rule;
 import foundation.fluent.jast.grammar.Symbol;
 import foundation.fluent.jast.util.MapOfSets;
 
 import java.util.*;
 
 import static foundation.fluent.jast.generator.LrItem.lrItem;
+import static foundation.fluent.jast.grammar.Symbol.ε;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;
@@ -24,17 +26,30 @@ public class Generator {
     }
 
     private void countFirst() {
-        grammar.getNonTerminals().forEach(symbol -> {
-            grammar.rulesFor(symbol).stream().filter(r -> r.getRight().size() > 0).map(r -> r.getRight().get(0)).filter(grammar.getTerminals()::contains).forEach(l -> {
-                first.add(symbol, l);
-            });
-        });
         grammar.getTerminals().forEach(symbol -> first.add(symbol, symbol));
+        boolean changed;
+        do {
+            changed = false;
+            for(Symbol symbol : grammar.getNonTerminals()) {
+                for(Rule rule : grammar.rulesFor(symbol)) {
+                    if(rule.getRight().isEmpty()) {
+                        first.add(symbol, ε);
+                    } else for(Symbol s : rule.getRight()) {
+                        Set<Symbol> symbols = first.get(s);
+                        changed = first.add(symbol, symbols);
+                        if(!symbols.contains(ε)) {
+                            first.get(symbol).remove(ε);
+                            break;
+                        }
+                    }
+                }
+            }
+        } while (changed);
     }
 
     public LrParser parser() {
         Queue<LrItemSet> processingSets = new LinkedList<>();
-        LrItemSet start = closure("InitialState", grammar.rulesFor(grammar.getStart()).stream().map(rule -> lrItem(rule, emptySet())).collect(toSet()));
+        LrItemSet start = closure("0", grammar.rulesFor(grammar.getStart()).stream().map(rule -> lrItem(rule, emptySet())).collect(toSet()));
         LrParser parser = new LrParser(start);
         parser.addState(start);
         processingSets.add(start);
@@ -76,8 +91,14 @@ public class Generator {
     }
 
     public Set<Symbol> follow(LrItem item) {
-        item = item.moveDot();
-        return item.isEnd() ? item.getLookahead() : first.get(item.symbolAtDot());
+        Set<Symbol> follow = new HashSet<>();
+        for(int i = item.getDot() + 1; i < item.getRule().getRight().size(); i++) {
+            follow.remove(ε);
+            follow.addAll(first.get(item.getRule().getRight().get(i)));
+            if(!follow.contains(ε)) return follow;
+        }
+        follow.addAll(item.getLookahead());
+        return follow;
     }
 
     public static LrParser generateParser(Grammar grammar) {

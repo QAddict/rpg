@@ -35,6 +35,14 @@ public final class LrItem implements Comparable<LrItem> {
         return lookahead;
     }
 
+    public int getDot() {
+        return dot;
+    }
+
+    public Rule getRule() {
+        return rule;
+    }
+
     public LrItem moveDot() {
         return new LrItem(dot + 1, rule, lookahead);
     }
@@ -62,11 +70,11 @@ public final class LrItem implements Comparable<LrItem> {
     public String toString() {
         StringJoiner j = new StringJoiner(" ");
         for(int i = 0; i < rule.getRight().size(); i++) {
-            if(i == dot) j.add(".");
+            if(i == dot) j.add("•");
             j.add(rule.getRight().get(i).toString());
         }
         if(dot == rule.getRight().size())
-            j.add(".");
+            j.add("•");
         return rule.getLeft() + " -> " + j + " " + lookahead;
     }
 

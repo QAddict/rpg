@@ -21,6 +21,9 @@ public final class MapOfSets<K, V> {
         return map.computeIfAbsent(key, k -> new HashSet<>()).add(value);
     }
 
+    public boolean add(K key, Collection<V> value) {
+        return map.computeIfAbsent(key, k -> new HashSet<>()).addAll(value);
+    }
     public void forEach(BiConsumer<? super K, ? super Set<V>> consumer) {
         map.forEach(consumer);
     }
