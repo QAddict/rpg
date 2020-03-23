@@ -10,7 +10,11 @@ public final class MapOfSets<K, V> {
     private final Map<K, Set<V>> map = new HashMap<>();
 
     public Set<V> get(K key) {
-        return map.getOrDefault(key, emptySet());
+        return getOrDefault(key, emptySet());
+    }
+
+    public Set<V> getOrDefault(K key, Set<V> defaultValue) {
+        return map.getOrDefault(key, defaultValue);
     }
 
     public boolean add(K key, V value) {

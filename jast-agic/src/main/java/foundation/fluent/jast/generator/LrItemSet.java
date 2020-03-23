@@ -6,7 +6,12 @@ import static java.util.stream.Collectors.joining;
 
 public class LrItemSet {
 
+    private final String name;
     private final Set<LrItem> closure = new HashSet<>();
+
+    public LrItemSet(String name) {
+        this.name = name;
+    }
 
     public boolean add(LrItem item) {
         return this.closure.add(item);
@@ -14,6 +19,10 @@ public class LrItemSet {
 
     public Set<LrItem> getItems() {
         return closure;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -31,7 +40,7 @@ public class LrItemSet {
 
     @Override
     public String toString() {
-        return closure.stream().map(Objects::toString).collect(joining(", "));
+        return name + ": " + closure.stream().map(Objects::toString).collect(joining(", "));
     }
 
 }
