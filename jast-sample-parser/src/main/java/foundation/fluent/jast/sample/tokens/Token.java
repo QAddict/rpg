@@ -14,6 +14,6 @@ public interface Token extends UnaryOperator<StateVisitor> {
     Token LPAR = current -> current.visit(LPar.SYMBOL);
     Token RPAR = current -> current.visit(RPar.SYMBOL);
     Token PLUS = current -> current.visit(Plus.SYMBOL);
-    Token IDENT = current -> current.visit(new Identifier("name"));
-    static Token ident(String name) {return current -> current.visit(new Identifier(name));}
+    Token IDENT = current -> current.visit(new Identifier("name", 0, 0));
+    static Token ident(String name, int line, int pos) {return current -> current.visit(new Identifier(name, line, pos));}
 }
