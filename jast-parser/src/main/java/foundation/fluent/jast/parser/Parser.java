@@ -3,7 +3,7 @@ package foundation.fluent.jast.parser;
 import java.util.Deque;
 import java.util.function.UnaryOperator;
 
-public class Parser<S extends StateBase, T extends UnaryOperator<S>> {
+public class Parser<S extends StateBase> {
 
     private final S initialState;
 
@@ -12,7 +12,7 @@ public class Parser<S extends StateBase, T extends UnaryOperator<S>> {
     }
 
 
-    public S parse(Deque<T> input) {
+    public S parse(Deque<? extends UnaryOperator<S>> input) {
         S state = initialState;
         while(!state.accepted() && !input.isEmpty()) {
             state = input.poll().apply(state);

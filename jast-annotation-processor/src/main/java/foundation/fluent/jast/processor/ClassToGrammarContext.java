@@ -8,29 +8,40 @@ import foundation.fluent.jast.grammar.Symbol;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.TypeMirror;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static foundation.fluent.jast.grammar.Rule.rule;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
 public class ClassToGrammarContext {
 
+    private final Set<String> usedNames = new HashSet<>();
+
+    private String uniqueName(TypeMirror typeMirror) {
+        String full = typeMirror.toString().replaceAll(">", "");
+        String s = Stream.of(full.split("<")).map(p -> p.substring(p.lastIndexOf(".") + 1)).collect(joining("Of"));
+        while(!usedNames.add(s)) {
+            s = s + "$";
+        }
+        return s;
+    }
+
     private static final class TypeSymbol implements Symbol {
         private final TypeMirror typeMirror;
+        private final String uniqueName;
 
-        private TypeSymbol(TypeMirror typeMirror) {
+        private TypeSymbol(TypeMirror typeMirror, String uniqueName) {
             this.typeMirror = typeMirror;
+            this.uniqueName = uniqueName;
         }
 
         @Override
         public String toString() {
-            String full = typeMirror.toString();
-            String raw = full.split("<")[0];
-            return raw.substring(raw.lastIndexOf(".") + 1) + Integer.toHexString(typeMirror.hashCode());
+            return uniqueName;
         }
     }
 
@@ -46,7 +57,7 @@ public class ClassToGrammarContext {
     }
 
     Symbol of(TypeMirror mirror) {
-        return symbolMap.computeIfAbsent(mirror.toString(), key -> new TypeSymbol(mirror));
+        return symbolMap.computeIfAbsent(mirror.toString(), key -> new TypeSymbol(mirror, uniqueName(mirror)));
     }
 
     Rule ruleOf(ExecutableElement method) {

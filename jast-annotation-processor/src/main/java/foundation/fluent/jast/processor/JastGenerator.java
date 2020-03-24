@@ -38,7 +38,37 @@ public class JastGenerator {
                 generateState(lrParser, set);
             }
         }
+        for(Symbol token : context.getGrammar().getTerminals()) {
+            generateToken(token);
+        }
+    }
 
+    private PrintWriter writer(String name) throws IOException {
+        return new PrintWriter(filer.createSourceFile(name).openWriter());
+    }
+
+    private void generateToken(Symbol symbol) {
+        try(PrintWriter w = writer("foundation.fluent.jast.Token" + symbol)) {
+            w.println("package foundation.fluent.jast;");
+            w.println();
+            w.println("import java.util.function.UnaryOperator;");
+            w.println("import javax.annotation.Generated;");
+            w.println();
+            w.println("@Generated(\"Generated token element wrapper for grammar parser.\")");
+            w.println("public class Token" + symbol + " implements UnaryOperator<State> {");
+            w.println("    private final " + context.symbolType(symbol) + " symbol;");
+            w.println();
+            w.println("    public Token" + symbol + "(" + context.symbolType(symbol) + " symbol) {");
+            w.println("        this.symbol = symbol;");
+            w.println("    }");
+            w.println();
+            w.println("    @Override public State apply(State state) {");
+            w.println("        return state.visit(symbol);");
+            w.println("    }");
+            w.println("}");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String chainedType(List<? extends VariableElement> parameters, int length, int noWildcard) {
@@ -53,16 +83,18 @@ public class JastGenerator {
     }
 
     private void generateState() {
-        try(PrintWriter w = new PrintWriter(filer.createSourceFile("foundation.fluent.jast.State").openWriter())) {
+        try(PrintWriter w = writer("foundation.fluent.jast.State")) {
             w.println("package foundation.fluent.jast;");
-            w.println("public class State implements foundation.fluent.jast.parser.StateBase {");
-            w.println("\tpublic State visitAny(Object symbol) {");
-            w.println("\t\tthrow new IllegalStateException(\"Unexpcted: \" + symbol + \". Expected: \");");
-            w.println("\t}");
+            w.println();
+            w.println("import javax.annotation.Generated;");
+            w.println();
+            w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
+            w.println("public class State extends foundation.fluent.jast.parser.StateBase {");
             for (Symbol symbol : context.getGrammar().getTerminals())
-                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return visitAny(symbol);}");
+                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return error(symbol);}");
             for (Symbol symbol : context.getGrammar().getNonTerminals())
-                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return visitAny(symbol);}");
+                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return error(symbol);}");
+            w.println("\tpublic " + context.symbolType(context.getGrammar().getStart()) + " result() {throw new IllegalStateException(\"End not reached.\");}");
             w.println("}");
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,7 +102,7 @@ public class JastGenerator {
     }
 
     private void generateStackState() {
-        try(PrintWriter w = new PrintWriter(filer.createSourceFile("foundation.fluent.jast.StackState").openWriter())) {
+        try(PrintWriter w = writer("foundation.fluent.jast.StackState")) {
             w.println("package foundation.fluent.jast;");
             w.println("public class StackState<T, P> extends State {");
             w.println();
@@ -95,10 +127,13 @@ public class JastGenerator {
 
     private void generateState(LrParser parser, LrItemSet set)  {
         LrItem longest = Collections.max(set.getItems());
-        try(PrintWriter w = new PrintWriter(filer.createSourceFile("foundation.fluent.jast.State" + context.stateClassName(set)).openWriter())) {
+        try(PrintWriter w = writer("foundation.fluent.jast.State" + context.stateClassName(set))) {
             w.println("package foundation.fluent.jast;");
             w.println("/*\n" + parser + "\n*/\n\n");
             int dot = longest.getDot();
+            w.println("import javax.annotation.Generated;");
+            w.println();
+            w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
             if(dot > 0) {
                 List<? extends VariableElement> parameters = context.methodOf(longest.getRule()).getParameters();
                 w.println("public class State" + set.getName() + " extends " + chainedType(parameters, dot) + " {");
@@ -132,10 +167,20 @@ public class JastGenerator {
                         w.println("\t}");
                     }
                     @Override public void visitAccept(LrItem item) {
+                        ExecutableElement method = context.methodOf(item.getRule());
+                        List<? extends VariableElement> parameters = method.getParameters();
+                        int size = parameters.size();
                         w.println("\t@Override public boolean accepted() {");
                         w.println("\t\treturn true;");
                         w.println("\t}");
-
+                        w.println();
+                        w.println("\tpublic " + context.symbolType(context.getGrammar().getStart()) + " result() {");
+                        w.println("\t\t" + chainedVar(parameters, size) + " stack0 = this;");
+                        for(int i = 1; i < size; i++) {
+                            w.println("\t\t" + chainedVar(parameters, size - i) + " stack" + i + " = stack" + (i - 1) + ".getPrev();");
+                        }
+                        w.println("\t\treturn " + methodName(method) + "(" + range(0, size).mapToObj(i -> "stack" + (size - i - 1) + ".getNode()").collect(joining(", ")) + ");");
+                        w.println("\t}");
                     }
                 });
             }

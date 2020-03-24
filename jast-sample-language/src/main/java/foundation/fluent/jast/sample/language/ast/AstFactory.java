@@ -10,7 +10,7 @@ public class AstFactory {
 
     @StartSymbol
     public static Program program(List<Statement> statements, End end) {
-        return new Program();
+        return new Program(statements);
     }
 
     public static List<Statement> statements() {
@@ -23,19 +23,23 @@ public class AstFactory {
     }
 
     public static Statement statement(Expression expression, Dot dot) {
-        return new ExpressionStatement();
+        return new ExpressionStatement(expression);
     }
 
-    public static Expression expression(Identifier identifier) {
+    public static Expression expression(Operand operand) {
+        return operand;
+    }
+
+    public static Expression expression(Expression left, Plus plus, Operand right) {
+        return new BinaryExpression(left, right);
+    }
+
+    public static Operand operand(Identifier identifier) {
         return identifier;
     }
 
-    public static Expression expression(Expression left, Plus plus, Identifier right) {
-        return new BinaryExpression();
-    }
-
-    public static Expression expression(LPar l, Expression expression, RPar r) {
-        return expression;
+    public static Operand expression(LPar l, Expression expression, RPar r) {
+        return (Operand) expression;
     }
 
 }
