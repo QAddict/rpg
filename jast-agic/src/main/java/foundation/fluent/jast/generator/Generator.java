@@ -82,13 +82,17 @@ public class Generator {
         return parser;
     }
 
+    private boolean notMultipleRecursion(LrItem item, Rule rule) {
+        return !item.getRule().equals(rule) || rule.getRight().indexOf(rule.getLeft()) >= item.getDot();
+    }
+
     public LrItemSet closure(Symbol symbol, Set<LrItem> base) {
         LrItemSet lr1ItemSet = new LrItemSet("" + symbol + counters.compute(symbol, (s, i) -> isNull(i) ? 1 : i+1));
         Queue<LrItem> queue = new ArrayDeque<>(base);
         while(!queue.isEmpty()) {
             LrItem item = queue.poll();
             if(lr1ItemSet.add(item) && !item.isEnd()) {
-                grammar.rulesFor(item.symbolAtDot()).stream().map(rule -> lrItem(rule, follow(item))).forEach(queue::add);
+                grammar.rulesFor(item.symbolAtDot()).stream().filter(r -> notMultipleRecursion(item, r)).map(rule -> lrItem(rule, follow(item))).forEach(queue::add);
             }
         }
         return lr1ItemSet;

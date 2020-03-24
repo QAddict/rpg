@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 
+import static java.lang.Character.*;
+
 public class Lexer implements Iterator<Token> {
 
     private final Reader reader;
@@ -32,6 +34,7 @@ public class Lexer implements Iterator<Token> {
     @Override
     public Token next() {
         int state = 0;
+        StringBuilder builder = new StringBuilder();
         do {
             switch(state) {
                 case 0:
@@ -41,11 +44,11 @@ public class Lexer implements Iterator<Token> {
                         case ')': state = 3; break;
                         case '+': state = 4; break;
                         default:
-                            if(Character.isJavaIdentifierStart(lookahead)) {
+                            if(isJavaIdentifierStart(lookahead)) {
                                 state = 5;
                                 break;
                             }
-                            if(!Character.isWhitespace(lookahead)) {
+                            if(!isWhitespace(lookahead)) {
                                 throw new IllegalStateException("Unexpected character: " + (char) lookahead);
                             }
                     }
@@ -55,9 +58,10 @@ public class Lexer implements Iterator<Token> {
                 case 3: return Token.RPAR;
                 case 4: return Token.PLUS;
                 case 5:
-                    if(!Character.isJavaIdentifierPart(lookahead))
-                        return Token.IDENT;
+                    if(!isJavaIdentifierPart(lookahead))
+                        return Token.ident(builder.toString());
             }
+            builder.append((char) lookahead);
             move();
         } while (true);
     }

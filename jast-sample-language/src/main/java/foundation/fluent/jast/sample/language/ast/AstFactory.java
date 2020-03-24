@@ -30,16 +30,16 @@ public class AstFactory {
         return operand.getExpression();
     }
 
-    public static Expression expression(Expression left, Plus plus, Operand right) {
-        return new BinaryExpression(left, right.getExpression());
+    public static Expression expression(Expression left, Plus plus, Expression right) {
+        return new BinaryExpression(left, right);
     }
 
-    public static Operand operand(Identifier identifier) {
-        return new Operand(identifier);
+    public static Expression operand(Identifier identifier) {
+        return identifier;
     }
 
-    public static Operand expression(LPar l, Expression expression, RPar r) {
-        return new Operand(expression);
+    public static Expression expression(LPar l, Expression expression, RPar r) {
+        return expression;
     }
 
     public void ignore(WhiteSpace w) {}
