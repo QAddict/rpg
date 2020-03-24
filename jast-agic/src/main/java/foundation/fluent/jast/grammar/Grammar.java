@@ -5,6 +5,7 @@ import foundation.fluent.jast.util.MapOfSets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 
 public class Grammar {
@@ -49,4 +50,8 @@ public class Grammar {
         return rulesBySymbol.get(symbol);
     }
 
+    @Override
+    public String toString() {
+        return "N = " + nonTerminals + "\nT = " + terminals + "\nS = " + start + "\nR = {\n\t" + rules.stream().map(Objects::toString).collect(joining("\n\t")) + "\n}";
+    }
 }

@@ -26,7 +26,15 @@ public class JastProcessor extends AbstractProcessor implements Consumer<Executa
     public void accept(ExecutableElement element) {
         try {
             ClassToGrammarContext context = new ClassToGrammarContext(element);
+            System.out.println("Grammar generated from class: " + element.getEnclosingElement());
+            System.out.println(context.getGrammar());
+            System.out.println();
+            System.out.println();
             LrParser parser = generateParser(context.getGrammar());
+            System.out.println("Parser description generated from grammar:\n\n");
+            System.out.println(parser);
+            System.out.println();
+            System.out.println();
             new JastGenerator(processingEnv.getFiler(), context).generateSources(parser);
         } catch (RuntimeException | Error e) {
             e.printStackTrace();

@@ -73,10 +73,10 @@ public class Generator {
             });
             transitions.forEach((transitionSymbol, baseSet) -> {
                 LrItemSet nextSet = closure(transitionSymbol, baseSet);
-                parser.transition(set, transitionSymbol, nextSet);
                 if(parser.addState(nextSet)) {
                     processingSets.add(nextSet);
                 }
+                parser.transition(set, transitionSymbol, nextSet);
             });
         }
         return parser;

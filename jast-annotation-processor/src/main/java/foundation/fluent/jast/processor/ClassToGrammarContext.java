@@ -28,7 +28,9 @@ public class ClassToGrammarContext {
 
         @Override
         public String toString() {
-            return typeMirror.toString().substring(typeMirror.toString().lastIndexOf(".") + 1);
+            String full = typeMirror.toString();
+            String raw = full.split("<")[0];
+            return raw.substring(raw.lastIndexOf(".") + 1) + Integer.toHexString(typeMirror.hashCode());
         }
     }
 

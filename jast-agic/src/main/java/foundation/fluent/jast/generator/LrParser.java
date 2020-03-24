@@ -10,7 +10,7 @@ import static java.util.stream.Collectors.joining;
 public class LrParser {
 
     private final LrItemSet start;
-    private final Set<LrItemSet> sets = new LinkedHashSet<>();
+    private final Map<LrItemSet, LrItemSet> sets = new LinkedHashMap<>();
     private final Map<LrItemSet, Map<Symbol, LrAction>> actions = new LinkedHashMap<>();
 
     public LrParser(LrItemSet start) {
@@ -18,7 +18,7 @@ public class LrParser {
     }
 
     public boolean addState(LrItemSet itemSet) {
-        return sets.add(itemSet);
+        return sets.putIfAbsent(itemSet, itemSet) == null;
     }
 
     public LrItemSet getStart() {
@@ -26,7 +26,7 @@ public class LrParser {
     }
 
     public Set<LrItemSet> getSets() {
-        return sets;
+        return sets.keySet();
     }
 
     private void action(LrItemSet from, Symbol symbol, LrAction action) {
@@ -36,7 +36,7 @@ public class LrParser {
     }
 
     public void transition(LrItemSet from, Symbol symbol, LrItemSet to) {
-        action(from, symbol, new LrAction.Goto(to));
+        action(from, symbol, new LrAction.Goto(sets.get(to)));
     }
 
     public void reduction(LrItemSet from, Symbol lookahead, LrItem item) {
@@ -50,7 +50,7 @@ public class LrParser {
 
     @Override
     public String toString() {
-        return sets.stream().map(Object::toString).collect(joining("\n")) + "\n\n" +
+        return getSets().stream().map(Object::toString).collect(joining("\n")) + "\n\n" +
                 actions.entrySet().stream().flatMap(entry -> entry.getValue().entrySet().stream().map(transition -> entry.getKey().getName() + ": " + transition.getKey() + " -> " + transition.getValue())).collect(Collectors.joining("\n"));
     }
 

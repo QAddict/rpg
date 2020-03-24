@@ -17,7 +17,6 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
-import static java.util.stream.IntStream.rangeClosed;
 
 public class JastGenerator {
 
@@ -98,13 +97,14 @@ public class JastGenerator {
         LrItem longest = Collections.max(set.getItems());
         try(PrintWriter w = new PrintWriter(filer.createSourceFile("foundation.fluent.jast.State" + context.stateClassName(set)).openWriter())) {
             w.println("package foundation.fluent.jast;");
+            w.println("/*\n" + parser + "\n*/\n\n");
             int dot = longest.getDot();
             if(dot > 0) {
                 List<? extends VariableElement> parameters = context.methodOf(longest.getRule()).getParameters();
                 w.println("public class State" + set.getName() + " extends " + chainedType(parameters, dot) + " {");
-                w.println("\tpublic State" + set.getName() + "(" + parameters.get(dot - 1).asType() + " node, " + chainedVar(parameters, dot - 1) + " prev) {");
-                w.println("\t\tsuper(node, prev);");
-                w.println("\t}");
+                w.println("    public State" + set.getName() + "(" + parameters.get(dot - 1).asType() + " node, " + chainedVar(parameters, dot - 1) + " prev) {");
+                w.println("        super(node, prev);");
+                w.println("    }");
             } else {
                 w.println("public class State" + set.getName() + " extends State {");
             }
