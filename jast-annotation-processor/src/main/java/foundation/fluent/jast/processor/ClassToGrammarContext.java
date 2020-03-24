@@ -6,10 +6,10 @@ import foundation.fluent.jast.grammar.Rule;
 import foundation.fluent.jast.grammar.Symbol;
 
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static foundation.fluent.jast.grammar.Rule.rule;
@@ -50,9 +50,19 @@ public class ClassToGrammarContext {
     private final Grammar grammar;
 
     public ClassToGrammarContext(ExecutableElement startRule) {
+        Set<Rule> rules = new LinkedHashSet<>();
+        Set<Symbol> ignored = new LinkedHashSet<>();
+        methodsIn(startRule.getEnclosingElement().getEnclosedElements()).forEach(method -> {
+            if(method.getReturnType().getKind().equals(TypeKind.VOID)) {
+                method.getParameters().forEach(p -> ignored.add(of(p.asType())));
+            } else {
+                rules.add(ruleOf(method));
+            }
+        });
         grammar = Grammar.grammar(
                 of(startRule.getReturnType()),
-                methodsIn(startRule.getEnclosingElement().getEnclosedElements()).stream().map(this::ruleOf).collect(Collectors.toCollection(LinkedHashSet::new))
+                rules,
+                ignored
         );
     }
 

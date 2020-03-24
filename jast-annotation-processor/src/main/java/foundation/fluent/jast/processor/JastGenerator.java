@@ -41,6 +41,9 @@ public class JastGenerator {
         for(Symbol token : context.getGrammar().getTerminals()) {
             generateToken(token);
         }
+        for(Symbol token : context.getGrammar().getIgnored()) {
+            generateToken(token);
+        }
     }
 
     private PrintWriter writer(String name) throws IOException {
@@ -90,6 +93,8 @@ public class JastGenerator {
             w.println();
             w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
             w.println("public class State extends foundation.fluent.jast.parser.StateBase {");
+            for (Symbol symbol : context.getGrammar().getIgnored())
+                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return this;}");
             for (Symbol symbol : context.getGrammar().getTerminals())
                 w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return error(symbol);}");
             for (Symbol symbol : context.getGrammar().getNonTerminals())

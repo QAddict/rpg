@@ -3,9 +3,9 @@ package foundation.fluent.jast.sample.language.ast;
 public class BinaryExpression implements Expression {
 
     private final Expression left;
-    private final Operand right;
+    private final Expression right;
 
-    public BinaryExpression(Expression left, Operand right) {
+    public BinaryExpression(Expression left, Expression right) {
         this.left = left;
         this.right = right;
     }

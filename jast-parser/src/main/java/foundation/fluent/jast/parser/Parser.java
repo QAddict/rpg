@@ -1,6 +1,6 @@
 package foundation.fluent.jast.parser;
 
-import java.util.Deque;
+import java.util.Iterator;
 import java.util.function.UnaryOperator;
 
 public class Parser<S extends StateBase> {
@@ -12,10 +12,10 @@ public class Parser<S extends StateBase> {
     }
 
 
-    public S parse(Deque<? extends UnaryOperator<S>> input) {
+    public S parse(Iterator<? extends UnaryOperator<S>> input) {
         S state = initialState;
-        while(!state.accepted() && !input.isEmpty()) {
-            state = input.poll().apply(state);
+        while(!state.accepted() && input.hasNext()) {
+            state = input.next().apply(state);
         }
         return state;
     }

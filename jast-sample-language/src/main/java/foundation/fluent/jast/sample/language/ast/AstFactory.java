@@ -27,19 +27,23 @@ public class AstFactory {
     }
 
     public static Expression expression(Operand operand) {
-        return operand;
+        return operand.getExpression();
     }
 
     public static Expression expression(Expression left, Plus plus, Operand right) {
-        return new BinaryExpression(left, right);
+        return new BinaryExpression(left, right.getExpression());
     }
 
     public static Operand operand(Identifier identifier) {
-        return identifier;
+        return new Operand(identifier);
     }
 
     public static Operand expression(LPar l, Expression expression, RPar r) {
-        return (Operand) expression;
+        return new Operand(expression);
     }
+
+    public void ignore(WhiteSpace w) {}
+
+    public void ignore(Comment c) {}
 
 }
