@@ -15,7 +15,8 @@ public class Parser<S extends StateBase> {
     public S parse(Iterator<? extends UnaryOperator<S>> input) {
         S state = initialState;
         while(!state.accepted() && input.hasNext()) {
-            state = input.next().apply(state);
+            UnaryOperator<S> next = input.next();
+            state = next.apply(state);
         }
         return state;
     }
