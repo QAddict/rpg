@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("(")
-public final class LPar extends Operator {
+public final class LPar extends Keyword {
     public static final LPar SYMBOL = new LPar();
     private LPar() {}
 }

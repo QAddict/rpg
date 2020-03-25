@@ -29,7 +29,8 @@
 
 package foundation.fluent.jast.common;
 
-public class Operator {
-    private final String string = getClass().getAnnotation(Token.class).value();
-    @Override public String toString() { return string; }
+@Token("?")
+public class Quest extends Keyword {
+    public static final Quest SYMBOL = new Quest();
+    private Quest() {}
 }

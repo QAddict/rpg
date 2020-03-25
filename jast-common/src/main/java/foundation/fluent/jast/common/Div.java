@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("/")
-public class Div extends Operator {
+public class Div extends Keyword {
     public static final Div SYMBOL = new Div();
     private Div() {}
 }

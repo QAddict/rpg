@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token(".")
-public final class Dot extends Operator {
+public final class Dot extends Keyword {
     public static final Dot SYMBOL = new Dot();
     private Dot() {}
 }

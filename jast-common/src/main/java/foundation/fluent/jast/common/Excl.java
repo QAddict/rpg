@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("!")
-public class Excl extends Operator {
+public class Excl extends Keyword {
     public static final Excl SYMBOL = new Excl();
     private Excl() {}
 }

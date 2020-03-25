@@ -27,10 +27,12 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast;
 
-@Token("--")
-public class MinusMinus extends Keyword {
-    public static final MinusMinus SYMBOL = new MinusMinus();
-    private MinusMinus() {}
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
+@Target({ElementType.METHOD, ElementType.TYPE})
+public @interface RulePriority {
+    int value();
 }

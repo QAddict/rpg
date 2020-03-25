@@ -69,9 +69,9 @@ public class Generator {
                         for(Symbol s : rule.getRight()) {
                             symbols.addAll(first.get(s));
                             if(!symbols.contains(ε)) {
-                                symbols.remove(ε);
                                 break;
                             }
+                            symbols.remove(ε);
                         }
                         changed |= first.add(symbol, symbols);
                     }
@@ -111,17 +111,13 @@ public class Generator {
         return parser;
     }
 
-    private boolean notMultipleRecursion(LrItem item, Rule rule) {
-        return !item.getRule().equals(rule) || rule.getRight().indexOf(rule.getLeft()) >= item.getDot();
-    }
-
     public LrItemSet closure(Symbol symbol, Set<LrItem> base) {
         LrItemSet lr1ItemSet = new LrItemSet("" + symbol + counters.compute(symbol, (s, i) -> isNull(i) ? 1 : i+1));
         Queue<LrItem> queue = new ArrayDeque<>(base);
         while(!queue.isEmpty()) {
             LrItem item = queue.poll();
             if(lr1ItemSet.add(item) && !item.isEnd()) {
-                grammar.rulesFor(item.symbolAtDot()).stream().filter(r -> notMultipleRecursion(item, r)).map(rule -> lrItem(rule, follow(item))).forEach(queue::add);
+                grammar.rulesFor(item.symbolAtDot()).stream().map(rule -> lrItem(rule, follow(item))).forEach(queue::add);
             }
         }
         return lr1ItemSet;
@@ -130,9 +126,9 @@ public class Generator {
     public Set<Symbol> follow(LrItem item) {
         Set<Symbol> follow = new HashSet<>();
         for(int i = item.getDot() + 1; i < item.getRule().getRight().size(); i++) {
-            follow.remove(ε);
             follow.addAll(first.get(item.getRule().getRight().get(i)));
             if(!follow.contains(ε)) return follow;
+            follow.remove(ε);
         }
         follow.addAll(item.getLookahead());
         return follow;

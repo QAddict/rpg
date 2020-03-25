@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token(")")
-public class RPar extends Operator {
+public class RPar extends Keyword {
     public static final RPar SYMBOL = new RPar();
     private RPar() {}
 }

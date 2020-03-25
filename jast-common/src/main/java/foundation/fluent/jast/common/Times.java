@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("*")
-public class Times extends Operator {
+public class Times extends Keyword {
     public static final Times SYMBOL = new Times();
     private Times() {}
 

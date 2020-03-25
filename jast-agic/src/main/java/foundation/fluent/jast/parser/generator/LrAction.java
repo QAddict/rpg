@@ -32,6 +32,7 @@ package foundation.fluent.jast.parser.generator;
 public interface LrAction {
 
     void accept(LrActionVisitor visitor);
+    int priority();
 
     interface LrActionVisitor {
         void visitGoto(LrItemSet set);
@@ -55,6 +56,11 @@ public interface LrAction {
         public void accept(LrActionVisitor visitor) {
             visitor.visitGoto(to);
         }
+
+        @Override
+        public int priority() {
+            return 0;
+        }
     }
 
     class Reduce implements LrAction {
@@ -73,6 +79,11 @@ public interface LrAction {
         public void accept(LrActionVisitor visitor) {
             visitor.visitReduction(item);
         }
+
+        @Override
+        public int priority() {
+            return item.getRule().getPriority();
+        }
     }
 
     class Accept implements LrAction {
@@ -90,6 +101,11 @@ public interface LrAction {
         @Override
         public void accept(LrActionVisitor visitor) {
             visitor.visitAccept(item);
+        }
+
+        @Override
+        public int priority() {
+            return item.getRule().getPriority();
         }
     }
 }

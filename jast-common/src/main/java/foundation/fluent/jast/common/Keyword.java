@@ -29,8 +29,7 @@
 
 package foundation.fluent.jast.common;
 
-@Token("--")
-public class MinusMinus extends Keyword {
-    public static final MinusMinus SYMBOL = new MinusMinus();
-    private MinusMinus() {}
+public class Keyword {
+    private final String string = getClass().getAnnotation(Token.class).value();
+    @Override public String toString() { return string; }
 }

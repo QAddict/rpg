@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("=")
-public final class Equal extends Operator {
+public final class Equal extends Keyword {
     public static final Equal SYMBOL = new Equal();
     private Equal() {}
 }

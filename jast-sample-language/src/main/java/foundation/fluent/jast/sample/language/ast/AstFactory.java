@@ -29,12 +29,14 @@
 
 package foundation.fluent.jast.sample.language.ast;
 
+import foundation.fluent.jast.RulePriority;
 import foundation.fluent.jast.StartSymbol;
 import foundation.fluent.jast.common.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RulePriority(1)
 public class AstFactory {
 
     @StartSymbol

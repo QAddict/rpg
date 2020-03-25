@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token(";")
-public final class Semicolon extends Operator {
+public final class Semicolon extends Keyword {
     public static final Semicolon SYMBOL = new Semicolon();
     private Semicolon() {}
 }

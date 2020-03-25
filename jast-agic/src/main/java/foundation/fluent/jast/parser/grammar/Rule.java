@@ -39,10 +39,16 @@ public final class Rule {
 
     private final Symbol left;
     private final List<Symbol> right;
+    private final int priority;
 
-    public Rule(Symbol left, List<Symbol> right) {
+    public Rule(Symbol left, List<Symbol> right, int priority) {
         this.left = left;
         this.right = unmodifiableList(new ArrayList<>(right));
+        this.priority = priority;
+    }
+
+    public Rule(Symbol left, List<Symbol> right) {
+        this(left, right, 0);
     }
 
     public Symbol getLeft() {
@@ -53,9 +59,14 @@ public final class Rule {
         return right;
     }
 
-    public static Rule rule(Symbol left, List<Symbol> right) {
-        return new Rule(left, right);
+    public static Rule rule(Symbol left, List<Symbol> right, int priority) {
+        return new Rule(left, right, priority);
     }
+
+    public static Rule rule(Symbol left, List<Symbol> right) {
+        return new Rule(left, right, 0);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -75,4 +86,7 @@ public final class Rule {
         return left + " -> " + right;
     }
 
+    public int getPriority() {
+        return priority;
+    }
 }

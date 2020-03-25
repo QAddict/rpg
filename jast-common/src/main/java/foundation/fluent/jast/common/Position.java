@@ -29,8 +29,38 @@
 
 package foundation.fluent.jast.common;
 
-@Token("--")
-public class MinusMinus extends Keyword {
-    public static final MinusMinus SYMBOL = new MinusMinus();
-    private MinusMinus() {}
+public class Position {
+    private final String fileName;
+    private int line = 0;
+    private int character = 0;
+
+    public Position(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void move(char character) {
+        if(character == '\n') {
+            line++;
+            this.character = 0;
+        }
+        this.character++;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getCharacter() {
+        return character;
+    }
+
+    @Override
+    public String toString() {
+        return fileName + ": line: " + line + ", character: " + character;
+    }
+
 }

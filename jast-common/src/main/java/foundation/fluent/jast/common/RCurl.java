@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("}")
-public final class RCurl extends Operator {
+public final class RCurl extends Keyword {
     public static final RCurl SYMBOL = new RCurl();
     private RCurl() {}
 }

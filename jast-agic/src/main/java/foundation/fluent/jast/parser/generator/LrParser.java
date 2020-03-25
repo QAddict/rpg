@@ -60,7 +60,17 @@ public class LrParser {
 
     private void action(LrItemSet from, Symbol symbol, LrAction action) {
         Map<Symbol, LrAction> actionMap = actions.computeIfAbsent(from, k -> new HashMap<>());
-        if(actionMap.containsKey(symbol)) throw new IllegalStateException("Conflict at: " + from + " for symbol: " + symbol + "\n\nCurrent parser state:\n" + this);
+        // Help resolve Shift / Reduce, Reduce / Reduce conflicts with rule priorities.
+        if(actionMap.containsKey(symbol)) {
+            LrAction currentAction = actionMap.get(symbol);
+            if(action.priority() == currentAction.priority()) {
+                throw new IllegalStateException("Conflict at: " + from + " for symbol: " + symbol + ": " + currentAction + " / " + action + "\n\nCurrent parser state:\n" + this);
+            }
+            System.out.println("Resolving conflict using priority at: " + from + " for symbol: " + symbol + ": " + currentAction + " (priority=" + currentAction.priority() + ") / " + action + " (priority=" + action.priority() + ")");
+            if(action.priority() > currentAction.priority()) {
+                actionMap.put(symbol, action);
+            }
+        }
         actionMap.put(symbol, action);
     }
 
@@ -70,7 +80,6 @@ public class LrParser {
 
     public void reduction(LrItemSet from, Symbol lookahead, LrItem item) {
         action(from, lookahead, new LrAction.Reduce(item));
-
     }
 
     public Map<Symbol, LrAction> actionsFor(LrItemSet set) {

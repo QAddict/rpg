@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token(",")
-public final class Comma extends Operator {
+public final class Comma extends Keyword {
     public static final Comma SYMBOL = new Comma();
     private Comma() {}
 }

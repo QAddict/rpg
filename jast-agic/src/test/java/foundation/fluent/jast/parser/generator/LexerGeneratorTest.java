@@ -33,22 +33,52 @@ import foundation.fluent.jast.parser.grammar.Grammar;
 import foundation.fluent.jast.parser.grammar.Symbol;
 import org.testng.annotations.Test;
 
-import static foundation.fluent.jast.parser.generator.GeneratorTest.Symbols.*;
+import static foundation.fluent.jast.parser.generator.LexerGeneratorTest.Ch.*;
+import static foundation.fluent.jast.parser.generator.LexerGeneratorTest.T.*;
 import static foundation.fluent.jast.parser.generator.RuleBuilder.of;
 import static foundation.fluent.jast.parser.generator.RuleBuilder.rule;
+import static foundation.fluent.jast.parser.grammar.Symbol.ε;
 import static java.util.Collections.emptySet;
 
-public class GeneratorTest {
+public class LexerGeneratorTest {
 
-    public enum Symbols implements Symbol { S, A, a }
+
+    public enum Ch implements Symbol {
+        t,h,i,s,eq,dot,lp,rp
+    }
+
+    public enum Kw implements Symbol {
+        THIS
+    }
+
+    public enum T implements Symbol {
+        IDENT, IDEN_CONT, Sa, S
+    }
+
+    public enum C implements Symbol {
+        AL, ALNUM
+    }
+
+    public enum Op implements Symbol {
+        EQ, DOT, LP, RP
+    }
 
     @Test
-    public void testParser() {
-        Grammar grammar = new Grammar(S, of(ε, a), of(S, A), of(
-                rule(S).to(A, ε),
-                rule(A).to(a, A)
+    public void testLexer() {
+        Grammar grammar = Grammar.grammar(S, of(
+                rule(S).priority(-1).to(T.IDENT),
+                rule(S).priority(-1).to(Kw.THIS),
+                rule(S).priority(-1).to(Op.EQ),
+                rule(Op.EQ).priority(-1).to(eq),
+                rule(T.IDENT).priority(-2).to(C.AL, T.IDEN_CONT),
+                rule(T.IDENT).priority(-2).to(t, T.IDEN_CONT),
+                rule(T.IDEN_CONT).priority(-2).to(C.ALNUM, T.IDEN_CONT),
+                rule(T.IDEN_CONT).priority(-2).to(h, T.IDEN_CONT),
+                rule(T.IDEN_CONT).priority(-2).to(i, T.IDEN_CONT),
+                rule(T.IDEN_CONT).priority(-2).to(s, T.IDEN_CONT),
+                rule(Kw.THIS).priority(-1).to(t,h,i,s)
         ), emptySet());
-        LrParser parser = Generator.generateParser(grammar);
+        LrParser parser = new Generator(grammar).parser();
         System.out.println(parser);
     }
 

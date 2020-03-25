@@ -95,7 +95,7 @@ public class JastGenerator {
             w.println("    }");
             w.println();
             w.println("    @Override public State apply(State state) {");
-            w.println("        return state.visit(symbol);");
+            w.println("        return state.visit" + symbol + "(symbol);");
             w.println("    }");
             w.println("}");
         } catch (IOException e) {
@@ -123,12 +123,12 @@ public class JastGenerator {
             w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
             w.println("public class State extends foundation.fluent.jast.parser.StateBase {");
             for (Symbol symbol : context.getGrammar().getIgnored())
-                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return this;}");
+                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) {\n\t\treturn this;\n\t}\n");
             for (Symbol symbol : context.getGrammar().getTerminals())
-                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return error(symbol);}");
+                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) {\n\t\treturn error(symbol);\n\t}\n");
             for (Symbol symbol : context.getGrammar().getNonTerminals())
-                w.println("\tpublic State visit(" + context.symbolType(symbol) + " symbol) {return error(symbol);}");
-            w.println("\tpublic " + context.symbolType(context.getGrammar().getStart()) + " result() {throw new IllegalStateException(\"End not reached.\");}");
+                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) {\n\t\treturn error(symbol);\n\t}\n");
+            w.println("\tpublic " + context.symbolType(context.getGrammar().getStart()) + " result() {\n\t\tthrow new IllegalStateException(\"End not reached.\");\n\t}");
             w.println("}");
         } catch (IOException e) {
             e.printStackTrace();
@@ -180,7 +180,7 @@ public class JastGenerator {
             for(Map.Entry<Symbol, LrAction> entry : parser.actionsFor(set).entrySet()) {
                 entry.getValue().accept(new LrAction.LrActionVisitor() {
                     @Override public void visitGoto(LrItemSet set) {
-                        w.println("\t@Override public State visit(" + context.symbolType(entry.getKey()) + " symbol) {");
+                        w.println("\t@Override public State visit" + entry.getKey() + "(" + context.symbolType(entry.getKey()) + " symbol) {");
                         w.println("\t\treturn new State" + context.stateClassName(set) + "(symbol, this);");
                         w.println("\t}");
                     }
@@ -188,15 +188,15 @@ public class JastGenerator {
                         ExecutableElement method = context.methodOf(item.getRule());
                         List<? extends VariableElement> parameters = method.getParameters();
                         int size = parameters.size();
-                        w.println("\t@Override public State visit(" + context.symbolType(entry.getKey()) + " symbol) {");
+                        w.println("\t@Override public State visit" + entry.getKey() +"(" + context.symbolType(entry.getKey()) + " symbol) {");
                         if(parameters.isEmpty()) {
-                            w.println("\t\treturn visit(" + methodName(method) + "()).visit(symbol);");
+                            w.println("\t\treturn visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "()).visit" + entry.getKey() + "(symbol);");
                         } else {
                             w.println("\t\t" + chainedVar(parameters, size) + " stack0 = this;");
                             for(int i = 1; i < size; i++) {
                                 w.println("\t\t" + chainedVar(parameters, size - i) + " stack" + i + " = stack" + (i - 1) + ".getPrev();");
                             }
-                            w.println("\t\treturn stack" + (size - 1) + ".getPrev().visit(" + methodName(method) + "(" + range(0, size).mapToObj(i -> "stack" + (size - i - 1) + ".getNode()").collect(joining(", ")) + ")).visit(symbol);");
+                            w.println("\t\treturn stack" + (size - 1) + ".getPrev().visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "(" + range(0, size).mapToObj(i -> "stack" + (size - i - 1) + ".getNode()").collect(joining(", ")) + ")).visit" + entry.getKey() + "(symbol);");
                         }
                         w.println("\t}");
                     }

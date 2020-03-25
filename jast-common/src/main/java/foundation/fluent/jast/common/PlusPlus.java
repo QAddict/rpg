@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("+")
-public class PlusPlus extends Operator {
+public class PlusPlus extends Keyword {
     public static final PlusPlus SYMBOL = new PlusPlus();
     private PlusPlus() {}
 }

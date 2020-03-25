@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("{")
-public final class LCurl extends Operator {
+public final class LCurl extends Keyword {
     public static final LCurl SYMBOL = new LCurl();
     private LCurl() {}
 }

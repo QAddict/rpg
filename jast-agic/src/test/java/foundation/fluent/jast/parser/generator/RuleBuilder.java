@@ -33,20 +33,29 @@ import foundation.fluent.jast.parser.grammar.Rule;
 import foundation.fluent.jast.parser.grammar.Symbol;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toSet;
 
 public interface RuleBuilder {
 
     Rule to(Symbol... right);
 
-    static RuleBuilder rule(Symbol left) {
-        return right -> new Rule(left, asList(right));
+    static PriorityBuilder rule(Symbol left) {
+        return priority -> right -> new Rule(left, asList(right), priority);
     }
 
+    @SafeVarargs
     static <T> Set<T> of(T... items) {
-        return Stream.of(items).collect(Collectors.toSet());
+        return Stream.of(items).collect(toSet());
     }
+
+    interface PriorityBuilder extends RuleBuilder {
+        RuleBuilder priority(int priority);
+        @Override default Rule to(Symbol... right) {
+            return priority(0).to(right);
+        }
+    }
+
 }

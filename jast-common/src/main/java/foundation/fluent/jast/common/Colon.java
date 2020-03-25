@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token(":")
-public final class Colon extends Operator {
+public final class Colon extends Keyword {
     public static final Colon SYMBOL = new Colon();
     private Colon() {}
 }

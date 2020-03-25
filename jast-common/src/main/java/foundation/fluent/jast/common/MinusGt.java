@@ -29,8 +29,8 @@
 
 package foundation.fluent.jast.common;
 
-@Token("--")
-public class MinusMinus extends Keyword {
-    public static final MinusMinus SYMBOL = new MinusMinus();
-    private MinusMinus() {}
+@Token("->")
+public final class MinusGt extends Keyword {
+    public static final MinusGt SYMBOL = new MinusGt();
+    private MinusGt() {}
 }

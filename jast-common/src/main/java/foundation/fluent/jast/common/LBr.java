@@ -30,7 +30,7 @@
 package foundation.fluent.jast.common;
 
 @Token("[")
-public final class LBr extends Operator {
+public final class LBr extends Keyword {
     public static final LBr SYMBOL = new LBr();
     private LBr() {}
 }
