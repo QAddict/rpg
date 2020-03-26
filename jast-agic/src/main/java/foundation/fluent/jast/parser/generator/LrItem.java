@@ -32,6 +32,7 @@ package foundation.fluent.jast.parser.generator;
 import foundation.fluent.jast.parser.grammar.Rule;
 import foundation.fluent.jast.parser.grammar.Symbol;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -50,6 +51,10 @@ public final class LrItem implements Comparable<LrItem> {
 
     public static LrItem lrItem(Rule rule, Set<Symbol> lookahead) {
         return new LrItem(0, rule, lookahead);
+    }
+
+    public static LrItem lrItem(int i, Rule rule, Set<Symbol> lookahead) {
+        return new LrItem(i, rule, lookahead);
     }
 
     public Symbol symbolAtDot() {
@@ -105,6 +110,12 @@ public final class LrItem implements Comparable<LrItem> {
         if(dot == rule.getRight().size())
             j.add("•");
         return rule.getLeft() + " -> " + j + " " + lookahead;
+    }
+
+    public LrItem mergeLookahead(LrItem t) {
+        Set<Symbol> merged = new LinkedHashSet<>(t.lookahead);
+        merged.addAll(lookahead);
+        return new LrItem(dot, rule, merged);
     }
 
 }

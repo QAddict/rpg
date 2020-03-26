@@ -27,46 +27,18 @@
  *
  */
 
-package foundation.fluent.jast.parser.generator;
+package foundation.fluent.jast.lexer;
 
-import java.util.*;
+public interface Unit {
 
-import static java.util.stream.Collectors.joining;
-
-public class LrItemSet {
-
-    private final String name;
-    private final Set<LrItem> closure;
-
-    public LrItemSet(String name, Set<LrItem> closure) {
-        this.name = name;
-        this.closure = closure;
+    class Char implements Unit {
+        private final int value;
+        private Char(int value) {
+            this.value = value;
+        }
     }
 
-    public Set<LrItem> getItems() {
-        return closure;
-    }
+    class Class implements Unit {
 
-    public String getName() {
-        return name;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LrItemSet that = (LrItemSet) o;
-        return Objects.equals(closure, that.closure);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(closure);
-    }
-
-    @Override
-    public String toString() {
-        return name + closure.stream().map(Objects::toString).collect(joining("\n\t", ": {\n\t", "\n}"));
-    }
-
 }

@@ -168,15 +168,15 @@ public class JastGenerator {
         LrItem longest = Collections.max(set.getItems());
         try(PrintWriter w = writer("State" + context.stateClassName(set))) {
             pkg(w);
-            w.println("/*\n" + parser + "\n*/\n\n");
+            //w.println("/*\n" + parser + "\n*/\n\n");
             int dot = longest.getDot();
             w.println("import javax.annotation.Generated;");
             w.println();
             w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
+            List<? extends VariableElement> longestParameters = context.methodOf(longest.getRule()).getParameters();
             if(dot > 0) {
-                List<? extends VariableElement> parameters = context.methodOf(longest.getRule()).getParameters();
-                w.println("public class State" + set.getName() + " extends " + chainedType(parameters, dot) + " {");
-                w.println("    public State" + set.getName() + "(" + parameters.get(dot - 1).asType() + " node, " + chainedVar(parameters, dot - 1) + " prev) {");
+                w.println("public class State" + set.getName() + " extends " + chainedType(longestParameters, dot) + " {");
+                w.println("    public State" + set.getName() + "(" + longestParameters.get(dot - 1).asType() + " node, " + chainedVar(longestParameters, dot - 1) + " prev) {");
                 w.println("        super(node, prev);");
                 w.println("    }");
             } else {
@@ -197,9 +197,9 @@ public class JastGenerator {
                         if(parameters.isEmpty()) {
                             w.println("\t\treturn visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "()).visit" + entry.getKey() + "(symbol);");
                         } else {
-                            w.println("\t\t" + chainedVar(parameters, size) + " stack0 = this;");
+                            w.println("\t\t" + chainedVar(longestParameters, longestParameters.size()) + " stack0 = this;");
                             for(int i = 1; i < size; i++) {
-                                w.println("\t\t" + chainedVar(parameters, size - i) + " stack" + i + " = stack" + (i - 1) + ".getPrev();");
+                                w.println("\t\t" + chainedVar(longestParameters, longestParameters.size() - i) + " stack" + i + " = stack" + (i - 1) + ".getPrev();");
                             }
                             w.println("\t\treturn stack" + (size - 1) + ".getPrev().visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "(" + range(0, size).mapToObj(i -> "stack" + (size - i - 1) + ".getNode()").collect(joining(", ")) + ")).visit" + entry.getKey() + "(symbol);");
                         }

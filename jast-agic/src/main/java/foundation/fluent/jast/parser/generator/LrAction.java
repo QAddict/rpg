@@ -29,6 +29,8 @@
 
 package foundation.fluent.jast.parser.generator;
 
+import java.util.Objects;
+
 public interface LrAction {
 
     void accept(LrActionVisitor visitor);
@@ -83,6 +85,19 @@ public interface LrAction {
         @Override
         public int priority() {
             return item.getRule().getPriority();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Reduce reduce = (Reduce) o;
+            return Objects.equals(item.getRule(), reduce.item.getRule());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(item.getRule());
         }
     }
 

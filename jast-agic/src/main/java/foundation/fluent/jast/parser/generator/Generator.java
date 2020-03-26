@@ -35,6 +35,7 @@ import foundation.fluent.jast.parser.grammar.Symbol;
 import foundation.fluent.jast.util.MapOfSets;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static foundation.fluent.jast.parser.generator.LrItem.lrItem;
 import static foundation.fluent.jast.parser.grammar.Symbol.any;
@@ -112,15 +113,21 @@ public class Generator {
     }
 
     public LrItemSet closure(Symbol symbol, Set<LrItem> base) {
-        LrItemSet lr1ItemSet = new LrItemSet("" + symbol + counters.compute(symbol, (s, i) -> isNull(i) ? 1 : i+1));
         Queue<LrItem> queue = new ArrayDeque<>(base);
+        Set<LrItem> closure = new LinkedHashSet<>();
         while(!queue.isEmpty()) {
             LrItem item = queue.poll();
-            if(lr1ItemSet.add(item) && !item.isEnd()) {
+            if(closure.add(item) && !item.isEnd()) {
                 grammar.rulesFor(item.symbolAtDot()).stream().map(rule -> lrItem(rule, follow(item))).forEach(queue::add);
             }
         }
-        return lr1ItemSet;
+        // Merge rules with same lookahead
+        Map<Integer, Map<Rule, LrItem>> aggregator = new LinkedHashMap<>();
+        closure.forEach(i -> aggregator.computeIfAbsent(i.getDot(), d -> new LinkedHashMap<>()).compute(i.getRule(), (r, t) -> {
+            if(isNull(t)) return i;
+            else return i.mergeLookahead(t);
+        }));
+        return new LrItemSet("" + symbol + counters.compute(symbol, (s, i) -> isNull(i) ? 1 : i+1), aggregator.entrySet().stream().flatMap(e -> e.getValue().values().stream()).collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
     public Set<Symbol> follow(LrItem item) {

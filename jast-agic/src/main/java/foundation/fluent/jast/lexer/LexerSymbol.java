@@ -27,46 +27,20 @@
  *
  */
 
-package foundation.fluent.jast.parser.generator;
+package foundation.fluent.jast.lexer;
 
-import java.util.*;
+import foundation.fluent.jast.parser.grammar.Symbol;
 
-import static java.util.stream.Collectors.joining;
-
-public class LrItemSet {
+public class LexerSymbol implements Symbol {
 
     private final String name;
-    private final Set<LrItem> closure;
 
-    public LrItemSet(String name, Set<LrItem> closure) {
+    public LexerSymbol(String name) {
         this.name = name;
-        this.closure = closure;
-    }
-
-    public Set<LrItem> getItems() {
-        return closure;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LrItemSet that = (LrItemSet) o;
-        return Objects.equals(closure, that.closure);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(closure);
     }
 
     @Override
     public String toString() {
-        return name + closure.stream().map(Objects::toString).collect(joining("\n\t", ": {\n\t", "\n}"));
+        return name;
     }
-
 }
