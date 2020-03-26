@@ -38,6 +38,7 @@ import foundation.fluent.jast.parser.grammar.Symbol;
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
@@ -75,13 +76,17 @@ public class JastGenerator {
         }
     }
 
-    private PrintWriter writer(String name) throws IOException {
-        return new PrintWriter(filer.createSourceFile(name).openWriter());
+    private PrintWriter writer(String className) throws IOException {
+        return new PrintWriter(filer.createSourceFile(context.getPackageName() + "." + className).openWriter());
+    }
+
+    private void pkg(PrintWriter w) {
+        w.println("package " + context.getPackageName() + ";");
     }
 
     private void generateToken(Symbol symbol) {
-        try(PrintWriter w = writer("foundation.fluent.jast.Token" + symbol)) {
-            w.println("package foundation.fluent.jast;");
+        try(PrintWriter w = writer("Token" + symbol)) {
+            pkg(w);
             w.println();
             w.println("import java.util.function.UnaryOperator;");
             w.println("import javax.annotation.Generated;");
@@ -115,8 +120,8 @@ public class JastGenerator {
     }
 
     private void generateState() {
-        try(PrintWriter w = writer("foundation.fluent.jast.State")) {
-            w.println("package foundation.fluent.jast;");
+        try(PrintWriter w = writer("State")) {
+            pkg(w);
             w.println();
             w.println("import javax.annotation.Generated;");
             w.println();
@@ -136,8 +141,8 @@ public class JastGenerator {
     }
 
     private void generateStackState() {
-        try(PrintWriter w = writer("foundation.fluent.jast.StackState")) {
-            w.println("package foundation.fluent.jast;");
+        try(PrintWriter w = writer("StackState")) {
+            pkg(w);
             w.println("public class StackState<T, P> extends State {");
             w.println();
             w.println("\tprivate final T node;");
@@ -161,8 +166,8 @@ public class JastGenerator {
 
     private void generateState(LrParser parser, LrItemSet set)  {
         LrItem longest = Collections.max(set.getItems());
-        try(PrintWriter w = writer("foundation.fluent.jast.State" + context.stateClassName(set))) {
-            w.println("package foundation.fluent.jast;");
+        try(PrintWriter w = writer("State" + context.stateClassName(set))) {
+            pkg(w);
             w.println("/*\n" + parser + "\n*/\n\n");
             int dot = longest.getDot();
             w.println("import javax.annotation.Generated;");

@@ -30,6 +30,7 @@
 package foundation.fluent.jast.processor;
 
 import foundation.fluent.jast.RulePriority;
+import foundation.fluent.jast.StartSymbol;
 import foundation.fluent.jast.parser.generator.LrItemSet;
 import foundation.fluent.jast.parser.grammar.Grammar;
 import foundation.fluent.jast.parser.grammar.Rule;
@@ -51,6 +52,7 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
 
 public class ClassToGrammarContext {
 
+    private final String packageName;
     private final Set<String> usedNames = new HashSet<>();
     private final Map<String, Symbol> symbolMap = new HashMap<>();
     private final Map<Rule, ExecutableElement> ruleAssociation = new HashMap<>();
@@ -58,9 +60,11 @@ public class ClassToGrammarContext {
 
 
     public ClassToGrammarContext(ExecutableElement startRule) {
+        String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
         Set<Rule> rules = new LinkedHashSet<>();
         Set<Symbol> ignored = new LinkedHashSet<>();
         Element factoryClass = startRule.getEnclosingElement();
+        packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
         int priority = priority(factoryClass, 0);
         methodsIn(factoryClass.getEnclosedElements()).forEach(method -> {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {
@@ -107,6 +111,9 @@ public class ClassToGrammarContext {
         return ruleAssociation.get(rule);
     }
 
+    public String getPackageName() {
+        return packageName;
+    }
 
     private String uniqueName(TypeMirror typeMirror) {
         String full = typeMirror.toString().replaceAll(">", "");

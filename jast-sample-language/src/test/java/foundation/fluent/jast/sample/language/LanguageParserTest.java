@@ -29,7 +29,7 @@
 
 package foundation.fluent.jast.sample.language;
 
-import foundation.fluent.jast.*;
+import foundation.fluent.jast.sample.language.ast.*;
 import foundation.fluent.jast.common.*;
 import foundation.fluent.jast.parser.Parser;
 import foundation.fluent.jast.sample.language.ast.Identifier;
