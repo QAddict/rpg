@@ -59,7 +59,7 @@ public class JastGenerator {
     }
 
     public void generateSources(LrParser lrParser) {
-        generateState();
+        generateState(lrParser);
         generateStackState();
         for(LrItemSet set : lrParser.getSets()) {
             if(set.equals(lrParser.getStart())) {
@@ -119,9 +119,11 @@ public class JastGenerator {
         return chainedType(parameters, length, 2);
     }
 
-    private void generateState() {
+    private void generateState(LrParser parser) {
         try(PrintWriter w = writer("State")) {
             pkg(w);
+            w.println();
+            w.println("/*\n\n" + context.getGrammar() + "\n\n\n" + parser + "\n\n*/");
             w.println();
             w.println("import javax.annotation.Generated;");
             w.println();
