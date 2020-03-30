@@ -29,8 +29,15 @@
 
 package foundation.fluent.jast.common;
 
-public final class End {
-    public static final End SYMBOL = new End();
-    private End() {}
-    @Override public String toString() { return "<eof>"; }
+import foundation.fluent.jast.parser.Position;
+
+public final class End extends Token {
+    public End(Position position) {
+        super(position);
+    }
+
+    @Override
+    public String toString() {
+        return "<eof>";
+    }
 }

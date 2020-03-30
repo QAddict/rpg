@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("if")
-public class If extends Keyword {
-    public static final If SYMBOL = new If();
-    private If() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("if")
+public class If extends Token {
+    public If(Position position) {
+        super(position);
+    }
 }

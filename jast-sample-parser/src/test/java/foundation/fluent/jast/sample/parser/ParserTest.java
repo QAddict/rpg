@@ -29,8 +29,10 @@
 
 package foundation.fluent.jast.sample.parser;
 
+import foundation.fluent.jast.parser.Lexer;
+import foundation.fluent.jast.parser.ParseErrorException;
 import foundation.fluent.jast.sample.ast.Expression;
-import foundation.fluent.jast.sample.lexer.Lexer;
+import foundation.fluent.jast.sample.lexer.SimpleLexer;
 import foundation.fluent.jast.sample.states.InitialState;
 import foundation.fluent.jast.sample.states.StateVisitor;
 import org.testng.annotations.Test;
@@ -40,12 +42,15 @@ import java.io.StringReader;
 
 import static foundation.fluent.jast.sample.tokens.Token.*;
 import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ParserTest {
 
     @Test
-    public void testParse() {
-        Expression expression = new Parser<StateVisitor>(new InitialState()).parse(asList(
+    public void testParse() throws ParseErrorException {
+        Lexer<StateVisitor> lexer = mock(Lexer.class);
+        when(lexer.next()).thenReturn(
                 LPAR,
                 LPAR,
                 IDENT,
@@ -60,13 +65,14 @@ public class ParserTest {
                 RPAR,
                 RPAR,
                 END
-        ).iterator()).result();
+        );
+        Expression expression = new Parser<StateVisitor>(new InitialState()).parse(lexer).result();
         System.out.println(expression);
     }
 
     @Test
-    public void testParserAndLexer() {
-        Lexer lexer = new Lexer(new StringReader("(abcd + efg) + gfds"));
+    public void testParserAndLexer() throws ParseErrorException {
+        SimpleLexer lexer = new SimpleLexer(new StringReader("(abcd + efg) + gfds"));
         Parser<StateVisitor> parser = new Parser<>(new InitialState());
         StateVisitor stateVisitor = parser.parse(lexer);
         Expression expression = stateVisitor.result();

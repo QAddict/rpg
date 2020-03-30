@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token(",")
-public final class Comma extends Keyword {
-    public static final Comma SYMBOL = new Comma();
-    private Comma() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name(",")
+public final class Comma extends Token {
+    public Comma(Position position) {
+        super(position);
+    }
 }

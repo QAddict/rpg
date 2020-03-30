@@ -27,14 +27,14 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-import foundation.fluent.jast.parser.Name;
-import foundation.fluent.jast.parser.Position;
+public class ParseErrorException extends Exception {
+    public ParseErrorException(Position position, String message) {
+        super("Parse error: " + message + "\n\tat " + position);
+    }
 
-@Name("?")
-public class Quest extends Token {
-    public Quest(Position position) {
-        super(position);
+    public ParseErrorException(Position position, Throwable cause) {
+        super("Parse error: " + cause.getMessage() + "\n\tat " + position, cause);
     }
 }

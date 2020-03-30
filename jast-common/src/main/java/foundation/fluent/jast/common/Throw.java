@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("throw")
-public class Throw extends Keyword {
-    public static final Throw SYMBOL = new Throw();
-    private Throw() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("throw")
+public class Throw extends Token {
+    public Throw(Position position) {
+        super(position);
+    }
 }

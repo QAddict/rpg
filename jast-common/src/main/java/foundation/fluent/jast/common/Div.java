@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("/")
-public class Div extends Keyword {
-    public static final Div SYMBOL = new Div();
-    private Div() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("/")
+public class Div extends Token {
+    public Div(Position position) {
+        super(position);
+    }
 }

@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("abstract")
-public class Abstract extends Keyword {
-    public static final Abstract SYMBOL = new Abstract();
-    private Abstract() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("abstract")
+public class Abstract extends Token {
+    public Abstract(Position position) {
+        super(position);
+    }
 }

@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("!")
-public class Excl extends Keyword {
-    public static final Excl SYMBOL = new Excl();
-    private Excl() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("!")
+public class Excl extends Token {
+    public Excl(Position position) {
+        super(position);
+    }
 }

@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("else")
-public class Else extends Keyword {
-    public static final Else SYMBOL = new Else();
-    private Else() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("else")
+public class Else extends Token {
+    public Else(Position position) {
+        super(position);
+    }
 }

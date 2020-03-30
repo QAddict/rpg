@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("for")
-public class For extends Keyword {
-    public static final For SYMBOL = new For();
-    private For() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("for")
+public class For extends Token {
+    public For(Position position) {
+        super(position);
+    }
 }

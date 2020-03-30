@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token(">")
-public final class Gt extends Keyword {
-    public static final Gt SYMBOL = new Gt();
-    private Gt() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name(">")
+public final class Gt extends Token {
+    public Gt(Position position) {
+        super(position);
+    }
 }

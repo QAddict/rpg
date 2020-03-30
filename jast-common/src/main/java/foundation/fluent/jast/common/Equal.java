@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("=")
-public final class Equal extends Keyword {
-    public static final Equal SYMBOL = new Equal();
-    private Equal() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("=")
+public final class Equal extends Token {
+    public Equal(Position position) {
+        super(position);
+    }
 }

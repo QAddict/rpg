@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("import")
-public class Import extends Keyword {
-    public static final Import SYMBOL = new Import();
-    private Import() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("import")
+public class Import extends Token {
+    public Import(Position position) {
+        super(position);
+    }
 }

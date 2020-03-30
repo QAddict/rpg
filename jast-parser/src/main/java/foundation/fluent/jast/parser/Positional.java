@@ -27,24 +27,9 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class AstUtils {
-
-    public static <T> List<T> addTo(List<T> list, T item) {
-        list.add(item);
-        return list;
-    }
-
-    public static <T> List<T> list() {
-        return new ArrayList<>();
-    }
-
-    public static <T> List<T> list(T item) {
-        return addTo(new ArrayList<>(), item);
-    }
-
+@FunctionalInterface
+public interface Positional {
+    Position position();
 }

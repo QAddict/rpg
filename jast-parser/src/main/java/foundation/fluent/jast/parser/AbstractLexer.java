@@ -27,14 +27,35 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-import foundation.fluent.jast.parser.Name;
-import foundation.fluent.jast.parser.Position;
+import java.io.IOException;
+import java.io.Reader;
 
-@Name("?")
-public class Quest extends Token {
-    public Quest(Position position) {
-        super(position);
+public abstract class AbstractLexer<S> implements Lexer<S> {
+
+    private final Reader reader;
+    protected int look;
+    protected final Position position;
+
+    public AbstractLexer(String fileName, Reader reader) throws ParseErrorException {
+        this.position = new Position(fileName);
+        this.reader = reader;
+        move();
     }
+
+    protected void move() throws ParseErrorException {
+        try {
+            look = reader.read();
+            this.position.move((char) look);
+        } catch (IOException e) {
+            throw new ParseErrorException(position, e);
+        }
+    }
+
+    @Override
+    public Position position() {
+        return position.copy();
+    }
+
 }

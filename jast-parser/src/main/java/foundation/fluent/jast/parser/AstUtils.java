@@ -27,14 +27,31 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-import foundation.fluent.jast.parser.Name;
-import foundation.fluent.jast.parser.Position;
+import java.util.ArrayList;
+import java.util.List;
 
-@Name("?")
-public class Quest extends Token {
-    public Quest(Position position) {
-        super(position);
+import static java.util.Objects.isNull;
+
+public class AstUtils {
+
+    public static <T> List<T> addTo(List<T> list, T item) {
+        list.add(item);
+        return list;
     }
+
+    public static <T> List<T> list() {
+        return new ArrayList<>();
+    }
+
+    public static <T> List<T> list(T item) {
+        return addTo(new ArrayList<>(), item);
+    }
+
+    public static String expected(Class<?> of) {
+        Name name = of.getAnnotation(Name.class);
+        return isNull(name) ? of.getSimpleName() : name.value();
+    }
+
 }

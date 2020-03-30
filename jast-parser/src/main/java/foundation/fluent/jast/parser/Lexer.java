@@ -27,9 +27,9 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-public class Keyword {
-    private final String string = getClass().getAnnotation(Token.class).value();
-    @Override public String toString() { return string; }
+public interface Lexer<S> {
+    Token<S> next() throws ParseErrorException;
+    Position position();
 }

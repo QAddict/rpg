@@ -88,18 +88,19 @@ public class JastGenerator {
         try(PrintWriter w = writer("Token" + symbol)) {
             pkg(w);
             w.println();
-            w.println("import java.util.function.UnaryOperator;");
+            w.println("import foundation.fluent.jast.parser.Token;");
+            w.println("import foundation.fluent.jast.parser.UnexpectedInputException;");
             w.println("import javax.annotation.Generated;");
             w.println();
             w.println("@Generated(\"Generated token element wrapper for grammar parser.\")");
-            w.println("public class Token" + symbol + " implements UnaryOperator<State> {");
+            w.println("public class Token" + symbol + " implements Token<State> {");
             w.println("    private final " + context.symbolType(symbol) + " symbol;");
             w.println();
             w.println("    public Token" + symbol + "(" + context.symbolType(symbol) + " symbol) {");
             w.println("        this.symbol = symbol;");
             w.println("    }");
             w.println();
-            w.println("    @Override public State apply(State state) {");
+            w.println("    @Override public State accept(State state) throws UnexpectedInputException {");
             w.println("        return state.visit" + symbol + "(symbol);");
             w.println("    }");
             w.println("}");
@@ -125,16 +126,17 @@ public class JastGenerator {
             w.println();
             w.println("/*\n\n" + context.getGrammar() + "\n\n\n" + parser + "\n\n*/");
             w.println();
+            w.println("import foundation.fluent.jast.parser.UnexpectedInputException;");
             w.println("import javax.annotation.Generated;");
             w.println();
             w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
             w.println("public class State extends foundation.fluent.jast.parser.StateBase {");
             for (Symbol symbol : context.getGrammar().getIgnored())
-                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) {\n\t\treturn this;\n\t}\n");
+                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) throws UnexpectedInputException {\n\t\treturn this;\n\t}\n");
             for (Symbol symbol : context.getGrammar().getTerminals())
-                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) {\n\t\treturn error(symbol);\n\t}\n");
+                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) throws UnexpectedInputException {\n\t\treturn error(symbol);\n\t}\n");
             for (Symbol symbol : context.getGrammar().getNonTerminals())
-                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) {\n\t\treturn error(symbol);\n\t}\n");
+                w.println("\tpublic State visit" + symbol + "(" + context.symbolType(symbol) + " symbol) throws UnexpectedInputException {\n\t\treturn error(symbol);\n\t}\n");
             w.println("\tpublic " + context.symbolType(context.getGrammar().getStart()) + " result() {\n\t\tthrow new IllegalStateException(\"End not reached.\");\n\t}");
             w.println("}");
         } catch (IOException e) {
@@ -172,6 +174,7 @@ public class JastGenerator {
             pkg(w);
             //w.println("/*\n" + parser + "\n*/\n\n");
             int dot = longest.getDot();
+            w.println("import foundation.fluent.jast.parser.UnexpectedInputException;");
             w.println("import javax.annotation.Generated;");
             w.println();
             w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
@@ -195,7 +198,7 @@ public class JastGenerator {
                         ExecutableElement method = context.methodOf(item.getRule());
                         List<? extends VariableElement> parameters = method.getParameters();
                         int size = parameters.size();
-                        w.println("\t@Override public State visit" + entry.getKey() +"(" + context.symbolType(entry.getKey()) + " symbol) {");
+                        w.println("\t@Override public State visit" + entry.getKey() +"(" + context.symbolType(entry.getKey()) + " symbol) throws UnexpectedInputException {");
                         if(parameters.isEmpty()) {
                             w.println("\t\treturn visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "()).visit" + entry.getKey() + "(symbol);");
                         } else {

@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("while")
-public class While extends Keyword {
-    public static final While SYMBOL = new While();
-    private While() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("while")
+public class While extends Token {
+    public While(Position position) {
+        super(position);
+    }
 }

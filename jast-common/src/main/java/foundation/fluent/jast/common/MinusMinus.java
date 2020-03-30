@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("--")
-public class MinusMinus extends Keyword {
-    public static final MinusMinus SYMBOL = new MinusMinus();
-    private MinusMinus() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("--")
+public class MinusMinus extends Token {
+    public MinusMinus(Position position) {
+        super(position);
+    }
 }

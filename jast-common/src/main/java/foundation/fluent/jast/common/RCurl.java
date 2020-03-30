@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("}")
-public final class RCurl extends Keyword {
-    public static final RCurl SYMBOL = new RCurl();
-    private RCurl() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("}")
+public final class RCurl extends Token {
+    public RCurl(Position position) {
+        super(position);
+    }
 }

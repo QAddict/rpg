@@ -29,10 +29,10 @@
 
 package foundation.fluent.jast.parser;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.joining;
+import static foundation.fluent.jast.parser.AstUtils.expected;
+import static java.util.stream.Collectors.toList;
 
 public class StateBase {
 
@@ -40,8 +40,8 @@ public class StateBase {
         return false;
     }
 
-    public <T> T error(Object symbol) {
-        throw new IllegalStateException(getClass().getSimpleName() + ": Unexpected input: " + symbol + ". Expected one of: " + Stream.of(getClass().getDeclaredMethods()).filter(m -> m.getName().startsWith("visit") && m.getParameterCount() == 1).map(m -> m.getParameterTypes()[0].getSimpleName()).collect(joining(", ", "{", "}")));
+    public <T> T error(Object symbol) throws UnexpectedInputException {
+        throw new UnexpectedInputException(getClass().getSimpleName(), symbol, Stream.of(getClass().getDeclaredMethods()).filter(m -> m.getName().startsWith("visit") && m.getParameterCount() == 1).map(m -> expected(m.getParameterTypes()[0])).collect(toList()));
     }
 
 }

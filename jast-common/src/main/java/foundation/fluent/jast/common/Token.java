@@ -29,10 +29,23 @@
 
 package foundation.fluent.jast.common;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+import foundation.fluent.jast.parser.Positional;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Token {
-    String value();
+public class Token implements Positional {
+    private final Position position;
+
+    public Token(Position position) {
+        this.position = position;
+    }
+
+    public Position position() {
+        return position;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getAnnotation(Name.class).value();
+    }
 }

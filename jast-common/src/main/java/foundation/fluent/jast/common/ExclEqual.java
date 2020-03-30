@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("!=")
-public final class ExclEqual extends Keyword {
-    public static final ExclEqual SYMBOL = new ExclEqual();
-    private ExclEqual() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("!=")
+public final class ExclEqual extends Token {
+    public ExclEqual(Position position) {
+        super(position);
+    }
 }

@@ -29,9 +29,6 @@
 
 package foundation.fluent.jast.parser;
 
-import java.util.Iterator;
-import java.util.function.UnaryOperator;
-
 public class Parser<S extends StateBase> {
 
     private final S initialState;
@@ -40,12 +37,15 @@ public class Parser<S extends StateBase> {
         this.initialState = initialState;
     }
 
-
-    public S parse(Iterator<? extends UnaryOperator<S>> input) {
+    public S parse(Lexer<S> input) throws ParseErrorException {
         S state = initialState;
-        while(!state.accepted() && input.hasNext()) {
-            UnaryOperator<S> next = input.next();
-            state = next.apply(state);
+        Position mark = input.position();
+        while(!state.accepted()) try {
+            mark = input.position();
+            Token<S> next = input.next();
+            state = next.accept(state);
+        } catch (UnexpectedInputException un) {
+            throw new ParseErrorException(mark, un);
         }
         return state;
     }

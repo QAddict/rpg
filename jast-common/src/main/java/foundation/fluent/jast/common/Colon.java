@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token(":")
-public final class Colon extends Keyword {
-    public static final Colon SYMBOL = new Colon();
-    private Colon() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name(":")
+public final class Colon extends Token {
+    public Colon(Position position) {
+        super(position);
+    }
 }

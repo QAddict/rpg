@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("(")
-public final class LPar extends Keyword {
-    public static final LPar SYMBOL = new LPar();
-    private LPar() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("(")
+public final class LPar extends Token {
+    public LPar(Position position) {
+        super(position);
+    }
 }

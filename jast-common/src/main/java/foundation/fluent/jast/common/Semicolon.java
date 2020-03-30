@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token(";")
-public final class Semicolon extends Keyword {
-    public static final Semicolon SYMBOL = new Semicolon();
-    private Semicolon() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name(";")
+public final class Semicolon extends Token {
+    public Semicolon(Position position) {
+        super(position);
+    }
 }

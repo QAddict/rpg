@@ -33,16 +33,16 @@ import foundation.fluent.jast.common.End;
 import foundation.fluent.jast.common.LPar;
 import foundation.fluent.jast.common.Plus;
 import foundation.fluent.jast.common.RPar;
+import foundation.fluent.jast.parser.Position;
 import foundation.fluent.jast.sample.ast.Identifier;
 import foundation.fluent.jast.sample.states.StateVisitor;
 
-import java.util.function.UnaryOperator;
-
-public interface Token extends UnaryOperator<StateVisitor> {
-    Token END = current -> current.visit(End.SYMBOL);
-    Token LPAR = current -> current.visit(LPar.SYMBOL);
-    Token RPAR = current -> current.visit(RPar.SYMBOL);
-    Token PLUS = current -> current.visit(Plus.SYMBOL);
+public interface Token extends foundation.fluent.jast.parser.Token<StateVisitor> {
+    Position p = new Position("");
+    Token END = current -> current.visit(new End(p));
+    Token LPAR = current -> current.visit(new LPar(p));
+    Token RPAR = current -> current.visit(new RPar(p));
+    Token PLUS = current -> current.visit(new Plus(p));
     Token IDENT = current -> current.visit(new Identifier("name", 0, 0));
     static Token ident(String name, int line, int pos) {return current -> current.visit(new Identifier(name, line, pos));}
 }

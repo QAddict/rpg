@@ -29,6 +29,9 @@
 
 package foundation.fluent.jast.sample.language;
 
+import foundation.fluent.jast.parser.Lexer;
+import foundation.fluent.jast.parser.ParseErrorException;
+import foundation.fluent.jast.parser.Position;
 import foundation.fluent.jast.sample.language.ast.*;
 import foundation.fluent.jast.common.*;
 import foundation.fluent.jast.parser.Parser;
@@ -36,22 +39,26 @@ import foundation.fluent.jast.sample.language.ast.Identifier;
 import foundation.fluent.jast.sample.language.ast.Program;
 import org.testng.annotations.Test;
 
-import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class LanguageParserTest {
 
     @Test
-    public void testParser() {
+    public void testParser() throws ParseErrorException {
         Parser<State> parser = new Parser<>(new State1());
-        Program program = parser.parse(asList(
+        Position p = new Position("");
+        Lexer<State> lexer = mock(Lexer.class);
+        when(lexer.next()).thenReturn(
                 new TokenComment(new Comment()),
-                new TokenLPar(LPar.SYMBOL),
-                new TokenWhiteSpace(new WhiteSpace()),
+                new TokenLPar(new LPar(p)),
+                new TokenWhiteSpace(new WhiteSpace(p)),
                 new TokenIdentifier(new Identifier("variable")),
-                new TokenRPar(RPar.SYMBOL),
-                new TokenDot(Dot.SYMBOL),
-                new TokenEnd(End.SYMBOL)
-        ).iterator()).result();
+                new TokenRPar(new RPar(p)),
+                new TokenDot(new Dot(p)),
+                new TokenEnd(new End(p))
+        );
+        Program program = parser.parse(lexer).result();
         System.out.println(program);
     }
 

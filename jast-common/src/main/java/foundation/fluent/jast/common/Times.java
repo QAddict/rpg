@@ -29,9 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("*")
-public class Times extends Keyword {
-    public static final Times SYMBOL = new Times();
-    private Times() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
 
+@Name("*")
+public class Times extends Token {
+    public Times(Position position) {
+        super(position);
+    }
 }

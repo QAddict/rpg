@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("+")
-public class Plus extends Keyword {
-    public static final Plus SYMBOL = new Plus();
-    private Plus() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("+")
+public class Plus extends Token {
+    public Plus(Position position) {
+        super(position);
+    }
 }

@@ -27,14 +27,10 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-import foundation.fluent.jast.parser.Name;
-import foundation.fluent.jast.parser.Position;
+public interface Token<S> {
 
-@Name("?")
-public class Quest extends Token {
-    public Quest(Position position) {
-        super(position);
-    }
+    S accept(S previous) throws UnexpectedInputException;
+
 }

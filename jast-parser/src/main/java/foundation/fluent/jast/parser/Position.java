@@ -27,23 +27,30 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
 public class Position {
     private final String fileName;
-    private int line = 0;
+    private int line = 1;
     private int character = 0;
 
-    public Position(String fileName) {
+    private Position(String fileName, int line, int character) {
         this.fileName = fileName;
+        this.line = line;
+        this.character = character;
+    }
+
+    public Position(String fileName) {
+        this(fileName, 1, 0);
     }
 
     public void move(char character) {
         if(character == '\n') {
             line++;
             this.character = 0;
+        } else {
+            this.character++;
         }
-        this.character++;
     }
 
     public String getFileName() {
@@ -61,6 +68,10 @@ public class Position {
     @Override
     public String toString() {
         return fileName + ": line: " + line + ", character: " + character;
+    }
+
+    public Position copy() {
+        return new Position(fileName, line, character);
     }
 
 }

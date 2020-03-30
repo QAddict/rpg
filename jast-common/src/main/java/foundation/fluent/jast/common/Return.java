@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("return")
-public class Return extends Keyword {
-    public static final Return SYMBOL = new Return();
-    private Return() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("return")
+public class Return extends Token {
+    public Return(Position position) {
+        super(position);
+    }
 }

@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("private")
-public class Private extends Keyword {
-    public static final Private SYMBOL = new Private();
-    private Private() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("private")
+public class Private extends Token {
+    public Private(Position position) {
+        super(position);
+    }
 }

@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("]")
-public final class RBr extends Keyword {
-    public static final RBr SYMBOL = new RBr();
-    private RBr() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("]")
+public final class RBr extends Token {
+    public RBr(Position position) {
+        super(position);
+    }
 }

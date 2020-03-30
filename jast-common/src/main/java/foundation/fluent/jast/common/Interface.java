@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("interface")
-public class Interface extends Keyword {
-    public static final Interface SYMBOL = new Interface();
-    private Interface() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("interface")
+public class Interface extends Token {
+    public Interface(Position position) {
+        super(position);
+    }
 }

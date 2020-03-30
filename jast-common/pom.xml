@@ -40,5 +40,12 @@
 
     <artifactId>jast-common</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>foundation.fluent.api</groupId>
+            <artifactId>jast-parser</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

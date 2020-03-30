@@ -29,5 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token(" \n\r\t")
-public class WhiteSpace { }
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name(" \n\r\t")
+public class WhiteSpace extends Token {
+    public WhiteSpace(Position position) {
+        super(position);
+    }
+}

@@ -29,11 +29,15 @@
 
 package foundation.fluent.jast.common;
 
-@Token("\\w\\a*")
-public class Identifier {
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("\\w\\a*")
+public class Identifier extends Token {
     private final String name;
 
-    public Identifier(String name) {
+    public Identifier(Position position, String name) {
+        super(position);
         this.name = name;
     }
 

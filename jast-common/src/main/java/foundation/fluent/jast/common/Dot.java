@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token(".")
-public final class Dot extends Keyword {
-    public static final Dot SYMBOL = new Dot();
-    private Dot() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name(".")
+public final class Dot extends Token {
+    public Dot(Position position) {
+        super(position);
+    }
 }

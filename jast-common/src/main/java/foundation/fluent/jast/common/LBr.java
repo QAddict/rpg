@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("[")
-public final class LBr extends Keyword {
-    public static final LBr SYMBOL = new LBr();
-    private LBr() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("[")
+public final class LBr extends Token {
+    public LBr(Position position) {
+        super(position);
+    }
 }

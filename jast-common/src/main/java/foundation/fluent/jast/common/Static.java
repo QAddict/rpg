@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("static")
-public class Static extends Keyword {
-    public static final Static SYMBOL = new Static();
-    private Static() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("static")
+public class Static extends Token {
+    public Static(Position position) {
+        super(position);
+    }
 }

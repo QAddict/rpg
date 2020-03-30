@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("this")
-public class This extends Keyword {
-    public static final This SYMBOL = new This();
-    private This() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("this")
+public class This extends Token {
+    public This(Position position) {
+        super(position);
+    }
 }

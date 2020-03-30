@@ -27,14 +27,25 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-import foundation.fluent.jast.parser.Name;
-import foundation.fluent.jast.parser.Position;
+import java.util.List;
 
-@Name("?")
-public class Quest extends Token {
-    public Quest(Position position) {
-        super(position);
+import static java.util.stream.Collectors.joining;
+
+public class UnexpectedInputException extends Exception {
+    private final Object state;
+    private final Object unexpectedSymbol;
+    private final List<?> expected;
+
+    public UnexpectedInputException(Object state, Object unexpectedSymbol, List<?> expected) {
+        this.state = state;
+        this.unexpectedSymbol = unexpectedSymbol;
+        this.expected = expected;
+    }
+
+    @Override
+    public String getMessage() {
+        return "Expected " + (expected.size() == 1 ? expected.get(0) : expected.stream().map(Object::toString).collect(joining(", ", " one of: ", ""))) + ", but got " + unexpectedSymbol;
     }
 }

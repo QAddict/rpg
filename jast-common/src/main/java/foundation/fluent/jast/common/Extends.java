@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("extends")
-public class Extends extends Keyword {
-    public static final Extends SYMBOL = new Extends();
-    private Extends() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("extends")
+public class Extends extends Token {
+    public Extends(Position position) {
+        super(position);
+    }
 }

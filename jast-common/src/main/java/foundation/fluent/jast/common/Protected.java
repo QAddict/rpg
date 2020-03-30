@@ -29,8 +29,12 @@
 
 package foundation.fluent.jast.common;
 
-@Token("protected")
-public class Protected extends Keyword {
-    public static final Protected SYMBOL = new Protected();
-    private Protected() {}
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
+
+@Name("protected")
+public class Protected extends Token {
+    public Protected(Position position) {
+        super(position);
+    }
 }

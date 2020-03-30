@@ -27,14 +27,12 @@
  *
  */
 
-package foundation.fluent.jast.common;
+package foundation.fluent.jast.parser;
 
-import foundation.fluent.jast.parser.Name;
-import foundation.fluent.jast.parser.Position;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-@Name("?")
-public class Quest extends Token {
-    public Quest(Position position) {
-        super(position);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Name {
+    String value();
 }
