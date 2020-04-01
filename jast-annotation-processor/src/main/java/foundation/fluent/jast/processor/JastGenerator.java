@@ -202,9 +202,9 @@ public class JastGenerator {
                         if(parameters.isEmpty()) {
                             w.println("\t\treturn visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "()).visit" + entry.getKey() + "(symbol);");
                         } else {
-                            w.println("\t\t" + chainedVar(longestParameters, longestParameters.size()) + " stack0 = this;");
+                            w.println("\t\t" + chainedVar(longestParameters, dot) + " stack0 = this;");
                             for(int i = 1; i < size; i++) {
-                                w.println("\t\t" + chainedVar(longestParameters, longestParameters.size() - i) + " stack" + i + " = stack" + (i - 1) + ".getPrev();");
+                                w.println("\t\t" + chainedVar(longestParameters, dot - i) + " stack" + i + " = stack" + (i - 1) + ".getPrev();");
                             }
                             w.println("\t\treturn stack" + (size - 1) + ".getPrev().visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "(" + range(0, size).mapToObj(i -> "stack" + (size - i - 1) + ".getNode()").collect(joining(", ")) + ")).visit" + entry.getKey() + "(symbol);");
                         }
