@@ -29,31 +29,36 @@
 
 package foundation.fluent.jast.parser;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
-public abstract class AbstractLexer<S> implements Lexer<S> {
+public class Input {
 
     private final Reader reader;
-    protected int look;
-    protected final Position position;
+    private int lookahead;
+    private final Position position;
 
-    public AbstractLexer(String fileName, Reader reader) throws ParseErrorException {
-        this.position = new Position(fileName);
+    public Input(String fileName, Reader reader) throws IOException {
         this.reader = reader;
+        this.position = new Position(fileName);
         move();
     }
 
-    protected void move() throws ParseErrorException {
-        try {
-            look = reader.read();
-            this.position.move((char) look);
-        } catch (IOException e) {
-            throw new ParseErrorException(position, e);
-        }
+    public Input(String fileName) throws IOException {
+        this(fileName, new FileReader(fileName));
     }
 
-    @Override
+    public int lookahead() {
+        return lookahead;
+    }
+
+    public Input move() throws IOException {
+        lookahead = reader.read();
+        position.move((char) lookahead);
+        return this;
+    }
+
     public Position position() {
         return position.copy();
     }

@@ -31,25 +31,21 @@ package foundation.fluent.jast.parser;
 
 import java.io.IOException;
 
-public class Parser<S extends StateBase> {
+public interface TokenInput<S> {
 
-    private final S initialState;
+    Token<S> next() throws ParseErrorException, IOException;
 
-    public Parser(S initialState) {
-        this.initialState = initialState;
-    }
+    Position position();
 
-    public S parse(TokenInput<S> input) throws ParseErrorException {
-        S state = initialState;
-        Position mark = input.position();
-        while(!state.accepted()) try {
-            mark = input.position();
-            Token<S> next = input.next();
-            state = next.accept(state);
-        } catch (UnexpectedInputException | IOException un) {
-            throw new ParseErrorException(mark, un);
-        }
-        return state;
+    static <S> TokenInput<S> tokenInput(Input input, Lexer<S> lexer) {
+        return new TokenInput<S>() {
+            @Override public Token<S> next() throws ParseErrorException, IOException {
+                return lexer.next(input);
+            }
+            @Override public Position position() {
+                return input.position();
+            }
+        };
     }
 
 }

@@ -29,15 +29,14 @@
 
 package foundation.fluent.jast.sample.language;
 
-import foundation.fluent.jast.parser.Lexer;
-import foundation.fluent.jast.parser.ParseErrorException;
-import foundation.fluent.jast.parser.Position;
+import foundation.fluent.jast.parser.*;
 import foundation.fluent.jast.sample.language.ast.*;
 import foundation.fluent.jast.common.*;
-import foundation.fluent.jast.parser.Parser;
 import foundation.fluent.jast.sample.language.ast.Identifier;
 import foundation.fluent.jast.sample.language.ast.Program;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,10 +44,10 @@ import static org.mockito.Mockito.when;
 public class LanguageParserTest {
 
     @Test
-    public void testParser() throws ParseErrorException {
+    public void testParser() throws ParseErrorException, IOException {
         Parser<State> parser = new Parser<>(new State1());
         Position p = new Position("");
-        Lexer<State> lexer = mock(Lexer.class);
+        TokenInput<State> lexer = mock(TokenInput.class);
         when(lexer.next()).thenReturn(
                 new TokenComment(new Comment()),
                 new TokenLPar(new LPar(p)),

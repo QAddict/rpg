@@ -29,7 +29,9 @@
 
 package foundation.fluent.jast.parser;
 
+import java.io.IOException;
+
+@FunctionalInterface
 public interface Lexer<S> {
-    Token<S> next() throws ParseErrorException;
-    Position position();
+    Token<S> next(Input input) throws ParseErrorException, IOException;
 }

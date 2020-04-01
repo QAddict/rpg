@@ -27,29 +27,14 @@
  *
  */
 
-package foundation.fluent.jast.parser;
+package foundation.fluent.jast.common;
 
-import java.io.IOException;
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.Position;
 
-public class Parser<S extends StateBase> {
-
-    private final S initialState;
-
-    public Parser(S initialState) {
-        this.initialState = initialState;
+@Name("true")
+public class True extends Token {
+    public True(Position position) {
+        super(position);
     }
-
-    public S parse(TokenInput<S> input) throws ParseErrorException {
-        S state = initialState;
-        Position mark = input.position();
-        while(!state.accepted()) try {
-            mark = input.position();
-            Token<S> next = input.next();
-            state = next.accept(state);
-        } catch (UnexpectedInputException | IOException un) {
-            throw new ParseErrorException(mark, un);
-        }
-        return state;
-    }
-
 }

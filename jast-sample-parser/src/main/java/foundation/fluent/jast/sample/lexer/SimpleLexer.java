@@ -29,29 +29,27 @@
 
 package foundation.fluent.jast.sample.lexer;
 
-import foundation.fluent.jast.parser.AbstractLexer;
+import foundation.fluent.jast.parser.Input;
+import foundation.fluent.jast.parser.Lexer;
 import foundation.fluent.jast.parser.ParseErrorException;
 import foundation.fluent.jast.sample.states.StateVisitor;
 import foundation.fluent.jast.sample.tokens.Token;
 
-import java.io.Reader;
+import java.io.IOException;
 
 import static foundation.fluent.jast.sample.lexer.SimpleLexer.State.*;
 import static java.lang.Character.*;
 
-public class SimpleLexer extends AbstractLexer<StateVisitor> {
-
-    public SimpleLexer(Reader reader) throws ParseErrorException {
-        super("", reader);
-    }
+public class SimpleLexer implements Lexer<StateVisitor> {
 
     enum State {START, LPAR, RPAR, PLUS, IDENT, END}
 
     @Override
-    public Token next() throws ParseErrorException {
+    public Token next(Input input) throws IOException {
         State state = State.START;
         StringBuilder builder = new StringBuilder();
         do {
+            int look = input.lookahead();
             switch(state) {
                 case START:
                     switch (look) {
@@ -78,7 +76,7 @@ public class SimpleLexer extends AbstractLexer<StateVisitor> {
                         return Token.ident(builder.toString(), 0, 0);
             }
             builder.append((char) look);
-            move();
+            input.move();
         } while (true);
     }
 }
