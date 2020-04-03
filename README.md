@@ -121,3 +121,11 @@ within the prefix__. So it's typesafe. As reduction is done within a state visit
 information of all elements on the stack to be used in the rule application (AST method invocation).
 
 Example of such parser, but implemented manually, can be found in the module `jast-sample-parser`.
+
+## Further automation for more rapid development
+1. For IsA relation in the AST there is always rule A is(B b). Therefore adding such rule automatically seems to
+   simplify the grammar.
+2. Common pattern for lists is pair of rules - empty rule, and list + item. If there is a list for which there's no
+   rule, then such pair can be added automatically. That would also significantly simplify the grammar. But it may
+   result in a magic. So it can be explicitly controlled by annotations.
+   
