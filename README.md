@@ -81,8 +81,11 @@ information - token description (a.k.a. regular expression).
 Simply annotate the class representing terminal symbol with `@Name`:
 
 ```java
-@Name("=")
-class Equal {}
+@Name(".") class Dot {}
+@Name("+") class Plus {}
+@Name("(") class LPar {}
+@Name(")") class RPar {}
+@Pattern("\\w\\a*") class Identifier {}
 ```
 
 Resulting generated code usage example is following:
