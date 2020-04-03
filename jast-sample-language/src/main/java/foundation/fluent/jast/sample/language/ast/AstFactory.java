@@ -33,48 +33,24 @@ import foundation.fluent.jast.RulePriority;
 import foundation.fluent.jast.StartSymbol;
 import foundation.fluent.jast.common.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static foundation.fluent.jast.parser.AstUtils.addTo;
+import static foundation.fluent.jast.parser.AstUtils.list;
+
 @RulePriority(1)
-public class AstFactory {
+public interface AstFactory {
 
     @StartSymbol
-    public static Program program(List<Statement> statements, End end) {
-        return new Program(statements);
-    }
+    static Program         is  (List<Statement> s, End e)            { return new Program(s); }
+    static List<Statement> is  ()                                    { return list(); }
+    static List<Statement> is  (List<Statement> l, Statement s)      { return addTo(l, s); }
+    static Statement       is  (Expression e, Dot d)                 { return new ExpressionStatement(e); }
+    static Expression      is  (Expression l, Plus p, Expression r)  { return new BinaryExpression(l, r); }
+    static Expression      is  (Identifier i)                        { return i; }
+    static Expression      is  (LPar l, Expression e, RPar r)        { return e; }
 
-    public static List<Statement> statements() {
-        return new ArrayList<>();
-    }
-
-    public static List<Statement> statements(List<Statement> statements, Statement statement) {
-        statements.add(statement);
-        return statements;
-    }
-
-    public static Statement statement(Expression expression, Dot dot) {
-        return new ExpressionStatement(expression);
-    }
-
-    public static Expression expression(Operand operand) {
-        return operand.getExpression();
-    }
-
-    public static Expression expression(Expression left, Plus plus, Expression right) {
-        return new BinaryExpression(left, right);
-    }
-
-    public static Expression operand(Identifier identifier) {
-        return identifier;
-    }
-
-    public static Expression expression(LPar l, Expression expression, RPar r) {
-        return expression;
-    }
-
-    public void ignore(WhiteSpace w) {}
-
-    public void ignore(Comment c) {}
+    static void ignore(WhiteSpace w) {}
+    static void ignore(Comment c) {}
 
 }
