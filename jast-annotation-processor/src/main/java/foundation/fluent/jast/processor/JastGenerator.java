@@ -29,6 +29,7 @@
 
 package foundation.fluent.jast.processor;
 
+import foundation.fluent.jast.parser.Name;
 import foundation.fluent.jast.parser.generator.LrAction;
 import foundation.fluent.jast.parser.generator.LrItem;
 import foundation.fluent.jast.parser.generator.LrItemSet;
@@ -38,13 +39,14 @@ import foundation.fluent.jast.parser.grammar.Symbol;
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
 
@@ -84,6 +86,40 @@ public class JastGenerator {
         w.println("package " + context.getPackageName() + ";");
     }
 
+    private void generateLexer() {
+        try(PrintWriter w = writer("Lexer")) {
+            pkg(w);
+            w.println();
+            w.println("import import foundation.fluent.jast.parser.*;");
+            w.println();
+            w.println("class Lexer extends extends KeywordLexerBase<State> implements foundation.fluent.jast.parser.Lexer<State> {");
+            w.println();
+            w.println("    public Lexer(LiteralFactory<State> factory) {");
+            w.println("        super(factory);");
+            w.println("    }");
+            w.println();
+            w.println("    @Override\"");
+            w.println("    public Token<State> next(Input input) throws ParseErrorException, IOException {");
+            w.println("        Position mark = input.position();");
+            w.println("        if(input.lookahead() < 0) return new TokenEnd(new End(mark));");
+            w.println("        char lookahead = (char) input.lookahead();");
+            w.println("        input.move();");
+            w.println("        switch (lookahead) {");
+            context.getGrammar().getTerminals().stream().map(context::symbolType).filter(t -> nonNull(t.getAnnotation(Name.class))).collect(groupingBy(t -> t.getAnnotation(Name.class).value().charAt(0))).forEach((c, g) -> {
+                w.print("case '" + c + "': ");
+                if(g.size() == 1) {
+
+                }
+            });
+            w.println("            default: return groups(mark, lookahead, input);");
+            w.println("        }");
+            w.println("    }");
+            w.println("}");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void generateToken(Symbol symbol) {
         try(PrintWriter w = writer("Token" + symbol)) {
             pkg(w);
@@ -102,6 +138,10 @@ public class JastGenerator {
             w.println();
             w.println("    @Override public State accept(State state) throws UnexpectedInputException {");
             w.println("        return state.visit" + symbol + "(symbol);");
+            w.println("    }");
+            w.println();
+            w.println("    @Override public String toString() {");
+            w.println("        return symbol.toString();");
             w.println("    }");
             w.println("}");
         } catch (IOException e) {
@@ -172,7 +212,7 @@ public class JastGenerator {
         LrItem longest = Collections.max(set.getItems());
         try(PrintWriter w = writer("State" + context.stateClassName(set))) {
             pkg(w);
-            //w.println("/*\n" + parser + "\n*/\n\n");
+            w.println("/*\n" + set + "\n*/\n\n");
             int dot = longest.getDot();
             w.println("import foundation.fluent.jast.parser.UnexpectedInputException;");
             w.println("import javax.annotation.Generated;");

@@ -33,18 +33,21 @@ public class Position {
     private final String fileName;
     private int line = 1;
     private int character = 0;
+    private int total = 0;
 
-    private Position(String fileName, int line, int character) {
+    private Position(String fileName, int line, int character, int total) {
         this.fileName = fileName;
         this.line = line;
         this.character = character;
+        this.total = total;
     }
 
     public Position(String fileName) {
-        this(fileName, 1, 0);
+        this(fileName, 1, 0, 0);
     }
 
     public void move(char character) {
+        total++;
         if(character == '\n') {
             line++;
             this.character = 0;
@@ -65,13 +68,17 @@ public class Position {
         return character;
     }
 
+    public int getTotal() {
+        return total;
+    }
+
     @Override
     public String toString() {
         return fileName + ": line: " + line + ", character: " + character;
     }
 
     public Position copy() {
-        return new Position(fileName, line, character);
+        return new Position(fileName, line, character, total);
     }
 
 }

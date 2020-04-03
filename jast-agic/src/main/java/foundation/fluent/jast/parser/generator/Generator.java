@@ -63,19 +63,16 @@ public class Generator {
             changed = false;
             for(Symbol symbol : grammar.getNonTerminals()) {
                 for(Rule rule : grammar.rulesFor(symbol)) {
-                    if(rule.getRight().isEmpty()) {
-                        changed |= first.add(symbol, ε);
-                    } else {
-                        Set<Symbol> symbols = new LinkedHashSet<>();
-                        for(Symbol s : rule.getRight()) {
-                            symbols.addAll(first.get(s));
-                            if(!symbols.contains(ε)) {
-                                break;
-                            }
-                            symbols.remove(ε);
+                    Set<Symbol> symbols = new LinkedHashSet<>();
+                    for(Symbol s : rule.getRight()) {
+                        symbols.addAll(first.get(s));
+                        if(!symbols.contains(ε)) {
+                            break;
                         }
-                        changed |= first.add(symbol, symbols);
+                        symbols.remove(ε);
                     }
+                    symbols.add(ε);
+                    changed |= first.add(symbol, symbols);
                 }
             }
         } while (changed);

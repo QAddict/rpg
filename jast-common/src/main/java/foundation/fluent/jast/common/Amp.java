@@ -29,19 +29,12 @@
 
 package foundation.fluent.jast.common;
 
+import foundation.fluent.jast.parser.Name;
 import foundation.fluent.jast.parser.Position;
 
-public class Identifier extends Token {
-    private final String name;
-
-    public Identifier(Position position, String name) {
+@Name("&")
+public final class Amp extends Token {
+    public Amp(Position position) {
         super(position);
-        this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
 }

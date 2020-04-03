@@ -51,7 +51,7 @@ public class AstUtils {
 
     public static String expected(Class<?> of) {
         Name name = of.getAnnotation(Name.class);
-        return isNull(name) ? of.getSimpleName() : name.value();
+        return isNull(name) ? "<" + of.getSimpleName() + ">" : name.value();
     }
 
 }
