@@ -27,33 +27,10 @@
  *
  */
 
-package foundation.fluent.jast.sample.language.ast;
+package foundation.fluent.jast;
 
-import foundation.fluent.jast.MetaRule;
-import foundation.fluent.jast.RulePriority;
-import foundation.fluent.jast.StartSymbol;
-import foundation.fluent.jast.common.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
-import java.util.List;
-
-import static foundation.fluent.jast.parser.AstUtils.addTo;
-import static foundation.fluent.jast.parser.AstUtils.list;
-
-@RulePriority(1)
-public interface AstFactory {
-
-    @StartSymbol
-    static Program         is  (@SimpleList List<Statement> s, End e)            { return new Program(s); }
-    static Statement       is  (Expression e, Dot d)                 { return new ExpressionStatement(e); }
-    static Expression      is  (Expression l, Plus p, Expression r)  { return new BinaryExpression(l, r); }
-    static Expression      is  (Identifier i)                        { return i; }
-    static Expression      is  (LPar l, Expression e, RPar r)        { return e; }
-
-    static void ignore(WhiteSpace w) {}
-    static void ignore(Comment c) {}
-
-    @SimpleList static <T> List<T> simpleList () { return list(); }
-    @SimpleList static <T> List<T> simpleList (List<T> l, T t) { return addTo(l, t); }
-
-    @MetaRule @interface SimpleList {}
-}
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface MetaRule {}

@@ -34,11 +34,13 @@ import foundation.fluent.jast.parser.generator.LrAction;
 import foundation.fluent.jast.parser.generator.LrItem;
 import foundation.fluent.jast.parser.generator.LrItemSet;
 import foundation.fluent.jast.parser.generator.LrParser;
+import foundation.fluent.jast.parser.grammar.Rule;
 import foundation.fluent.jast.parser.grammar.Symbol;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
@@ -46,8 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.IntStream.range;
 
 public class JastGenerator {
@@ -149,14 +150,14 @@ public class JastGenerator {
         }
     }
 
-    private String chainedType(List<? extends VariableElement> parameters, int length, int noWildcard) {
-        return length > 0 ? "StackState<" + parameters.get(length - 1).asType() + ", " + chainedType(parameters, length - 1, noWildcard - 1) + ">" : noWildcard > 0 ? "State" : "? extends State";
+    private String chainedType(List<TypeMirror> parameters, int length, int noWildcard) {
+        return length > 0 ? "StackState<" + parameters.get(length - 1) + ", " + chainedType(parameters, length - 1, noWildcard - 1) + ">" : noWildcard > 0 ? "State" : "? extends State";
     }
 
-    private String chainedVar(List<? extends VariableElement> parameters, int length) {
+    private String chainedVar(List<TypeMirror> parameters, int length) {
         return chainedType(parameters, length, 1);
     }
-    private String chainedType(List<? extends VariableElement> parameters, int length) {
+    private String chainedType(List<TypeMirror> parameters, int length) {
         return chainedType(parameters, length, 2);
     }
 
@@ -218,10 +219,10 @@ public class JastGenerator {
             w.println("import javax.annotation.Generated;");
             w.println();
             w.println("@Generated(\"Generated visitor pattern based state for grammar parser.\")");
-            List<? extends VariableElement> longestParameters = context.methodOf(longest.getRule()).getParameters();
+            List<TypeMirror> longestParameters = longest.getRule().getRight().stream().map(context::symbolType).collect(toList());
             if(dot > 0) {
                 w.println("public class State" + set.getName() + " extends " + chainedType(longestParameters, dot) + " {");
-                w.println("    public State" + set.getName() + "(" + longestParameters.get(dot - 1).asType() + " node, " + chainedVar(longestParameters, dot - 1) + " prev) {");
+                w.println("    public State" + set.getName() + "(" + longestParameters.get(dot - 1) + " node, " + chainedVar(longestParameters, dot - 1) + " prev) {");
                 w.println("        super(node, prev);");
                 w.println("    }");
             } else {
@@ -235,24 +236,27 @@ public class JastGenerator {
                         w.println("\t}");
                     }
                     @Override public void visitReduction(LrItem item) {
-                        ExecutableElement method = context.methodOf(item.getRule());
+                        Rule rule = item.getRule();
+                        ExecutableElement method = context.methodOf(rule);
+                        TypeMirror rType = context.symbolType(rule.getLeft());
                         List<? extends VariableElement> parameters = method.getParameters();
                         int size = parameters.size();
                         w.println("\t@Override public State visit" + entry.getKey() +"(" + context.symbolType(entry.getKey()) + " symbol) throws UnexpectedInputException {");
                         if(parameters.isEmpty()) {
-                            w.println("\t\treturn visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "()).visit" + entry.getKey() + "(symbol);");
+                            w.println("\t\treturn visit" + context.of(rType) + "(" + methodName(method) + "()).visit" + entry.getKey() + "(symbol);");
                         } else {
                             w.println("\t\t" + chainedVar(longestParameters, dot) + " stack0 = this;");
                             for(int i = 1; i < size; i++) {
                                 w.println("\t\t" + chainedVar(longestParameters, dot - i) + " stack" + i + " = stack" + (i - 1) + ".getPrev();");
                             }
-                            w.println("\t\treturn stack" + (size - 1) + ".getPrev().visit" + context.of(method.getReturnType()) + "(" + methodName(method) + "(" + range(0, size).mapToObj(i -> "stack" + (size - i - 1) + ".getNode()").collect(joining(", ")) + ")).visit" + entry.getKey() + "(symbol);");
+                            w.println("\t\treturn stack" + (size - 1) + ".getPrev().visit" + context.of(rType) + "(" + methodName(method) + "(" + range(0, size).mapToObj(i -> "stack" + (size - i - 1) + ".getNode()").collect(joining(", ")) + ")).visit" + entry.getKey() + "(symbol);");
                         }
                         w.println("\t}");
                     }
                     @Override public void visitAccept(LrItem item) {
                         ExecutableElement method = context.methodOf(item.getRule());
-                        List<? extends VariableElement> parameters = method.getParameters();
+                        List<TypeMirror> parameters = longest.getRule().getRight().stream().map(context::symbolType).collect(toList());
+                        //List<? extends VariableElement> parameters = method.getParameters();
                         int size = parameters.size();
                         w.println("\t@Override public boolean accepted() {");
                         w.println("\t\treturn true;");

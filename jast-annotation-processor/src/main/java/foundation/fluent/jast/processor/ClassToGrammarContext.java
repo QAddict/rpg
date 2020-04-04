@@ -29,6 +29,7 @@
 
 package foundation.fluent.jast.processor;
 
+import foundation.fluent.jast.MetaRule;
 import foundation.fluent.jast.RulePriority;
 import foundation.fluent.jast.StartSymbol;
 import foundation.fluent.jast.parser.generator.LrItemSet;
@@ -36,8 +37,11 @@ import foundation.fluent.jast.parser.grammar.Grammar;
 import foundation.fluent.jast.parser.grammar.Rule;
 import foundation.fluent.jast.parser.grammar.Symbol;
 
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
@@ -45,9 +49,10 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static foundation.fluent.jast.parser.grammar.Rule.rule;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.*;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
 public class ClassToGrammarContext {
@@ -66,18 +71,40 @@ public class ClassToGrammarContext {
         Element factoryClass = startRule.getEnclosingElement();
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
         int priority = priority(factoryClass, 0);
-        methodsIn(factoryClass.getEnclosedElements()).forEach(method -> {
+        List<ExecutableElement> methods = methodsIn(factoryClass.getEnclosedElements());
+        Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
+        methods.stream().filter(m -> !hasMetaRuleAnnotation(m)).forEach(method -> {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {
                 method.getParameters().forEach(p -> ignored.add(of(p.asType())));
             } else {
                 rules.add(ruleOf(method, priority(method, priority)));
+                method.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(p -> {
+                    DeclaredType l = (DeclaredType) p.asType();
+                    metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
+                        rules.add(ruleOf(metaRule, priority, l, metaSymbols(metaRule, l)));
+                    });
+                });
             }
         });
-        grammar = Grammar.grammar(
-                of(startRule.getReturnType()),
-                rules,
-                ignored
-        );
+        grammar = Grammar.grammar(of(startRule.getReturnType()), rules, ignored);
+    }
+
+    private boolean isMetaRuleAnnotation(AnnotationMirror a) {
+        return nonNull((a.getAnnotationType()).asElement().getAnnotation(MetaRule.class));
+    }
+
+    private boolean hasMetaRuleAnnotation(Element e) {
+        return e.getAnnotationMirrors().stream().anyMatch(this::isMetaRuleAnnotation);
+    }
+
+    private String getMetaRuleAnnotation(Element e) {
+        return e.getAnnotationMirrors().stream().filter(this::isMetaRuleAnnotation).findFirst().map(Object::toString).orElse(null);
+    }
+
+    private List<TypeMirror> metaSymbols(ExecutableElement metaRule, DeclaredType target) {
+        TypeMirror tm = metaRule.asType();
+        Map<String, TypeMirror> map = TypeUtils.resolveParameters(metaRule, target);
+        return metaRule.getParameters().stream().map(Element::asType).map(t -> map.getOrDefault(t.toString(), t)).collect(toList());
     }
 
     int priority(Element element, int defaultPriority) {
@@ -90,7 +117,11 @@ public class ClassToGrammarContext {
     }
 
     Rule ruleOf(ExecutableElement method, int priority) {
-        Rule rule = rule(of(method.getReturnType()), method.getParameters().stream().map(par -> of(par.asType())).collect(toList()), priority);
+        return ruleOf(method, priority, method.getReturnType(), method.getParameters().stream().map(VariableElement::asType).collect(toList()));
+    }
+
+    Rule ruleOf(ExecutableElement method, int priority, TypeMirror l, List<TypeMirror> r) {
+        Rule rule = rule(of(l), r.stream().map(this::of).collect(toList()), priority);
         ruleAssociation.put(rule, method);
         return rule;
     }
