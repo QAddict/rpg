@@ -27,35 +27,15 @@
  *
  */
 
-package foundation.fluent.jast.parser;
+package foundation.fluent.jast.lexer.pattern;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Range implements Item {
+    private final char l;
+    private final char h;
 
-import static java.util.Collections.unmodifiableList;
-import static java.util.Objects.isNull;
-
-public class AstUtils {
-
-    public static <T> List<T> addTo(List<T> list, T item) {
-        list.add(item);
-        return list;
+    public Range(char l, char h) {
+        this.l = l;
+        this.h = h;
     }
 
-    public static <T> List<T> list() {
-        return new ArrayList<>();
-    }
-
-    public static <T> List<T> list(T item) {
-        return addTo(new ArrayList<>(), item);
-    }
-
-    public static String expected(Class<?> of) {
-        Name name = of.getAnnotation(Name.class);
-        return isNull(name) ? "<" + of.getSimpleName() + ">" : name.value();
-    }
-
-    public static <T> List<T> copy(List<T> list) {
-        return unmodifiableList(new ArrayList<>(list));
-    }
 }

@@ -49,6 +49,7 @@
         <module>jast-parser</module>
         <module>jast-annotation-processor</module>
         <module>jast-sample-language</module>
+        <module>jast-lexer-generator</module>
     </modules>
 
     <url>https://github.com/c0stra/jast-agic/wiki/jast-agic</url>

@@ -30,7 +30,7 @@
 package foundation.fluent.jast.processor;
 
 import foundation.fluent.jast.MetaRule;
-import foundation.fluent.jast.RulePriority;
+import foundation.fluent.jast.Priority;
 import foundation.fluent.jast.StartSymbol;
 import foundation.fluent.jast.parser.generator.LrItemSet;
 import foundation.fluent.jast.parser.grammar.Grammar;
@@ -50,6 +50,7 @@ import java.util.stream.Stream;
 
 import static foundation.fluent.jast.parser.grammar.Rule.rule;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;
@@ -78,15 +79,21 @@ public class ClassToGrammarContext {
                 method.getParameters().forEach(p -> ignored.add(of(p.asType())));
             } else {
                 rules.add(ruleOf(method, priority(method, priority)));
-                method.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(p -> {
-                    DeclaredType l = (DeclaredType) p.asType();
-                    metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
-                        rules.add(ruleOf(metaRule, priority, l, metaSymbols(metaRule, l)));
-                    });
-                });
+                addMetaRules(method, metaRules, rules, priority, emptyMap());
             }
         });
         grammar = Grammar.grammar(of(startRule.getReturnType()), rules, ignored);
+    }
+
+    private void addMetaRules(ExecutableElement method, Map<String, List<ExecutableElement>> metaRules, Set<Rule> rules, int priority, Map<String, TypeMirror> pMap) {
+        method.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(p -> {
+            DeclaredType l = (DeclaredType) metaSymbol(p.asType(), pMap);
+            metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
+                Map<String, TypeMirror> map = pMap.isEmpty() ? TypeUtils.resolveParameters(metaRule, l) : pMap;
+                rules.add(ruleOf(metaRule, priority, l, metaSymbols(metaRule, map)));
+                addMetaRules(metaRule, metaRules, rules, priority, map);
+            });
+        });
     }
 
     private boolean isMetaRuleAnnotation(AnnotationMirror a) {
@@ -101,14 +108,16 @@ public class ClassToGrammarContext {
         return e.getAnnotationMirrors().stream().filter(this::isMetaRuleAnnotation).findFirst().map(Object::toString).orElse(null);
     }
 
-    private List<TypeMirror> metaSymbols(ExecutableElement metaRule, DeclaredType target) {
-        TypeMirror tm = metaRule.asType();
-        Map<String, TypeMirror> map = TypeUtils.resolveParameters(metaRule, target);
-        return metaRule.getParameters().stream().map(Element::asType).map(t -> map.getOrDefault(t.toString(), t)).collect(toList());
+    private List<TypeMirror> metaSymbols(ExecutableElement metaRule, Map<String, TypeMirror> map) {
+        return metaRule.getParameters().stream().map(Element::asType).map(t -> metaSymbol(t, map)).collect(toList());
+    }
+
+    private TypeMirror metaSymbol(TypeMirror t, Map<String, TypeMirror> map) {
+        return map.getOrDefault(t.toString(), t);
     }
 
     int priority(Element element, int defaultPriority) {
-        RulePriority annotation = element.getAnnotation(RulePriority.class);
+        Priority annotation = element.getAnnotation(Priority.class);
         return isNull(annotation) ? defaultPriority : annotation.value();
     }
 

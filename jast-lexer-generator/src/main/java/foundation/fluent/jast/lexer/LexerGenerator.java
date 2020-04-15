@@ -27,35 +27,43 @@
  *
  */
 
-package foundation.fluent.jast.parser;
+package foundation.fluent.jast.lexer;
 
-import java.util.ArrayList;
-import java.util.List;
+import foundation.fluent.jast.lexer.pattern.*;
+import foundation.fluent.jast.parser.Name;
+import foundation.fluent.jast.parser.ParseErrorException;
 
-import static java.util.Collections.unmodifiableList;
+import java.io.IOException;
+import java.util.*;
+
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
 
-public class AstUtils {
+public class LexerGenerator implements Comparator<Class<?>> {
 
-    public static <T> List<T> addTo(List<T> list, T item) {
-        list.add(item);
-        return list;
+    private final PatternParser parser = new PatternParser();
+
+    public void generate(List<Class<?>> tokens) throws IOException, ParseErrorException {
+        Map<Pattern, Class<?>> patterns = new LinkedHashMap<>();
+        tokens.sort(this);
+        for(Class<?> token : tokens)
+            patterns.put(patternOf(token), token);
+
     }
 
-    public static <T> List<T> list() {
-        return new ArrayList<>();
+    private Pattern patternOf(Class<?> token) throws IOException, ParseErrorException {
+        foundation.fluent.jast.parser.Pattern pattern = token.getAnnotation(foundation.fluent.jast.parser.Pattern.class);
+        if(nonNull(pattern))
+            return parser.parse(pattern.value());
+        Name name = token.getAnnotation(Name.class);
+        if(isNull(name))
+            throw new IllegalArgumentException(token.getSimpleName());
+        return new Pattern(Collections.singletonList(new Option(name.value().chars().mapToObj(c -> new Unit(new Char((char) c), Occurrence.ONE)).collect(toList()))));
     }
 
-    public static <T> List<T> list(T item) {
-        return addTo(new ArrayList<>(), item);
-    }
-
-    public static String expected(Class<?> of) {
-        Name name = of.getAnnotation(Name.class);
-        return isNull(name) ? "<" + of.getSimpleName() + ">" : name.value();
-    }
-
-    public static <T> List<T> copy(List<T> list) {
-        return unmodifiableList(new ArrayList<>(list));
+    @Override
+    public int compare(Class<?> o1, Class<?> o2) {
+        return 0;
     }
 }

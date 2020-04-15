@@ -27,20 +27,12 @@
  *
  */
 
-package foundation.fluent.jast.lexer;
+package foundation.fluent.jast;
 
-import foundation.fluent.jast.parser.grammar.Symbol;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
-public class LexerSymbol implements Symbol {
-
-    private final String name;
-
-    public LexerSymbol(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
+@Target({ElementType.METHOD, ElementType.TYPE})
+public @interface Priority {
+    int value();
 }

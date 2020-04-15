@@ -29,16 +29,32 @@
 
 package foundation.fluent.jast.lexer;
 
-public interface Unit {
+import foundation.fluent.jast.lexer.pattern.Pattern;
+import foundation.fluent.jast.parser.ParseErrorException;
+import org.testng.annotations.Test;
 
-    class Char implements Unit {
-        private final int value;
-        private Char(int value) {
-            this.value = value;
-        }
+import java.io.IOException;
+
+public class PatternParserTest {
+
+    private final PatternParser parser = new PatternParser();
+
+    @Test
+    public void testParse1() throws IOException, ParseErrorException {
+        Pattern abc = parser.parse("a*bc");
+        System.out.println(abc);
     }
 
-    class Class implements Unit {
-
+    @Test
+    public void testParse2() throws IOException, ParseErrorException {
+        Pattern abc = parser.parse("\\w");
+        System.out.println(abc);
     }
+
+    @Test
+    public void testParse3() throws IOException, ParseErrorException {
+        Pattern abc = parser.parse("\\w*");
+        System.out.println(abc);
+    }
+
 }

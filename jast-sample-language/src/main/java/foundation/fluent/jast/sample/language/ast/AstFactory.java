@@ -30,16 +30,17 @@
 package foundation.fluent.jast.sample.language.ast;
 
 import foundation.fluent.jast.MetaRule;
-import foundation.fluent.jast.RulePriority;
+import foundation.fluent.jast.Priority;
 import foundation.fluent.jast.StartSymbol;
 import foundation.fluent.jast.common.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import static foundation.fluent.jast.parser.AstUtils.addTo;
 import static foundation.fluent.jast.parser.AstUtils.list;
 
-@RulePriority(1)
+@Priority(1)
 public interface AstFactory {
 
     @StartSymbol
@@ -48,6 +49,7 @@ public interface AstFactory {
     static Expression      is  (Expression l, Plus p, Expression r)  { return new BinaryExpression(l, r); }
     static Expression      is  (Identifier i)                        { return i; }
     static Expression      is  (LPar l, Expression e, RPar r)        { return e; }
+    static Expression      is  (Identifier i, LPar l, @EmptyCommaList N<List<Expression>> e, RPar r) { return null; }
 
     static void ignore(WhiteSpace w) {}
     static void ignore(Comment c) {}
@@ -55,5 +57,12 @@ public interface AstFactory {
     @SimpleList static <T> List<T> simpleList () { return list(); }
     @SimpleList static <T> List<T> simpleList (List<T> l, T t) { return addTo(l, t); }
 
+    @EmptyCommaList static <T> N<List<T>> l() { return new N<>(Collections.emptyList()); }
+    @EmptyCommaList static <T> N<List<T>> l(@CommaList List<T> l) {return new N<>(l); }
+    @CommaList static <T> List<T> commaList (T t) { return list(t); }
+    @CommaList static <T> List<T> commaList (List<T> l, Comma c, T t) { return addTo(l, t); }
+
     @MetaRule @interface SimpleList {}
+    @MetaRule @interface CommaList {}
+    @MetaRule @interface EmptyCommaList {}
 }

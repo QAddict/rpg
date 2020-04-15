@@ -20,7 +20,7 @@ the the factory, which in turn defines our grammar rules:
 ```java
 package foundation.fluent.jast.sample.language.ast;
 
-import foundation.fluent.jast.RulePriority;
+import foundation.fluent.jast.Priority;
 import foundation.fluent.jast.StartSymbol;
 import foundation.fluent.jast.common.*;
 

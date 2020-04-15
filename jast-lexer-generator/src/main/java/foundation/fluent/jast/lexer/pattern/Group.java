@@ -27,12 +27,12 @@
  *
  */
 
-package foundation.fluent.jast;
+package foundation.fluent.jast.lexer.pattern;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
+public class Group implements Chunk {
+    private final char g;
 
-@Target({ElementType.METHOD, ElementType.TYPE})
-public @interface RulePriority {
-    int value();
+    public Group(char g) {
+        this.g = g;
+    }
 }
