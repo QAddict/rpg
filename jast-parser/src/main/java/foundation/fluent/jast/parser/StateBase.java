@@ -31,10 +31,10 @@ package foundation.fluent.jast.parser;
 
 import java.util.stream.Stream;
 
-import static foundation.fluent.jast.parser.AstUtils.expected;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
-public class StateBase {
+public class StateBase<R> {
 
     public boolean accepted() {
         return false;
@@ -42,6 +42,15 @@ public class StateBase {
 
     public <T> T error(Object symbol) throws UnexpectedInputException {
         throw new UnexpectedInputException(getClass().getSimpleName(), symbol, Stream.of(getClass().getDeclaredMethods()).filter(m -> m.getName().startsWith("visit") && m.getParameterCount() == 1).map(m -> expected(m.getParameterTypes()[0])).collect(toList()));
+    }
+
+    public R result() {
+        throw new IllegalStateException("End not reached.");
+    }
+
+    private static String expected(Class<?> of) {
+        Name name = of.getAnnotation(Name.class);
+        return isNull(name) ? "<" + of.getSimpleName() + ">" : name.value();
     }
 
 }

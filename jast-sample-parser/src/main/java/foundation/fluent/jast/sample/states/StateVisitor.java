@@ -37,7 +37,7 @@ import foundation.fluent.jast.parser.StateBase;
 import foundation.fluent.jast.sample.ast.Expression;
 import foundation.fluent.jast.sample.ast.Identifier;
 
-public class StateVisitor extends StateBase {
+public class StateVisitor extends StateBase<Expression> {
 
     public StateVisitor visitAny(Object object) {
         throw new IllegalStateException(getClass().getSimpleName() + ": Unexpected " + object.getClass().getSimpleName());
@@ -69,10 +69,6 @@ public class StateVisitor extends StateBase {
 
     public boolean accepted() {
         return false;
-    }
-
-    public Expression result() {
-        throw new IllegalStateException(getClass().getSimpleName() + ": Result not available.");
     }
 
 }

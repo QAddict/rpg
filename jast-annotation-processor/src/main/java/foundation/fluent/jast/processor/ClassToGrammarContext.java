@@ -32,10 +32,11 @@ package foundation.fluent.jast.processor;
 import foundation.fluent.jast.MetaRule;
 import foundation.fluent.jast.Priority;
 import foundation.fluent.jast.StartSymbol;
-import foundation.fluent.jast.parser.generator.LrItemSet;
-import foundation.fluent.jast.parser.grammar.Grammar;
-import foundation.fluent.jast.parser.grammar.Rule;
-import foundation.fluent.jast.parser.grammar.Symbol;
+import foundation.fluent.jast.automata.LrItemSet;
+import foundation.fluent.jast.generator.TypeUtils;
+import foundation.fluent.jast.grammar.Grammar;
+import foundation.fluent.jast.grammar.Rule;
+import foundation.fluent.jast.grammar.Symbol;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
@@ -48,7 +49,7 @@ import javax.lang.model.type.TypeMirror;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static foundation.fluent.jast.parser.grammar.Rule.rule;
+import static foundation.fluent.jast.grammar.Rule.rule;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.isNull;
@@ -116,20 +117,20 @@ public class ClassToGrammarContext {
         return map.getOrDefault(t.toString(), t);
     }
 
-    int priority(Element element, int defaultPriority) {
+    public int priority(Element element, int defaultPriority) {
         Priority annotation = element.getAnnotation(Priority.class);
         return isNull(annotation) ? defaultPriority : annotation.value();
     }
 
-    Symbol of(TypeMirror mirror) {
+    public Symbol of(TypeMirror mirror) {
         return symbolMap.computeIfAbsent(mirror.toString(), key -> new TypeSymbol(mirror, uniqueName(mirror)));
     }
 
-    Rule ruleOf(ExecutableElement method, int priority) {
+    public Rule ruleOf(ExecutableElement method, int priority) {
         return ruleOf(method, priority, method.getReturnType(), method.getParameters().stream().map(VariableElement::asType).collect(toList()));
     }
 
-    Rule ruleOf(ExecutableElement method, int priority, TypeMirror l, List<TypeMirror> r) {
+    public Rule ruleOf(ExecutableElement method, int priority, TypeMirror l, List<TypeMirror> r) {
         Rule rule = rule(of(l), r.stream().map(this::of).collect(toList()), priority);
         ruleAssociation.put(rule, method);
         return rule;

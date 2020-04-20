@@ -29,15 +29,16 @@
 
 package foundation.fluent.jast.parser.generator;
 
-import foundation.fluent.jast.parser.grammar.Grammar;
-import foundation.fluent.jast.parser.grammar.Symbol;
+import foundation.fluent.jast.grammar.Grammar;
+import foundation.fluent.jast.grammar.Symbol;
+import foundation.fluent.jast.automata.LrParserConstructor;
+import foundation.fluent.jast.automata.LrParserAutomata;
 import org.testng.annotations.Test;
 
 import static foundation.fluent.jast.parser.generator.LexerGeneratorTest.Ch.*;
 import static foundation.fluent.jast.parser.generator.LexerGeneratorTest.T.*;
 import static foundation.fluent.jast.parser.generator.RuleBuilder.of;
 import static foundation.fluent.jast.parser.generator.RuleBuilder.rule;
-import static foundation.fluent.jast.parser.grammar.Symbol.ε;
 import static java.util.Collections.emptySet;
 
 public class LexerGeneratorTest {
@@ -78,7 +79,7 @@ public class LexerGeneratorTest {
                 rule(T.IDEN_CONT).priority(-2).to(s, T.IDEN_CONT),
                 rule(Kw.THIS).priority(-1).to(t,h,i,s)
         ), emptySet());
-        LrParser parser = new Generator(grammar).parser();
+        LrParserAutomata parser = new LrParserConstructor(grammar).constructAutomata();
         System.out.println(parser);
     }
 

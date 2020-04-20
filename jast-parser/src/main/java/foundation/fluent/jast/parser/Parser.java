@@ -31,7 +31,7 @@ package foundation.fluent.jast.parser;
 
 import java.io.IOException;
 
-public class Parser<S extends StateBase> {
+public class Parser<R, S extends StateBase<R>> {
 
     private final S initialState;
 
@@ -39,7 +39,7 @@ public class Parser<S extends StateBase> {
         this.initialState = initialState;
     }
 
-    public S parse(TokenInput<S> input) throws ParseErrorException {
+    public R parse(TokenInput<S> input) throws ParseErrorException {
         S state = initialState;
         Position mark = input.position();
         while(!state.accepted()) try {
@@ -49,7 +49,7 @@ public class Parser<S extends StateBase> {
         } catch (UnexpectedInputException | IOException un) {
             throw new ParseErrorException(mark, un);
         }
-        return state;
+        return state.result();
     }
 
 }

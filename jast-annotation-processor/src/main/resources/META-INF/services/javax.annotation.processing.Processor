@@ -56,5 +56,5 @@
 #
 #
 
-foundation.fluent.jast.processor.JastProcessor
+foundation.fluent.jast.processor.StartSymbolProcessor
 

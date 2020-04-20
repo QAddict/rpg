@@ -65,16 +65,15 @@ public class ParserTest {
                 RPAR,
                 END
         );
-        Expression expression = new Parser<StateVisitor>(new InitialState()).parse(lexer).result();
+        Expression expression = new Parser<Expression, StateVisitor>(new InitialState()).parse(lexer);
         System.out.println(expression);
     }
 
     @Test
     public void testParserAndLexer() throws ParseErrorException, IOException {
         TokenInput<StateVisitor> input = tokenInput(new Input("", new StringReader("(abcd + efg) + gfds")), new SimpleLexer());
-        Parser<StateVisitor> parser = new Parser<>(new InitialState());
-        StateVisitor stateVisitor = parser.parse(input);
-        Expression expression = stateVisitor.result();
+        Parser<Expression, StateVisitor> parser = new Parser<>(new InitialState());
+        Expression expression = parser.parse(input);
         System.out.println(expression);
     }
 

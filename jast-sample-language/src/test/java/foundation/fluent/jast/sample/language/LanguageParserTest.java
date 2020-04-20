@@ -45,7 +45,7 @@ public class LanguageParserTest {
 
     @Test
     public void testParser() throws ParseErrorException, IOException {
-        Parser<State> parser = new Parser<>(new State1());
+        Parser<Program, State> parser = new Parser<>(new State1());
         Position p = new Position("");
         TokenInput<State> lexer = mock(TokenInput.class);
         when(lexer.next()).thenReturn(
@@ -57,7 +57,7 @@ public class LanguageParserTest {
                 new TokenDot(new Dot(p)),
                 new TokenEnd(new End(p))
         );
-        Program program = parser.parse(lexer).result();
+        Program program = parser.parse(lexer);
         System.out.println(program);
     }
 

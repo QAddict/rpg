@@ -35,8 +35,8 @@ import foundation.fluent.jast.common.*;
 import java.util.List;
 
 import static foundation.fluent.jast.lexer.pattern.Occurrence.*;
-import static foundation.fluent.jast.parser.AstUtils.addTo;
-import static foundation.fluent.jast.parser.AstUtils.list;
+import static foundation.fluent.jast.common.AstUtils.addTo;
+import static foundation.fluent.jast.common.AstUtils.list;
 
 public interface PatternFactory {
     @StartSymbol

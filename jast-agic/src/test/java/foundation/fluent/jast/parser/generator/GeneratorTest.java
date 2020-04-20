@@ -29,8 +29,10 @@
 
 package foundation.fluent.jast.parser.generator;
 
-import foundation.fluent.jast.parser.grammar.Grammar;
-import foundation.fluent.jast.parser.grammar.Symbol;
+import foundation.fluent.jast.grammar.Grammar;
+import foundation.fluent.jast.grammar.Symbol;
+import foundation.fluent.jast.automata.LrParserConstructor;
+import foundation.fluent.jast.automata.LrParserAutomata;
 import org.testng.annotations.Test;
 
 import static foundation.fluent.jast.parser.generator.GeneratorTest.Symbols.*;
@@ -48,7 +50,7 @@ public class GeneratorTest {
                 rule(S).to(A, ε),
                 rule(A).to(a, A)
         ), emptySet());
-        LrParser parser = Generator.generateParser(grammar);
+        LrParserAutomata parser = LrParserConstructor.generateParser(grammar);
         System.out.println(parser);
     }
 

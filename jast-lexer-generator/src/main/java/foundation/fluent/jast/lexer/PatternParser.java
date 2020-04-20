@@ -38,20 +38,20 @@ import foundation.fluent.jast.parser.Token;
 import java.io.IOException;
 import java.io.StringReader;
 
-public class PatternParser extends Parser<State> {
+public class PatternParser extends Parser<Pattern, State> {
 
     private static final State initialState = new State1();
-    private static final Lexer lexer = new Lexer();
+    private static final PatternLexer lexer = new PatternLexer();
 
     public PatternParser() {
         super(initialState);
     }
 
     public Pattern parse(String pattern) throws IOException, ParseErrorException {
-        return parse(TokenInput.tokenInput(new Input(pattern, new StringReader(pattern)), lexer)).result();
+        return parse(TokenInput.tokenInput(new Input(pattern, new StringReader(pattern)), lexer));
     }
 
-    private static class Lexer implements foundation.fluent.jast.parser.Lexer<State> {
+    private static class PatternLexer implements Lexer<State> {
 
         @Override
         public Token<State> next(Input input) throws IOException {

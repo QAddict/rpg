@@ -29,8 +29,8 @@
 
 package foundation.fluent.jast.parser.generator;
 
-import foundation.fluent.jast.parser.grammar.Rule;
-import foundation.fluent.jast.parser.grammar.Symbol;
+import foundation.fluent.jast.grammar.Rule;
+import foundation.fluent.jast.grammar.Symbol;
 
 import java.util.Set;
 import java.util.stream.Stream;

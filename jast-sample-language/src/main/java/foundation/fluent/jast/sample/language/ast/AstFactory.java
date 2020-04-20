@@ -37,8 +37,8 @@ import foundation.fluent.jast.common.*;
 import java.util.Collections;
 import java.util.List;
 
-import static foundation.fluent.jast.parser.AstUtils.addTo;
-import static foundation.fluent.jast.parser.AstUtils.list;
+import static foundation.fluent.jast.common.AstUtils.addTo;
+import static foundation.fluent.jast.common.AstUtils.list;
 
 @Priority(1)
 public interface AstFactory {
