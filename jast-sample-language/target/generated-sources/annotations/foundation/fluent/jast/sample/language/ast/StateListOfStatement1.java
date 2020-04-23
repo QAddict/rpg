@@ -33,8 +33,8 @@ package foundation.fluent.jast.sample.language.ast;
 
 ListOfStatement1: {
 	Program -> ListOfStatement • End []
-	ListOfStatement -> ListOfStatement • Statement [End, Dot, Plus, Identifier, LPar]
-	Statement -> • Expression Dot [Dot, Plus, End, Identifier, LPar]
+	ListOfStatement -> ListOfStatement • Statement [End, Identifier, Dot, LPar, Plus]
+	Statement -> • Expression Dot [Identifier, Dot, LPar, Plus, End]
 	Expression -> • Expression Plus Expression [Dot, Plus]
 	Expression -> • Identifier [Dot, Plus]
 	Expression -> • LPar Expression RPar [Dot, Plus]
@@ -57,16 +57,6 @@ public class StateListOfStatement1 extends StackState<java.util.List<foundation.
     // Reduce:
     // Shift:
     @Override
-    public State visitEnd(foundation.fluent.jast.common.End symbol) {
-        return new StateEnd1(symbol, this);
-    }
-
-    @Override
-    public State visitStatement(foundation.fluent.jast.sample.language.ast.Statement symbol) {
-        return new StateStatement1(symbol, this);
-    }
-
-    @Override
     public State visitIdentifier(foundation.fluent.jast.sample.language.ast.Identifier symbol) {
         return new StateIdentifier1(symbol, this);
     }
@@ -79,6 +69,16 @@ public class StateListOfStatement1 extends StackState<java.util.List<foundation.
     @Override
     public State visitLPar(foundation.fluent.jast.common.LPar symbol) {
         return new StateLPar1(symbol, this);
+    }
+
+    @Override
+    public State visitEnd(foundation.fluent.jast.common.End symbol) {
+        return new StateEnd1(symbol, this);
+    }
+
+    @Override
+    public State visitStatement(foundation.fluent.jast.sample.language.ast.Statement symbol) {
+        return new StateStatement1(symbol, this);
     }
 
 

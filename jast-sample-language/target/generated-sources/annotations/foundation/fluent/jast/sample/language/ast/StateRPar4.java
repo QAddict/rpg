@@ -50,15 +50,6 @@ public class StateRPar4 extends StackState<foundation.fluent.jast.common.RPar, S
 
     // Reduce:
     @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.fluent.jast.sample.language.ast.Expression, StackState<foundation.fluent.jast.common.LPar, ? extends State>> stack1 = this.getPrev();
-		StackState<foundation.fluent.jast.common.LPar, ? extends State> stack2 = stack1.getPrev();
-		State stack3 = stack2.getPrev();
-        return stack3.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
-    }
-
-    @Override
     public State visitComma(foundation.fluent.jast.common.Comma symbol) throws UnexpectedInputException {
         
 		StackState<foundation.fluent.jast.sample.language.ast.Expression, StackState<foundation.fluent.jast.common.LPar, ? extends State>> stack1 = this.getPrev();
@@ -74,6 +65,15 @@ public class StateRPar4 extends StackState<foundation.fluent.jast.common.RPar, S
 		StackState<foundation.fluent.jast.common.LPar, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.fluent.jast.sample.language.ast.Expression, StackState<foundation.fluent.jast.common.LPar, ? extends State>> stack1 = this.getPrev();
+		StackState<foundation.fluent.jast.common.LPar, ? extends State> stack2 = stack1.getPrev();
+		State stack3 = stack2.getPrev();
+        return stack3.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
     }
 
 

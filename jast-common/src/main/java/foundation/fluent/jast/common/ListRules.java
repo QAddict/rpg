@@ -27,50 +27,28 @@
  *
  */
 
-package foundation.fluent.jast.sample.language.ast;
+package foundation.fluent.jast.common;
 
-/*
+import java.util.List;
 
-Identifier2: {
-	Expression -> Identifier • [RPar, Plus]
-	Expression -> Identifier • LPar NOfListOfExpression RPar [RPar, Plus]
-}
+import static foundation.fluent.jast.common.AstUtils.addTo;
+import static foundation.fluent.jast.common.AstUtils.list;
+import static java.util.Collections.emptyList;
 
-*/
+public interface ListRules {
 
-import foundation.fluent.jast.parser.UnexpectedInputException;
-import javax.annotation.Generated;
+    @List1 static <T> List<T> isList1 ()                       { return list(); }
+    @List1 static <T> List<T> isList1 (List<T> l, T t)         { return addTo(l, t); }
 
-@Generated("Generated visitor pattern based state for grammar parser.")
-public class StateIdentifier2 extends StackState<foundation.fluent.jast.sample.language.ast.Identifier, State> {
-    // Stack:
-    public StateIdentifier2(foundation.fluent.jast.sample.language.ast.Identifier node, State prev) {
-        super(node, prev);
-    }
+    @List2 static <T> List<T> isList2(T p)                     { return list(p); }
+    @List2 static <T> List<T> isList2(List<T> l, Comma c, T p) { return addTo(l, p); }
 
+    @List3 static <T> N<List<T>> isList3()                     { return new N<>(emptyList()); }
+    @List3 static <T> N<List<T>> isList3(@List2 List<T> l)     { return new N<>(l); }
 
-    // Reduce:
-    @Override
-    public State visitRPar(foundation.fluent.jast.common.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
-    }
+    @List4 static <T> List<T> isList4 (T t)                    { return list(t); }
+    @List4 static <T> List<T> isList4 (List<T> l, T t)         { return addTo(l, t); }
 
-    @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
-    }
+    @Opt static <T> T notPresent()                             { return null; }
 
-
-    // Shift:
-    @Override
-    public State visitLPar(foundation.fluent.jast.common.LPar symbol) {
-        return new StateLPar6(symbol, this);
-    }
-
-
-    // Accept:
 }

@@ -52,13 +52,13 @@ public class StateExpression5 extends StackState<foundation.fluent.jast.sample.l
     // Reduce:
     // Shift:
     @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) {
-        return new StatePlus2(symbol, this);
+    public State visitRPar(foundation.fluent.jast.common.RPar symbol) {
+        return new StateRPar3(symbol, this);
     }
 
     @Override
-    public State visitRPar(foundation.fluent.jast.common.RPar symbol) {
-        return new StateRPar3(symbol, this);
+    public State visitPlus(foundation.fluent.jast.common.Plus symbol) {
+        return new StatePlus2(symbol, this);
     }
 
 

@@ -27,50 +27,9 @@
  *
  */
 
-package foundation.fluent.jast.sample.language.ast;
+package foundation.fluent.jast.common;
 
-/*
+import foundation.fluent.jast.MetaRule;
 
-Expression4: {
-	ListOfExpression -> Expression • [RPar, Comma]
-	Expression -> Expression • Plus Expression [RPar, Plus, Comma]
-}
-
-*/
-
-import foundation.fluent.jast.parser.UnexpectedInputException;
-import javax.annotation.Generated;
-
-@Generated("Generated visitor pattern based state for grammar parser.")
-public class StateExpression4 extends StackState<foundation.fluent.jast.sample.language.ast.Expression, State> {
-    // Stack:
-    public StateExpression4(foundation.fluent.jast.sample.language.ast.Expression node, State prev) {
-        super(node, prev);
-    }
-
-
-    // Reduce:
-    @Override
-    public State visitComma(foundation.fluent.jast.common.Comma symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitListOfExpression(foundation.fluent.jast.common.ListRules.isList2(this.getNode())).visitComma(symbol);
-    }
-
-    @Override
-    public State visitRPar(foundation.fluent.jast.common.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitListOfExpression(foundation.fluent.jast.common.ListRules.isList2(this.getNode())).visitRPar(symbol);
-    }
-
-
-    // Shift:
-    @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) {
-        return new StatePlus4(symbol, this);
-    }
-
-
-    // Accept:
-}
+@MetaRule
+public @interface List4 {}

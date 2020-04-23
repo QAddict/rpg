@@ -27,7 +27,9 @@
  *
  */
 
-package foundation.fluent.jast.generator;
+package foundation.fluent.jast.common;
 
-public class StateGenerator {
-}
+import foundation.fluent.jast.MetaRule;
+
+@MetaRule
+public @interface Opt {}

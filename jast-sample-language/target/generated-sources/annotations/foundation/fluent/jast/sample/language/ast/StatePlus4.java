@@ -33,10 +33,10 @@ package foundation.fluent.jast.sample.language.ast;
 
 Plus4: {
 	Expression -> Expression Plus • Expression [RPar, Plus, Comma]
-	Expression -> • Expression Plus Expression [Plus, Comma, RPar]
-	Expression -> • Identifier [Plus, Comma, RPar]
-	Expression -> • LPar Expression RPar [Plus, Comma, RPar]
-	Expression -> • Identifier LPar NOfListOfExpression RPar [Plus, Comma, RPar]
+	Expression -> • Expression Plus Expression [Comma, RPar, Plus]
+	Expression -> • Identifier [Comma, RPar, Plus]
+	Expression -> • LPar Expression RPar [Comma, RPar, Plus]
+	Expression -> • Identifier LPar NOfListOfExpression RPar [Comma, RPar, Plus]
 }
 
 */

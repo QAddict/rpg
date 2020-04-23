@@ -60,14 +60,14 @@ public class StateLPar2 extends StackState<foundation.fluent.jast.common.LPar, S
     @Override
     public State visitRPar(foundation.fluent.jast.common.RPar symbol) throws UnexpectedInputException {
         
-        return this.visitNOfListOfExpression(foundation.fluent.jast.sample.language.ast.AstFactory.l()).visitRPar(symbol);
+        return this.visitNOfListOfExpression(foundation.fluent.jast.common.ListRules.isList3()).visitRPar(symbol);
     }
 
 
     // Shift:
     @Override
-    public State visitListOfExpression(java.util.List<foundation.fluent.jast.sample.language.ast.Expression> symbol) {
-        return new StateListOfExpression1(symbol, this);
+    public State visitIdentifier(foundation.fluent.jast.sample.language.ast.Identifier symbol) {
+        return new StateIdentifier4(symbol, this);
     }
 
     @Override
@@ -76,13 +76,13 @@ public class StateLPar2 extends StackState<foundation.fluent.jast.common.LPar, S
     }
 
     @Override
-    public State visitIdentifier(foundation.fluent.jast.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier4(symbol, this);
+    public State visitExpression(foundation.fluent.jast.sample.language.ast.Expression symbol) {
+        return new StateExpression4(symbol, this);
     }
 
     @Override
-    public State visitExpression(foundation.fluent.jast.sample.language.ast.Expression symbol) {
-        return new StateExpression4(symbol, this);
+    public State visitListOfExpression(java.util.List<foundation.fluent.jast.sample.language.ast.Expression> symbol) {
+        return new StateListOfExpression1(symbol, this);
     }
 
     @Override

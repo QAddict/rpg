@@ -54,7 +54,7 @@ public class StateListOfExpression1 extends StackState<java.util.List<foundation
     public State visitRPar(foundation.fluent.jast.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitNOfListOfExpression(foundation.fluent.jast.sample.language.ast.AstFactory.l(this.getNode())).visitRPar(symbol);
+        return stack1.visitNOfListOfExpression(foundation.fluent.jast.common.ListRules.isList3(this.getNode())).visitRPar(symbol);
     }
 
 

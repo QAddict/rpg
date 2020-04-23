@@ -39,4 +39,11 @@ public class Unit {
         this.r = r;
     }
 
+    public Chunk getC() {
+        return c;
+    }
+
+    public Occurrence getR() {
+        return r;
+    }
 }

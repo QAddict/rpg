@@ -29,6 +29,7 @@
 
 package foundation.fluent.jast.lexer;
 
+import foundation.fluent.jast.grammar.Rule;
 import foundation.fluent.jast.lexer.pattern.*;
 import foundation.fluent.jast.parser.Name;
 import foundation.fluent.jast.parser.ParseErrorException;
@@ -44,12 +45,28 @@ public class LexerGenerator implements Comparator<Class<?>> {
 
     private final PatternParser parser = new PatternParser();
 
+    private final class LexState {
+
+    }
+
     public void generate(List<Class<?>> tokens) throws IOException, ParseErrorException {
         Map<Pattern, Class<?>> patterns = new LinkedHashMap<>();
         tokens.sort(this);
         for(Class<?> token : tokens)
             patterns.put(patternOf(token), token);
 
+        patterns.forEach((p, t) -> {
+            p.getOptions().forEach(o -> {
+                Set<LexState> states = Collections.singleton(new LexState());
+                for(Unit u : o.getUnits()) {
+                }
+            });
+        });
+    }
+
+    private LexState drill(Set<LexState> s, Option o, int i) {
+        o.getUnits().get(i).getR();
+        throw new UnsupportedOperationException("drill");
     }
 
     private Pattern patternOf(Class<?> token) throws IOException, ParseErrorException {

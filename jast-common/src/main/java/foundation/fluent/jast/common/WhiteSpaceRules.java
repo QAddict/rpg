@@ -27,50 +27,11 @@
  *
  */
 
-package foundation.fluent.jast.sample.language.ast;
+package foundation.fluent.jast.common;
 
-/*
+public interface WhiteSpaceRules {
 
-Identifier2: {
-	Expression -> Identifier • [RPar, Plus]
-	Expression -> Identifier • LPar NOfListOfExpression RPar [RPar, Plus]
-}
+    void ignore(WhiteSpace w);
+    void ignore(Comment c);
 
-*/
-
-import foundation.fluent.jast.parser.UnexpectedInputException;
-import javax.annotation.Generated;
-
-@Generated("Generated visitor pattern based state for grammar parser.")
-public class StateIdentifier2 extends StackState<foundation.fluent.jast.sample.language.ast.Identifier, State> {
-    // Stack:
-    public StateIdentifier2(foundation.fluent.jast.sample.language.ast.Identifier node, State prev) {
-        super(node, prev);
-    }
-
-
-    // Reduce:
-    @Override
-    public State visitRPar(foundation.fluent.jast.common.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
-    }
-
-    @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
-    }
-
-
-    // Shift:
-    @Override
-    public State visitLPar(foundation.fluent.jast.common.LPar symbol) {
-        return new StateLPar6(symbol, this);
-    }
-
-
-    // Accept:
 }

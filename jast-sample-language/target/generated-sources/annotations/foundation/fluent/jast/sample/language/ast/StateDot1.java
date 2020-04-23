@@ -32,7 +32,7 @@ package foundation.fluent.jast.sample.language.ast;
 /*
 
 Dot1: {
-	Statement -> Expression Dot • [Dot, Plus, End, Identifier, LPar]
+	Statement -> Expression Dot • [Identifier, Dot, LPar, Plus, End]
 }
 
 */
@@ -50,11 +50,27 @@ public class StateDot1 extends StackState<foundation.fluent.jast.common.Dot, Sta
 
     // Reduce:
     @Override
+    public State visitIdentifier(foundation.fluent.jast.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.fluent.jast.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitStatement(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
+    }
+
+    @Override
     public State visitDot(foundation.fluent.jast.common.Dot symbol) throws UnexpectedInputException {
         
 		StackState<foundation.fluent.jast.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitStatement(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitDot(symbol);
+    }
+
+    @Override
+    public State visitLPar(foundation.fluent.jast.common.LPar symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.fluent.jast.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitStatement(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitLPar(symbol);
     }
 
     @Override
@@ -71,22 +87,6 @@ public class StateDot1 extends StackState<foundation.fluent.jast.common.Dot, Sta
 		StackState<foundation.fluent.jast.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitStatement(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitEnd(symbol);
-    }
-
-    @Override
-    public State visitIdentifier(foundation.fluent.jast.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.fluent.jast.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitStatement(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
-    }
-
-    @Override
-    public State visitLPar(foundation.fluent.jast.common.LPar symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.fluent.jast.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitStatement(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitLPar(symbol);
     }
 
 

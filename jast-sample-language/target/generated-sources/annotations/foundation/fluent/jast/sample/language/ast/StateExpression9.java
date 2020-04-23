@@ -56,7 +56,7 @@ public class StateExpression9 extends StackState<foundation.fluent.jast.sample.l
 		StackState<foundation.fluent.jast.common.Comma, StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Expression>, ? extends State>> stack1 = this.getPrev();
 		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Expression>, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitListOfExpression(foundation.fluent.jast.sample.language.ast.AstFactory.commaList(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
+        return stack3.visitListOfExpression(foundation.fluent.jast.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class StateExpression9 extends StackState<foundation.fluent.jast.sample.l
 		StackState<foundation.fluent.jast.common.Comma, StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Expression>, ? extends State>> stack1 = this.getPrev();
 		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Expression>, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitListOfExpression(foundation.fluent.jast.sample.language.ast.AstFactory.commaList(stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
+        return stack3.visitListOfExpression(foundation.fluent.jast.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
     }
 
 

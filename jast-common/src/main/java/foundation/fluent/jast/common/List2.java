@@ -27,7 +27,9 @@
  *
  */
 
-package foundation.fluent.jast.generator;
+package foundation.fluent.jast.common;
 
-public class StateItemGenerator {
-}
+import foundation.fluent.jast.MetaRule;
+
+@MetaRule
+public @interface List2 {}

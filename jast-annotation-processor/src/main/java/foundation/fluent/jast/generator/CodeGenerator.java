@@ -80,7 +80,7 @@ public class CodeGenerator {
     }
 
     private void generateState(LrParserAutomata parser) {
-        SourceModel code = source("State").set(grammar, context.getGrammar()).set(automata, parser).set(result, context.getGrammar().getStart());
+        SourceModel code = source("State").set(grammar, context.getGrammar()).set(automata, parser).set(result, typeOf(context.getGrammar().getStart()));
         context.getGrammar().getIgnored().forEach(s -> code.with(Ignored).set(name, s).set(type, typeOf(s)));
         context.getGrammar().getSymbols().forEach(s -> code.with(Symbols).set(name, s).set(type, typeOf(s)));
         write(code);

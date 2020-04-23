@@ -38,10 +38,7 @@ import foundation.fluent.jast.grammar.Grammar;
 import foundation.fluent.jast.grammar.Rule;
 import foundation.fluent.jast.grammar.Symbol;
 
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -65,6 +62,9 @@ public class ClassToGrammarContext {
     private final Map<Rule, ExecutableElement> ruleAssociation = new HashMap<>();
     private final Grammar grammar;
 
+    private Stream<ExecutableElement> methods(Element factory) {
+        return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
+    }
 
     public ClassToGrammarContext(ExecutableElement startRule) {
         String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
@@ -73,7 +73,7 @@ public class ClassToGrammarContext {
         Element factoryClass = startRule.getEnclosingElement();
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
         int priority = priority(factoryClass, 0);
-        List<ExecutableElement> methods = methodsIn(factoryClass.getEnclosedElements());
+        List<ExecutableElement> methods = methods(factoryClass).collect(toList());
         Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
         methods.stream().filter(m -> !hasMetaRuleAnnotation(m)).forEach(method -> {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {

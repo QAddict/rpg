@@ -33,7 +33,7 @@ package foundation.fluent.jast.sample.language.ast;
 
 Expression7: {
 	Expression -> Expression Plus Expression • [RPar, Plus]
-	Expression -> Expression • Plus Expression [Plus, RPar]
+	Expression -> Expression • Plus Expression [RPar, Plus]
 }
 
 */

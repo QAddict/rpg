@@ -50,16 +50,6 @@ public class StateRPar5 extends StackState<foundation.fluent.jast.common.RPar, S
 
     // Reduce:
     @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.fluent.jast.common.N<java.util.List<foundation.fluent.jast.sample.language.ast.Expression>>, StackState<foundation.fluent.jast.common.LPar, StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
-		StackState<foundation.fluent.jast.common.LPar, StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
-		StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
-		State stack4 = stack3.getPrev();
-        return stack4.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
-    }
-
-    @Override
     public State visitRPar(foundation.fluent.jast.common.RPar symbol) throws UnexpectedInputException {
         
 		StackState<foundation.fluent.jast.common.N<java.util.List<foundation.fluent.jast.sample.language.ast.Expression>>, StackState<foundation.fluent.jast.common.LPar, StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
@@ -67,6 +57,16 @@ public class StateRPar5 extends StackState<foundation.fluent.jast.common.RPar, S
 		StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
         return stack4.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.fluent.jast.common.N<java.util.List<foundation.fluent.jast.sample.language.ast.Expression>>, StackState<foundation.fluent.jast.common.LPar, StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
+		StackState<foundation.fluent.jast.common.LPar, StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
+		StackState<foundation.fluent.jast.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
+		State stack4 = stack3.getPrev();
+        return stack4.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
     }
 
 

@@ -32,7 +32,7 @@ package foundation.fluent.jast.sample.language.ast;
 /*
 
 Expression1: {
-	Statement -> Expression • Dot [Dot, Plus, End, Identifier, LPar]
+	Statement -> Expression • Dot [Identifier, Dot, LPar, Plus, End]
 	Expression -> Expression • Plus Expression [Dot, Plus]
 }
 

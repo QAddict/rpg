@@ -32,7 +32,7 @@ package foundation.fluent.jast.sample.language.ast;
 /*
 
 Statement1: {
-	ListOfStatement -> ListOfStatement Statement • [End, Dot, Plus, Identifier, LPar]
+	ListOfStatement -> ListOfStatement Statement • [End, Identifier, Dot, LPar, Plus]
 }
 
 */
@@ -50,35 +50,19 @@ public class StateStatement1 extends StackState<foundation.fluent.jast.sample.la
 
     // Reduce:
     @Override
-    public State visitDot(foundation.fluent.jast.common.Dot symbol) throws UnexpectedInputException {
-        
-		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList(stack1.getNode(), this.getNode())).visitDot(symbol);
-    }
-
-    @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
-        
-		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList(stack1.getNode(), this.getNode())).visitPlus(symbol);
-    }
-
-    @Override
-    public State visitEnd(foundation.fluent.jast.common.End symbol) throws UnexpectedInputException {
-        
-		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList(stack1.getNode(), this.getNode())).visitEnd(symbol);
-    }
-
-    @Override
     public State visitIdentifier(foundation.fluent.jast.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
 		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
+        return stack2.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
+    }
+
+    @Override
+    public State visitDot(foundation.fluent.jast.common.Dot symbol) throws UnexpectedInputException {
+        
+		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitDot(symbol);
     }
 
     @Override
@@ -86,7 +70,23 @@ public class StateStatement1 extends StackState<foundation.fluent.jast.sample.la
         
 		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList(stack1.getNode(), this.getNode())).visitLPar(symbol);
+        return stack2.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitLPar(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
+        
+		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitPlus(symbol);
+    }
+
+    @Override
+    public State visitEnd(foundation.fluent.jast.common.End symbol) throws UnexpectedInputException {
+        
+		StackState<java.util.List<foundation.fluent.jast.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitEnd(symbol);
     }
 
 

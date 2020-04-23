@@ -31,6 +31,7 @@ package foundation.fluent.jast.parser;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.function.Consumer;
 
 public class Compiler<R, S extends StateBase<R>> {
@@ -49,4 +50,7 @@ public class Compiler<R, S extends StateBase<R>> {
         consumer.accept(parser.parse(TokenInput.tokenInput(new Input(file, new FileReader(file)), lexer)));
     }
 
+    public void compile(String name, Reader reader) throws IOException, ParseErrorException {
+        consumer.accept(parser.parse(TokenInput.tokenInput(new Input(name, reader), lexer)));
+    }
 }

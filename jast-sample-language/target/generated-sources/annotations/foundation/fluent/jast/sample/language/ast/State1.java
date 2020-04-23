@@ -33,8 +33,8 @@ package foundation.fluent.jast.sample.language.ast;
 
 1: {
 	Program -> • ListOfStatement End []
-	ListOfStatement -> • [End, Dot, Plus, Identifier, LPar]
-	ListOfStatement -> • ListOfStatement Statement [End, Dot, Plus, Identifier, LPar]
+	ListOfStatement -> • [End, Identifier, Dot, LPar, Plus]
+	ListOfStatement -> • ListOfStatement Statement [End, Identifier, Dot, LPar, Plus]
 }
 
 */
@@ -47,33 +47,33 @@ public class State1 extends State {
     // Stack:
     // Reduce:
     @Override
-    public State visitDot(foundation.fluent.jast.common.Dot symbol) throws UnexpectedInputException {
-        
-        return this.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList()).visitDot(symbol);
-    }
-
-    @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
-        
-        return this.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList()).visitPlus(symbol);
-    }
-
-    @Override
-    public State visitEnd(foundation.fluent.jast.common.End symbol) throws UnexpectedInputException {
-        
-        return this.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList()).visitEnd(symbol);
-    }
-
-    @Override
     public State visitIdentifier(foundation.fluent.jast.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
-        return this.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList()).visitIdentifier(symbol);
+        return this.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1()).visitIdentifier(symbol);
+    }
+
+    @Override
+    public State visitDot(foundation.fluent.jast.common.Dot symbol) throws UnexpectedInputException {
+        
+        return this.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1()).visitDot(symbol);
     }
 
     @Override
     public State visitLPar(foundation.fluent.jast.common.LPar symbol) throws UnexpectedInputException {
         
-        return this.visitListOfStatement(foundation.fluent.jast.sample.language.ast.AstFactory.simpleList()).visitLPar(symbol);
+        return this.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1()).visitLPar(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
+        
+        return this.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1()).visitPlus(symbol);
+    }
+
+    @Override
+    public State visitEnd(foundation.fluent.jast.common.End symbol) throws UnexpectedInputException {
+        
+        return this.visitListOfStatement(foundation.fluent.jast.common.ListRules.isList1()).visitEnd(symbol);
     }
 
 

@@ -51,13 +51,6 @@ public class StateIdentifier4 extends StackState<foundation.fluent.jast.sample.l
 
     // Reduce:
     @Override
-    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
-    }
-
-    @Override
     public State visitComma(foundation.fluent.jast.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
@@ -69,6 +62,13 @@ public class StateIdentifier4 extends StackState<foundation.fluent.jast.sample.l
         
 		State stack1 = this.getPrev();
         return stack1.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.fluent.jast.common.Plus symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitExpression(foundation.fluent.jast.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
     }
 
 
