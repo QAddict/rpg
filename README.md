@@ -1,4 +1,4 @@
-# J-RPG - Java Rapid Parser Generator
+# RPG - Java Rapid Parser Generator
 Java Abstract Syntax Tree driven LR0 / LR1 rapid parser generator, generating parser based on Java AST factory methods, and
 returning user defined root node of the tree.
 
@@ -18,16 +18,15 @@ Given the terminal classes and AST nodes declared for our language, lets define 
 the the factory, which in turn defines our grammar rules:
 
 ```java
-package foundation.fluent.jast.sample.language.ast;
+package foundation.rpg.sample.language.ast;
 
-import foundation.fluent.jast.Priority;
-import foundation.fluent.jast.StartSymbol;
-import foundation.fluent.jast.common.*;
+import foundation.rpg.Priority;
+import foundation.rpg.StartSymbol;
 
 import java.util.List;
 
-import static foundation.fluent.jast.common.AstUtils.addTo;
-import static foundation.fluent.jast.common.AstUtils.list;
+import static foundation.rpg.common.AstUtils.addTo;
+import static foundation.rpg.common.AstUtils.list;
 
 @RulePriority(1)
 public interface AstFactory {
@@ -47,7 +46,7 @@ public interface AstFactory {
 }
 ```
 
-The goal of __JAST-agic__ is to re-use such factory as grammar definition, and generate the LR(1) parser forsuch grammar,
+The goal of __RPG__ is to re-use such factory as grammar definition, and generate the LR(1) parser forsuch grammar,
 which in turn invokes the factory methods during parsing.
 BTW. the AST factory in fact looks very similar to other parser generators. Yet this is directly Java code.
 
