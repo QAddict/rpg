@@ -33,10 +33,10 @@ package foundation.rpg.sample.language.ast;
 
 Plus2: {
 	Expression -> Expression Plus • Expression [RPar, Plus]
-	Expression -> • Expression Plus Expression [RPar, Plus]
-	Expression -> • Identifier [RPar, Plus]
-	Expression -> • LPar Expression RPar [RPar, Plus]
-	Expression -> • Identifier LPar NOfListOfExpression RPar [RPar, Plus]
+	Expression -> • Expression Plus Expression [Plus, RPar]
+	Expression -> • Identifier [Plus, RPar]
+	Expression -> • LPar Expression RPar [Plus, RPar]
+	Expression -> • Identifier LPar NOfListOfExpression RPar [Plus, RPar]
 }
 
 */

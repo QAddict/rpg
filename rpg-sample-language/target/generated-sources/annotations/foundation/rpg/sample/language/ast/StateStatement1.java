@@ -50,14 +50,6 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
 
     // Reduce:
     @Override
-    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
-        
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitEnd(symbol);
-    }
-
-    @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
@@ -71,6 +63,14 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitLPar(symbol);
+    }
+
+    @Override
+    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
+        
+		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitEnd(symbol);
     }
 
 

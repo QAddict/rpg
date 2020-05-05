@@ -33,7 +33,7 @@ package foundation.rpg.sample.language.ast;
 
 Expression9: {
 	ListOfExpression -> ListOfExpression Comma Expression • [RPar, Comma]
-	Expression -> Expression • Plus Expression [Comma, RPar, Plus]
+	Expression -> Expression • Plus Expression [RPar, Comma, Plus]
 }
 
 */
@@ -51,21 +51,21 @@ public class StateExpression9 extends StackState<foundation.rpg.sample.language.
 
     // Reduce:
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> stack1 = this.getPrev();
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> stack2 = stack1.getPrev();
-		State stack3 = stack2.getPrev();
-        return stack3.visitListOfExpression(foundation.rpg.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
-    }
-
-    @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> stack1 = this.getPrev();
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitListOfExpression(foundation.rpg.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> stack1 = this.getPrev();
+		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> stack2 = stack1.getPrev();
+		State stack3 = stack2.getPrev();
+        return stack3.visitListOfExpression(foundation.rpg.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
     }
 
 

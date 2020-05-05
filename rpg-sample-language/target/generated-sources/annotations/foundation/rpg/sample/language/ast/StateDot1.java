@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Dot1: {
-	Statement -> Expression Dot • [End, Identifier, LPar]
+	Statement -> Expression Dot • [Identifier, LPar, End]
 }
 
 */
@@ -50,14 +50,6 @@ public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<
 
     // Reduce:
     @Override
-    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitStatement(foundation.rpg.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitEnd(symbol);
-    }
-
-    @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
@@ -71,6 +63,14 @@ public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitStatement(foundation.rpg.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitLPar(symbol);
+    }
+
+    @Override
+    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitStatement(foundation.rpg.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitEnd(symbol);
     }
 
 

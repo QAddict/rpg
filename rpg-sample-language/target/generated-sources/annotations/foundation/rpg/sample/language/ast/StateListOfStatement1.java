@@ -34,7 +34,7 @@ package foundation.rpg.sample.language.ast;
 ListOfStatement1: {
 	Program -> ListOfStatement • End []
 	ListOfStatement -> ListOfStatement • Statement [End, Identifier, LPar]
-	Statement -> • Expression Dot [End, Identifier, LPar]
+	Statement -> • Expression Dot [Identifier, LPar, End]
 	Expression -> • Expression Plus Expression [Dot, Plus]
 	Expression -> • Identifier [Dot, Plus]
 	Expression -> • LPar Expression RPar [Dot, Plus]
@@ -57,18 +57,13 @@ public class StateListOfStatement1 extends StackState<java.util.List<foundation.
     // Reduce:
     // Shift:
     @Override
-    public State visitEnd(foundation.rpg.common.End symbol) {
-        return new StateEnd1(symbol, this);
+    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
+        return new StateIdentifier1(symbol, this);
     }
 
     @Override
     public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) {
         return new StateStatement1(symbol, this);
-    }
-
-    @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier1(symbol, this);
     }
 
     @Override
@@ -79,6 +74,11 @@ public class StateListOfStatement1 extends StackState<java.util.List<foundation.
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
         return new StateLPar1(symbol, this);
+    }
+
+    @Override
+    public State visitEnd(foundation.rpg.common.End symbol) {
+        return new StateEnd1(symbol, this);
     }
 
 

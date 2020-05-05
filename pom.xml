@@ -50,7 +50,7 @@
         <module>rpg-sample-language</module>
     </modules>
 
-    <url>https://github.com/c0stra/jast-agic/wiki/jast-agic</url>
+    <url>https://github.com/c0stra/rpg/wiki/rpg</url>
 
     <properties>
         <java.version>1.8</java.version>
@@ -94,9 +94,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/c0stra/jast-agic.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/c0stra/jast-agic.git</developerConnection>
-        <url>https://github.com/c0stra/jast-agic</url>
+        <connection>scm:git:git://github.com/c0stra/rpg.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/c0stra/rpg.git</developerConnection>
+        <url>https://github.com/c0stra/rpg</url>
         <tag>HEAD</tag>
     </scm>
 

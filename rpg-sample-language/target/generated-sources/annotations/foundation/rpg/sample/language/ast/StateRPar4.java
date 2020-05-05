@@ -50,12 +50,12 @@ public class StateRPar4 extends StackState<foundation.rpg.common.RPar, StackStat
 
     // Reduce:
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.LPar, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.common.LPar, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
+        return stack3.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
     }
 
     @Override
@@ -68,12 +68,12 @@ public class StateRPar4 extends StackState<foundation.rpg.common.RPar, StackStat
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.LPar, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.common.LPar, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
+        return stack3.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
     }
 
 

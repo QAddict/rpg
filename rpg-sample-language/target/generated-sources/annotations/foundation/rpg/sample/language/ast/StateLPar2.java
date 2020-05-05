@@ -71,11 +71,6 @@ public class StateLPar2 extends StackState<foundation.rpg.common.LPar, StackStat
     }
 
     @Override
-    public State visitListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
-        return new StateListOfExpression1(symbol, this);
-    }
-
-    @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
         return new StateIdentifier4(symbol, this);
     }
@@ -88,6 +83,11 @@ public class StateLPar2 extends StackState<foundation.rpg.common.LPar, StackStat
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
         return new StateLPar5(symbol, this);
+    }
+
+    @Override
+    public State visitListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
+        return new StateListOfExpression1(symbol, this);
     }
 
 

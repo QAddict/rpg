@@ -52,13 +52,13 @@ public class StateExpression2 extends StackState<foundation.rpg.sample.language.
     // Reduce:
     // Shift:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) {
-        return new StateRPar1(symbol, this);
+    public State visitPlus(foundation.rpg.common.Plus symbol) {
+        return new StatePlus2(symbol, this);
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) {
-        return new StatePlus2(symbol, this);
+    public State visitRPar(foundation.rpg.common.RPar symbol) {
+        return new StateRPar1(symbol, this);
     }
 
 

@@ -2,6 +2,14 @@
 Java Abstract Syntax Tree driven LR0 / LR1 rapid parser generator, generating parser based on Java AST factory methods, and
 returning user defined root node of the tree.
 
+## Table of content
+* [Grammar definition using Java code - re-use AST factory](#rpg---java-rapid-parser-generator)
+* [Solving conflicts using priorities](#solving-conflicts-using-priorities)
+* [Lexer definition](#lexer-definition)
+* [Generated Parser - Typesafe heterogeneous active stack](#generated-parser---typesafe-heterogeneous-active-stack)
+* [Meta rules](#meta-rules)
+* [Decomposition of grammar definition](#decomposition-of-grammar-definition)
+
 Imagine your syntax tree factory class is at the same time definition of your parser grammar. That can be achieved
 by small enhancement of the factory.
 
@@ -122,7 +130,7 @@ information of all elements on the stack to be used in the rule application (AST
 Example of such parser, but implemented manually, can be found in the module `jast-sample-parser`.
 
 ## Meta rules
-J-RPG supports re-usable rules using annotation marked generic methods.
+__RPG__ supports re-usable rules using annotation marked generic methods.
 
 Such rules are called __Meta rules__ and in fact you can think of them as of generic rules or rule templates, which
 can be re-used, and applied (expanded) by refering their marker annotation.
@@ -139,5 +147,22 @@ See example:
 
 // Usage of the meta rules adds them automatically for given type.
 static Program is(@SimpleList List<Statement> s, End e) { return new Program(s); }
+
+```
+
+## Decomposition of grammar definition
+There is also support for decomposition of the rules into multiple interfaces.
+They are re-used simply by extending the other interface.
+
+`rpg-common` comes already with such re-usable sets of rules. You can re-use them by extending:
+
+```
+public interface MyAstFactory extends WhiteSpaceRules, ListRules {
+
+    @StartSymbol
+    Program is (@List1 List<Statement> s) { return new Program(s); }
+    // ...
+
+}
 
 ```

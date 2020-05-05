@@ -51,10 +51,10 @@ public class StateIdentifier4 extends StackState<foundation.rpg.sample.language.
 
     // Reduce:
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitComma(symbol);
+        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
     }
 
     @Override
@@ -65,10 +65,10 @@ public class StateIdentifier4 extends StackState<foundation.rpg.sample.language.
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
+        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitComma(symbol);
     }
 
 

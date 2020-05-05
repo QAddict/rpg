@@ -51,17 +51,17 @@ public class StateExpression4 extends StackState<foundation.rpg.sample.language.
 
     // Reduce:
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitListOfExpression(foundation.rpg.common.ListRules.isList2(this.getNode())).visitComma(symbol);
-    }
-
-    @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitListOfExpression(foundation.rpg.common.ListRules.isList2(this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitListOfExpression(foundation.rpg.common.ListRules.isList2(this.getNode())).visitComma(symbol);
     }
 
 

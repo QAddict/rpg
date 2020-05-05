@@ -33,10 +33,10 @@ package foundation.rpg.sample.language.ast;
 
 Comma1: {
 	ListOfExpression -> ListOfExpression Comma • Expression [RPar, Comma]
-	Expression -> • Expression Plus Expression [Comma, RPar, Plus]
-	Expression -> • Identifier [Comma, RPar, Plus]
-	Expression -> • LPar Expression RPar [Comma, RPar, Plus]
-	Expression -> • Identifier LPar NOfListOfExpression RPar [Comma, RPar, Plus]
+	Expression -> • Expression Plus Expression [RPar, Comma, Plus]
+	Expression -> • Identifier [RPar, Comma, Plus]
+	Expression -> • LPar Expression RPar [RPar, Comma, Plus]
+	Expression -> • Identifier LPar NOfListOfExpression RPar [RPar, Comma, Plus]
 }
 
 */
