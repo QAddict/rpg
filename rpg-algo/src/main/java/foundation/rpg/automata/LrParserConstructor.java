@@ -52,7 +52,7 @@ public class LrParserConstructor {
     private final Map<Symbol, Integer> counters = new LinkedHashMap<>();
 
     public LrParserConstructor(Grammar grammar) {
-        this.grammar = grammar;
+        this.grammar = grammar.augmented();
         countFirst();
     }
 
@@ -86,7 +86,7 @@ public class LrParserConstructor {
     public LrParserAutomata constructAutomata() {
         Queue<LrItemSet> processingSets = new LinkedList<>();
         LrItemSet start = closure(any, grammar.rulesFor(grammar.getStart()).stream().map(rule -> lrItem(rule, emptySet())).collect(toSet()));
-        LrParserAutomata parser = new LrParserAutomata(start);
+        LrParserAutomata parser = new LrParserAutomata(start, grammar);
         parser.addState(start);
         processingSets.add(start);
         while(!processingSets.isEmpty()) {

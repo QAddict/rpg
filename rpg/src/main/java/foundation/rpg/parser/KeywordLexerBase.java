@@ -76,7 +76,10 @@ public class KeywordLexerBase<S> {
     public Token<S> groups(Position mark, char lookahead, Input input) throws IOException, ParseErrorException {
         if(isDigit(lookahead)) {
             StringBuilder b = new StringBuilder().append(lookahead);
-            while(isDigit(input.move().lookahead())) b.append(lookahead);
+            while(isDigit(input.lookahead())) {
+                b.append(lookahead);
+                input.move();
+            }
             switch (input.lookahead()) {
                 case '.':
                 case 'e':

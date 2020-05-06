@@ -43,14 +43,14 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class StateExpression1 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
-    // Stack:
+// Stack:
     public StateExpression1(foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
-    // Shift:
+// Reduce:
+// Shift:
     @Override
     public State visitDot(foundation.rpg.common.Dot symbol) {
         return new StateDot1(symbol, this);
@@ -62,5 +62,5 @@ public class StateExpression1 extends StackState<foundation.rpg.sample.language.
     }
 
 
-    // Accept:
+// Accept:
 }

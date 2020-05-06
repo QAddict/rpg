@@ -39,10 +39,10 @@ import static foundation.rpg.common.AstUtils.list;
 
 public interface PatternFactory {
     @StartSymbol
-    static  Pattern       is  (List<Option> l, End e)                { return new Pattern(l); }
+    static  Pattern       is  (List<Option> l)                       { return new Pattern(l); }
     static  List<Option>  is  (Option o)                             { return list(o); }
     static  List<Option>  is  (List<Option> l, Pipe p, Option o)     { return addTo(l, o);}
-    static  Option        is  (List<Unit> l)                         { return new Option(l); }
+    static  Option        is1 (List<Unit> l)                         { return new Option(l); }
     static  List<Unit>    is  ()                                     { return list(); }
     static  List<Unit>    is  (List<Unit> l, Unit u)                 { return addTo(l, u); }
     static  Unit          is  (Chunk c, Occurrence r)                { return new Unit(c, r); }

@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 End1: {
-	Program -> ListOfStatement End • []
+	Start -> Program End • []
 }
 
 */
@@ -41,26 +41,23 @@ import foundation.rpg.parser.UnexpectedInputException;
 import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
-public class StateEnd1 extends StackState<foundation.rpg.common.End, StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State>> {
-    // Stack:
-    public StateEnd1(foundation.rpg.common.End node, StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> prev) {
+public class StateEnd1 extends StackState<foundation.rpg.parser.End, StackState<foundation.rpg.sample.language.ast.Program, ? extends State>> {
+// Stack:
+    public StateEnd1(foundation.rpg.parser.End node, StackState<foundation.rpg.sample.language.ast.Program, ? extends State> prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
-    // Shift:
-    // Accept:
+// Reduce:
+// Shift:
+// Accept:
     @Override
     public boolean accepted() {
         return true;
     }
     @Override
     public foundation.rpg.sample.language.ast.Program result() {
-        
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return foundation.rpg.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode());
+        return getPrev().getNode();
     }
 
 

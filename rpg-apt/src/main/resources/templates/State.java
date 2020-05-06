@@ -44,12 +44,12 @@ import javax.annotation.Generated;
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class $class$ extends StateBase<$result$> {
 
-    // Ignored:
+// Ignored:
     public State visit$name$($type$ symbol) {
         return this;
     }
 
-    // Symbols:
+// Symbols:
     public State visit$name$($type$ symbol) throws UnexpectedInputException {
         return error(symbol);
     }

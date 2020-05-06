@@ -43,13 +43,13 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class StateExpression4 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
-    // Stack:
+// Stack:
     public StateExpression4(foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
+// Reduce:
     @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
@@ -65,12 +65,12 @@ public class StateExpression4 extends StackState<foundation.rpg.sample.language.
     }
 
 
-    // Shift:
+// Shift:
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) {
         return new StatePlus4(symbol, this);
     }
 
 
-    // Accept:
+// Accept:
 }

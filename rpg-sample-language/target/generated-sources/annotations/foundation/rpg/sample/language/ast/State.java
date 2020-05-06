@@ -31,11 +31,12 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-N = [Program, ListOfStatement, Statement, Expression, NOfListOfExpression, ListOfExpression]
+N = [Start, Program, ListOfStatement, Statement, Expression, NOfListOfExpression, ListOfExpression]
 T = [End, Dot, Plus, Identifier, LPar, RPar, Comma]
-S = Program
+S = Start
 R = {
-	Program -> [ListOfStatement, End]
+	Start -> [Program, End]
+	Program -> [ListOfStatement]
 	ListOfStatement -> []
 	ListOfStatement -> [ListOfStatement, Statement]
 	Statement -> [Expression, Dot]
@@ -50,12 +51,16 @@ R = {
 }
 
 1: {
-	Program -> • ListOfStatement End []
+	Start -> • Program End []
+	Program -> • ListOfStatement [End]
 	ListOfStatement -> • [End, Identifier, LPar]
 	ListOfStatement -> • ListOfStatement Statement [End, Identifier, LPar]
 }
+Program1: {
+	Start -> Program • End []
+}
 ListOfStatement1: {
-	Program -> ListOfStatement • End []
+	Program -> ListOfStatement • [End]
 	ListOfStatement -> ListOfStatement • Statement [End, Identifier, LPar]
 	Statement -> • Expression Dot [End, Identifier, LPar]
 	Expression -> • Expression Plus Expression [Dot, Plus]
@@ -64,7 +69,7 @@ ListOfStatement1: {
 	Expression -> • Identifier LPar NOfListOfExpression RPar [Dot, Plus]
 }
 End1: {
-	Program -> ListOfStatement End • []
+	Start -> Program End • []
 }
 Statement1: {
 	ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
@@ -237,13 +242,15 @@ RPar6: {
 1: End -> REDUCE: ListOfStatement -> • [End, Identifier, LPar]
 1: Identifier -> REDUCE: ListOfStatement -> • [End, Identifier, LPar]
 1: LPar -> REDUCE: ListOfStatement -> • [End, Identifier, LPar]
+1: Program -> GOTO: Program1
 1: ListOfStatement -> GOTO: ListOfStatement1
-ListOfStatement1: End -> GOTO: End1
+Program1: End -> GOTO: End1
+ListOfStatement1: End -> REDUCE: Program -> ListOfStatement • [End]
 ListOfStatement1: Statement -> GOTO: Statement1
 ListOfStatement1: Expression -> GOTO: Expression1
 ListOfStatement1: Identifier -> GOTO: Identifier1
 ListOfStatement1: LPar -> GOTO: LPar1
-End1:  -> ACCEPT: Program -> ListOfStatement End • []
+End1:  -> ACCEPT: Start -> Program End • []
 Statement1: End -> REDUCE: ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
 Statement1: Identifier -> REDUCE: ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
 Statement1: LPar -> REDUCE: ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
@@ -349,7 +356,7 @@ import javax.annotation.Generated;
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class State extends StateBase<foundation.rpg.sample.language.ast.Program> {
 
-    // Ignored:
+// Ignored:
     public State visitWhiteSpace(foundation.rpg.common.WhiteSpace symbol) {
         return this;
     }
@@ -359,8 +366,8 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
 
-    // Symbols:
-    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
+// Symbols:
+    public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

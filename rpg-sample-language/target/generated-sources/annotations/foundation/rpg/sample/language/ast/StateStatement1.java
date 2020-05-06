@@ -42,15 +42,15 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class StateStatement1 extends StackState<foundation.rpg.sample.language.ast.Statement, StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State>> {
-    // Stack:
+// Stack:
     public StateStatement1(foundation.rpg.sample.language.ast.Statement node, StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
+// Reduce:
     @Override
-    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
+    public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
         
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
@@ -74,6 +74,6 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
     }
 
 
-    // Shift:
-    // Accept:
+// Shift:
+// Accept:
 }

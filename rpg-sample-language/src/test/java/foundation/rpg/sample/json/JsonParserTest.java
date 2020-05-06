@@ -27,19 +27,35 @@
  *
  */
 
-package foundation.rpg.grammar;
+package foundation.rpg.sample.json;
 
-public interface Symbol {
-    Symbol start = new Symbol() {
-        @Override public String toString() { return "Start"; }
-    };
-    Symbol end = new Symbol() {
-        @Override public String toString() { return "End"; }
-    };
-    Symbol ε = new Symbol() {
-        @Override public String toString() { return "ε"; }
-    };
-    Symbol any = new Symbol() {
-        @Override public String toString() { return ""; }
-    };
+import foundation.rpg.parser.*;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+public class JsonParserTest {
+
+    private final JsonParser parser = new JsonParser();
+
+    @Test
+    public void testJson() throws IOException, ParseErrorException {
+        Assert.assertTrue(parser.parse("[]") instanceof List);
+        Assert.assertTrue(parser.parse("[4]") instanceof List);
+        Assert.assertTrue(parser.parse("[5,\"a\"]") instanceof List);
+        Assert.assertTrue(parser.parse("{}") instanceof Map);
+        Assert.assertEquals(parser.parse("1") , 1);
+        Assert.assertEquals(parser.parse("\"1\"") , "1");
+        Assert.assertEquals(1, ((Map) parser.parse("{a:1,b:3}")).get("a"));
+    }
+
+    @Test(expectedExceptions = ParseErrorException.class, expectedExceptionsMessageRegExp = "Parse error: Duplicate key: a\n" +
+            "\tat json: line: 1, character: 9")
+    public void testError() throws IOException, ParseErrorException {
+        Assert.assertEquals(1, ((Map) parser.parse("{a:1,a:3}")).get("a"));
+    }
+
 }

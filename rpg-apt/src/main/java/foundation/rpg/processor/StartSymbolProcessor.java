@@ -54,7 +54,7 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
     @Override
     public void accept(ExecutableElement element) {
         try {
-            ClassToGrammarContext context = new ClassToGrammarContext(element);
+            ClassToGrammarContext context = new ClassToGrammarContext(element, processingEnv.getElementUtils());
             System.out.println("Grammar generated from class: " + element.getEnclosingElement());
             System.out.println(context.getGrammar());
             System.out.println();

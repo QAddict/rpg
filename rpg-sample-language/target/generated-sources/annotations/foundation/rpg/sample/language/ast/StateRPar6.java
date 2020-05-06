@@ -42,13 +42,13 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class StateRPar6 extends StackState<foundation.rpg.common.RPar, StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>>> {
-    // Stack:
+// Stack:
     public StateRPar6(foundation.rpg.common.RPar node, StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
+// Reduce:
     @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
@@ -80,6 +80,6 @@ public class StateRPar6 extends StackState<foundation.rpg.common.RPar, StackStat
     }
 
 
-    // Shift:
-    // Accept:
+// Shift:
+// Accept:
 }

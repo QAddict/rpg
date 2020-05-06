@@ -46,14 +46,14 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> {
-    // Stack:
+// Stack:
     public StateComma1(foundation.rpg.common.Comma node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
-    // Shift:
+// Reduce:
+// Shift:
     @Override
     public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
         return new StateExpression9(symbol, this);
@@ -70,5 +70,5 @@ public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackSt
     }
 
 
-    // Accept:
+// Accept:
 }

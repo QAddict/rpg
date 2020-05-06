@@ -30,12 +30,9 @@
 package foundation.rpg.sample.language;
 
 import foundation.rpg.common.*;
-import foundation.rpg.parser.ParseErrorException;
-import foundation.rpg.parser.Position;
-import foundation.rpg.parser.TokenInput;
+import foundation.rpg.parser.*;
 import foundation.rpg.sample.language.ast.Identifier;
 import foundation.rpg.sample.language.ast.Program;
-import foundation.rpg.parser.Parser;
 import foundation.rpg.sample.language.ast.*;
 import org.testng.annotations.Test;
 

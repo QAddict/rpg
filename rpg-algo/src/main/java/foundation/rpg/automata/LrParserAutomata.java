@@ -29,6 +29,7 @@
 
 package foundation.rpg.automata;
 
+import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Symbol;
 
 import java.util.*;
@@ -41,9 +42,15 @@ public class LrParserAutomata {
     private final LrItemSet start;
     private final Map<LrItemSet, LrItemSet> sets = new LinkedHashMap<>();
     private final Map<LrItemSet, Map<Symbol, LrAction>> actions = new LinkedHashMap<>();
+    private final Grammar grammar;
 
-    public LrParserAutomata(LrItemSet start) {
+    public LrParserAutomata(LrItemSet start, Grammar grammar) {
         this.start = start;
+        this.grammar = grammar;
+    }
+
+    public Grammar getGrammar() {
+        return grammar;
     }
 
     public boolean addState(LrItemSet itemSet) {

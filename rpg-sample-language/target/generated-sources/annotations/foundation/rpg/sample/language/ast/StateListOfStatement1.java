@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 ListOfStatement1: {
-	Program -> ListOfStatement • End []
+	Program -> ListOfStatement • [End]
 	ListOfStatement -> ListOfStatement • Statement [End, Identifier, LPar]
 	Statement -> • Expression Dot [End, Identifier, LPar]
 	Expression -> • Expression Plus Expression [Dot, Plus]
@@ -48,19 +48,22 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class StateListOfStatement1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, State> {
-    // Stack:
+// Stack:
     public StateListOfStatement1(java.util.List<foundation.rpg.sample.language.ast.Statement> node, State prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
-    // Shift:
+// Reduce:
     @Override
-    public State visitEnd(foundation.rpg.common.End symbol) {
-        return new StateEnd1(symbol, this);
+    public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitProgram(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitEnd(symbol);
     }
 
+
+// Shift:
     @Override
     public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) {
         return new StateStatement1(symbol, this);
@@ -82,5 +85,5 @@ public class StateListOfStatement1 extends StackState<java.util.List<foundation.
     }
 
 
-    // Accept:
+// Accept:
 }

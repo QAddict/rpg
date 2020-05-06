@@ -42,19 +42,19 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class StateNOfListOfExpression2 extends StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> {
-    // Stack:
+// Stack:
     public StateNOfListOfExpression2(foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>> node, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> prev) {
         super(node, prev);
     }
 
 
-    // Reduce:
-    // Shift:
+// Reduce:
+// Shift:
     @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) {
         return new StateRPar5(symbol, this);
     }
 
 
-    // Accept:
+// Accept:
 }

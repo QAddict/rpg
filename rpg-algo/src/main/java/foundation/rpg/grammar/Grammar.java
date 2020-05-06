@@ -34,6 +34,7 @@ import foundation.rpg.util.MapOfSets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
 public class Grammar {
@@ -61,6 +62,13 @@ public class Grammar {
         Set<Symbol> nonTerminals = rules.stream().map(Rule::getLeft).collect(Collectors.toCollection(LinkedHashSet::new));
         Set<Symbol> terminals = rules.stream().flatMap(rule -> rule.getRight().stream()).filter(symbol -> !nonTerminals.contains(symbol)).collect(Collectors.toCollection(LinkedHashSet::new));
         return new Grammar(start, terminals, nonTerminals, rules, ignored);
+    }
+
+    public Grammar augmented() {
+        Set<Rule> augmentedRules = new LinkedHashSet<>();
+        augmentedRules.add(Rule.rule(Symbol.start, asList(this.start, Symbol.end)));
+        augmentedRules.addAll(rules);
+        return grammar(Symbol.start, augmentedRules, ignored);
     }
 
     public Symbol getStart() {

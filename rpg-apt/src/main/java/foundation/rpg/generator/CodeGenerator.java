@@ -33,6 +33,7 @@ import foundation.rpg.automata.LrAction;
 import foundation.rpg.automata.LrItem;
 import foundation.rpg.automata.LrItemSet;
 import foundation.rpg.automata.LrParserAutomata;
+import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
 import foundation.rpg.processor.ClassToGrammarContext;
@@ -64,7 +65,7 @@ public class CodeGenerator {
         write(source("StackState"));
         for(LrItemSet set : lrParser.getSets())
             generateState(lrParser, set);
-        Stream.of(context.getGrammar().getTerminals(), context.getGrammar().getIgnored()).flatMap(Collection::stream)
+        Stream.of(lrParser.getGrammar().getTerminals(), lrParser.getGrammar().getIgnored()).flatMap(Collection::stream)
                 .forEach(s -> write(source("Token$name$").set(name, s).set(type, typeOf(s))));
     }
 
@@ -80,9 +81,9 @@ public class CodeGenerator {
     }
 
     private void generateState(LrParserAutomata parser) {
-        SourceModel code = source("State").set(grammar, context.getGrammar()).set(automata, parser).set(result, typeOf(context.getGrammar().getStart()));
-        context.getGrammar().getIgnored().forEach(s -> code.with(Ignored).set(name, s).set(type, typeOf(s)));
-        context.getGrammar().getSymbols().forEach(s -> code.with(Symbols).set(name, s).set(type, typeOf(s)));
+        SourceModel code = source("State").set(grammar, parser.getGrammar()).set(automata, parser).set(result, typeOf(parser.getGrammar().getStart()));
+        parser.getGrammar().getIgnored().forEach(s -> code.with(Ignored).set(name, s).set(type, typeOf(s)));
+        parser.getGrammar().getSymbols().stream().filter(s -> !s.equals(parser.getGrammar().getStart())).forEach(s -> code.with(Symbols).set(name, s).set(type, typeOf(s)));
         write(code);
     }
 
@@ -146,7 +147,7 @@ public class CodeGenerator {
             }
 
             @Override public void visitAccept(LrItem item) {
-                visitCall(item, code.with(Accept).set(result, typeOf(context.getGrammar().getStart())));
+                code.with(Accept).set(result, typeOf(parser.getGrammar().getStart()));
             }
         }));
         write(code);

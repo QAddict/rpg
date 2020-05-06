@@ -39,7 +39,7 @@ import java.util.List;
 public interface AstFactory extends WhiteSpaceRules, ListRules {
 
     @StartSymbol
-    static Program     is  (@List1 List<Statement> s, End e)                            { return new Program(s); }
+    static Program     is  (@List1 List<Statement> s)                                   { return new Program(s); }
     static Statement   is  (Expression e, Dot d)                                        { return new ExpressionStatement(e); }
     static Expression  is  (Expression l, Plus p, Expression r)                         { return new BinaryExpression(l, r); }
     static Expression  is  (Identifier i)                                               { return i; }

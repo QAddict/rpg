@@ -27,19 +27,14 @@
  *
  */
 
-package foundation.rpg.grammar;
+package foundation.rpg.common;
 
-public interface Symbol {
-    Symbol start = new Symbol() {
-        @Override public String toString() { return "Start"; }
-    };
-    Symbol end = new Symbol() {
-        @Override public String toString() { return "End"; }
-    };
-    Symbol ε = new Symbol() {
-        @Override public String toString() { return "ε"; }
-    };
-    Symbol any = new Symbol() {
-        @Override public String toString() { return ""; }
-    };
+import foundation.rpg.Name;
+import foundation.rpg.parser.Position;
+
+@Name("\n")
+public class Lf extends Token {
+    public Lf(Position position) {
+        super(position);
+    }
 }

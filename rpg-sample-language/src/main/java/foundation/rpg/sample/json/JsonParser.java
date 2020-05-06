@@ -27,17 +27,24 @@
  *
  */
 
-package foundation.rpg.common;
+package foundation.rpg.sample.json;
 
-import foundation.rpg.parser.Position;
+import foundation.rpg.parser.Input;
+import foundation.rpg.parser.ParseErrorException;
+import foundation.rpg.parser.Parser;
 
-public final class End extends Token {
-    public End(Position position) {
-        super(position);
+import java.io.IOException;
+import java.io.StringReader;
+
+import static foundation.rpg.parser.TokenInput.tokenInput;
+
+public class JsonParser {
+
+    private final Parser<Object, State> parser = new Parser<>(new State1());
+    private final JsonLexer lexer = new JsonLexer();
+
+    public Object parse(String json) throws IOException, ParseErrorException {
+        return parser.parse(tokenInput(new Input("json", new StringReader(json)), lexer));
     }
 
-    @Override
-    public String toString() {
-        return "<eof>";
-    }
 }

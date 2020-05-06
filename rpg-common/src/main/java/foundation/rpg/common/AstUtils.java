@@ -30,7 +30,9 @@
 package foundation.rpg.common;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.unmodifiableList;
 
@@ -52,4 +54,21 @@ public class AstUtils {
     public static <T> List<T> copy(List<T> list) {
         return unmodifiableList(new ArrayList<>(list));
     }
+
+    public static <K, V> Map<K, V> map(K key, V value) {
+        return putIn(new LinkedHashMap<>(), key, value);
+    }
+
+    public static <K, V> Map<K, V> putIn(Map<K, V> map, K key, V value) {
+        map.put(key, value);
+        return map;
+    }
+
+    public static <K, V> Map<K, V> putUniqueIn(Map<K, V> map, K key, V value, String errorMessage) {
+        if(map.containsKey(key)) {
+            throw new IllegalStateException(errorMessage);
+        }
+        return putIn(map, key, value);
+    }
+
 }

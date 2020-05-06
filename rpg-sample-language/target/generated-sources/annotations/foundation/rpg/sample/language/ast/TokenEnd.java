@@ -35,9 +35,9 @@ import javax.annotation.Generated;
 
 @Generated("Generated token element wrapper for grammar parser.")
 public class TokenEnd implements Token<State> {
-    private final foundation.rpg.common.End symbol;
+    private final foundation.rpg.parser.End symbol;
 
-    public TokenEnd(foundation.rpg.common.End symbol) {
+    public TokenEnd(foundation.rpg.parser.End symbol) {
         this.symbol = symbol;
     }
 

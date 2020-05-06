@@ -46,7 +46,7 @@ public class Parser<R, S extends StateBase<R>> {
             mark = input.position();
             Token<S> next = input.next();
             state = next.accept(state);
-        } catch (UnexpectedInputException | IOException un) {
+        } catch (UnexpectedInputException | IOException | RuntimeException un) {
             throw new ParseErrorException(mark, un);
         }
         return state.result();

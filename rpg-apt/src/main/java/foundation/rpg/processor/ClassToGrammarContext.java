@@ -32,7 +32,6 @@ package foundation.rpg.processor;
 import foundation.rpg.MetaRule;
 import foundation.rpg.Priority;
 import foundation.rpg.StartSymbol;
-import foundation.rpg.automata.LrItemSet;
 import foundation.rpg.generator.TypeUtils;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
@@ -42,6 +41,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -59,6 +59,7 @@ public class ClassToGrammarContext {
     private final String packageName;
     private final Set<String> usedNames = new LinkedHashSet<>();
     private final Map<String, Symbol> symbolMap = new LinkedHashMap<>();
+    private final Map<Symbol, TypeMirror> typeMap = new LinkedHashMap<>();
     private final Map<Rule, ExecutableElement> ruleAssociation = new LinkedHashMap<>();
     private final Grammar grammar;
 
@@ -66,7 +67,7 @@ public class ClassToGrammarContext {
         return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
     }
 
-    public ClassToGrammarContext(ExecutableElement startRule) {
+    public ClassToGrammarContext(ExecutableElement startRule, Elements elements) {
         String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
         Set<Rule> rules = new LinkedHashSet<>();
         Set<Symbol> ignored = new LinkedHashSet<>();
@@ -84,6 +85,8 @@ public class ClassToGrammarContext {
             }
         });
         grammar = Grammar.grammar(of(startRule.getReturnType()), rules, ignored);
+        typeMap.put(Symbol.start, startRule.getReturnType());
+        typeMap.put(Symbol.end, elements.getTypeElement("foundation.rpg.parser.End").asType());
     }
 
     private void addMetaRules(ExecutableElement method, Map<String, List<ExecutableElement>> metaRules, Set<Rule> rules, int priority, Map<String, TypeMirror> pMap) {
@@ -123,7 +126,11 @@ public class ClassToGrammarContext {
     }
 
     public Symbol of(TypeMirror mirror) {
-        return symbolMap.computeIfAbsent(mirror.toString(), key -> new TypeSymbol(mirror, uniqueName(mirror)));
+        return symbolMap.computeIfAbsent(mirror.toString(), key -> {
+            Symbol s = new TypeSymbol(uniqueName(mirror));
+            typeMap.put(s, mirror);
+            return s;
+        });
     }
 
     public Rule ruleOf(ExecutableElement method, int priority) {
@@ -140,12 +147,8 @@ public class ClassToGrammarContext {
         return grammar;
     }
 
-    public String stateClassName(LrItemSet set) {
-        return set.getName();
-    }
-
     public TypeMirror symbolType(Symbol symbol) {
-        return ((TypeSymbol) symbol).typeMirror;
+        return typeMap.get(symbol);
     }
 
     public ExecutableElement methodOf(Rule rule) {
@@ -167,11 +170,9 @@ public class ClassToGrammarContext {
 
 
     private static final class TypeSymbol implements Symbol {
-        private final TypeMirror typeMirror;
         private final String uniqueName;
 
-        private TypeSymbol(TypeMirror typeMirror, String uniqueName) {
-            this.typeMirror = typeMirror;
+        private TypeSymbol(String uniqueName) {
             this.uniqueName = uniqueName;
         }
 

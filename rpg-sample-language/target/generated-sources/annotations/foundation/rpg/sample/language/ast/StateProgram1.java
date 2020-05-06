@@ -31,9 +31,8 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-Identifier4: {
-	Expression -> Identifier • [RPar, Plus, Comma]
-	Expression -> Identifier • LPar NOfListOfExpression RPar [RPar, Plus, Comma]
+Program1: {
+	Start -> Program • End []
 }
 
 */
@@ -42,40 +41,18 @@ import foundation.rpg.parser.UnexpectedInputException;
 import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
-public class StateIdentifier4 extends StackState<foundation.rpg.sample.language.ast.Identifier, State> {
+public class StateProgram1 extends StackState<foundation.rpg.sample.language.ast.Program, State> {
 // Stack:
-    public StateIdentifier4(foundation.rpg.sample.language.ast.Identifier node, State prev) {
+    public StateProgram1(foundation.rpg.sample.language.ast.Program node, State prev) {
         super(node, prev);
     }
 
 
 // Reduce:
-    @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
-    }
-
-    @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
-    }
-
-    @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitComma(symbol);
-    }
-
-
 // Shift:
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar8(symbol, this);
+    public State visitEnd(foundation.rpg.parser.End symbol) {
+        return new StateEnd1(symbol, this);
     }
 
 

@@ -40,33 +40,32 @@ import javax.annotation.Generated;
 
 @Generated("Generated visitor pattern based state for grammar parser.")
 public class $class$ extends $parent$ {
-    // Stack:
+// Stack:
     public $class$($node$ node, $prev$ prev) {
         super(node, prev);
     }
 
-    // Reduce:
+// Reduce:
     @Override
     public State visit$name$($type$ symbol) throws UnexpectedInputException {
         $parameters$
         return $start$.visit$result$($factory$).visit$name$(symbol);
     }
 
-    // Shift:
+// Shift:
     @Override
     public State visit$name$($type$ symbol) {
         return new State$next$(symbol, this);
     }
 
-    // Accept:
+// Accept:
     @Override
     public boolean accepted() {
         return true;
     }
     @Override
     public $result$ result() {
-        $parameters$
-        return $factory$;
+        return getPrev().getNode();
     }
 
 }
