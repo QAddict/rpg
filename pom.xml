@@ -35,6 +35,7 @@
     <artifactId>rpg-project</artifactId>
     <version>1.3-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>Rapid Parser Generator for Java</name>
 
     <description>
         Java AST driven LR0 / LR1 parser generator, generating parser based on Java AST factory methods, and returning
