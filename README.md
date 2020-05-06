@@ -1,8 +1,14 @@
 # RPG - Java Rapid Parser Generator
+[![Released version](https://img.shields.io/maven-central/v/foundation.fluent.api/rpg-project.svg)](https://search.maven.org/#search%7Cga%7C1%7Crpg-project)
+[![Build Status](https://travis-ci.org/c0stra/rpg-project.svg?branch=master)](https://travis-ci.org/c0stra/rpg-project)
+
 Java Abstract Syntax Tree driven LR0 / LR1 rapid parser generator, generating parser based on Java AST factory methods, and
 returning user defined root node of the tree.
 
 ## Table of content
+* [Maven configuration](#maven-configuration)
+    * [Code dependencies](#code-dependencies)
+    * [Annotation processing dependencies](#annotation-processing-dependencies)
 * [Grammar definition using Java code - re-use AST factory](#rpg---java-rapid-parser-generator)
 * [Solving conflicts using priorities](#solving-conflicts-using-priorities)
 * [Lexer definition](#lexer-definition)
@@ -20,6 +26,67 @@ In order to define grammar, we'd need to add "unused" types describing only the 
 
 To avoid unnecessary overhead in a project, module `rpg-common` contains plenty of ready to use classes representing
 terminal symbols. Common operators, keywords as well as literals.
+
+## Maven configuration
+### Code dependencies
+
+First you need dependencies used in your code.
+
+Following dependency contains annotations used to mark your grammar: `@StartSymbol` and `@Priority`.
+
+Then it contains base classes, that the generated parser uses. So this is mandatory compile time dependency.
+Put it simply to your dependencies.
+```xml
+<dependency>
+    <groupId>foundation.fluent.api</groupId>
+    <artifactId>rpg</artifactId>
+    <version>${rpg.version}</version>
+</dependency>
+```
+
+Next dependency is not mandatory, but provides plenty of ready to use tools like:
+* Ready to use classes representing terminal symbols used in common languages, like operators, keywords, parentheses,
+ whitespaces, etc.
+* `AstUtils` class for frequently used actions in building the whole tree. Mostly shortcuts to simply create or update
+ lists or maps.
+* Ready to use sets of rules:
+    * Typical whitespace removal rules - ignoring whitespaces and comments.
+    * Meta rules for typical constructs - lists with left recursion, comma separated lists etc.
+
+It's this dependency:
+```xml
+<dependency>
+    <groupId>foundation.fluent.api</groupId>
+    <artifactId>rpg-common</artifactId>
+    <version>${rpg.version}</version>
+</dependency>
+```
+
+### Annotation processing dependencies
+
+We need a dependency for annotation processor in order to get the parser generated. Ideally pass it to compiler plugin.
+But if no compiler plugin is defined, it can be picked up also from project's compile time dependencies.
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${compiler.plugin.version}</version>
+            <configuration>
+                <annotationProcessorPaths>
+                    <annotationProcessorPath>
+                        <groupId>foundation.fluent.api</groupId>
+                        <artifactId>rpg-apt</artifactId>
+                        <version>${rpg.version}</version>
+                    </annotationProcessorPath>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
 
 ## Grammar definition using Java code - re-use AST factory
 
