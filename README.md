@@ -9,6 +9,7 @@ returning user defined root node of the tree.
 * [Generated Parser - Typesafe heterogeneous active stack](#generated-parser---typesafe-heterogeneous-active-stack)
 * [Meta rules](#meta-rules)
 * [Decomposition of grammar definition](#decomposition-of-grammar-definition)
+* ["No coding" parser](#no-coding-parser)
 
 Imagine your syntax tree factory class is at the same time definition of your parser grammar. That can be achieved
 by small enhancement of the factory.
@@ -156,7 +157,7 @@ They are re-used simply by extending the other interface.
 
 `rpg-common` comes already with such re-usable sets of rules. You can re-use them by extending:
 
-```
+```java
 public interface MyAstFactory extends WhiteSpaceRules, ListRules {
 
     @StartSymbol
@@ -166,3 +167,33 @@ public interface MyAstFactory extends WhiteSpaceRules, ListRules {
 }
 
 ```
+
+### "No coding parser"
+As __RPG__ allows to use any type, including builtin or 3rd party types for representation of the AST
+nodes (and therefore symbols of the grammar), then it makes it very simple to generate data parsers.
+E.g. very simple JSON parser can be constructed with following factory / grammar definition:
+
+```java
+public interface JsonFactory extends WhiteSpaceRules {
+
+    @StartSymbol
+    static Object               is  (String v)                                                     { return v;}
+    static Object               is  (Integer v)                                                    { return v; }
+    static Object               is  (Double v)                                                     { return v; }
+    static Object               is  (LBr o, List<Object> l, RBr c)                                 { return l; }
+    static Object               is  (LBr o, RBr c)                                                 { return emptyList(); }
+    static Object               is  (LCurl o, Map<String, Object> m, RCurl c)                      { return m; }
+    static Object               is  (LCurl o, RCurl c)                                             { return emptyMap(); }
+    static List<Object>         is  (Object v)                                                     { return list(v); }
+    static List<Object>         is  (List<Object> l, Comma c, Object v)                            { return addTo(l, v); }
+    static Map<String, Object>  is  (String k, Colon c, Object v)                                  { return map(k, v); }
+    static Map<String, Object>  is  (Map<String, Object> m, Comma s, String k, Colon c, Object v)  { return putUniqueIn(m, k, v, "Duplicate key: " + k); }
+
+}
+``` 
+It demonstrates, that there's no need to define any AST nodes, as Java's `List`, `Map` and literals is sufficient
+to represent simple JSON object.
+The factory in turn also immediately checks correctness - not allowing duplicate entries in JSON object.
+
+For full example see json package in rpg-sample-language module. There is also unit test for it.
+
