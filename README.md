@@ -18,7 +18,7 @@ Node types (classes) in the abstract syntax (parse) tree in fact correspond to n
 There are also types, that represent terminal symbols of our grammar (identifiers, string literals, any other literals).
 In order to define grammar, we'd need to add "unused" types describing only the syntax.
 
-To avoid unnecessary overhead in a project, module `jast-common` contains plenty of ready to use classes representing
+To avoid unnecessary overhead in a project, module `rpg-common` contains plenty of ready to use classes representing
 terminal symbols. Common operators, keywords as well as literals.
 
 ## Grammar definition using Java code - re-use AST factory
@@ -127,8 +127,6 @@ and link to previous stacked state.
 Every state represents exactly known prefix of the longest possible rule to reduce __including all types of symbols
 within the prefix__. So it's typesafe. As reduction is done within a state visitor method, it benefits from the type
 information of all elements on the stack to be used in the rule application (AST method invocation).
-
-Example of such parser, but implemented manually, can be found in the module `jast-sample-parser`.
 
 ## Meta rules
 __RPG__ supports re-usable rules using annotation marked generic methods.
