@@ -59,7 +59,7 @@ public class LrParserAutomata {
     }
 
     private void action(LrItemSet from, Symbol symbol, LrAction action) {
-        Map<Symbol, LrAction> actionMap = actions.computeIfAbsent(from, k -> new HashMap<>());
+        Map<Symbol, LrAction> actionMap = actions.computeIfAbsent(from, k -> new LinkedHashMap<>());
         // Help resolve Shift / Reduce, Reduce / Reduce conflicts with rule priorities.
         if(actionMap.containsKey(symbol)) {
             LrAction currentAction = actionMap.get(symbol);

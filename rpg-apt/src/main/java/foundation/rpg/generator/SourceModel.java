@@ -96,7 +96,7 @@ public class SourceModel {
     private static final Pattern FRAGMENT = Pattern.compile("// (.*):");
     static Map<String, String> load(String type) {
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(SourceModel.class.getResourceAsStream("/templates/" + type + ".java")))) {
-            Map<String, String> map = new HashMap<>();
+            Map<String, String> map = new LinkedHashMap<>();
             String name = "";
             for(String line = reader.readLine(); line != null; line = reader.readLine()) {
                 map.put(name, map.getOrDefault(name, "") + line + "\n");

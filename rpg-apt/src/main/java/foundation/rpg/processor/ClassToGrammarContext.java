@@ -57,9 +57,9 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
 public class ClassToGrammarContext {
 
     private final String packageName;
-    private final Set<String> usedNames = new HashSet<>();
-    private final Map<String, Symbol> symbolMap = new HashMap<>();
-    private final Map<Rule, ExecutableElement> ruleAssociation = new HashMap<>();
+    private final Set<String> usedNames = new LinkedHashSet<>();
+    private final Map<String, Symbol> symbolMap = new LinkedHashMap<>();
+    private final Map<Rule, ExecutableElement> ruleAssociation = new LinkedHashMap<>();
     private final Grammar grammar;
 
     private Stream<ExecutableElement> methods(Element factory) {

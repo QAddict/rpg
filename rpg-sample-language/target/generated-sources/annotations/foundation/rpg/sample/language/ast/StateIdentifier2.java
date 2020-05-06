@@ -51,17 +51,17 @@ public class StateIdentifier2 extends StackState<foundation.rpg.sample.language.
 
     // Reduce:
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
-    }
-
-    @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
     }
 
 

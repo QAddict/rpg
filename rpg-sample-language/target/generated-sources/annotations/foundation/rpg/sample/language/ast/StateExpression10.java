@@ -33,7 +33,7 @@ package foundation.rpg.sample.language.ast;
 
 Expression10: {
 	Expression -> Expression Plus Expression • [RPar, Plus, Comma]
-	Expression -> Expression • Plus Expression [Plus, RPar, Comma]
+	Expression -> Expression • Plus Expression [RPar, Plus, Comma]
 }
 
 */

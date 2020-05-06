@@ -33,7 +33,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class SourceModelTest {
@@ -41,7 +41,7 @@ public class SourceModelTest {
     @Test
     public void testLoad() {
         Map<String, String> map = SourceModel.load("State");
-        Assert.assertEquals(map.keySet(), new HashSet<>(Arrays.asList("", "Ignored:", "Symbols:")));
+        Assert.assertEquals(map.keySet(), new LinkedHashSet<>(Arrays.asList("", "Ignored:", "Symbols:")));
     }
 
 }

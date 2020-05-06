@@ -55,13 +55,13 @@ public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackSt
     // Reduce:
     // Shift:
     @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier4(symbol, this);
+    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateExpression9(symbol, this);
     }
 
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression9(symbol, this);
+    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
+        return new StateIdentifier4(symbol, this);
     }
 
     @Override

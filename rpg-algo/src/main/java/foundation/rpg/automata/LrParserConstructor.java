@@ -49,7 +49,7 @@ public class LrParserConstructor {
     private final Grammar grammar;
 
     private final MapOfSets<Symbol, Symbol> first = new MapOfSets<>();
-    private final Map<Symbol, Integer> counters = new HashMap<>();
+    private final Map<Symbol, Integer> counters = new LinkedHashMap<>();
 
     public LrParserConstructor(Grammar grammar) {
         this.grammar = grammar;
@@ -133,7 +133,7 @@ public class LrParserConstructor {
     }
 
     public Set<Symbol> follow(LrItem item) {
-        Set<Symbol> follow = new HashSet<>();
+        Set<Symbol> follow = new LinkedHashSet<>();
         for(int i = item.getDot() + 1; i < item.getRule().getRight().size(); i++) {
             follow.addAll(first.get(item.getRule().getRight().get(i)));
             if(!follow.contains(ε)) return follow;

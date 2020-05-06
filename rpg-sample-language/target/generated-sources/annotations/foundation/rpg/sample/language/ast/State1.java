@@ -47,6 +47,12 @@ public class State1 extends State {
     // Stack:
     // Reduce:
     @Override
+    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
+        
+        return this.visitListOfStatement(foundation.rpg.common.ListRules.isList1()).visitEnd(symbol);
+    }
+
+    @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
         return this.visitListOfStatement(foundation.rpg.common.ListRules.isList1()).visitIdentifier(symbol);
@@ -56,12 +62,6 @@ public class State1 extends State {
     public State visitLPar(foundation.rpg.common.LPar symbol) throws UnexpectedInputException {
         
         return this.visitListOfStatement(foundation.rpg.common.ListRules.isList1()).visitLPar(symbol);
-    }
-
-    @Override
-    public State visitEnd(foundation.rpg.common.End symbol) throws UnexpectedInputException {
-        
-        return this.visitListOfStatement(foundation.rpg.common.ListRules.isList1()).visitEnd(symbol);
     }
 
 

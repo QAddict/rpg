@@ -55,13 +55,13 @@ public class StateLPar1 extends StackState<foundation.rpg.common.LPar, State> {
     // Reduce:
     // Shift:
     @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier2(symbol, this);
+    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateExpression2(symbol, this);
     }
 
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression2(symbol, this);
+    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
+        return new StateIdentifier2(symbol, this);
     }
 
     @Override
