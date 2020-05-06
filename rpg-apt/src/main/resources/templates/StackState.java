@@ -29,6 +29,7 @@
 
 package $package$;
 
+// Generated token element wrapper for grammar parser.
 public class $class$<T, P> extends State {
 
     private final T node;

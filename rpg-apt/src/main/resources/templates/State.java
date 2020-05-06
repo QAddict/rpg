@@ -39,9 +39,8 @@ $automata$
 
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.StateBase;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class $class$ extends StateBase<$result$> {
 
 // Ignored:

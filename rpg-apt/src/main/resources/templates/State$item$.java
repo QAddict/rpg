@@ -36,9 +36,8 @@ $lrItem$
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class $class$ extends $parent$ {
 // Stack:
     public $class$($node$ node, $prev$ prev) {
