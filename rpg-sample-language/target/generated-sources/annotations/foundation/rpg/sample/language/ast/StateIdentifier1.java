@@ -39,9 +39,8 @@ Identifier1: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.ast.Identifier, State> {
 // Stack:
     public StateIdentifier1(foundation.rpg.sample.language.ast.Identifier node, State prev) {

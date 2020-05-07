@@ -31,9 +31,8 @@ package foundation.rpg.sample.language.ast;
 
 import foundation.rpg.parser.Token;
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated token element wrapper for grammar parser.")
+// Generated token element wrapper for grammar parser.
 public class TokenWhiteSpace implements Token<State> {
     private final foundation.rpg.common.WhiteSpace symbol;
 

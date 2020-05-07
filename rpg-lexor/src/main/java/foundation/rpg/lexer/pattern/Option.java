@@ -30,14 +30,35 @@
 package foundation.rpg.lexer.pattern;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Option {
     private final List<Unit> units;
+
     public Option(List<Unit> units) {
         this.units = units;
     }
 
     public List<Unit> getUnits() {
         return units;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Option option = (Option) o;
+        return Objects.equals(units, option.units);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(units);
+    }
+
+    @Override
+    public String toString() {
+        return units.stream().map(Objects::toString).collect(Collectors.joining());
     }
 }

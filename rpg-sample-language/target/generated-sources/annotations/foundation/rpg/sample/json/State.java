@@ -383,9 +383,8 @@ RCurl6: Comma -> REDUCE: Object -> LCurl MapOfObject RCurl • [RCurl, Comma]
 
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.StateBase;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class State extends StateBase<java.lang.Object> {
 
 // Ignored:

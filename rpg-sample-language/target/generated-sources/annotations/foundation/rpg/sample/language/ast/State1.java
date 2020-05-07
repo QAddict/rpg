@@ -41,9 +41,8 @@ package foundation.rpg.sample.language.ast;
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class State1 extends State {
 // Stack:
 // Reduce:

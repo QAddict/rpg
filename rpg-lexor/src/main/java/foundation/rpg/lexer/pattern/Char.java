@@ -29,9 +29,41 @@
 
 package foundation.rpg.lexer.pattern;
 
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
+
 public class Char implements Item, Chunk {
     private final char c;
     public Char(char c) {
         this.c = c;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitChar(c);
+    }
+
+    @Override
+    public Set<Character> getChars() {
+        return Collections.singleton(c);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Char aChar = (Char) o;
+        return c == aChar.c;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(c);
+    }
+
+    @Override
+    public String toString() {
+        return "" + c;
     }
 }

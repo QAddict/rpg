@@ -30,4 +30,8 @@
 package foundation.rpg.lexer.pattern;
 
 public class Any implements Chunk {
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitAny();
+    }
 }

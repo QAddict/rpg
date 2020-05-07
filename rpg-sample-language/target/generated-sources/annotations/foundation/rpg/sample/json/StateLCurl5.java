@@ -41,9 +41,8 @@ LCurl5: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateLCurl5 extends StackState<foundation.rpg.common.LCurl, State> {
 // Stack:
     public StateLCurl5(foundation.rpg.common.LCurl node, State prev) {

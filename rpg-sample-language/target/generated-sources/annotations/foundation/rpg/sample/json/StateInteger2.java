@@ -38,9 +38,8 @@ Integer2: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateInteger2 extends StackState<java.lang.Integer, State> {
 // Stack:
     public StateInteger2(java.lang.Integer node, State prev) {

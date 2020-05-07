@@ -45,9 +45,8 @@ Colon1: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateColon1 extends StackState<foundation.rpg.common.Colon, StackState<java.lang.String, ? extends State>> {
 // Stack:
     public StateColon1(foundation.rpg.common.Colon node, StackState<java.lang.String, ? extends State> prev) {

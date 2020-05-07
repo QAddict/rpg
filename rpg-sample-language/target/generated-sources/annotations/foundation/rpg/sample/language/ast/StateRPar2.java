@@ -38,9 +38,8 @@ RPar2: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateRPar2 extends StackState<foundation.rpg.common.RPar, StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>>> {
 // Stack:
     public StateRPar2(foundation.rpg.common.RPar node, StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> prev) {

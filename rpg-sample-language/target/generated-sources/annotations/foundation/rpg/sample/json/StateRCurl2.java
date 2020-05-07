@@ -38,9 +38,8 @@ RCurl2: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateRCurl2 extends StackState<foundation.rpg.common.RCurl, StackState<foundation.rpg.common.LCurl, ? extends State>> {
 // Stack:
     public StateRCurl2(foundation.rpg.common.RCurl node, StackState<foundation.rpg.common.LCurl, ? extends State> prev) {

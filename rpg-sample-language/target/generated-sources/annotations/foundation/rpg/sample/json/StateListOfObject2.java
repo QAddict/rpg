@@ -39,9 +39,8 @@ ListOfObject2: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateListOfObject2 extends StackState<java.util.List<java.lang.Object>, StackState<foundation.rpg.common.LBr, ? extends State>> {
 // Stack:
     public StateListOfObject2(java.util.List<java.lang.Object> node, StackState<foundation.rpg.common.LBr, ? extends State> prev) {

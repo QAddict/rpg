@@ -31,10 +31,17 @@ package foundation.rpg.lexer.pattern;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toSet;
+
 public class Chars implements Chunk {
     private final List<Item> items;
 
     public Chars(List<Item> items) {
         this.items = items;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitChars(items.stream().flatMap(i -> i.getChars().stream()).collect(toSet()));
     }
 }

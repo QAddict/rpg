@@ -27,8 +27,32 @@
  *
  */
 
-package foundation.rpg.lexer.pattern;
+package foundation.rpg.lexer;
 
-public enum Occurrence {
-    ONE, ANY, AT_LEAST_ONE
+import foundation.rpg.grammar.Grammar;
+import foundation.rpg.parser.ParseErrorException;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+
+import static java.util.Arrays.asList;
+import static org.testng.Assert.*;
+
+public class PatternToGrammarTest {
+
+    @Test
+    public void test() throws IOException, ParseErrorException {
+
+        PatternParser parser = new PatternParser();
+
+        Grammar grammar = new PatternToGrammar().grammarFromPatterns(asList(
+                parser.parse("if"),
+                parser.parse("else"),
+                parser.parse("extends"),
+                parser.parse("\\w\\a*")
+        ));
+
+        System.out.println(grammar);
+    }
+
 }

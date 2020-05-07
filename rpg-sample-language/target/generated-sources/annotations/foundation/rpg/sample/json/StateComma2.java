@@ -38,9 +38,8 @@ Comma2: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateComma2 extends StackState<foundation.rpg.common.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> {
 // Stack:
     public StateComma2(foundation.rpg.common.Comma node, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State> prev) {

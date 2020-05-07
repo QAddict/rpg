@@ -351,9 +351,8 @@ RPar6: Comma -> REDUCE: Expression -> Identifier LPar NOfListOfExpression RPar â
 
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.StateBase;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class State extends StateBase<foundation.rpg.sample.language.ast.Program> {
 
 // Ignored:

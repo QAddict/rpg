@@ -38,9 +38,8 @@ NOfListOfExpression2: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateNOfListOfExpression2 extends StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> {
 // Stack:
     public StateNOfListOfExpression2(foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>> node, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> prev) {

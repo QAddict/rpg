@@ -29,10 +29,35 @@
 
 package foundation.rpg.lexer.pattern;
 
+import java.util.Objects;
+
 public class Group implements Chunk {
     private final char g;
 
     public Group(char g) {
         this.g = g;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitGroup(g);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return g == group.g;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(g);
+    }
+
+    @Override
+    public String toString() {
+        return "\\" + g;
     }
 }

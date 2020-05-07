@@ -30,16 +30,14 @@
 package foundation.rpg.grammar;
 
 public interface Symbol {
-    Symbol start = new Symbol() {
-        @Override public String toString() { return "Start"; }
-    };
-    Symbol end = new Symbol() {
-        @Override public String toString() { return "End"; }
-    };
-    Symbol ε = new Symbol() {
-        @Override public String toString() { return "ε"; }
-    };
-    Symbol any = new Symbol() {
-        @Override public String toString() { return ""; }
-    };
+    Symbol start = symbol("Start");
+    Symbol end = symbol("End");
+    Symbol ε = symbol("ε");
+    Symbol any = symbol("");
+
+    static Symbol symbol(String name) {
+        return new Symbol() {
+            @Override public String toString() { return name; }
+        };
+    }
 }

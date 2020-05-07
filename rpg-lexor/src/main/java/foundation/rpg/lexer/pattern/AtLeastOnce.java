@@ -27,33 +27,41 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.lexer.pattern;
 
-/*
+import java.util.Objects;
 
-NOfListOfExpression3: {
-	Expression -> Identifier LPar NOfListOfExpression • RPar [RPar, Plus, Comma]
-}
+public class AtLeastOnce implements Unit {
+    private final Chunk chunk;
 
-*/
-
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class StateNOfListOfExpression3 extends StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> {
-// Stack:
-    public StateNOfListOfExpression3(foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>> node, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> prev) {
-        super(node, prev);
+    public AtLeastOnce(Chunk chunk) {
+        this.chunk = chunk;
     }
 
-
-// Reduce:
-// Shift:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) {
-        return new StateRPar6(symbol, this);
+    public void accept(Visitor visitor) {
+        visitor.visitAtLeastOnce(this);
     }
 
+    public Chunk getChunk() {
+        return chunk;
+    }
 
-// Accept:
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AtLeastOnce anyTimes = (AtLeastOnce) o;
+        return Objects.equals(chunk, anyTimes.chunk);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chunk);
+    }
+
+    @Override
+    public String toString() {
+        return chunk + "+";
+    }
 }

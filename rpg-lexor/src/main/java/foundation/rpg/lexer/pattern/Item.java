@@ -29,5 +29,8 @@
 
 package foundation.rpg.lexer.pattern;
 
+import java.util.Set;
+
 public interface Item {
+    Set<Character> getChars();
 }

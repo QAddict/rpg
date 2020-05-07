@@ -29,6 +29,6 @@
 
 package foundation.rpg.lexer.pattern;
 
-public interface Chunk {
+public interface Chunk extends Unit {
 
 }

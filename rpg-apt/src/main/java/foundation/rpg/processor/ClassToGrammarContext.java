@@ -47,6 +47,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static foundation.rpg.grammar.Rule.rule;
+import static foundation.rpg.grammar.Symbol.symbol;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.isNull;
@@ -127,7 +128,7 @@ public class ClassToGrammarContext {
 
     public Symbol of(TypeMirror mirror) {
         return symbolMap.computeIfAbsent(mirror.toString(), key -> {
-            Symbol s = new TypeSymbol(uniqueName(mirror));
+            Symbol s = symbol(uniqueName(mirror));
             typeMap.put(s, mirror);
             return s;
         });
@@ -166,20 +167,6 @@ public class ClassToGrammarContext {
             s = s + "$";
         }
         return s;
-    }
-
-
-    private static final class TypeSymbol implements Symbol {
-        private final String uniqueName;
-
-        private TypeSymbol(String uniqueName) {
-            this.uniqueName = uniqueName;
-        }
-
-        @Override
-        public String toString() {
-            return uniqueName;
-        }
     }
 
 }

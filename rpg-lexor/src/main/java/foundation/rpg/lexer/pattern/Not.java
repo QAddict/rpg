@@ -29,10 +29,17 @@
 
 package foundation.rpg.lexer.pattern;
 
-public class Not implements Chunk {
-    private final Chunk negated;
+import java.util.Collections;
 
-    public Not(Chunk negated) {
+public class Not implements Chunk {
+    private final Chars negated;
+
+    public Not(Chars negated) {
         this.negated = negated;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitNot(Collections.emptySet());
     }
 }

@@ -44,9 +44,8 @@ ListOfStatement1: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateListOfStatement1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, State> {
 // Stack:
     public StateListOfStatement1(java.util.List<foundation.rpg.sample.language.ast.Statement> node, State prev) {

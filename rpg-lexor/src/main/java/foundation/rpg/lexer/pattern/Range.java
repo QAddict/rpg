@@ -29,6 +29,12 @@
 
 package foundation.rpg.lexer.pattern;
 
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toSet;
+
 public class Range implements Item {
     private final char l;
     private final char h;
@@ -38,4 +44,27 @@ public class Range implements Item {
         this.h = h;
     }
 
+    @Override
+    public Set<Character> getChars() {
+        return IntStream.rangeClosed(l, h).mapToObj(i -> (char) i).collect(toSet());
+    }
+
+    @Override
+    public String toString() {
+        return l + "-" + h;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Range range = (Range) o;
+        return l == range.l &&
+                h == range.h;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(l, h);
+    }
 }

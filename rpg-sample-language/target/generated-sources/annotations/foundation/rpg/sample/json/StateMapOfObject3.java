@@ -39,9 +39,8 @@ MapOfObject3: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateMapOfObject3 extends StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.LCurl, ? extends State>> {
 // Stack:
     public StateMapOfObject3(java.util.Map<java.lang.String,java.lang.Object> node, StackState<foundation.rpg.common.LCurl, ? extends State> prev) {

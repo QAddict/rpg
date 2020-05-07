@@ -30,14 +30,28 @@
 package foundation.rpg.lexer.pattern;
 
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.joining;
 
 public class Pattern implements Chunk {
     private final List<Option> options;
+
     public Pattern(List<Option> options) {
         this.options = options;
     }
 
     public List<Option> getOptions() {
         return options;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitOptions(this);
+    }
+
+    @Override
+    public String toString() {
+        return options.stream().map(Objects::toString).collect(joining("|"));
     }
 }

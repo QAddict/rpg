@@ -42,9 +42,8 @@ LPar3: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateLPar3 extends StackState<foundation.rpg.common.LPar, State> {
 // Stack:
     public StateLPar3(foundation.rpg.common.LPar node, State prev) {

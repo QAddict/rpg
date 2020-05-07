@@ -38,9 +38,8 @@ Double2: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StateDouble2 extends StackState<java.lang.Double, State> {
 // Stack:
     public StateDouble2(java.lang.Double node, State prev) {

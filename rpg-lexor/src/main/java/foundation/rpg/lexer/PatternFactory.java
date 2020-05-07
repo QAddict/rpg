@@ -27,10 +27,11 @@
  *
  */
 
-package foundation.rpg.lexer.pattern;
+package foundation.rpg.lexer;
 
 import foundation.rpg.StartSymbol;
 import foundation.rpg.common.*;
+import foundation.rpg.lexer.pattern.*;
 
 import java.util.List;
 
@@ -45,13 +46,15 @@ public interface PatternFactory {
     static  Option        is1 (List<Unit> l)                         { return new Option(l); }
     static  List<Unit>    is  ()                                     { return list(); }
     static  List<Unit>    is  (List<Unit> l, Unit u)                 { return addTo(l, u); }
-    static  Unit          is  (Chunk c, Occurrence r)                { return new Unit(c, r); }
+    static  Unit          is  (Chunk c)                              { return c; }
+    static  Unit          is  (Chunk c, Times t)                     { return new AnyTimes(c); }
+    static  Unit          is  (Chunk c, Plus p)                      { return new AtLeastOnce(c); }
     static  Chunk         is  (Character c)                          { return new Char(c); }
     static  Chunk         is  (Dot d)                                { return new Any(); }
-    static  Chunk         is  (Minus d)                              { return new Any(); }
-    static  Chunk         is  (Tilda d)                              { return new Any(); }
-    static  Chunk         is  (RPar d)                               { return new Any(); }
-    static  Chunk         is  (RBr d)                                { return new Any(); }
+    static  Chunk         is  (Minus d)                              { return is('-'); }
+    static  Chunk         is  (Tilda d)                              { return is('~'); }
+    static  Chunk         is  (RPar d)                               { return is(')'); }
+    static  Chunk         is  (RBr d)                                { return is(']'); }
     static  Chunk         is  (Bs b, Tilda c)                        { return is('~'); }
     static  Chunk         is  (Bs b, Times c)                        { return is('*'); }
     static  Chunk         is  (Bs b, Plus c)                         { return is('+'); }
@@ -65,8 +68,5 @@ public interface PatternFactory {
     static  List<Item>    is  (List<Item> l, Item i)                 { return addTo(l, i); }
     static  Item          is1 (Character c)                          { return new Char(c); }
     static  Item          is  (Character l, Minus m, Character h)    { return new Range(l, h); }
-    static  Chunk         is  (LPar l, List<Option> o, RPar r)       { return new Pattern(o); }
-    static  Occurrence    is2 ()                                     { return Occurrence.ONE; }
-    static  Occurrence    is  (Times t)                              { return Occurrence.ANY; }
-    static  Occurrence    is  (Plus p)                               { return Occurrence.AT_LEAST_ONE; }
+    static  Chunk         is  (LPar l, List<Option> o, RPar r)       { return is(o); }
 }

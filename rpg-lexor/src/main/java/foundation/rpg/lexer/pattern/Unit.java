@@ -29,21 +29,8 @@
 
 package foundation.rpg.lexer.pattern;
 
-public class Unit {
+public interface Unit {
 
-    private final Chunk c;
-    private final Occurrence r;
+    void accept (Visitor visitor);
 
-    public Unit(Chunk c, Occurrence r) {
-        this.c = c;
-        this.r = r;
-    }
-
-    public Chunk getC() {
-        return c;
-    }
-
-    public Occurrence getR() {
-        return r;
-    }
 }

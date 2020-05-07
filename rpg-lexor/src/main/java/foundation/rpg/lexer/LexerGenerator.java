@@ -30,9 +30,7 @@
 package foundation.rpg.lexer;
 
 import foundation.rpg.lexer.pattern.Char;
-import foundation.rpg.lexer.pattern.Occurrence;
 import foundation.rpg.lexer.pattern.Option;
-import foundation.rpg.lexer.pattern.Unit;
 import foundation.rpg.Name;
 import foundation.rpg.parser.ParseErrorException;
 import foundation.rpg.Pattern;
@@ -57,18 +55,9 @@ public class LexerGenerator implements Comparator<Class<?>> {
         tokens.sort(this);
         for(Class<?> token : tokens)
             patterns.put(patternOf(token), token);
-
-        patterns.forEach((p, t) -> {
-            p.getOptions().forEach(o -> {
-                Set<LexState> states = Collections.singleton(new LexState());
-                for(Unit u : o.getUnits()) {
-                }
-            });
-        });
     }
 
     private LexState drill(Set<LexState> s, Option o, int i) {
-        o.getUnits().get(i).getR();
         throw new UnsupportedOperationException("drill");
     }
 
@@ -79,7 +68,7 @@ public class LexerGenerator implements Comparator<Class<?>> {
         Name name = token.getAnnotation(Name.class);
         if(isNull(name))
             throw new IllegalArgumentException(token.getSimpleName());
-        return new foundation.rpg.lexer.pattern.Pattern(Collections.singletonList(new Option(name.value().chars().mapToObj(c -> new Unit(new Char((char) c), Occurrence.ONE)).collect(toList()))));
+        return new foundation.rpg.lexer.pattern.Pattern(Collections.singletonList(new Option(name.value().chars().mapToObj(c -> new Char((char) c)).collect(toList()))));
     }
 
     @Override

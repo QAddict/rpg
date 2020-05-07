@@ -42,9 +42,8 @@ Plus4: {
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
-import javax.annotation.Generated;
 
-@Generated("Generated visitor pattern based state for grammar parser.")
+// Generated visitor pattern based state for grammar parser.
 public class StatePlus4 extends StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
 // Stack:
     public StatePlus4(foundation.rpg.common.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {

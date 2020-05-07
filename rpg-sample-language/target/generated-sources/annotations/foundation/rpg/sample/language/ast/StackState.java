@@ -29,6 +29,7 @@
 
 package foundation.rpg.sample.language.ast;
 
+// Generated token element wrapper for grammar parser.
 public class StackState<T, P> extends State {
 
     private final T node;
