@@ -85,12 +85,12 @@ public class PatternToGrammar {
 
                 @Override
                 public void visitChar(char character) {
-
+                    // No additional rule.
                 }
 
                 @Override
                 public void visitGroup(char group) {
-
+                    // No additional rule.
                 }
 
                 @Override
@@ -99,8 +99,8 @@ public class PatternToGrammar {
                 }
 
                 @Override
-                public void visitAny() {
-
+                public void visitAny(Any any) {
+                    rules.add(rule(of(any), singletonList(Symbol.any)));
                 }
 
                 @Override

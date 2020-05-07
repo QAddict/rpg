@@ -29,7 +29,6 @@
 
 package foundation.rpg.lexer.pattern;
 
-import java.util.List;
 import java.util.Set;
 
 public interface Visitor {
@@ -40,7 +39,7 @@ public interface Visitor {
     void visitChar(char character);
     void visitGroup(char group);
     void visitChars(Set<Character> characters);
-    void visitAny();
+    void visitAny(Any any);
     void visitNot(Set<Character> characters);
 
 }
