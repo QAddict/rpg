@@ -64,6 +64,7 @@ public class LexerGenerator {
         Grammar grammar = patternToGrammar.grammarFromPatterns(patterns);
         LrParserAutomata lrParserAutomata = LexerConstructor.generateParser(grammar);
         w.println("\t\tswitch(state) {");
+        w.println("\t\t\tcase -1: return new TokenEnd(new End(input.position()));");
         lrParserAutomata.getSets().forEach(set -> {
             w.println("\t\t\tcase " + stateOf(set) + ": switch(symbol) {");
             lrParserAutomata.actionsFor(set).forEach((s, a) -> {

@@ -56,7 +56,13 @@ public class LexerConstructor extends LrParserConstructor {
     }
 
     private boolean isInGroup(Symbol g, Symbol c) {
-        return true;
+        switch (g.toString().charAt(1)) {
+            case 'a': return Character.isAlphabetic(c.toString().charAt(0));
+            case 'w': return Character.isJavaIdentifierStart(c.toString().charAt(0));
+            case 'd': return Character.isDigit(c.toString().charAt(0));
+            case '.': return true;
+        }
+        return false;
     }
 
     private boolean isGroup(Symbol k) {
