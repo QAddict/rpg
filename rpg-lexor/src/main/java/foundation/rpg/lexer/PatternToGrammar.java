@@ -36,11 +36,11 @@ import foundation.rpg.lexer.pattern.*;
 
 import java.util.*;
 
+import static foundation.rpg.grammar.Grammar.grammar;
 import static foundation.rpg.grammar.Rule.rule;
 import static foundation.rpg.grammar.Symbol.symbol;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.toList;
 
 public class PatternToGrammar {
@@ -55,7 +55,7 @@ public class PatternToGrammar {
         Symbol start = symbol("Token");
         for(Pattern pattern : patterns) {
             Symbol patternSymbol = of(pattern);
-            rules.add(rule(start, Collections.singletonList(patternSymbol)));
+            rules.add(rule(start, Collections.singletonList(patternSymbol), 10));
             pattern.accept(new Visitor() {
                 @Override
                 public void visitOptions(Pattern pattern) {
@@ -99,18 +99,13 @@ public class PatternToGrammar {
                 }
 
                 @Override
-                public void visitAny(Any any) {
-                    rules.add(rule(of(any), singletonList(Symbol.any)));
-                }
-
-                @Override
                 public void visitNot(Set<Character> characters) {
 
                 }
 
             });
         }
-        return Grammar.grammar(start, rules, Collections.emptySet());
+        return grammar(start, rules, emptySet());
     }
 
 }

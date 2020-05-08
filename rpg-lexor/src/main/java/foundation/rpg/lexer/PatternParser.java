@@ -69,6 +69,7 @@ public class PatternParser extends Parser<Pattern, State> {
                 case ')': return new TokenRPar(new RPar(mark));
                 case '[': return new TokenLBr(new LBr(mark));
                 case ']': return new TokenRBr(new RBr(mark));
+                case '.': return new TokenDot(new Dot(mark));
                 default: return new TokenCharacter((char) i);
             }
         }

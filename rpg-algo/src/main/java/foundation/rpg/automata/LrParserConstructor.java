@@ -91,18 +91,7 @@ public class LrParserConstructor {
         processingSets.add(start);
         while(!processingSets.isEmpty()) {
             LrItemSet set = processingSets.poll();
-            MapOfSets<Symbol, LrItem> transitions = new MapOfSets<>();
-            set.getItems().forEach(lrItem -> {
-                if(lrItem.isEnd()) {
-                    if(lrItem.getLookahead().isEmpty()) {
-                        parser.accept(set, lrItem);
-                    } else {
-                        lrItem.getLookahead().forEach(lookahead -> parser.reduction(set, lookahead, lrItem));
-                    }
-                } else {
-                    transitions.add(lrItem.symbolAtDot(), lrItem.moveDot());
-                }
-            });
+            MapOfSets<Symbol, LrItem> transitions = transitions(parser, set);
             transitions.forEach((transitionSymbol, baseSet) -> {
                 LrItemSet nextSet = closure(transitionSymbol, baseSet);
                 if(parser.addState(nextSet)) {
@@ -112,6 +101,22 @@ public class LrParserConstructor {
             });
         }
         return parser;
+    }
+
+    public MapOfSets<Symbol, LrItem> transitions(LrParserAutomata parser, LrItemSet set) {
+        MapOfSets<Symbol, LrItem> transitions = new MapOfSets<>();
+        set.getItems().forEach(lrItem -> {
+            if(lrItem.isEnd()) {
+                if(lrItem.getLookahead().isEmpty()) {
+                    parser.accept(set, lrItem);
+                } else {
+                    lrItem.getLookahead().forEach(lookahead -> parser.reduction(set, lookahead, lrItem));
+                }
+            } else {
+                transitions.add(lrItem.symbolAtDot(), lrItem.moveDot());
+            }
+        });
+        return transitions;
     }
 
     public LrItemSet closure(Symbol symbol, Set<LrItem> base) {

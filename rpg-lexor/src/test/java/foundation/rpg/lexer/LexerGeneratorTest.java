@@ -29,36 +29,41 @@
 
 package foundation.rpg.lexer;
 
-import foundation.rpg.automata.LrParserAutomata;
-import foundation.rpg.automata.LrParserConstructor;
-import foundation.rpg.grammar.Grammar;
-import foundation.rpg.parser.ParseErrorException;
+import foundation.rpg.Name;
+import foundation.rpg.Pattern;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
+import javax.lang.model.element.Element;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.*;
 
-public class PatternToGrammarTest {
+public class LexerGeneratorTest {
+
+    @Name("if") class E1 {}
+    @Name("else") class E2 {}
+    @Name("extends") class E3 {}
+    @Pattern("\\w\\a*") class E4 {}
+    @Pattern("'.*'") class E5 {}
 
     @Test
-    public void test() throws IOException, ParseErrorException {
-
-        PatternParser parser = new PatternParser();
-
-        Grammar grammar = new PatternToGrammar().grammarFromPatterns(asList(
-                parser.parse("if"),
-                parser.parse("else"),
-                parser.parse("extends"),
-                parser.parse("\\w\\a*"),
-                parser.parse("'.*'")
-        ));
-
-        System.out.println(grammar);
-
-        LrParserAutomata lrParserAutomata = LexerConstructor.generateParser(grammar);
-        System.out.println(lrParserAutomata);
+    public void testProcess() {
+        Element e1 = mock(Element.class);
+        Element e2 = mock(Element.class);
+        Element e3 = mock(Element.class);
+        Element e4 = mock(Element.class);
+        Element e5 = mock(Element.class);
+        when(e1.getAnnotation(Name.class)).thenReturn(E1.class.getAnnotation(Name.class));
+        when(e2.getAnnotation(Name.class)).thenReturn(E2.class.getAnnotation(Name.class));
+        when(e3.getAnnotation(Name.class)).thenReturn(E3.class.getAnnotation(Name.class));
+        when(e4.getAnnotation(Pattern.class)).thenReturn(E4.class.getAnnotation(Pattern.class));
+        when(e5.getAnnotation(Pattern.class)).thenReturn(E5.class.getAnnotation(Pattern.class));
+        StringWriter stringWriter = new StringWriter();
+        new LexerGenerator().process(asList(e1, e2, e3, e4, e5), new PrintWriter(stringWriter));
+        System.out.println(stringWriter);
     }
-
 }

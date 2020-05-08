@@ -27,11 +27,44 @@
  *
  */
 
-package foundation.rpg.lexer.pattern;
+package foundation.rpg.lexer;
 
-public class Any implements Chunk {
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitAny(this);
+import foundation.rpg.automata.LrItem;
+import foundation.rpg.automata.LrItemSet;
+import foundation.rpg.automata.LrParserAutomata;
+import foundation.rpg.automata.LrParserConstructor;
+import foundation.rpg.grammar.Grammar;
+import foundation.rpg.grammar.Symbol;
+import foundation.rpg.util.MapOfSets;
+
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+
+public class LexerConstructor extends LrParserConstructor {
+    public LexerConstructor(Grammar grammar) {
+        super(grammar);
     }
+
+    @Override
+    public MapOfSets<Symbol, LrItem> transitions(LrParserAutomata parser, LrItemSet set) {
+        MapOfSets<Symbol, LrItem> transitions = super.transitions(parser, set);
+        Set<Symbol> keys = transitions.keys();
+        Set<Symbol> chars = keys.stream().filter(k -> !isGroup(k)).collect(toSet());
+        keys.stream().filter(this::isGroup).forEach(g -> chars.stream().filter(c -> isInGroup(g, c)).forEach(c -> transitions.get(c).addAll(transitions.get(g))));
+        return transitions;
+    }
+
+    private boolean isInGroup(Symbol g, Symbol c) {
+        return true;
+    }
+
+    private boolean isGroup(Symbol k) {
+        return k.toString().startsWith("\\");
+    }
+
+    public static LrParserAutomata generateParser(Grammar grammar) {
+        return new LexerConstructor(grammar).constructAutomata();
+    }
+
 }

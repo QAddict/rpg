@@ -50,7 +50,7 @@ public interface PatternFactory {
     static  Unit          is  (Chunk c, Times t)                     { return new AnyTimes(c); }
     static  Unit          is  (Chunk c, Plus p)                      { return new AtLeastOnce(c); }
     static  Chunk         is  (Character c)                          { return new Char(c); }
-    static  Chunk         is  (Dot d)                                { return new Any(); }
+    static  Chunk         is  (Dot d)                                { return new Group('.'); }
     static  Chunk         is  (Minus d)                              { return is('-'); }
     static  Chunk         is  (Tilda d)                              { return is('~'); }
     static  Chunk         is  (RPar d)                               { return is(')'); }

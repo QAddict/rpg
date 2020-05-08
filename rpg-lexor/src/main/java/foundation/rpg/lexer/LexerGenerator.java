@@ -29,50 +29,81 @@
 
 package foundation.rpg.lexer;
 
+import foundation.rpg.Name;
+import foundation.rpg.automata.*;
+import foundation.rpg.grammar.Grammar;
 import foundation.rpg.lexer.pattern.Char;
 import foundation.rpg.lexer.pattern.Option;
-import foundation.rpg.Name;
+import foundation.rpg.lexer.pattern.Pattern;
 import foundation.rpg.parser.ParseErrorException;
-import foundation.rpg.Pattern;
 
+import javax.lang.model.element.Element;
 import java.io.IOException;
-import java.util.*;
+import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
-public class LexerGenerator implements Comparator<Class<?>> {
+public class LexerGenerator {
 
-    private final PatternParser parser = new PatternParser();
+    private final PatternParser patternParser = new PatternParser();
+    private final PatternToGrammar patternToGrammar = new PatternToGrammar();
+    private final Map<LrItemSet, Integer> states = new LinkedHashMap<>();
 
-    private final class LexState {
-
+    private int stateOf(LrItemSet set) {
+        return states.computeIfAbsent(set, k -> states.size());
     }
 
-    public void generate(List<Class<?>> tokens) throws IOException, ParseErrorException {
-        Map<foundation.rpg.lexer.pattern.Pattern, Class<?>> patterns = new LinkedHashMap<>();
-        tokens.sort(this);
-        for(Class<?> token : tokens)
-            patterns.put(patternOf(token), token);
+    public LrParserAutomata process(List<Element> elements, PrintWriter w) {
+        List<Pattern> patterns = elements.stream().map(this::patternOf).collect(toList());
+        Grammar grammar = patternToGrammar.grammarFromPatterns(patterns);
+        LrParserAutomata lrParserAutomata = LexerConstructor.generateParser(grammar);
+        w.println("\t\tswitch(state) {");
+        lrParserAutomata.getSets().forEach(set -> {
+            w.println("\t\t\tcase " + stateOf(set) + ": switch(symbol) {");
+            lrParserAutomata.actionsFor(set).forEach((s, a) -> {
+                a.accept(new LrAction.LrActionVisitor() {
+                    @Override
+                    public void visitGoto(LrItemSet set) {
+                        //if(grammar.getTerminals().contains(s))
+                            w.println("\t\t\t\tcase " + s + ": state = " + stateOf(set) + "; break;");
+                    }
+
+                    @Override
+                    public void visitReduction(LrItem item) {
+                        w.println("\t\t\t\tdefault: return;");
+                    }
+
+                    @Override
+                    public void visitAccept(LrItem item) {
+
+                    }
+                });
+            });
+            w.println("\t\t\t}");
+        });
+        w.println("\t\t}");
+        return lrParserAutomata;
     }
 
-    private LexState drill(Set<LexState> s, Option o, int i) {
-        throw new UnsupportedOperationException("drill");
-    }
-
-    private foundation.rpg.lexer.pattern.Pattern patternOf(Class<?> token) throws IOException, ParseErrorException {
-        Pattern pattern = token.getAnnotation(Pattern.class);
-        if(nonNull(pattern))
-            return parser.parse(pattern.value());
+    private foundation.rpg.lexer.pattern.Pattern patternOf(Element token) {
+        foundation.rpg.Pattern pattern = token.getAnnotation(foundation.rpg.Pattern.class);
+        if(nonNull(pattern)) {
+            try {
+                return patternParser.parse(pattern.value());
+            } catch (IOException | ParseErrorException e) {
+                throw new IllegalStateException(e);
+            }
+        }
         Name name = token.getAnnotation(Name.class);
         if(isNull(name))
-            throw new IllegalArgumentException(token.getSimpleName());
-        return new foundation.rpg.lexer.pattern.Pattern(Collections.singletonList(new Option(name.value().chars().mapToObj(c -> new Char((char) c)).collect(toList()))));
+            throw new IllegalArgumentException(token.getSimpleName().toString());
+        return new Pattern(singletonList(new Option(name.value().chars().mapToObj(c -> new Char((char) c)).collect(toList()))));
     }
 
-    @Override
-    public int compare(Class<?> o1, Class<?> o2) {
-        return 0;
-    }
 }

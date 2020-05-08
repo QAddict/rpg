@@ -56,4 +56,9 @@ public final class MapOfSets<K, V> {
     public void forEach(BiConsumer<? super K, ? super Set<V>> consumer) {
         map.forEach(consumer);
     }
+
+    public Set<K> keys() {
+        return map.keySet();
+    }
+
 }
