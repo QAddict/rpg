@@ -52,6 +52,6 @@ public class Pattern implements Chunk {
 
     @Override
     public String toString() {
-        return options.stream().map(Objects::toString).collect(joining("|"));
+        return "P" + options.stream().map(Objects::toString).collect(joining("|"));
     }
 }

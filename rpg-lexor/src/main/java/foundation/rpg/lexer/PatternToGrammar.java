@@ -41,7 +41,8 @@ import static foundation.rpg.grammar.Rule.rule;
 import static foundation.rpg.grammar.Symbol.symbol;
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
-import static java.util.stream.Collectors.toList;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public class PatternToGrammar {
 
@@ -55,57 +56,90 @@ public class PatternToGrammar {
         Symbol start = symbol("Token");
         for(Pattern pattern : patterns) {
             Symbol patternSymbol = of(pattern);
-            rules.add(rule(start, Collections.singletonList(patternSymbol), 10));
-            pattern.accept(new Visitor() {
-                @Override
-                public void visitOptions(Pattern pattern) {
-                    Symbol patternSymbol = of(pattern);
-                    pattern.getOptions().forEach(option -> rules.add(rule(patternSymbol, option.getUnits().stream().map(u -> {
-                        u.accept(this);
-                        return of(u);
-                    }).collect(toList()))));
-                }
-
-                @Override
-                public void visitAnyTimes(AnyTimes anyTimes) {
-                    Symbol left = of(anyTimes);
-                    rules.add(rule(left, emptyList()));
-                    rules.add(rule(left, asList(of(anyTimes.getChunk()), left)));
-                    anyTimes.getChunk().accept(this);
-                }
-
-                @Override
-                public void visitAtLeastOnce(AtLeastOnce node) {
-                    Symbol left = of(node);
-                    Symbol chunkSymbol = of(node.getChunk());
-                    rules.add(rule(left, singletonList(chunkSymbol)));
-                    rules.add(rule(left, asList(chunkSymbol, left)));
-                    node.getChunk().accept(this);
-                }
-
-                @Override
-                public void visitChar(char character) {
-                    // No additional rule.
-                }
-
-                @Override
-                public void visitGroup(char group) {
-                    // No additional rule.
-                }
-
-                @Override
-                public void visitChars(Set<Character> characters) {
-                    characters.forEach(this::visitChar);
-                }
-
-                @Override
-                public void visitNot(Set<Character> characters) {
-
-                }
-
-            });
+            //rules.add(rule(start, singletonList(patternSymbol), 10));
+            pattern.accept(new RulesVisitor(rules, start, emptyList()));
         }
         return grammar(start, rules, emptySet());
     }
 
+    private class RulesVisitor implements Visitor {
+        private final Set<Rule> rules;
+        private final Symbol left;
+        private final List<Symbol> append;
+
+        public RulesVisitor(Set<Rule> rules, Symbol left, List<Symbol> append) {
+            this.rules = rules;
+            this.left = left;
+            this.append = append;
+        }
+
+        List<Symbol> concat(Symbol... s) {
+            List<Symbol> r = new ArrayList<>(append.size() + s.length);
+            r.addAll(asList(s));
+            r.addAll(append);
+            return r;
+        }
+
+        RulesVisitor rules(Symbol left, List<Symbol> append) {
+            return new RulesVisitor(rules, left, new ArrayList<>(append));
+        }
+
+        @Override
+        public void visitOptions(Pattern pattern) {
+            pattern.getOptions().forEach(option -> {
+                rules.add(rule(left, singletonList(of(option))));
+                rules(left, append).visitOption(option);
+            });
+        }
+
+        @Override
+        public void visitOption(Option option) {
+            if(isNull(option)) return;
+            Symbol symbol = of(option);
+            if(nonNull(option.getSuffix())) {
+                rules(symbol, append).visitOption(option.getSuffix());
+                option.getPrefix().accept(rules(symbol, singletonList(of(option.getSuffix()))));
+            } else {
+                option.getPrefix().accept(rules(symbol, append));
+            }
+        }
+
+        @Override
+        public void visitAnyTimes(AnyTimes anyTimes) {
+            rules.add(rule(left, append));
+            //Symbol left = of(anyTimes);
+            //rules.add(rule(left, asList(of(anyTimes.getChunk()), left)));
+            anyTimes.getChunk().accept(rules(left, singletonList(left)));
+        }
+
+        @Override
+        public void visitAtLeastOnce(AtLeastOnce node) {
+            Symbol left = of(node);
+            Symbol chunkSymbol = of(node.getChunk());
+            rules.add(rule(left, concat(chunkSymbol)));
+            rules.add(rule(left, concat(of(node.getChunk()), left)));
+            node.getChunk().accept(rules(this.left, concat(left)));
+        }
+
+        @Override
+        public void visitChar(Char node) {
+            rules.add(rule(left, concat(of(node))));
+        }
+
+        @Override
+        public void visitGroup(Group node) {
+            rules.add(rule(left, concat(of(node))));
+        }
+
+        @Override
+        public void visitChars(Chars chars) {
+            //characters.forEach(this::visitChar);
+        }
+
+        @Override
+        public void visitNot(Not not) {
+            rules.add(rule(left, concat(of(not))));
+        }
+
+    }
 }

@@ -29,19 +29,17 @@
 
 package foundation.rpg.lexer.pattern;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 public class Option {
-    private final List<Unit> units;
+    private final Unit prefix;
+    private final Option suffix;
 
-    public Option(List<Unit> units) {
-        this.units = units;
-    }
-
-    public List<Unit> getUnits() {
-        return units;
+    public Option(Unit prefix, Option suffix) {
+        this.prefix = prefix;
+        this.suffix = suffix;
     }
 
     @Override
@@ -49,16 +47,26 @@ public class Option {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Option option = (Option) o;
-        return Objects.equals(units, option.units);
+        return Objects.equals(prefix, option.prefix) &&
+                Objects.equals(suffix, option.suffix);
+    }
+
+    public Unit getPrefix() {
+        return prefix;
+    }
+
+    public Option getSuffix() {
+        return suffix;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(units);
+        return Objects.hash(prefix, suffix);
     }
 
     @Override
     public String toString() {
-        return units.stream().map(Objects::toString).collect(Collectors.joining());
+        return "_" + prefix + (isNull(suffix) ? "" : suffix);
     }
+
 }

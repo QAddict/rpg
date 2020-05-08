@@ -29,7 +29,7 @@
 
 package foundation.rpg.lexer.pattern;
 
-import java.util.Collections;
+import java.util.Objects;
 
 public class Not implements Chunk {
     private final Chars negated;
@@ -40,6 +40,24 @@ public class Not implements Chunk {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitNot(Collections.emptySet());
+        visitor.visitNot(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Not not = (Not) o;
+        return Objects.equals(negated, not.negated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(negated);
+    }
+
+    @Override
+    public String toString() {
+        return "[~" + negated + "]";
     }
 }

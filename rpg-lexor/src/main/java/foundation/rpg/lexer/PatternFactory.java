@@ -43,9 +43,8 @@ public interface PatternFactory {
     static  Pattern       is  (List<Option> l)                       { return new Pattern(l); }
     static  List<Option>  is  (Option o)                             { return list(o); }
     static  List<Option>  is  (List<Option> l, Pipe p, Option o)     { return addTo(l, o);}
-    static  Option        is1 (List<Unit> l)                         { return new Option(l); }
-    static  List<Unit>    is  ()                                     { return list(); }
-    static  List<Unit>    is  (List<Unit> l, Unit u)                 { return addTo(l, u); }
+    static  Option        is ()                                      { return null; }
+    static  Option        is  (Unit u, Option o)                     { return new Option(u, o); }
     static  Unit          is  (Chunk c)                              { return c; }
     static  Unit          is  (Chunk c, Times t)                     { return new AnyTimes(c); }
     static  Unit          is  (Chunk c, Plus p)                      { return new AtLeastOnce(c); }

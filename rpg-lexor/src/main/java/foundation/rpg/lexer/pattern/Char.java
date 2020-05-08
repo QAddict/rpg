@@ -41,7 +41,7 @@ public class Char implements Item, Chunk {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitChar(c);
+        visitor.visitChar(this);
     }
 
     @Override

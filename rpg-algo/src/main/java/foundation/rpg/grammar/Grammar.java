@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toCollection;
 
 public class Grammar {
 
@@ -59,8 +60,8 @@ public class Grammar {
     }
 
     public static Grammar grammar(Symbol start, Set<Rule> rules, Set<Symbol> ignored) {
-        Set<Symbol> nonTerminals = rules.stream().map(Rule::getLeft).collect(Collectors.toCollection(LinkedHashSet::new));
-        Set<Symbol> terminals = rules.stream().flatMap(rule -> rule.getRight().stream()).filter(symbol -> !nonTerminals.contains(symbol)).collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<Symbol> nonTerminals = rules.stream().map(Rule::getLeft).collect(toCollection(LinkedHashSet::new));
+        Set<Symbol> terminals = rules.stream().flatMap(rule -> rule.getRight().stream()).filter(symbol -> !nonTerminals.contains(symbol)).collect(toCollection(LinkedHashSet::new));
         return new Grammar(start, terminals, nonTerminals, rules, ignored);
     }
 

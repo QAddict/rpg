@@ -71,8 +71,8 @@ public class LexerGenerator {
                 a.accept(new LrAction.LrActionVisitor() {
                     @Override
                     public void visitGoto(LrItemSet set) {
-                        //if(grammar.getTerminals().contains(s))
-                            w.println("\t\t\t\tcase " + s + ": state = " + stateOf(set) + "; break;");
+                        if(grammar.getTerminals().contains(s))
+                            w.println("\t\t\t\tcase '" + s + "': state = " + stateOf(set) + "; break;");
                     }
 
                     @Override
@@ -104,7 +104,11 @@ public class LexerGenerator {
         Name name = token.getAnnotation(Name.class);
         if(isNull(name))
             throw new IllegalArgumentException(token.getSimpleName().toString());
-        return new Pattern(singletonList(new Option(name.value().chars().mapToObj(c -> new Char((char) c)).collect(toList()))));
+        Option o = null;
+        for(int i = name.value().length(); i > 0; i--) {
+            o = new Option(new Char(name.value().charAt(i - 1)), o);
+        }
+        return new Pattern(singletonList(o));
     }
 
 }

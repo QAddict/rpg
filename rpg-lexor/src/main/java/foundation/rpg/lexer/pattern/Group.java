@@ -40,7 +40,7 @@ public class Group implements Chunk {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitGroup(g);
+        visitor.visitGroup(this);
     }
 
     @Override

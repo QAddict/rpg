@@ -30,7 +30,6 @@
 package foundation.rpg.lexer;
 
 import foundation.rpg.automata.LrParserAutomata;
-import foundation.rpg.automata.LrParserConstructor;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.parser.ParseErrorException;
 import org.testng.annotations.Test;
@@ -38,7 +37,6 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 import static java.util.Arrays.asList;
-import static org.testng.Assert.*;
 
 public class PatternToGrammarTest {
 
@@ -52,7 +50,7 @@ public class PatternToGrammarTest {
                 parser.parse("else"),
                 parser.parse("extends"),
                 parser.parse("\\w\\a*"),
-                parser.parse("'.*'")
+                parser.parse("'[~']*'")
         ));
 
         System.out.println(grammar);

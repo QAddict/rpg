@@ -34,11 +34,14 @@ import java.util.Set;
 public interface Visitor {
 
     void visitOptions(Pattern pattern);
+
+    void visitOption(Option option);
+
     void visitAnyTimes(AnyTimes chunk);
     void visitAtLeastOnce(AtLeastOnce chunk);
-    void visitChar(char character);
-    void visitGroup(char group);
-    void visitChars(Set<Character> characters);
-    void visitNot(Set<Character> characters);
+    void visitChar(Char node);
+    void visitGroup(Group node);
+    void visitChars(Chars characters);
+    void visitNot(Not characters);
 
 }

@@ -30,8 +30,9 @@
 package foundation.rpg.lexer.pattern;
 
 import java.util.List;
+import java.util.Objects;
 
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.joining;
 
 public class Chars implements Chunk {
     private final List<Item> items;
@@ -42,6 +43,11 @@ public class Chars implements Chunk {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitChars(items.stream().flatMap(i -> i.getChars().stream()).collect(toSet()));
+        visitor.visitChars(this);
+    }
+
+    @Override
+    public String toString() {
+        return items.stream().map(Objects::toString).collect(joining());
     }
 }
