@@ -43,11 +43,10 @@ public interface PatternFactory {
     static  Pattern       is  (List<Option> l)                       { return new Pattern(l); }
     static  List<Option>  is  (Option o)                             { return list(o); }
     static  List<Option>  is  (List<Option> l, Pipe p, Option o)     { return addTo(l, o);}
-    static  Option        is ()                                      { return null; }
-    static  Option        is  (Unit u, Option o)                     { return new Option(u, o); }
-    static  Unit          is  (Chunk c)                              { return c; }
-    static  Unit          is  (Chunk c, Times t)                     { return new AnyTimes(c); }
-    static  Unit          is  (Chunk c, Plus p)                      { return new AtLeastOnce(c); }
+    static  Option        is  ()                                     { return null; }
+    static  Option        is  (Chunk u, Option o)                    { return new Once(u, o); }
+    static  Option        is  (Chunk u, Times t, Option o)           { return new AnyTimes(u, o); }
+    static  Option        is  (Chunk u, Plus t, Option o)            { return new Once(u, new AnyTimes(u, o)); }
     static  Chunk         is  (Character c)                          { return new Char(c); }
     static  Chunk         is  (Dot d)                                { return new Group('.'); }
     static  Chunk         is  (Minus d)                              { return is('-'); }
@@ -59,7 +58,7 @@ public interface PatternFactory {
     static  Chunk         is  (Bs b, Plus c)                         { return is('+'); }
     static  Chunk         is  (Bs b, Dot d)                          { return is('.'); }
     static  Chunk         is  (Bs b, LPar l)                         { return is('('); }
-    static  Chunk         is  (Bs b, LBr l)                          { return is('('); }
+    static  Chunk         is  (Bs b, LBr l)                          { return is('['); }
     static  Chunk         is  (Bs b, Character g)                    { return new Group(g); }
     static  Chunk         is  (LBr o, List<Item> l, RBr c)           { return new Chars(l); }
     static  Chunk         is  (LBr o, Tilda t, List<Item> l, RBr c)  { return new Not(new Chars(l)); }

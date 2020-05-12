@@ -31,16 +31,18 @@ package foundation.rpg.lexer;
 
 import foundation.rpg.Name;
 import foundation.rpg.Pattern;
+import foundation.rpg.parser.ParseErrorException;
 import org.testng.annotations.Test;
 
 import javax.lang.model.element.Element;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.LinkedHashSet;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.*;
 
 public class LexerGeneratorTest {
 
@@ -51,19 +53,24 @@ public class LexerGeneratorTest {
     @Pattern("'[~']*'") class E5 {}
 
     @Test
-    public void testProcess() {
+    public void testProcess() throws IOException, ParseErrorException {
         Element e1 = mock(Element.class);
         Element e2 = mock(Element.class);
         Element e3 = mock(Element.class);
         Element e4 = mock(Element.class);
         Element e5 = mock(Element.class);
         when(e1.getAnnotation(Name.class)).thenReturn(E1.class.getAnnotation(Name.class));
+        when(e1.toString()).thenReturn("e1");
         when(e2.getAnnotation(Name.class)).thenReturn(E2.class.getAnnotation(Name.class));
+        when(e2.toString()).thenReturn("e2");
         when(e3.getAnnotation(Name.class)).thenReturn(E3.class.getAnnotation(Name.class));
+        when(e3 .toString()).thenReturn("e3");
         when(e4.getAnnotation(Pattern.class)).thenReturn(E4.class.getAnnotation(Pattern.class));
+        when(e4.toString()).thenReturn("e4");
         when(e5.getAnnotation(Pattern.class)).thenReturn(E5.class.getAnnotation(Pattern.class));
+        when(e5.toString()).thenReturn("e5");
         StringWriter stringWriter = new StringWriter();
-        new LexerGenerator().process(asList(e1, e2, e3, e4, e5), new PrintWriter(stringWriter));
+        new LexerGenerator().process(new LinkedHashSet<>(asList(e1, e2, e3, e4, e5)), new PrintWriter(stringWriter));
         System.out.println(stringWriter);
     }
 }

@@ -49,6 +49,10 @@ public class Char implements Item, Chunk {
         return Collections.singleton(c);
     }
 
+    public char getChar() {
+        return c;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

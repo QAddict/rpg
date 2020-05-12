@@ -29,11 +29,15 @@
 
 package foundation.rpg.lexer;
 
+import foundation.rpg.Name;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
 import foundation.rpg.lexer.pattern.*;
+import foundation.rpg.parser.ParseErrorException;
 
+import javax.lang.model.element.Element;
+import java.io.IOException;
 import java.util.*;
 
 import static foundation.rpg.grammar.Grammar.grammar;
@@ -46,18 +50,40 @@ import static java.util.Objects.nonNull;
 
 public class PatternToGrammar {
 
+    private final PatternParser patternParser = new PatternParser();
     private final Map<Object, Symbol> map = new LinkedHashMap<>();
+
     private Symbol of(Object o) {
         return map.computeIfAbsent(o, k -> symbol(o.toString()));
     }
 
-    public final Grammar grammarFromPatterns(List<Pattern> patterns) {
+    private boolean hasPattern(Element element) {
+        return nonNull(element.getAnnotation(foundation.rpg.Pattern.class));
+    }
+
+    private Pattern patternOf(Element element) throws IOException, ParseErrorException {
+        return patternParser.parse(element.getAnnotation(foundation.rpg.Pattern.class).value());
+    }
+
+    private List<Symbol> symbolsOf(Element element) {
+        char[] chars = element.getAnnotation(Name.class).value().toCharArray();
+        List<Symbol> left = new ArrayList<>(chars.length);
+        for(char c : chars)
+            left.add(of(c));
+        return left;
+    }
+
+    public final Grammar grammarFromPatterns(Set<Element> elements) throws IOException, ParseErrorException {
         Set<Rule> rules = new LinkedHashSet<>();
         Symbol start = symbol("Token");
-        for(Pattern pattern : patterns) {
-            Symbol patternSymbol = of(pattern);
-            //rules.add(rule(start, singletonList(patternSymbol), 10));
-            pattern.accept(new RulesVisitor(rules, start, emptyList()));
+        for(Element element : elements) {
+            Symbol elementSymbol = of(element);
+            rules.add(rule(start, singletonList(elementSymbol)));
+            if(hasPattern(element)) {
+                patternOf(element).accept(new RulesVisitor(rules, elementSymbol, emptyList(), null));
+            } else {
+                rules.add(rule(elementSymbol, symbolsOf(element), 10));
+            }
         }
         return grammar(start, rules, emptySet());
     }
@@ -66,11 +92,13 @@ public class PatternToGrammar {
         private final Set<Rule> rules;
         private final Symbol left;
         private final List<Symbol> append;
+        private final Pattern pattern;
 
-        public RulesVisitor(Set<Rule> rules, Symbol left, List<Symbol> append) {
+        public RulesVisitor(Set<Rule> rules, Symbol left, List<Symbol> append, Pattern pattern) {
             this.rules = rules;
             this.left = left;
             this.append = append;
+            this.pattern = pattern;
         }
 
         List<Symbol> concat(Symbol... s) {
@@ -81,7 +109,7 @@ public class PatternToGrammar {
         }
 
         RulesVisitor rules(Symbol left, List<Symbol> append) {
-            return new RulesVisitor(rules, left, new ArrayList<>(append));
+            return new RulesVisitor(rules, left, new ArrayList<>(append), pattern);
         }
 
         @Override
@@ -106,24 +134,15 @@ public class PatternToGrammar {
 
         @Override
         public void visitAnyTimes(AnyTimes anyTimes) {
-            rules.add(rule(left, append));
-            //Symbol left = of(anyTimes);
-            //rules.add(rule(left, asList(of(anyTimes.getChunk()), left)));
-            anyTimes.getChunk().accept(rules(left, singletonList(left)));
-        }
-
-        @Override
-        public void visitAtLeastOnce(AtLeastOnce node) {
-            Symbol left = of(node);
-            Symbol chunkSymbol = of(node.getChunk());
-            rules.add(rule(left, concat(chunkSymbol)));
-            rules.add(rule(left, concat(of(node.getChunk()), left)));
-            node.getChunk().accept(rules(this.left, concat(left)));
+            if(nonNull(anyTimes.getSuffix())) {
+                rules(left, append).visitOption(anyTimes.getSuffix());
+            }
+            anyTimes.getPrefix().accept(rules(left, singletonList(left)));
         }
 
         @Override
         public void visitChar(Char node) {
-            rules.add(rule(left, concat(of(node))));
+            rules.add(rule(left, concat(of(node.getChar()))));
         }
 
         @Override
@@ -133,6 +152,7 @@ public class PatternToGrammar {
 
         @Override
         public void visitChars(Chars chars) {
+            //chars
             //characters.forEach(this::visitChar);
         }
 

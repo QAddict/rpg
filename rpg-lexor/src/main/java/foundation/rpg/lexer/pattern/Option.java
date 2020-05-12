@@ -33,11 +33,11 @@ import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
-public class Option {
-    private final Unit prefix;
+public abstract class Option {
+    private final Chunk prefix;
     private final Option suffix;
 
-    public Option(Unit prefix, Option suffix) {
+    public Option(Chunk prefix, Option suffix) {
         this.prefix = prefix;
         this.suffix = suffix;
     }
@@ -51,7 +51,7 @@ public class Option {
                 Objects.equals(suffix, option.suffix);
     }
 
-    public Unit getPrefix() {
+    public Chunk getPrefix() {
         return prefix;
     }
 

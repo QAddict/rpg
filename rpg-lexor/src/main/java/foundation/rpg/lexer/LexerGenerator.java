@@ -29,29 +29,18 @@
 
 package foundation.rpg.lexer;
 
-import foundation.rpg.Name;
 import foundation.rpg.automata.*;
 import foundation.rpg.grammar.Grammar;
-import foundation.rpg.lexer.pattern.Char;
-import foundation.rpg.lexer.pattern.Option;
-import foundation.rpg.lexer.pattern.Pattern;
 import foundation.rpg.parser.ParseErrorException;
 
 import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Collections.singletonList;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toList;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class LexerGenerator {
 
-    private final PatternParser patternParser = new PatternParser();
     private final PatternToGrammar patternToGrammar = new PatternToGrammar();
     private final Map<LrItemSet, Integer> states = new LinkedHashMap<>();
 
@@ -59,25 +48,32 @@ public class LexerGenerator {
         return states.computeIfAbsent(set, k -> states.size());
     }
 
-    public LrParserAutomata process(List<Element> elements, PrintWriter w) {
-        List<Pattern> patterns = elements.stream().map(this::patternOf).collect(toList());
-        Grammar grammar = patternToGrammar.grammarFromPatterns(patterns);
+    public LrParserAutomata process(Set<Element> elements, PrintWriter w) throws IOException, ParseErrorException {
+        Grammar grammar = patternToGrammar.grammarFromPatterns(elements);
         LrParserAutomata lrParserAutomata = LexerConstructor.generateParser(grammar);
-        w.println("\t\tswitch(state) {");
-        w.println("\t\t\tcase -1: return new TokenEnd(new End(input.position()));");
+        w.println("\t\tif(symbol == -1) return new TokenEnd(new End(input.position()));");
+        w.println("\t\tstate = 0;");
+        w.println("\t\tfor(;;symbol = input.move()) switch(state) {");
         lrParserAutomata.getSets().forEach(set -> {
-            w.println("\t\t\tcase " + stateOf(set) + ": switch(symbol) {");
+            Map<Character, Integer> chars = new LinkedHashMap<>();
+            Map<Character, Integer> groups = new LinkedHashMap<>();
+            AtomicReference<String> otherwise = new AtomicReference<>();
+            otherwise.set("throw new IllegalStateException()");
             lrParserAutomata.actionsFor(set).forEach((s, a) -> {
                 a.accept(new LrAction.LrActionVisitor() {
                     @Override
                     public void visitGoto(LrItemSet set) {
                         if(grammar.getTerminals().contains(s))
-                            w.println("\t\t\t\tcase '" + s + "': state = " + stateOf(set) + "; break;");
+                            if(set.toString().startsWith("\\")) {
+                                groups.put(set.toString().charAt(1), stateOf(set));
+                            } else {
+                                chars.put(set.toString().charAt(0), stateOf(set));
+                            }
                     }
 
                     @Override
                     public void visitReduction(LrItem item) {
-                        w.println("\t\t\t\tdefault: return;");
+                        otherwise.set("return v -> v.visit(new " + item.getRule().getLeft() + "());");
                     }
 
                     @Override
@@ -86,29 +82,16 @@ public class LexerGenerator {
                     }
                 });
             });
+            w.println("\t\t\tcase " + stateOf(set) + ": switch(symbol) {");
+            chars.forEach((c, s) -> w.println("\t\t\t\tcase '" + c + "': state = " + s + "; break;"));
+            w.println("\t\t\t\tdefault:");
+            groups.forEach((g, s) -> w.println("\t\t\t\t\tif(" + g + "Has(symbol)) { state = " + s +"; break; }"));
+            w.println("\t\t\t\t\t" + otherwise.get());
             w.println("\t\t\t}");
+
         });
         w.println("\t\t}");
         return lrParserAutomata;
-    }
-
-    private foundation.rpg.lexer.pattern.Pattern patternOf(Element token) {
-        foundation.rpg.Pattern pattern = token.getAnnotation(foundation.rpg.Pattern.class);
-        if(nonNull(pattern)) {
-            try {
-                return patternParser.parse(pattern.value());
-            } catch (IOException | ParseErrorException e) {
-                throw new IllegalStateException(e);
-            }
-        }
-        Name name = token.getAnnotation(Name.class);
-        if(isNull(name))
-            throw new IllegalArgumentException(token.getSimpleName().toString());
-        Option o = null;
-        for(int i = name.value().length(); i > 0; i--) {
-            o = new Option(new Char(name.value().charAt(i - 1)), o);
-        }
-        return new Pattern(singletonList(o));
     }
 
 }

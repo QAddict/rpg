@@ -29,29 +29,45 @@
 
 package foundation.rpg.lexer;
 
+import foundation.rpg.Name;
+import foundation.rpg.Pattern;
 import foundation.rpg.automata.LrParserAutomata;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.parser.ParseErrorException;
 import org.testng.annotations.Test;
 
+import javax.lang.model.element.Element;
 import java.io.IOException;
+import java.util.LinkedHashSet;
 
 import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PatternToGrammarTest {
 
+    @Name("if") class E1 {}
+    @Name("else") class E2 {}
+    @Name("extends") class E3 {}
+    @Pattern("\\w\\a*") class E4 {}
+    @Pattern("'[~']*'") class E5 {}
+
     @Test
     public void test() throws IOException, ParseErrorException {
+        Element e1 = mock(Element.class);
+        Element e2 = mock(Element.class);
+        Element e3 = mock(Element.class);
+        Element e4 = mock(Element.class);
+        Element e5 = mock(Element.class);
+        when(e1.getAnnotation(Name.class)).thenReturn(LexerGeneratorTest.E1.class.getAnnotation(Name.class));
+        when(e2.getAnnotation(Name.class)).thenReturn(LexerGeneratorTest.E2.class.getAnnotation(Name.class));
+        when(e3.getAnnotation(Name.class)).thenReturn(LexerGeneratorTest.E3.class.getAnnotation(Name.class));
+        when(e4.getAnnotation(Pattern.class)).thenReturn(LexerGeneratorTest.E4.class.getAnnotation(Pattern.class));
+        when(e5.getAnnotation(Pattern.class)).thenReturn(LexerGeneratorTest.E5.class.getAnnotation(Pattern.class));
 
         PatternParser parser = new PatternParser();
 
-        Grammar grammar = new PatternToGrammar().grammarFromPatterns(asList(
-                parser.parse("if"),
-                parser.parse("else"),
-                parser.parse("extends"),
-                parser.parse("\\w\\a*"),
-                parser.parse("'[~']*'")
-        ));
+        Grammar grammar = new PatternToGrammar().grammarFromPatterns(new LinkedHashSet<>(asList(e1, e2, e3, e4, e5)));
 
         System.out.println(grammar);
 

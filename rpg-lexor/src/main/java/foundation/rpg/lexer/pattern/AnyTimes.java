@@ -29,39 +29,14 @@
 
 package foundation.rpg.lexer.pattern;
 
-import java.util.Objects;
+public class AnyTimes extends Option {
 
-public class AnyTimes implements Unit {
-    private final Chunk chunk;
-
-    public AnyTimes(Chunk chunk) {
-        this.chunk = chunk;
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitAnyTimes(this);
-    }
-
-    public Chunk getChunk() {
-        return chunk;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AnyTimes anyTimes = (AnyTimes) o;
-        return Objects.equals(chunk, anyTimes.chunk);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(chunk);
+    public AnyTimes(Chunk chunk, Option option) {
+        super(chunk, option);
     }
 
     @Override
     public String toString() {
-        return chunk + "*";
+        return getPrefix() + "*";
     }
 }

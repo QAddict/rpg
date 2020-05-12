@@ -38,7 +38,6 @@ public interface Visitor {
     void visitOption(Option option);
 
     void visitAnyTimes(AnyTimes chunk);
-    void visitAtLeastOnce(AtLeastOnce chunk);
     void visitChar(Char node);
     void visitGroup(Group node);
     void visitChars(Chars characters);

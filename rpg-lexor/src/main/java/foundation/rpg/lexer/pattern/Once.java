@@ -29,8 +29,10 @@
 
 package foundation.rpg.lexer.pattern;
 
-public interface Unit {
+public class Once extends Option {
 
-    void accept (Visitor visitor);
+    public Once(Chunk prefix, Option suffix) {
+        super(prefix, suffix);
+    }
 
 }
