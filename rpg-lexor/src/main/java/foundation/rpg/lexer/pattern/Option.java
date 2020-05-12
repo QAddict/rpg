@@ -69,4 +69,8 @@ public abstract class Option {
         return "_" + prefix + (isNull(suffix) ? "" : suffix);
     }
 
+    public void accept(Visitor visitor) {
+        visitor.visitOption(this);
+    }
+
 }

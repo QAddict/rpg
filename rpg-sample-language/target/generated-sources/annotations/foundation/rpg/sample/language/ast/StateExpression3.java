@@ -58,13 +58,16 @@ public class StateExpression3 extends StackState<foundation.rpg.sample.language.
         return stack3.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitDot(symbol);
     }
 
-
-// Shift:
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) {
-        return new StatePlus1(symbol, this);
+    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
+		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
+		State stack3 = stack2.getPrev();
+        return stack3.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
     }
 
 
+// Shift:
 // Accept:
 }

@@ -59,12 +59,14 @@ public interface PatternFactory {
     static  Chunk         is  (Bs b, Dot d)                          { return is('.'); }
     static  Chunk         is  (Bs b, LPar l)                         { return is('('); }
     static  Chunk         is  (Bs b, LBr l)                          { return is('['); }
+    static  Chunk         is  (Bs b, Bs l)                           { return is('\\'); }
     static  Chunk         is  (Bs b, Character g)                    { return new Group(g); }
     static  Chunk         is  (LBr o, List<Item> l, RBr c)           { return new Chars(l); }
     static  Chunk         is  (LBr o, Tilda t, List<Item> l, RBr c)  { return new Not(new Chars(l)); }
     static  List<Item>    is1 ()                                     { return list(); }
     static  List<Item>    is  (List<Item> l, Item i)                 { return addTo(l, i); }
     static  Item          is1 (Character c)                          { return new Char(c); }
+    static  Item          is1 (Bs c)                                 { return new Char('\\'); }
     static  Item          is  (Character l, Minus m, Character h)    { return new Range(l, h); }
     static  Chunk         is  (LPar l, List<Option> o, RPar r)       { return is(o); }
 }

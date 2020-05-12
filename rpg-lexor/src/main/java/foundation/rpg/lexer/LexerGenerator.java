@@ -52,34 +52,35 @@ public class LexerGenerator {
         Grammar grammar = patternToGrammar.grammarFromPatterns(elements);
         LrParserAutomata lrParserAutomata = LexerConstructor.generateParser(grammar);
         w.println("\t\tif(symbol == -1) return new TokenEnd(new End(input.position()));");
-        w.println("\t\tstate = 0;");
+        w.println("\t\tstate = " + stateOf(lrParserAutomata.getStart()) + ";");
         w.println("\t\tfor(;;symbol = input.move()) switch(state) {");
-        lrParserAutomata.getSets().forEach(set -> {
-            Map<Character, Integer> chars = new LinkedHashMap<>();
-            Map<Character, Integer> groups = new LinkedHashMap<>();
+        Queue<LrItemSet> queue = new LinkedList<>();
+        queue.add(lrParserAutomata.getStart());
+        Set<LrItemSet> visited = new HashSet<>();
+        while (!queue.isEmpty()) {
+            LrItemSet set = queue.poll();
+            Map<String, Integer> chars = new LinkedHashMap<>();
+            Map<String, Integer> groups = new LinkedHashMap<>();
             AtomicReference<String> otherwise = new AtomicReference<>();
             otherwise.set("throw new IllegalStateException()");
             lrParserAutomata.actionsFor(set).forEach((s, a) -> {
                 a.accept(new LrAction.LrActionVisitor() {
-                    @Override
                     public void visitGoto(LrItemSet set) {
-                        if(grammar.getTerminals().contains(s))
-                            if(set.toString().startsWith("\\")) {
-                                groups.put(set.toString().charAt(1), stateOf(set));
-                            } else {
-                                chars.put(set.toString().charAt(0), stateOf(set));
-                            }
+                        if(grammar.getTerminals().contains(s)) {
+                            if(visited.add(set))
+                                queue.add(set);
+                            if(s.toString().startsWith("\\") && s.toString().length() > 1)
+                                groups.put(s.toString().substring(1), stateOf(set));
+                            else
+                                chars.put(s.toString(), stateOf(set));
+                        }
                     }
 
-                    @Override
                     public void visitReduction(LrItem item) {
                         otherwise.set("return v -> v.visit(new " + item.getRule().getLeft() + "());");
                     }
 
-                    @Override
-                    public void visitAccept(LrItem item) {
-
-                    }
+                    public void visitAccept(LrItem item) { }
                 });
             });
             w.println("\t\t\tcase " + stateOf(set) + ": switch(symbol) {");
@@ -88,8 +89,7 @@ public class LexerGenerator {
             groups.forEach((g, s) -> w.println("\t\t\t\t\tif(" + g + "Has(symbol)) { state = " + s +"; break; }"));
             w.println("\t\t\t\t\t" + otherwise.get());
             w.println("\t\t\t}");
-
-        });
+        }
         w.println("\t\t}");
         return lrParserAutomata;
     }

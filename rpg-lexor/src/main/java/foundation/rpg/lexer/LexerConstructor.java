@@ -66,7 +66,8 @@ public class LexerConstructor extends LrParserConstructor {
     }
 
     private boolean isGroup(Symbol k) {
-        return k.toString().startsWith("\\");
+        String s = k.toString();
+        return s.startsWith("\\") && s.length() > 1;
     }
 
     public static LrParserAutomata generateParser(Grammar grammar) {

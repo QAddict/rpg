@@ -50,7 +50,7 @@ public class LexerGeneratorTest {
     @Name("else") class E2 {}
     @Name("extends") class E3 {}
     @Pattern("\\w\\a*") class E4 {}
-    @Pattern("'[~']*'") class E5 {}
+    @Pattern("'([~'\\]|\\\\')*'|\"[~\"]*\"") class E5 {}
 
     @Test
     public void testProcess() throws IOException, ParseErrorException {

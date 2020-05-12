@@ -88,6 +88,7 @@ public class PatternToGrammar {
         return grammar(start, rules, emptySet());
     }
 
+
     private class RulesVisitor implements Visitor {
         private final Set<Rule> rules;
         private final Symbol left;
@@ -116,7 +117,7 @@ public class PatternToGrammar {
         public void visitOptions(Pattern pattern) {
             pattern.getOptions().forEach(option -> {
                 rules.add(rule(left, singletonList(of(option))));
-                rules(left, append).visitOption(option);
+                option.accept(rules(left, append));
             });
         }
 
@@ -125,8 +126,9 @@ public class PatternToGrammar {
             if(isNull(option)) return;
             Symbol symbol = of(option);
             if(nonNull(option.getSuffix())) {
-                rules(symbol, append).visitOption(option.getSuffix());
-                option.getPrefix().accept(rules(symbol, singletonList(of(option.getSuffix()))));
+                Symbol suffixSymbol = of(option.getSuffix());
+                option.getSuffix().accept(rules(suffixSymbol, append));
+                option.getPrefix().accept(rules(symbol, singletonList(suffixSymbol)));
             } else {
                 option.getPrefix().accept(rules(symbol, append));
             }
@@ -135,7 +137,9 @@ public class PatternToGrammar {
         @Override
         public void visitAnyTimes(AnyTimes anyTimes) {
             if(nonNull(anyTimes.getSuffix())) {
-                rules(left, append).visitOption(anyTimes.getSuffix());
+                anyTimes.getSuffix().accept(rules(left, append));
+            } else {
+                rules.add(rule(left, emptyList()));
             }
             anyTimes.getPrefix().accept(rules(left, singletonList(left)));
         }

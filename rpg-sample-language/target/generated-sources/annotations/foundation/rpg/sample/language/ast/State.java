@@ -283,7 +283,7 @@ LPar3: Expression -> GOTO: Expression5
 LPar3: Identifier -> GOTO: Identifier2
 LPar3: LPar -> GOTO: LPar3
 Expression3: Dot -> REDUCE: Expression -> Expression Plus Expression • [Dot, Plus]
-Expression3: Plus -> GOTO: Plus1
+Expression3: Plus -> REDUCE: Expression -> Expression Plus Expression • [Dot, Plus]
 NOfListOfExpression1: RPar -> GOTO: RPar2
 ListOfExpression1: RPar -> REDUCE: NOfListOfExpression -> ListOfExpression • [RPar]
 ListOfExpression1: Comma -> GOTO: Comma1
@@ -327,7 +327,7 @@ LPar8: LPar -> GOTO: LPar5
 Expression6: RPar -> GOTO: RPar4
 Expression6: Plus -> GOTO: Plus2
 Expression7: RPar -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus]
-Expression7: Plus -> GOTO: Plus2
+Expression7: Plus -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus]
 NOfListOfExpression2: RPar -> GOTO: RPar5
 RPar3: RPar -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus]
 RPar3: Plus -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus]
@@ -335,7 +335,7 @@ Expression9: RPar -> REDUCE: ListOfExpression -> ListOfExpression Comma Expressi
 Expression9: Comma -> REDUCE: ListOfExpression -> ListOfExpression Comma Expression • [RPar, Comma]
 Expression9: Plus -> GOTO: Plus4
 Expression10: RPar -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus, Comma]
-Expression10: Plus -> GOTO: Plus4
+Expression10: Plus -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus, Comma]
 Expression10: Comma -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus, Comma]
 NOfListOfExpression3: RPar -> GOTO: RPar6
 RPar4: RPar -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus, Comma]

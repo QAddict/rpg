@@ -61,6 +61,7 @@ public class PatternParser extends Parser<Pattern, State> {
             switch (i) {
                 case -1: return new TokenEnd(new End(mark));
                 case '\\': return new TokenBs(new Bs(mark));
+                case '|': return new TokenPipe(new Pipe(mark));
                 case '*': return new TokenTimes(new Times(mark));
                 case '+': return new TokenPlus(new Plus(mark));
                 case '~': return new TokenTilda(new Tilda(mark));

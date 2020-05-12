@@ -78,8 +78,9 @@ public class LrParserAutomata {
             if(action.priority() > currentAction.priority()) {
                 actionMap.put(symbol, action);
             }
+        } else {
+            actionMap.put(symbol, action);
         }
-        actionMap.put(symbol, action);
     }
 
     public void transition(LrItemSet from, Symbol symbol, LrItemSet to) {

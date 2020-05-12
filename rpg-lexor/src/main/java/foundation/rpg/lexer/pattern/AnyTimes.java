@@ -29,6 +29,8 @@
 
 package foundation.rpg.lexer.pattern;
 
+import static java.util.Objects.isNull;
+
 public class AnyTimes extends Option {
 
     public AnyTimes(Chunk chunk, Option option) {
@@ -37,6 +39,11 @@ public class AnyTimes extends Option {
 
     @Override
     public String toString() {
-        return getPrefix() + "*";
+        return "_" + getPrefix() + "*" + (isNull(getSuffix()) ? "" : getSuffix());
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitAnyTimes(this);
     }
 }

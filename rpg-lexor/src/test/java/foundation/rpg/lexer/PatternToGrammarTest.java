@@ -46,12 +46,6 @@ import static org.mockito.Mockito.when;
 
 public class PatternToGrammarTest {
 
-    @Name("if") class E1 {}
-    @Name("else") class E2 {}
-    @Name("extends") class E3 {}
-    @Pattern("\\w\\a*") class E4 {}
-    @Pattern("'[~']*'") class E5 {}
-
     @Test
     public void test() throws IOException, ParseErrorException {
         Element e1 = mock(Element.class);
@@ -64,8 +58,6 @@ public class PatternToGrammarTest {
         when(e3.getAnnotation(Name.class)).thenReturn(LexerGeneratorTest.E3.class.getAnnotation(Name.class));
         when(e4.getAnnotation(Pattern.class)).thenReturn(LexerGeneratorTest.E4.class.getAnnotation(Pattern.class));
         when(e5.getAnnotation(Pattern.class)).thenReturn(LexerGeneratorTest.E5.class.getAnnotation(Pattern.class));
-
-        PatternParser parser = new PatternParser();
 
         Grammar grammar = new PatternToGrammar().grammarFromPatterns(new LinkedHashSet<>(asList(e1, e2, e3, e4, e5)));
 
