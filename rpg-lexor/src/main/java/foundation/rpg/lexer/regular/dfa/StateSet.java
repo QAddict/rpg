@@ -29,7 +29,7 @@
 
 package foundation.rpg.lexer.regular.dfa;
 
-import foundation.rpg.lexer.regular.Atom;
+import foundation.rpg.lexer.regular.ast.Atom;
 import foundation.rpg.lexer.regular.thompson.State;
 
 import java.util.*;

@@ -27,40 +27,24 @@
  *
  */
 
-package foundation.rpg.lexer.regular.thompson;
+package foundation.rpg.lexer;
 
-import foundation.rpg.lexer.regular.ast.Atom;
+import foundation.rpg.lexer.regular.RegularParser;
+import foundation.rpg.lexer.regular.ast.Pattern;
+import foundation.rpg.lexer.regular.ast.Union;
+import foundation.rpg.lexer.regular.dfa.Transformer;
+import foundation.rpg.lexer.regular.thompson.GNFA;
+import foundation.rpg.lexer.regular.thompson.ThompsonPatternVisitor;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class State {
-    public void add(Atom epsilon, State end) {
-        transitions.add(new Transition(epsilon, end));
-    }
+public class RegularGenerator {
 
-    public static class Transition {
-        private final Atom atom;
-        private final State next;
+    private final RegularParser parser = new RegularParser();
+    private final Transformer transformer = new Transformer();
 
-        private Transition(Atom atom, State next) {
-            this.atom = atom;
-            this.next = next;
-        }
-
-        public Atom getAtom() {
-            return atom;
-        }
-
-        public State getNext() {
-            return next;
-        }
-    }
-
-    private final List<Transition> transitions = new ArrayList<>();
-
-    public List<Transition> getTransitions() {
-        return transitions;
+    public GNFA gnfaFrom(List<Pattern> patterns) {
+        return new Union(patterns).accept(new ThompsonPatternVisitor());
     }
 
 }

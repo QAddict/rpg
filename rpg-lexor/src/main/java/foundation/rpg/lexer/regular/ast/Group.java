@@ -27,18 +27,15 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.lexer.regular.ast;
 
-public class Repetition implements Pattern {
+import foundation.rpg.lexer.regular.PatternVisitor;
 
-    private final Pattern pattern;
+public class Group implements Atom {
+    private final char g;
 
-    public Repetition(Pattern pattern) {
-        this.pattern = pattern;
-    }
-
-    public Pattern getPattern() {
-        return pattern;
+    public Group(char g) {
+        this.g = g;
     }
 
     @Override
@@ -46,4 +43,7 @@ public class Repetition implements Pattern {
         return visitor.visit(this);
     }
 
+    public char getG() {
+        return g;
+    }
 }

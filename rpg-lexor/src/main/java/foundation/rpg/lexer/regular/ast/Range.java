@@ -27,40 +27,30 @@
  *
  */
 
-package foundation.rpg.lexer.regular.thompson;
+package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.ast.Atom;
+import foundation.rpg.lexer.regular.PatternVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Range implements Atom, Item {
+    private final char start;
+    private final char end;
 
-public class State {
-    public void add(Atom epsilon, State end) {
-        transitions.add(new Transition(epsilon, end));
+    public Range(char start, char end) {
+        this.start = start;
+        this.end = end;
     }
 
-    public static class Transition {
-        private final Atom atom;
-        private final State next;
-
-        private Transition(Atom atom, State next) {
-            this.atom = atom;
-            this.next = next;
-        }
-
-        public Atom getAtom() {
-            return atom;
-        }
-
-        public State getNext() {
-            return next;
-        }
+    @Override
+    public <R> R accept(PatternVisitor<R> visitor) {
+        return visitor.visit(this);
     }
 
-    private final List<Transition> transitions = new ArrayList<>();
+    public char getStart() {
+        return start;
+    }
 
-    public List<Transition> getTransitions() {
-        return transitions;
+    public char getEnd() {
+        return end;
     }
 
 }

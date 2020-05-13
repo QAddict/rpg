@@ -29,9 +29,25 @@
 
 package foundation.rpg.lexer.regular;
 
-public class Range implements Atom {
-    @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
-        return visitor.visit(this);
+import foundation.rpg.lexer.regular.ast.Pattern;
+import foundation.rpg.parser.Input;
+import foundation.rpg.parser.ParseErrorException;
+import foundation.rpg.parser.Parser;
+import foundation.rpg.parser.TokenInput;
+
+import java.io.IOException;
+import java.io.StringReader;
+
+public class RegularParser extends Parser<Pattern, State> {
+
+    private static final RegularLexer lexer = new RegularLexer();
+
+    public RegularParser() {
+        super(new State1());
     }
+
+    public Pattern parse(String pattern) throws IOException, ParseErrorException {
+        return parse(TokenInput.tokenInput(new Input(pattern, new StringReader(pattern)), lexer));
+    }
+
 }

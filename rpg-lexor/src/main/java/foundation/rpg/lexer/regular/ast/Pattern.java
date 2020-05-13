@@ -27,7 +27,9 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.lexer.regular.ast;
+
+import foundation.rpg.lexer.regular.PatternVisitor;
 
 public interface Pattern {
     <R> R accept(PatternVisitor<R> visitor);

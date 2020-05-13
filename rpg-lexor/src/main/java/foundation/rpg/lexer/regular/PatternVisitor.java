@@ -29,6 +29,8 @@
 
 package foundation.rpg.lexer.regular;
 
+import foundation.rpg.lexer.regular.ast.*;
+
 public interface PatternVisitor<R> {
 
     R visit(Char character);

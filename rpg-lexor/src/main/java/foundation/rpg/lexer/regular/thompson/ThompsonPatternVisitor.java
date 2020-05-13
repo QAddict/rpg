@@ -30,6 +30,10 @@
 package foundation.rpg.lexer.regular.thompson;
 
 import foundation.rpg.lexer.regular.*;
+import foundation.rpg.lexer.regular.ast.*;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.rangeClosed;
 
 public class ThompsonPatternVisitor implements PatternVisitor<GNFA> {
 
@@ -45,17 +49,23 @@ public class ThompsonPatternVisitor implements PatternVisitor<GNFA> {
 
     @Override
     public GNFA visit(Group group) {
-        return null;
+        State start = new State();
+        State end = new State();
+        start.add(group, end);
+        return new GNFA(start, end);
     }
 
     @Override
     public GNFA visit(Range range) {
-        return null;
+        return visit(new Union(rangeClosed(range.getStart(), range.getEnd()).mapToObj(i -> new Char((char) i)).collect(toList())));
     }
 
     @Override
     public GNFA visit(Inversion inversion) {
-        return null;
+        State start = new State();
+        State end = new State();
+        start.add(inversion, end);
+        return new GNFA(start, end);
     }
 
     @Override

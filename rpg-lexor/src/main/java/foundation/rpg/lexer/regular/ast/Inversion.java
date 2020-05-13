@@ -27,7 +27,23 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.lexer.regular.ast;
 
-public interface Atom extends Pattern {
+import foundation.rpg.lexer.regular.PatternVisitor;
+
+public class Inversion implements Atom {
+    private final CharClass charClass;
+
+    public Inversion(CharClass charClass) {
+        this.charClass = charClass;
+    }
+
+    @Override
+    public <R> R accept(PatternVisitor<R> visitor) {
+        return visitor.visit(this);
+    }
+
+    public CharClass getCharClass() {
+        return charClass;
+    }
 }

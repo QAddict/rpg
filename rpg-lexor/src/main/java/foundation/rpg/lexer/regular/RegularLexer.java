@@ -29,9 +29,34 @@
 
 package foundation.rpg.lexer.regular;
 
-public class Group implements Atom {
+import foundation.rpg.common.*;
+import foundation.rpg.parser.*;
+import foundation.rpg.parser.Token;
+
+import java.io.IOException;
+
+public class RegularLexer implements Lexer<State> {
+
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
-        return visitor.visit(this);
+    public Token<State> next(Input input) throws IOException {
+        int i = input.lookahead();
+        Position mark = input.position();
+        input.move();
+        switch (i) {
+            case -1: return new TokenEnd(new End(mark));
+            case '\\': return new TokenBs(new Bs(mark));
+            case '|': return new TokenPipe(new Pipe(mark));
+            case '*': return new TokenTimes(new Times(mark));
+            //case '+': return new TokenPlus(new Plus(mark));
+            case '~': return new TokenTilda(new Tilda(mark));
+            case '-': return new TokenMinus(new Minus(mark));
+            case '(': return new TokenLPar(new LPar(mark));
+            case ')': return new TokenRPar(new RPar(mark));
+            case '[': return new TokenLBr(new LBr(mark));
+            case ']': return new TokenRBr(new RBr(mark));
+            case '.': return new TokenDot(new Dot(mark));
+            default: return new TokenCharacter((char) i);
+        }
     }
+
 }

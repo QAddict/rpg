@@ -27,40 +27,45 @@
  *
  */
 
-package foundation.rpg.lexer.regular.thompson;
+package foundation.rpg.lexer.regular.dfa;
 
 import foundation.rpg.lexer.regular.ast.Atom;
+import foundation.rpg.lexer.regular.Bfs;
+import foundation.rpg.lexer.regular.thompson.GNFA;
+import foundation.rpg.lexer.regular.thompson.State;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class State {
-    public void add(Atom epsilon, State end) {
-        transitions.add(new Transition(epsilon, end));
+import static foundation.rpg.lexer.regular.thompson.ThompsonPatternVisitor.epsilon;
+import static java.util.Collections.singleton;
+
+public class Transformer {
+
+    public DFA transform(GNFA gnfa) {
+        StateSet stateSet = new StateSet();
+        State start = gnfa.getStart();
+        stateSet.add(start);
+        e(stateSet);
+        Map<StateSet, StateSet> cache = new LinkedHashMap<>();
+        Bfs.bfs((set, queue) -> {
+            Map<Atom, StateSet> trans = new LinkedHashMap<>();
+            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getAtom() != epsilon).forEach(t -> trans.computeIfAbsent(t.getAtom(), k -> new StateSet()).add(t.getNext()));
+            trans.forEach((a, s) -> {
+                e(s);
+                set.setTransition(a, cache.computeIfAbsent(s, k -> k));
+                queue.accept(s);
+            });
+        }, singleton(stateSet));
+        return new DFA(stateSet);
     }
 
-    public static class Transition {
-        private final Atom atom;
-        private final State next;
-
-        private Transition(Atom atom, State next) {
-            this.atom = atom;
-            this.next = next;
-        }
-
-        public Atom getAtom() {
-            return atom;
-        }
-
-        public State getNext() {
-            return next;
-        }
-    }
-
-    private final List<Transition> transitions = new ArrayList<>();
-
-    public List<Transition> getTransitions() {
-        return transitions;
+    private void e(StateSet stateSet) {
+        Bfs.bfs((state, queue) -> state.getTransitions().forEach(t -> {
+            if(t.getAtom() == epsilon) {
+                stateSet.add(t.getNext());
+                queue.accept(t.getNext());
+            }
+        }), stateSet.getStates());
     }
 
 }

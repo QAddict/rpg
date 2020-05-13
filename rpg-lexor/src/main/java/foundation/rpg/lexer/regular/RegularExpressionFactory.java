@@ -30,19 +30,26 @@
 package foundation.rpg.lexer.regular;
 
 import foundation.rpg.StartSymbol;
-import foundation.rpg.common.LPar;
-import foundation.rpg.common.Pipe;
-import foundation.rpg.common.RPar;
-import foundation.rpg.common.Times;
+import foundation.rpg.common.*;
+import foundation.rpg.lexer.regular.ast.*;
+
+import java.util.List;
 
 public interface RegularExpressionFactory {
 
     @StartSymbol
-    static Pattern is (Atom c) { return null; }
     static Pattern is () { return null; }
     static Pattern is (LPar l, Pattern p, RPar r) { return p; }
     static Pattern is (Pattern p, Times t) { return p; }
     static Pattern is (Pattern l, Pipe p, Pattern r) { return r; }
     static Pattern is (Atom l, Pattern r) { return r; }
+    static Atom    is (Atom a, Times t) { return new Repetition(a); }
+    static Atom    is (Character c) { return new Char(c); }
+    static Atom    is (Bs b, Character g) {return new Group(g); }
+    static Atom    is (Dot d) { return new Group('.'); }
+    static Atom    is (LBr l, @List1 List<Item> i, RBr r) { return new CharClass(i); }
+    static Atom    is (LBr l, Tilda t, @List1 List<Item> i, RBr r) { return new Inversion(new CharClass(i)); }
+    static Item    is1(Character c) { return new Char(c); }
+    static Item    is (Character s, Minus m, Character e) { return new Range(s, e); }
 
 }

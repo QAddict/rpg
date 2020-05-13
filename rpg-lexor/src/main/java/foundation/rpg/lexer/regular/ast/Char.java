@@ -27,20 +27,35 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.lexer.regular.ast;
 
-import java.util.List;
+import foundation.rpg.lexer.regular.PatternVisitor;
 
-public class Union implements Pattern {
+import java.util.Objects;
 
-    private final List<Pattern> operands;
+public class Char implements Atom, Item {
+    private final char value;
 
-    public Union(List<Pattern> operands) {
-        this.operands = operands;
+    public Char(char value) {
+        this.value = value;
     }
 
-    public List<Pattern> getOperands() {
-        return operands;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Char aChar = (Char) o;
+        return value == aChar.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    @Override
+    public String toString() {
+        return "" + value;
     }
 
     @Override

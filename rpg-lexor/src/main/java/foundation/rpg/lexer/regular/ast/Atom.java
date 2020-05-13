@@ -27,25 +27,7 @@
  *
  */
 
-package foundation.rpg.lexer.regular.dfa;
+package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.Chain;
-import foundation.rpg.lexer.regular.Char;
-import foundation.rpg.lexer.regular.Pattern;
-import foundation.rpg.lexer.regular.Repetition;
-import foundation.rpg.lexer.regular.thompson.GNFA;
-import foundation.rpg.lexer.regular.thompson.ThompsonPatternVisitor;
-import org.testng.annotations.Test;
-
-import static java.util.Arrays.asList;
-
-public class TransformTest {
-
-    @Test
-    public void testTransform() {
-        Pattern pattern = new Chain(asList(new Char('a'), new Char('b'), new Repetition(new Char('a'))));
-        GNFA gnfa = pattern.accept(new ThompsonPatternVisitor());
-        DFA transform = new Transform().transform(gnfa);
-        System.out.println(transform);
-    }
+public interface Atom extends Pattern {
 }

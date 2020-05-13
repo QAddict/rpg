@@ -27,11 +27,25 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.lexer.regular.ast;
 
-public class Inversion implements Atom {
+import foundation.rpg.lexer.regular.PatternVisitor;
+
+public class Repetition implements Atom {
+
+    private final Pattern pattern;
+
+    public Repetition(Pattern pattern) {
+        this.pattern = pattern;
+    }
+
+    public Pattern getPattern() {
+        return pattern;
+    }
+
     @Override
     public <R> R accept(PatternVisitor<R> visitor) {
         return visitor.visit(this);
     }
+
 }
