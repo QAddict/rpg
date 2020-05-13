@@ -66,14 +66,14 @@ public class LexerGenerator {
             lrParserAutomata.actionsFor(set).forEach((s, a) -> {
                 a.accept(new LrAction.LrActionVisitor() {
                     public void visitGoto(LrItemSet set) {
-                        if(grammar.getTerminals().contains(s)) {
+                       // if(grammar.getTerminals().contains(s)) {
                             if(visited.add(set))
                                 queue.add(set);
                             if(s.toString().startsWith("\\") && s.toString().length() > 1)
                                 groups.put(s.toString().substring(1), stateOf(set));
                             else
                                 chars.put(s.toString(), stateOf(set));
-                        }
+                     //   }
                     }
 
                     public void visitReduction(LrItem item) {

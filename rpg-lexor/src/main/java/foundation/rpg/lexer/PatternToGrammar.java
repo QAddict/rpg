@@ -141,6 +141,7 @@ public class PatternToGrammar {
             } else {
                 rules.add(rule(left, emptyList()));
             }
+            rules.add(rule(left, emptyList()));
             anyTimes.getPrefix().accept(rules(left, singletonList(left)));
         }
 
