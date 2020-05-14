@@ -29,9 +29,13 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
-public class Range implements Atom, Item {
+import java.util.stream.Stream;
+
+import static java.util.stream.IntStream.rangeClosed;
+
+public class Range implements Node, Item {
     private final char start;
     private final char end;
 
@@ -41,7 +45,7 @@ public class Range implements Atom, Item {
     }
 
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
     }
 
@@ -53,4 +57,8 @@ public class Range implements Atom, Item {
         return end;
     }
 
+    @Override
+    public Stream<Character> getChars() {
+        return rangeClosed(start, end).mapToObj(i -> (char) i);
+    }
 }

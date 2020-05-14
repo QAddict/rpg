@@ -29,5 +29,8 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-public interface Atom extends Pattern {
+import foundation.rpg.lexer.regular.Visitor;
+
+public interface Node {
+    <R> R accept(Visitor<R> visitor);
 }

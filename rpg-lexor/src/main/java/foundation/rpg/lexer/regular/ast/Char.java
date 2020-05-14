@@ -29,15 +29,20 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
-public class Char implements Atom, Item {
+public class Char implements Node, Item {
     private final char value;
 
     public Char(char value) {
         this.value = value;
+    }
+
+    public Char(int value) {
+        this((char) value);
     }
 
     @Override
@@ -59,7 +64,12 @@ public class Char implements Atom, Item {
     }
 
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Stream<Character> getChars() {
+        return Stream.of(value);
     }
 }

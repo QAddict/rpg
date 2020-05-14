@@ -29,11 +29,11 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
 import java.util.Objects;
 
-public class Group implements Atom {
+public class Group implements Node {
     private final char g;
 
     public Group(char g) {
@@ -45,7 +45,7 @@ public class Group implements Atom {
     }
 
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
     }
 

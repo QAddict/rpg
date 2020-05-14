@@ -29,14 +29,14 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
 import java.util.List;
 import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
 
-public class CharClass implements Atom {
+public class CharClass implements Node {
 
     private final List<Item> items;
 
@@ -44,9 +44,13 @@ public class CharClass implements Atom {
         this.items = items;
     }
 
+    public List<Item> getItems() {
+        return items;
+    }
+
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
-        return null;
+    public <R> R accept(Visitor<R> visitor) {
+        return visitor.visit(this);
     }
 
     @Override

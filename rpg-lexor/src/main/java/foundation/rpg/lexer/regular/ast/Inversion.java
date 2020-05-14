@@ -29,9 +29,9 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
-public class Inversion implements Atom {
+public class Inversion implements Node {
     private final CharClass charClass;
 
     public Inversion(CharClass charClass) {
@@ -39,7 +39,7 @@ public class Inversion implements Atom {
     }
 
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
     }
 

@@ -48,7 +48,7 @@ public class RegularGeneratorTest {
                 generator.parseName("else"),
                 generator.parseName("extends"),
                 generator.parsePattern("\\w\\a*"),
-                generator.parsePattern("'[~']*'")
+                generator.parsePattern("'([~'\\]|\\\\['\\nrt])*'")
         ));
         System.out.println(gnfa);
         DFA dfa = generator.transform(gnfa);

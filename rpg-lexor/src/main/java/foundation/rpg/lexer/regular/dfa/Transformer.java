@@ -29,16 +29,16 @@
 
 package foundation.rpg.lexer.regular.dfa;
 
-import foundation.rpg.lexer.regular.ast.Atom;
+import foundation.rpg.lexer.regular.ast.Inversion;
+import foundation.rpg.lexer.regular.ast.Node;
 import foundation.rpg.lexer.regular.Bfs;
 import foundation.rpg.lexer.regular.ast.Char;
-import foundation.rpg.lexer.regular.ast.Group;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.State;
 
 import java.util.*;
 
-import static foundation.rpg.lexer.regular.thompson.ThompsonPatternVisitor.epsilon;
+import static foundation.rpg.lexer.regular.thompson.ThompsonVisitor.epsilon;
 import static java.util.Collections.singleton;
 
 public class Transformer {
@@ -50,10 +50,21 @@ public class Transformer {
         e(stateSet);
         Map<StateSet, StateSet> cache = new LinkedHashMap<>();
         Bfs.bfs((set, queue) -> {
-            Map<Atom, StateSet> trans = new LinkedHashMap<>();
-            Map<Atom, StateSet> groups = new LinkedHashMap<>();
-            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getAtom() != epsilon)
-                    .forEach(t -> (t.getAtom() instanceof Char ? trans : groups).computeIfAbsent(t.getAtom(), k -> new StateSet()).add(t.getNext()));
+            Map<Node, StateSet> trans = new LinkedHashMap<>();
+            Map<Node, StateSet> groups = new LinkedHashMap<>();
+            Set<Inversion> inv = new LinkedHashSet<>();
+            StateSet defaultState = new StateSet();
+            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getNode() != epsilon)
+                    .forEach(t -> {
+                        if(t.getNode() instanceof Inversion) {
+                            defaultState.add(t.getNext());
+                            set.addFailOn((Inversion) t.getNode());
+                        } else {
+                            (t.getNode() instanceof Char ? trans : groups).computeIfAbsent(t.getNode(), k -> new StateSet()).add(t.getNext());
+                        }
+                    });
+            if(!defaultState.getStates().isEmpty())
+                set.setDefaultState(cache.computeIfAbsent(defaultState, k -> k));
             groups.forEach((a, s) -> {
                 e(s);
                 StateSet cachedSet = cache.computeIfAbsent(s, k -> k);
@@ -74,7 +85,7 @@ public class Transformer {
 
     private void e(StateSet stateSet) {
         Bfs.bfs((state, queue) -> state.getTransitions().forEach(t -> {
-            if(t.getAtom() == epsilon) {
+            if(t.getNode() == epsilon) {
                 stateSet.add(t.getNext());
                 queue.accept(t.getNext());
             }

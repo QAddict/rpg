@@ -29,33 +29,32 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
-public class Chain implements Pattern {
+import java.util.List;
+import java.util.Objects;
 
-    private final Pattern left;
-    private final Pattern right;
+import static java.util.stream.Collectors.joining;
 
-    public Chain(Pattern left, Pattern right) {
-        this.left = left;
-        this.right = right;
+public class Chain implements Node {
+
+    private final List<? extends Node> operands;
+
+    public Chain(List<? extends Node> operands) {
+        this.operands = operands;
     }
 
-    public Pattern getLeft() {
-        return left;
-    }
-
-    public Pattern getRight() {
-        return right;
+    public List<? extends Node> getOperands() {
+        return operands;
     }
 
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
     }
 
     @Override
     public String toString() {
-        return "" + left + right;
+        return operands.stream().map(Objects::toString).collect(joining());
     }
 }

@@ -29,7 +29,7 @@
 
 package foundation.rpg.lexer.regular.thompson;
 
-import foundation.rpg.lexer.regular.ast.Atom;
+import foundation.rpg.lexer.regular.ast.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,11 @@ public class State {
 
     private final List<Transition> transitions = new ArrayList<>();
 
-    public void add(Atom epsilon, State end) {
+    public interface In {
+
+    }
+
+    public void add(Node epsilon, State end) {
         transitions.add(new Transition(epsilon, end));
     }
 
@@ -58,16 +62,16 @@ public class State {
     }
 
     public static class Transition {
-        private final Atom atom;
+        private final Node node;
         private final State next;
 
-        private Transition(Atom atom, State next) {
-            this.atom = atom;
+        private Transition(Node node, State next) {
+            this.node = node;
             this.next = next;
         }
 
-        public Atom getAtom() {
-            return atom;
+        public Node getNode() {
+            return node;
         }
 
         public State getNext() {

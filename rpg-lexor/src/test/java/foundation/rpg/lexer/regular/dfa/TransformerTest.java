@@ -29,12 +29,9 @@
 
 package foundation.rpg.lexer.regular.dfa;
 
-import foundation.rpg.lexer.regular.ast.Chain;
-import foundation.rpg.lexer.regular.ast.Char;
-import foundation.rpg.lexer.regular.ast.Pattern;
-import foundation.rpg.lexer.regular.ast.Repetition;
+import foundation.rpg.lexer.regular.ast.*;
 import foundation.rpg.lexer.regular.thompson.GNFA;
-import foundation.rpg.lexer.regular.thompson.ThompsonPatternVisitor;
+import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
 import org.testng.annotations.Test;
 
 import static java.util.Arrays.asList;
@@ -43,8 +40,8 @@ public class TransformerTest {
 
     @Test
     public void testTransform() {
-        Pattern pattern = new Chain(new Char('a'), new Chain(new Char('b'), new Repetition(new Char('a'))));
-        GNFA gnfa = pattern.accept(new ThompsonPatternVisitor());
+        Node pattern = new Chain(asList(new Char('a'), new Char('b'), new Repetition(new Char('a'))));
+        GNFA gnfa = pattern.accept(new ThompsonVisitor());
         DFA transform = new Transformer().transform(gnfa);
         System.out.println(transform);
     }

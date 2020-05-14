@@ -27,30 +27,20 @@
  *
  */
 
-package foundation.rpg.lexer.regular.ast;
+package foundation.rpg.lexer.regular;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.ast.*;
 
-public class Union implements Pattern {
+public interface Visitor<R> {
 
-    private final Pattern left;
-    private final Pattern right;
+    R visit(Char character);
+    R visit(Group group);
+    R visit(Range range);
+    R visit(Inversion inversion);
+    R visit(Chain chain);
+    R visit(Repetition repetition);
+    R visit(Pattern pattern);
+    R visit(Empty empty);
+    R visit(CharClass charClass);
 
-    public Union(Pattern left, Pattern right) {
-        this.left = left;
-        this.right = right;
-    }
-
-    public Pattern getLeft() {
-        return left;
-    }
-
-    public Pattern getRight() {
-        return right;
-    }
-
-    @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
-        return visitor.visit(this);
-    }
 }

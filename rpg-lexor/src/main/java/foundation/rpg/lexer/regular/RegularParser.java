@@ -29,6 +29,7 @@
 
 package foundation.rpg.lexer.regular;
 
+import foundation.rpg.lexer.regular.ast.Node;
 import foundation.rpg.lexer.regular.ast.Pattern;
 import foundation.rpg.parser.Input;
 import foundation.rpg.parser.ParseErrorException;
@@ -46,7 +47,7 @@ public class RegularParser extends Parser<Pattern, State> {
         super(new State1());
     }
 
-    public Pattern parse(String pattern) throws IOException, ParseErrorException {
+    public Node parse(String pattern) throws IOException, ParseErrorException {
         return parse(TokenInput.tokenInput(new Input(pattern, new StringReader(pattern)), lexer));
     }
 

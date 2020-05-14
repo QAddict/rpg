@@ -29,22 +29,22 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
-public class Repetition implements Atom {
+public class Repetition implements Node {
 
-    private final Pattern pattern;
+    private final Node pattern;
 
-    public Repetition(Pattern pattern) {
+    public Repetition(Node pattern) {
         this.pattern = pattern;
     }
 
-    public Pattern getPattern() {
+    public Node getPattern() {
         return pattern;
     }
 
     @Override
-    public <R> R accept(PatternVisitor<R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
     }
 

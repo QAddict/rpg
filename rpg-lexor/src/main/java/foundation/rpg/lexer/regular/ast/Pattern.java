@@ -29,8 +29,32 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-import foundation.rpg.lexer.regular.PatternVisitor;
+import foundation.rpg.lexer.regular.Visitor;
 
-public interface Pattern {
-    <R> R accept(PatternVisitor<R> visitor);
+import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.joining;
+
+public class Pattern implements Node {
+
+    private final List<? extends Node> operands;
+
+    public Pattern(List<? extends Node> operands) {
+        this.operands = operands;
+    }
+
+    public List<? extends Node> getOperands() {
+        return operands;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + operands.stream().map(Objects::toString).collect(joining("|")) + ")";
+    }
 }

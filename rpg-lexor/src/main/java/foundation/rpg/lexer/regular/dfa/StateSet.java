@@ -29,7 +29,8 @@
 
 package foundation.rpg.lexer.regular.dfa;
 
-import foundation.rpg.lexer.regular.ast.Atom;
+import foundation.rpg.lexer.regular.ast.Inversion;
+import foundation.rpg.lexer.regular.ast.Node;
 import foundation.rpg.lexer.regular.thompson.State;
 
 import java.util.*;
@@ -37,8 +38,10 @@ import java.util.*;
 public class StateSet {
 
     private final Set<State> states = new LinkedHashSet<>();
-    private final Map<Atom, StateSet> charTransitions = new LinkedHashMap<>();
-    private final Map<Atom, StateSet> groupTransitions = new LinkedHashMap<>();
+    private final Map<Node, StateSet> charTransitions = new LinkedHashMap<>();
+    private final Map<Node, StateSet> groupTransitions = new LinkedHashMap<>();
+    private final Set<Inversion> inversions = new LinkedHashSet<>();
+    private StateSet defaultState;
 
     public void add(State state) {
         states.add(state);
@@ -52,20 +55,36 @@ public class StateSet {
         return states;
     }
 
-    public void setCharTransition(Atom a, StateSet set) {
+    public StateSet getDefaultState() {
+        return defaultState;
+    }
+
+    public void setDefaultState(StateSet defaultState) {
+        this.defaultState = defaultState;
+    }
+
+    public void addFailOn(Inversion c) {
+
+    }
+
+    public void setCharTransition(Node a, StateSet set) {
         this.charTransitions.put(a, set);
     }
 
-    public void setGroupTransition(Atom a, StateSet set) {
+    public void setGroupTransition(Node a, StateSet set) {
         this.groupTransitions.put(a, set);
     }
 
-    public Map<Atom, StateSet> getCharTransitions() {
+    public Map<Node, StateSet> getCharTransitions() {
         return charTransitions;
     }
 
-    public Map<Atom, StateSet> getGroupTransitions() {
+    public Map<Node, StateSet> getGroupTransitions() {
         return groupTransitions;
+    }
+
+    public Set<Inversion> getInversions() {
+        return inversions;
     }
 
     @Override

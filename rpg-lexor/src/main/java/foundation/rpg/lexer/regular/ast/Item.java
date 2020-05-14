@@ -29,4 +29,8 @@
 
 package foundation.rpg.lexer.regular.ast;
 
-public interface Item { }
+import java.util.stream.Stream;
+
+public interface Item extends Node {
+    Stream<Character> getChars();
+}

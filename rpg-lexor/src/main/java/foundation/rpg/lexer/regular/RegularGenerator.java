@@ -29,15 +29,13 @@
 
 package foundation.rpg.lexer.regular;
 
-import foundation.rpg.lexer.regular.Bfs;
-import foundation.rpg.lexer.regular.RegularParser;
 import foundation.rpg.lexer.regular.ast.*;
 import foundation.rpg.lexer.regular.dfa.DFA;
 import foundation.rpg.lexer.regular.dfa.StateSet;
 import foundation.rpg.lexer.regular.dfa.Transformer;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.State;
-import foundation.rpg.lexer.regular.thompson.ThompsonPatternVisitor;
+import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
 import foundation.rpg.parser.ParseErrorException;
 
 import java.io.IOException;
@@ -46,7 +44,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
@@ -55,9 +52,9 @@ public class RegularGenerator {
 
     private final RegularParser parser = new RegularParser();
     private final Transformer transformer = new Transformer();
-    private final ThompsonPatternVisitor visitor = new ThompsonPatternVisitor();
+    private final ThompsonVisitor visitor = new ThompsonVisitor();
 
-    public Pattern parsePattern(String pattern) {
+    public Node parsePattern(String pattern) {
         try {
             return parser.parse(pattern);
         } catch (IOException | ParseErrorException e) {
@@ -65,14 +62,11 @@ public class RegularGenerator {
         }
     }
 
-    public Pattern parseName(String name) {
-        Pattern pattern = new Empty();
-        for(int i = 0; i < name.length(); i++)
-            pattern = new Chain(pattern, new Char(name.charAt(i)));
-        return pattern;
+    public Node parseName(String name) {
+        return new Chain(name.chars().mapToObj(Char::new).collect(toList()));
     }
 
-    public GNFA gnfaFrom(List<Pattern> patterns) {
+    public GNFA gnfaFrom(List<Node> patterns) {
         return visitor.visit(patterns);
     }
 
@@ -80,21 +74,33 @@ public class RegularGenerator {
         return transformer.transform(gnfa);
     }
 
+    private String escape(Object e) {
+        return e.toString().replace("\\", "\\\\").replace("'", "\\'");
+    }
+
     public void generate(DFA dfa, PrintWriter w) {
         Map<StateSet, Integer> states = new HashMap<>();
         Bfs.bfs((item, consumer) -> {
             w.println("\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ": switch(symbol) {");
             item.getCharTransitions().forEach((atom, nextSet) -> {
-                w.println("\t\t\t\tcase '" + atom + "': state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break;");
+                w.println("\t\t\t\tcase '" + escape(atom) + "': state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break;");
                 consumer.accept(nextSet);
             });
+            List<Character> invs = item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
+                    .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).collect(toList());
+            if(!invs.isEmpty()) {
+                invs.forEach(c -> w.println("\t\t\t\tcase '" + escape(c) + "':"));
+                w.println("\t\t\t\t\tthrow new IllegalStateException(\"\")");
+            }
             w.println("\t\t\t\tdefault:");
             item.getGroupTransitions().forEach((atom, nextSet) -> {
-                w.println("\t\t\t\t\tif('" + atom + "') { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                w.println("\t\t\t\t\tif(matches(\"" + atom + "\")) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
                 consumer.accept(nextSet);
             });
             List<Object> results = item.getStates().stream().filter(s -> nonNull(s.getResult())).map(State::getResult).collect(toList());
-            if(results.isEmpty()) {
+            if(nonNull(item.getDefaultState())) {
+                w.println("\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
+            } else if(results.isEmpty()) {
                 w.println("\t\t\t\t\tthrow new IllegalStateException(\"\")");
             } else {
                 w.println("\t\t\t\t\treturn visitor -> visitor.visit(" + results + ");");
