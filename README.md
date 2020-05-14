@@ -241,20 +241,23 @@ nodes (and therefore symbols of the grammar), then it makes it very simple to ge
 E.g. very simple JSON parser can be constructed with following factory / grammar definition:
 
 ```java
-public interface JsonFactory extends WhiteSpaceRules {
+@SuppressWarnings("unused")
+public class JsonFactory {
 
     @StartSymbol
-    static Object               is  (String v)                                                     { return v;}
-    static Object               is  (Integer v)                                                    { return v; }
-    static Object               is  (Double v)                                                     { return v; }
-    static Object               is  (LBr o, List<Object> l, RBr c)                                 { return l; }
-    static Object               is  (LBr o, RBr c)                                                 { return emptyList(); }
-    static Object               is  (LCurl o, Map<String, Object> m, RCurl c)                      { return m; }
-    static Object               is  (LCurl o, RCurl c)                                             { return emptyMap(); }
-    static List<Object>         is  (Object v)                                                     { return list(v); }
-    static List<Object>         is  (List<Object> l, Comma c, Object v)                            { return addTo(l, v); }
-    static Map<String, Object>  is  (String k, Colon c, Object v)                                  { return map(k, v); }
-    static Map<String, Object>  is  (Map<String, Object> m, Comma s, String k, Colon c, Object v)  { return putUniqueIn(m, k, v, "Duplicate key: " + k); }
+    Object              is (@Match("'([~'\\]|\\['\\rnt])*'|\"([~\"\\]|\\[\"\\rnt])*\"") String v) { return v; }
+    Object              is (@Match("\\d*") Integer v)                                             { return v; }
+    Object              is (@Match("\\d+\\[\\.eE]\\d+") Double v)                                 { return v; }
+    Object              is (LBr o, List<Object> l, RBr c)                                         { return l; }
+    Object              is (LBr o, RBr c)                                                         { return emptyList(); }
+    Object              is (LCurl o, Map<String, Object> m, RCurl c)                              { return m; }
+    Object              is (LCurl o, RCurl c)                                                     { return emptyMap(); }
+    List<Object>        is (Object v)                                                             { return list(v); }
+    List<Object>        is (List<Object> l, Comma c, Object v)                                    { return addTo(l, v); }
+    Map<String, Object> is (String k, Colon c, Object v)                                          { return map(k, v); }
+    Map<String, Object> is (Map<String, Object> m, Comma s, String k, Colon c, Object v)          { return putUniqueIn(m, k, v, "Duplicate key: " + k); }
+
+    void ignore(@Match("\\s+") WhiteSpace w) { }
 
 }
 ``` 

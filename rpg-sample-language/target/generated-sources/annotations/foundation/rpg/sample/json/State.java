@@ -386,13 +386,18 @@ import foundation.rpg.parser.StateBase;
 
 // Generated visitor pattern based state for grammar parser.
 public class State extends StateBase<java.lang.Object> {
+    private final foundation.rpg.sample.json.JsonFactory factory;
 
-// Ignored:
-    public State visitWhiteSpace(foundation.rpg.common.WhiteSpace symbol) {
-        return this;
+    public State(foundation.rpg.sample.json.JsonFactory factory) {
+        this.factory = factory;
     }
 
-    public State visitComment(foundation.rpg.common.Comment symbol) {
+    public foundation.rpg.sample.json.JsonFactory getFactory() {
+        return factory;
+    }
+
+    // Ignored:
+    public State visitWhiteSpace(foundation.rpg.common.WhiteSpace symbol) {
         return this;
     }
 

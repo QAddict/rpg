@@ -40,7 +40,7 @@ import static foundation.rpg.parser.TokenInput.tokenInput;
 
 public class JsonParser {
 
-    private final Parser<Object, State> parser = new Parser<>(new State1());
+    private final Parser<Object, State> parser = new Parser<>(new State1(new JsonFactory()));
     private final JsonLexer lexer = new JsonLexer();
 
     public Object parse(String json) throws IOException, ParseErrorException {

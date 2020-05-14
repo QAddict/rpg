@@ -41,9 +41,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateInteger5 extends StackState<java.lang.Integer, State> {
+
+// NoStack:
 // Stack:
-    public StateInteger5(java.lang.Integer node, State prev) {
-        super(node, prev);
+    public StateInteger5(foundation.rpg.sample.json.JsonFactory factory, java.lang.Integer node, State prev) {
+        super(factory, node, prev);
     }
 
 
@@ -52,14 +54,14 @@ public class StateInteger5 extends StackState<java.lang.Integer, State> {
     public State visitRCurl(foundation.rpg.common.RCurl symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitObject(foundation.rpg.sample.json.JsonFactory.is(this.getNode())).visitRCurl(symbol);
+        return stack1.visitObject(getFactory().is(this.getNode())).visitRCurl(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitObject(foundation.rpg.sample.json.JsonFactory.is(this.getNode())).visitComma(symbol);
+        return stack1.visitObject(getFactory().is(this.getNode())).visitComma(symbol);
     }
 
 

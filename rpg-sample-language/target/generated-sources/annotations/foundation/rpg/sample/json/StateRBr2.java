@@ -41,9 +41,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateRBr2 extends StackState<foundation.rpg.common.RBr, StackState<java.util.List<java.lang.Object>, StackState<foundation.rpg.common.LBr, ? extends State>>> {
+
+// NoStack:
 // Stack:
-    public StateRBr2(foundation.rpg.common.RBr node, StackState<java.util.List<java.lang.Object>, StackState<foundation.rpg.common.LBr, ? extends State>> prev) {
-        super(node, prev);
+    public StateRBr2(foundation.rpg.sample.json.JsonFactory factory, foundation.rpg.common.RBr node, StackState<java.util.List<java.lang.Object>, StackState<foundation.rpg.common.LBr, ? extends State>> prev) {
+        super(factory, node, prev);
     }
 
 
@@ -54,7 +56,7 @@ public class StateRBr2 extends StackState<foundation.rpg.common.RBr, StackState<
 		StackState<java.util.List<java.lang.Object>, StackState<foundation.rpg.common.LBr, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.common.LBr, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitObject(foundation.rpg.sample.json.JsonFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitEnd(symbol);
+        return stack3.visitObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitEnd(symbol);
     }
 
 

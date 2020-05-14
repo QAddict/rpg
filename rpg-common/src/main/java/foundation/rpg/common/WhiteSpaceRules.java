@@ -31,7 +31,8 @@ package foundation.rpg.common;
 
 public interface WhiteSpaceRules {
 
-    void ignore(WhiteSpace w);
-    void ignore(Comment c);
+    static void ignore(WhiteSpace w) {}
+
+    static void ignore(Comment c) {}
 
 }

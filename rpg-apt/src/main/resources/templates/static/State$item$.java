@@ -27,46 +27,44 @@
  *
  */
 
-package foundation.rpg.sample.json;
+package $package$;
 
 /*
 
-RCurl2: {
-	Object -> LCurl RCurl • [RBr, Comma]
-}
+$lrItem$
 
 */
 
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateRCurl2 extends StackState<foundation.rpg.common.RCurl, StackState<foundation.rpg.common.LCurl, ? extends State>> {
-
-// NoStack:
+public class $class$ extends $parent$ {
 // Stack:
-    public StateRCurl2(foundation.rpg.sample.json.JsonFactory factory, foundation.rpg.common.RCurl node, StackState<foundation.rpg.common.LCurl, ? extends State> prev) {
-        super(factory, node, prev);
+    public $class$($node$ node, $prev$ prev) {
+        super(node, prev);
     }
-
 
 // Reduce:
     @Override
-    public State visitRBr(foundation.rpg.common.RBr symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.LCurl, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitObject(getFactory().is(stack1.getNode(), this.getNode())).visitRBr(symbol);
+    public State visit$name$($type$ symbol) throws UnexpectedInputException {
+        $parameters$
+        return $start$.visit$result$($factoryCall$).visit$name$(symbol);
     }
-
-    @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.LCurl, ? extends State> stack1 = this.getPrev();
-		State stack2 = stack1.getPrev();
-        return stack2.visitObject(getFactory().is(stack1.getNode(), this.getNode())).visitComma(symbol);
-    }
-
 
 // Shift:
+    @Override
+    public State visit$name$($type$ symbol) {
+        return new State$next$(symbol, this);
+    }
+
 // Accept:
+    @Override
+    public boolean accepted() {
+        return true;
+    }
+    @Override
+    public $result$ result() {
+        return getPrev().getNode();
+    }
+
 }

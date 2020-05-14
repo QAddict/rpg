@@ -39,16 +39,18 @@ import static java.util.stream.Collectors.joining;
 
 public class SourceModel {
 
+    private final String dir;
     private final String name;
     private final Map<String, Object> variables = new LinkedHashMap<>();
     private final Map<String, List<SourceModel>> fragments = new LinkedHashMap<>();
 
-    private SourceModel(String name) {
+    private SourceModel(String dir, String name) {
+        this.dir = dir;
         this.name = name;
     }
 
-    public static SourceModel source(String pkg, String name) {
-        return new SourceModel(name).set("package", pkg);
+    public static SourceModel source(String pkg, boolean isStaticFactory, String name) {
+        return new SourceModel(isStaticFactory ? "static" : "instance", name).set("package", pkg);
     }
 
     public SourceModel set(Name name, Object value) {
@@ -65,7 +67,7 @@ public class SourceModel {
     }
 
     public SourceModel with(Name name) {
-        SourceModel fragment = new SourceModel(name.toString());
+        SourceModel fragment = new SourceModel(dir, name.toString());
         fragments.computeIfAbsent(name.toString(), n -> new ArrayList<>()).add(fragment);
         return fragment;
     }
@@ -88,14 +90,15 @@ public class SourceModel {
 
     @Override
     public String toString() {
-        Map<String, String> templates = load(name);
+        Map<String, String> templates = load(dir, name);
         String className = apply(variables, name);
         return set("class", className).get(templates, templates.getOrDefault("", ""));
     }
 
     private static final Pattern FRAGMENT = Pattern.compile("// (.*):");
-    static Map<String, String> load(String type) {
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(SourceModel.class.getResourceAsStream("/templates/" + type + ".java")))) {
+
+    static Map<String, String> load(String dir, String type) {
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(SourceModel.class.getResourceAsStream("/templates/" + dir + "/" + type + ".java")))) {
             Map<String, String> map = new LinkedHashMap<>();
             String name = "";
             for(String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -117,7 +120,7 @@ public class SourceModel {
     public interface Name {}
 
     public enum Names implements Name {
-        name, type, grammar, item, automata, node, prev, next, result, factory, start, parameters,
-        Ignored, Symbols, lrItem, parent, Stack, Shift, Reduce, Accept
+        name, type, grammar, item, automata, node, prev, next, result, factoryCall, factory, start, parameters,
+        Ignored, Symbols, lrItem, parent, Stack, NoStack, Shift, Reduce, Accept
     }
 }

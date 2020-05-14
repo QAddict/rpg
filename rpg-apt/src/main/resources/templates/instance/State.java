@@ -27,26 +27,39 @@
  *
  */
 
-package foundation.rpg.sample.json;
+package $package$;
 
-import foundation.rpg.parser.Token;
+/*
+
+$grammar$
+
+$automata$
+
+*/
+
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.StateBase;
 
-// Generated token element wrapper for grammar parser.
-public class TokenComment implements Token<State> {
-    private final foundation.rpg.common.Comment symbol;
+// Generated visitor pattern based state for grammar parser.
+public class $class$ extends StateBase<$result$> {
+    private final $factory$ factory;
 
-    public TokenComment(foundation.rpg.common.Comment symbol) {
-        this.symbol = symbol;
+    public $class$($factory$ factory) {
+        this.factory = factory;
     }
 
-    @Override
-    public State accept(State state) throws UnexpectedInputException {
-        return state.visitComment(symbol);
+    public $factory$ getFactory() {
+        return factory;
     }
 
-    @Override
-    public String toString() {
-        return symbol.toString();
+    // Ignored:
+    public State visit$name$($type$ symbol) {
+        return this;
     }
+
+// Symbols:
+    public State visit$name$($type$ symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
 }

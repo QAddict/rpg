@@ -41,9 +41,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateObject5 extends StackState<java.lang.Object, StackState<foundation.rpg.common.Colon, StackState<java.lang.String, ? extends State>>> {
+
+// NoStack:
 // Stack:
-    public StateObject5(java.lang.Object node, StackState<foundation.rpg.common.Colon, StackState<java.lang.String, ? extends State>> prev) {
-        super(node, prev);
+    public StateObject5(foundation.rpg.sample.json.JsonFactory factory, java.lang.Object node, StackState<foundation.rpg.common.Colon, StackState<java.lang.String, ? extends State>> prev) {
+        super(factory, node, prev);
     }
 
 
@@ -54,7 +56,7 @@ public class StateObject5 extends StackState<java.lang.Object, StackState<founda
 		StackState<foundation.rpg.common.Colon, StackState<java.lang.String, ? extends State>> stack1 = this.getPrev();
 		StackState<java.lang.String, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitMapOfObject(foundation.rpg.sample.json.JsonFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitRCurl(symbol);
+        return stack3.visitMapOfObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitRCurl(symbol);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class StateObject5 extends StackState<java.lang.Object, StackState<founda
 		StackState<foundation.rpg.common.Colon, StackState<java.lang.String, ? extends State>> stack1 = this.getPrev();
 		StackState<java.lang.String, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitMapOfObject(foundation.rpg.sample.json.JsonFactory.is(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
+        return stack3.visitMapOfObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
     }
 
 

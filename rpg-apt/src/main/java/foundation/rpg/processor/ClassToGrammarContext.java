@@ -53,6 +53,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;
+import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
 public class ClassToGrammarContext {
@@ -63,6 +64,8 @@ public class ClassToGrammarContext {
     private final Map<Symbol, TypeMirror> typeMap = new LinkedHashMap<>();
     private final Map<Rule, ExecutableElement> ruleAssociation = new LinkedHashMap<>();
     private final Grammar grammar;
+    private final boolean isStaticFactory;
+    private final Element factoryClass;
 
     private Stream<ExecutableElement> methods(Element factory) {
         return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
@@ -72,7 +75,7 @@ public class ClassToGrammarContext {
         String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
         Set<Rule> rules = new LinkedHashSet<>();
         Set<Symbol> ignored = new LinkedHashSet<>();
-        Element factoryClass = startRule.getEnclosingElement();
+        factoryClass = startRule.getEnclosingElement();
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
         int priority = priority(factoryClass, 0);
         List<ExecutableElement> methods = methods(factoryClass).collect(toList());
@@ -85,6 +88,7 @@ public class ClassToGrammarContext {
                 addMetaRules(method, metaRules, rules, priority, emptyMap());
             }
         });
+        isStaticFactory = methods.stream().anyMatch(method -> method.getModifiers().contains(STATIC));
         grammar = Grammar.grammar(of(startRule.getReturnType()), rules, ignored);
         typeMap.put(Symbol.start, startRule.getReturnType());
         typeMap.put(Symbol.end, elements.getTypeElement("foundation.rpg.parser.End").asType());
@@ -169,4 +173,11 @@ public class ClassToGrammarContext {
         return s;
     }
 
+    public boolean isStaticFactory() {
+        return isStaticFactory;
+    }
+
+    public Element getFactoryClass() {
+        return factoryClass;
+    }
 }

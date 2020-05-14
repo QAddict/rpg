@@ -27,44 +27,15 @@
  *
  */
 
-package $package$;
+package foundation.rpg;
 
-/*
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-$lrItem$
-
-*/
-
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class $class$ extends $parent$ {
-// Stack:
-    public $class$($node$ node, $prev$ prev) {
-        super(node, prev);
-    }
-
-// Reduce:
-    @Override
-    public State visit$name$($type$ symbol) throws UnexpectedInputException {
-        $parameters$
-        return $start$.visit$result$($factory$).visit$name$(symbol);
-    }
-
-// Shift:
-    @Override
-    public State visit$name$($type$ symbol) {
-        return new State$next$(symbol, this);
-    }
-
-// Accept:
-    @Override
-    public boolean accepted() {
-        return true;
-    }
-    @Override
-    public $result$ result() {
-        return getPrev().getNode();
-    }
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.PARAMETER, ElementType.FIELD})
+public @interface Match {
+    String value();
 }

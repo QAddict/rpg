@@ -40,7 +40,7 @@ public class SourceModelTest {
 
     @Test
     public void testLoad() {
-        Map<String, String> map = SourceModel.load("State");
+        Map<String, String> map = SourceModel.load("static", "State");
         Assert.assertEquals(map.keySet(), new LinkedHashSet<>(Arrays.asList("", "Ignored:", "Symbols:")));
     }
 

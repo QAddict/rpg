@@ -29,10 +29,10 @@
 
 package foundation.rpg.common;
 
-import foundation.rpg.Name;
+import foundation.rpg.Match;
 import foundation.rpg.parser.Position;
 
-@Name(" \n\r\t")
+@Match("[ \n\r\t][ \n\r\t]*")
 public class WhiteSpace extends Token {
     public WhiteSpace(Position position) {
         super(position);

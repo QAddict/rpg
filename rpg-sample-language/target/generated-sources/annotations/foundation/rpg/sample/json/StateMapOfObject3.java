@@ -42,9 +42,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateMapOfObject3 extends StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.LCurl, ? extends State>> {
+
+// NoStack:
 // Stack:
-    public StateMapOfObject3(java.util.Map<java.lang.String,java.lang.Object> node, StackState<foundation.rpg.common.LCurl, ? extends State> prev) {
-        super(node, prev);
+    public StateMapOfObject3(foundation.rpg.sample.json.JsonFactory factory, java.util.Map<java.lang.String,java.lang.Object> node, StackState<foundation.rpg.common.LCurl, ? extends State> prev) {
+        super(factory, node, prev);
     }
 
 
@@ -52,12 +54,12 @@ public class StateMapOfObject3 extends StackState<java.util.Map<java.lang.String
 // Shift:
     @Override
     public State visitRCurl(foundation.rpg.common.RCurl symbol) {
-        return new StateRCurl6(symbol, this);
+        return new StateRCurl6(getFactory(), symbol, this);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.Comma symbol) {
-        return new StateComma2(symbol, this);
+        return new StateComma2(getFactory(), symbol, this);
     }
 
 

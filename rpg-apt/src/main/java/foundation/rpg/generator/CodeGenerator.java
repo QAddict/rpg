@@ -33,7 +33,6 @@ import foundation.rpg.automata.LrAction;
 import foundation.rpg.automata.LrItem;
 import foundation.rpg.automata.LrItemSet;
 import foundation.rpg.automata.LrParserAutomata;
-import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
 import foundation.rpg.processor.ClassToGrammarContext;
@@ -49,6 +48,7 @@ import java.util.stream.Stream;
 import static foundation.rpg.generator.SourceModel.Names.*;
 import static java.lang.String.join;
 import static java.util.stream.Collectors.*;
+import static javax.lang.model.element.Modifier.STATIC;
 
 public class CodeGenerator {
 
@@ -97,11 +97,11 @@ public class CodeGenerator {
     }
 
     private SourceModel source(String name) {
-        return SourceModel.source(context.getPackageName(), name);
+        return SourceModel.source(context.getPackageName(), context.isStaticFactory(), name).set(factory, context.getFactoryClass());
     }
 
     private String methodName(ExecutableElement method) {
-        return method.getEnclosingElement() + "." + method.getSimpleName();
+        return (method.getModifiers().contains(STATIC) ? method.getEnclosingElement() : "getFactory()") + "." + method.getSimpleName();
     }
 
     private TypeMirror typeOf(Symbol symbol) {
@@ -116,6 +116,8 @@ public class CodeGenerator {
         SourceModel code = source("State$item$").set(item, set.getName()).set(lrItem, set).set(parent, superClass);
         if (dot > 0)
             code.with(Stack).set(node, longestParameters.get(dot - 1)).set(prev, chainedVar(longestParameters, dot - 1));
+        else
+            code.with(NoStack);
 
         parser.actionsFor(set).forEach((symbol, action) -> action.accept(new LrAction.LrActionVisitor() {
             @Override public void visitGoto(LrItemSet set) {
@@ -142,7 +144,7 @@ public class CodeGenerator {
                     state = "stack" + i;
                 }
                 String call = methodName(method) + "(" + join(", ", p) + ")";
-                fragment.set(factory, call).set(parameters, b);
+                fragment.set(factoryCall, call).set(parameters, b);
                 return state;
             }
 
