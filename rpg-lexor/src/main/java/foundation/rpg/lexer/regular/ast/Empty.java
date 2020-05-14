@@ -27,37 +27,18 @@
  *
  */
 
-package foundation.rpg.lexer.pattern;
+package foundation.rpg.lexer.regular.ast;
 
-import java.util.Objects;
+import foundation.rpg.lexer.regular.PatternVisitor;
 
-public class Group implements Chunk {
-    private final char g;
-
-    public Group(char g) {
-        this.g = g;
-    }
-
+public class Empty implements Pattern {
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitGroup(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Group group = (Group) o;
-        return g == group.g;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(g);
+    public <R> R accept(PatternVisitor<R> visitor) {
+        return visitor.visit(this);
     }
 
     @Override
     public String toString() {
-        return "\\" + g;
+        return "";
     }
 }

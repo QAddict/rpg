@@ -46,4 +46,9 @@ public class Inversion implements Atom {
     public CharClass getCharClass() {
         return charClass;
     }
+
+    @Override
+    public String toString() {
+        return "[~" + charClass + "]";
+    }
 }

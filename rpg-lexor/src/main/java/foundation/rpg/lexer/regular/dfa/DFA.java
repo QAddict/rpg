@@ -35,4 +35,8 @@ public class DFA {
     public DFA(StateSet start) {
         this.start = start;
     }
+
+    public StateSet getStart() {
+        return start;
+    }
 }

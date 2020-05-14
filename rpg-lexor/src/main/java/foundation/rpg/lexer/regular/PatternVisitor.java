@@ -40,5 +40,5 @@ public interface PatternVisitor<R> {
     R visit(Chain chain);
     R visit(Repetition repetition);
     R visit(Union union);
-
+    R visit(Empty empty);
 }

@@ -31,18 +31,22 @@ package foundation.rpg.lexer.regular.ast;
 
 import foundation.rpg.lexer.regular.PatternVisitor;
 
-import java.util.List;
-
 public class Union implements Pattern {
 
-    private final List<Pattern> operands;
+    private final Pattern left;
+    private final Pattern right;
 
-    public Union(List<Pattern> operands) {
-        this.operands = operands;
+    public Union(Pattern left, Pattern right) {
+        this.left = left;
+        this.right = right;
     }
 
-    public List<Pattern> getOperands() {
-        return operands;
+    public Pattern getLeft() {
+        return left;
+    }
+
+    public Pattern getRight() {
+        return right;
     }
 
     @Override

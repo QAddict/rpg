@@ -37,22 +37,35 @@ import java.util.*;
 public class StateSet {
 
     private final Set<State> states = new LinkedHashSet<>();
-    private final Map<Atom, StateSet> transitions = new LinkedHashMap<>();
+    private final Map<Atom, StateSet> charTransitions = new LinkedHashMap<>();
+    private final Map<Atom, StateSet> groupTransitions = new LinkedHashMap<>();
 
     public void add(State state) {
         states.add(state);
+    }
+
+    public void addAll(StateSet state) {
+        states.addAll(state.states);
     }
 
     public Set<State> getStates() {
         return states;
     }
 
-    public void setTransition(Atom a, StateSet set) {
-        this.transitions.put(a, set);
+    public void setCharTransition(Atom a, StateSet set) {
+        this.charTransitions.put(a, set);
     }
 
-    public Map<Atom, StateSet> getTransitions() {
-        return transitions;
+    public void setGroupTransition(Atom a, StateSet set) {
+        this.groupTransitions.put(a, set);
+    }
+
+    public Map<Atom, StateSet> getCharTransitions() {
+        return charTransitions;
+    }
+
+    public Map<Atom, StateSet> getGroupTransitions() {
+        return groupTransitions;
     }
 
     @Override

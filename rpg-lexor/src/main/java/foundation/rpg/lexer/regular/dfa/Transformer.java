@@ -31,6 +31,8 @@ package foundation.rpg.lexer.regular.dfa;
 
 import foundation.rpg.lexer.regular.ast.Atom;
 import foundation.rpg.lexer.regular.Bfs;
+import foundation.rpg.lexer.regular.ast.Char;
+import foundation.rpg.lexer.regular.ast.Group;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.State;
 
@@ -49,10 +51,21 @@ public class Transformer {
         Map<StateSet, StateSet> cache = new LinkedHashMap<>();
         Bfs.bfs((set, queue) -> {
             Map<Atom, StateSet> trans = new LinkedHashMap<>();
-            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getAtom() != epsilon).forEach(t -> trans.computeIfAbsent(t.getAtom(), k -> new StateSet()).add(t.getNext()));
+            Map<Atom, StateSet> groups = new LinkedHashMap<>();
+            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getAtom() != epsilon)
+                    .forEach(t -> (t.getAtom() instanceof Char ? trans : groups).computeIfAbsent(t.getAtom(), k -> new StateSet()).add(t.getNext()));
+            groups.forEach((a, s) -> {
+                e(s);
+                StateSet cachedSet = cache.computeIfAbsent(s, k -> k);
+                trans.forEach((c, as) -> {
+                    if(isInGroup(a.toString(), c.toString())) as.addAll(s);
+                });
+                set.setGroupTransition(a, cachedSet);
+                queue.accept(s);
+            });
             trans.forEach((a, s) -> {
                 e(s);
-                set.setTransition(a, cache.computeIfAbsent(s, k -> k));
+                set.setCharTransition(a, cache.computeIfAbsent(s, k -> k));
                 queue.accept(s);
             });
         }, singleton(stateSet));
@@ -66,6 +79,15 @@ public class Transformer {
                 queue.accept(t.getNext());
             }
         }), stateSet.getStates());
+    }
+
+    private boolean isInGroup(String g, String c) {
+        switch (g) {
+            case "\\w": return Character.isJavaIdentifierStart(c.charAt(0));
+            case "\\a": return Character.isJavaIdentifierPart(c.charAt(0));
+            case "\\d": return Character.isDigit(c.charAt(0));
+            default: return false;
+        }
     }
 
 }

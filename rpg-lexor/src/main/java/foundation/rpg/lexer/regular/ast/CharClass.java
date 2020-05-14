@@ -32,6 +32,9 @@ package foundation.rpg.lexer.regular.ast;
 import foundation.rpg.lexer.regular.PatternVisitor;
 
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.joining;
 
 public class CharClass implements Atom {
 
@@ -44,5 +47,10 @@ public class CharClass implements Atom {
     @Override
     public <R> R accept(PatternVisitor<R> visitor) {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return items.stream().map(Objects::toString).collect(joining());
     }
 }

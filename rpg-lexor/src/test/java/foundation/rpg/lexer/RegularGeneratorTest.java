@@ -29,22 +29,31 @@
 
 package foundation.rpg.lexer;
 
-import foundation.rpg.lexer.regular.ast.Chain;
+import foundation.rpg.lexer.regular.RegularGenerator;
+import foundation.rpg.lexer.regular.dfa.DFA;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import org.testng.annotations.Test;
+
+import java.io.PrintWriter;
 
 import static java.util.Arrays.asList;
 
 public class RegularGeneratorTest {
 
+    RegularGenerator generator = new RegularGenerator();
+
     @Test
     public void testGnfaFrom() {
-        GNFA gnfa = new RegularGenerator().gnfaFrom(asList(
-                new Chain(asList()),
-                new Chain(asList()),
-                new Chain(asList())
+        GNFA gnfa = generator.gnfaFrom(asList(
+                generator.parseName("else"),
+                generator.parseName("extends"),
+                generator.parsePattern("\\w\\a*"),
+                generator.parsePattern("'[~']*'")
         ));
         System.out.println(gnfa);
+        DFA dfa = generator.transform(gnfa);
+        System.out.println(dfa);
+        generator.generate(dfa, new PrintWriter(System.out));
     }
 
 }

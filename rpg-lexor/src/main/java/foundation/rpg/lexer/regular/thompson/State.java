@@ -35,8 +35,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class State {
+
+    private Object result;
+
+    private final List<Transition> transitions = new ArrayList<>();
+
     public void add(Atom epsilon, State end) {
         transitions.add(new Transition(epsilon, end));
+    }
+
+    public List<Transition> getTransitions() {
+        return transitions;
+    }
+
+    public State setResult(Object result) {
+        this.result = result;
+        return this;
+    }
+
+    public Object getResult() {
+        return result;
     }
 
     public static class Transition {
@@ -55,12 +73,6 @@ public class State {
         public State getNext() {
             return next;
         }
-    }
-
-    private final List<Transition> transitions = new ArrayList<>();
-
-    public List<Transition> getTransitions() {
-        return transitions;
     }
 
 }

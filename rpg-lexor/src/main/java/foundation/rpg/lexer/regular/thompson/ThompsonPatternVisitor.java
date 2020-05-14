@@ -32,8 +32,7 @@ package foundation.rpg.lexer.regular.thompson;
 import foundation.rpg.lexer.regular.*;
 import foundation.rpg.lexer.regular.ast.*;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.IntStream.rangeClosed;
+import java.util.List;
 
 public class ThompsonPatternVisitor implements PatternVisitor<GNFA> {
 
@@ -57,7 +56,11 @@ public class ThompsonPatternVisitor implements PatternVisitor<GNFA> {
 
     @Override
     public GNFA visit(Range range) {
-        return visit(new Union(rangeClosed(range.getStart(), range.getEnd()).mapToObj(i -> new Char((char) i)).collect(toList())));
+        Pattern p = new Char(range.getStart());
+        for(char i = range.getStart(); i < range.getEnd(); i++) {
+            p = new Union(p, new Char((char) (i + 1)));
+        }
+        return p.accept(this);
     }
 
     @Override
@@ -70,14 +73,10 @@ public class ThompsonPatternVisitor implements PatternVisitor<GNFA> {
 
     @Override
     public GNFA visit(Chain chain) {
-        GNFA automata = chain.getOperands().get(0).accept(this);
-        State start = automata.getStart();
-        for(int i = 1; i < chain.getOperands().size(); i++) {
-            GNFA n = chain.getOperands().get(i).accept(this);
-            automata.getEnd().add(epsilon, n.getStart());
-            automata = n;
-        }
-        return new GNFA(start, automata.getEnd());
+        GNFA left = chain.getLeft().accept(this);
+        GNFA right = chain.getRight().accept(this);
+        left.getEnd().add(epsilon, right.getStart());
+        return new GNFA(left.getStart(), right.getEnd());
     }
 
     @Override
@@ -96,12 +95,31 @@ public class ThompsonPatternVisitor implements PatternVisitor<GNFA> {
     public GNFA visit(Union union) {
         State start = new State();
         State end = new State();
-        for(Pattern pattern : union.getOperands()) {
-            GNFA automata = pattern.accept(this);
-            start.add(epsilon, automata.getStart());
-            automata.getEnd().add(epsilon, end);
-        }
+        GNFA left = union.getLeft().accept(this);
+        GNFA right = union.getRight().accept(this);
+        start.add(epsilon, left.getStart());
+        start.add(epsilon, right.getStart());
+        left.getEnd().add(epsilon, end);
+        right.getEnd().add(epsilon, end);
         return new GNFA(start, end);
     }
 
+    @Override
+    public GNFA visit(Empty empty) {
+        State start = new State();
+        State end = new State();
+        start.add(epsilon, end);
+        return new GNFA(start, end);
+    }
+
+    public GNFA visit(List<Pattern> patterns) {
+        State start = new State();
+        State end = new State();
+        for(Pattern pattern : patterns) {
+            GNFA automata = pattern.accept(this);
+            start.add(epsilon, automata.getStart());
+            automata.getEnd().setResult(pattern).add(epsilon, end);
+        }
+        return new GNFA(start, end);
+    }
 }

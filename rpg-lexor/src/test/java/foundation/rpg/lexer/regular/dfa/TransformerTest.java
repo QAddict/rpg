@@ -43,7 +43,7 @@ public class TransformerTest {
 
     @Test
     public void testTransform() {
-        Pattern pattern = new Chain(asList(new Char('a'), new Char('b'), new Repetition(new Char('a'))));
+        Pattern pattern = new Chain(new Char('a'), new Chain(new Char('b'), new Repetition(new Char('a'))));
         GNFA gnfa = pattern.accept(new ThompsonPatternVisitor());
         DFA transform = new Transformer().transform(gnfa);
         System.out.println(transform);

@@ -31,6 +31,8 @@ package foundation.rpg.lexer.regular.ast;
 
 import foundation.rpg.lexer.regular.PatternVisitor;
 
+import java.util.Objects;
+
 public class Group implements Atom {
     private final char g;
 
@@ -38,12 +40,31 @@ public class Group implements Atom {
         this.g = g;
     }
 
+    public char getG() {
+        return g;
+    }
+
     @Override
     public <R> R accept(PatternVisitor<R> visitor) {
         return visitor.visit(this);
     }
 
-    public char getG() {
-        return g;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return g == group.g;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(g);
+    }
+
+    @Override
+    public String toString() {
+        return "\\" + g;
+    }
+
 }
