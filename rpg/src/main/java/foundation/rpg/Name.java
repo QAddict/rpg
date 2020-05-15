@@ -38,4 +38,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.PARAMETER})
 public @interface Name {
     String value();
+    int priority() default 1;
 }

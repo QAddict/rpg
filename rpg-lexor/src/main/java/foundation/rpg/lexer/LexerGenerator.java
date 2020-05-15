@@ -75,12 +75,12 @@ public class LexerGenerator {
         }
     }
 
-    public void generateLexer(List<TokenInfo> info, PrintWriter w) {
+    public void generateLexer(String pkg, String name, List<TokenInfo> info, PrintWriter w) {
         Map<Object, TokenInfo> infoMap = info.stream().collect(toMap(TokenInfo::getPattern, identity()));
         GNFA gnfa = visitor.visit(info.stream().map(TokenInfo::getPattern).collect(toList()));
         DFA dfa = transformer.transform(gnfa);
         Comparator<TokenInfo> comparator = comparingInt(TokenInfo::getPriority);
-        generator.generate(dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).getElement().toString());
+        generator.generate(pkg, name, dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).getElement().toString());
     }
 
 }

@@ -33,14 +33,20 @@ import foundation.rpg.StartSymbol;
 import foundation.rpg.automata.LrParserAutomata;
 import foundation.rpg.generator.CodeGenerator;
 import foundation.rpg.automata.LrParserConstructor;
+import foundation.rpg.lexer.LexerGenerator;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import static java.util.stream.Collectors.toList;
 
 @SupportedAnnotationTypes("foundation.rpg.StartSymbol")
 public class StartSymbolProcessor extends AbstractProcessor implements Consumer<ExecutableElement> {
@@ -54,7 +60,8 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
     @Override
     public void accept(ExecutableElement element) {
         try {
-            ClassToGrammarContext context = new ClassToGrammarContext(element, processingEnv.getElementUtils());
+            ClassToTokenContext tokenContext = new ClassToTokenContext();
+            ClassToGrammarContext context = new ClassToGrammarContext(element, processingEnv.getElementUtils(), tokenContext);
             System.out.println("Grammar generated from class: " + element.getEnclosingElement());
             System.out.println(context.getGrammar());
             System.out.println();
@@ -65,6 +72,13 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
             System.out.println();
             System.out.println();
             new CodeGenerator(processingEnv.getFiler(), context).generateSources(parser);
+            /*
+            new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", context.getGrammar().getTerminals().stream().map(symbol -> {
+                TypeMirror type = context.symbolType(symbol);
+                return tokenContext.tokenInfoFor(type);
+            }).collect(toList()), new PrintWriter(processingEnv.getFiler().createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()));
+
+             */
         } catch (RuntimeException | Error e) {
             e.printStackTrace();
         }

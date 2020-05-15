@@ -38,4 +38,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.PARAMETER, ElementType.FIELD})
 public @interface Match {
     String value();
+    int priority() default 0;
 }

@@ -29,13 +29,16 @@
 
 package foundation.rpg.processor;
 
+import foundation.rpg.Match;
 import foundation.rpg.MetaRule;
+import foundation.rpg.Name;
 import foundation.rpg.Priority;
 import foundation.rpg.StartSymbol;
 import foundation.rpg.generator.TypeUtils;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
+import foundation.rpg.lexer.LexerGenerator;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
@@ -66,12 +69,14 @@ public class ClassToGrammarContext {
     private final Grammar grammar;
     private final boolean isStaticFactory;
     private final Element factoryClass;
+    private final ClassToTokenContext tokenContext;
 
     private Stream<ExecutableElement> methods(Element factory) {
         return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
     }
 
-    public ClassToGrammarContext(ExecutableElement startRule, Elements elements) {
+    public ClassToGrammarContext(ExecutableElement startRule, Elements elements, ClassToTokenContext tokenContext) {
+        this.tokenContext = tokenContext;
         String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
         Set<Rule> rules = new LinkedHashSet<>();
         Set<Symbol> ignored = new LinkedHashSet<>();
@@ -118,7 +123,7 @@ public class ClassToGrammarContext {
     }
 
     private List<TypeMirror> metaSymbols(ExecutableElement metaRule, Map<String, TypeMirror> map) {
-        return metaRule.getParameters().stream().map(Element::asType).map(t -> metaSymbol(t, map)).collect(toList());
+        return metaRule.getParameters().stream().map(this::scanTokens).map(t -> metaSymbol(t, map)).collect(toList());
     }
 
     private TypeMirror metaSymbol(TypeMirror t, Map<String, TypeMirror> map) {
@@ -139,7 +144,12 @@ public class ClassToGrammarContext {
     }
 
     public Rule ruleOf(ExecutableElement method, int priority) {
-        return ruleOf(method, priority, method.getReturnType(), method.getParameters().stream().map(VariableElement::asType).collect(toList()));
+        return ruleOf(method, priority, method.getReturnType(), method.getParameters().stream().map(this::scanTokens).collect(toList()));
+    }
+
+    private TypeMirror scanTokens(VariableElement e) {
+        tokenContext.analyzeToken(e);
+        return e.asType();
     }
 
     public Rule ruleOf(ExecutableElement method, int priority, TypeMirror l, List<TypeMirror> r) {
@@ -180,4 +190,5 @@ public class ClassToGrammarContext {
     public Element getFactoryClass() {
         return factoryClass;
     }
+
 }

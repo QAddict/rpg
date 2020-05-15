@@ -43,7 +43,7 @@ public class LexerGeneratorTest {
 
     @Test
     public void testGenerateLexer() {
-        new LexerGenerator().generateLexer(asList(
+        new LexerGenerator().generateLexer("pkg", "MyLexer", asList(
                 new TokenInfo("TokenTrue", parser.parseText("true"), 1),
                 new TokenInfo("TokenFalse", parser.parseText("false"), 1),
                 new TokenInfo("TokenThrows", parser.parseText("throws"), 1),

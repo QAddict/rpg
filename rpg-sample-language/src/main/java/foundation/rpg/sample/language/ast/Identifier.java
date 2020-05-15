@@ -29,6 +29,9 @@
 
 package foundation.rpg.sample.language.ast;
 
+import foundation.rpg.Match;
+
+@Match("\\w\\a*")
 public class Identifier implements Expression {
     private final String name;
 

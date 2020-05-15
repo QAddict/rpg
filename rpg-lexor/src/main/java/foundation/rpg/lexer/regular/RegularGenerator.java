@@ -33,7 +33,9 @@ import foundation.rpg.lexer.regular.ast.*;
 import foundation.rpg.lexer.regular.dfa.DFA;
 import foundation.rpg.lexer.regular.dfa.StateSet;
 import foundation.rpg.lexer.regular.thompson.State;
+import foundation.rpg.parser.*;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.function.Consumer;
@@ -49,20 +51,28 @@ public class RegularGenerator {
         return e.toString().replace("\\", "\\\\").replace("'", "\\'");
     }
 
-    public void generate(DFA dfa, PrintWriter w, Function<Set<Object>, String> prioritizer) {
+    private void i(PrintWriter w, Class<?>... t) {
+        for(Class<?> c : t) w.println("import " + c.getCanonicalName() + ";");
+    }
+    public void generate(String pkg, String name, DFA dfa, PrintWriter w, Function<Set<Object>, String> prioritizer) {
         Map<StateSet, Integer> states = new HashMap<>();
-        w.println("public class NewLexer implements Lexer<State> {");
+        w.println("package " + pkg + ";");
+        w.println();
+        i(w, Token.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, StringBuilder.class);
+        w.println();
+        w.println("public class " + name + " implements Lexer<State> {");
         w.println("\tpublic Token<State> next(Input input) throws IOException {");
         w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
         w.println("\t\tint symbol = input.lookahead();");
-        w.println("\t\tPosition mark = input.mark();");
-        w.println("\t\tif(symbol < 0) return new TokenEnd(new End(mark));");
+        w.println("\t\tPosition mark = input.position();");
+        w.println("\t\tStringBuilder builder = new StringBuilder();");
+        w.println("\t\tif(symbol < 0) return visitor -> visitor.visitEnd(new End(mark));");
         w.println("\t\tfor(; true; symbol = input.move().lookahead()) {");
         w.println("\t\t\tswitch(state) {");
         Bfs.bfs((item, consumer) -> {
             Consumer<String> r = pref -> {
                 item.getGroupTransitions().forEach((atom, nextSet) -> {
-                    w.println(pref + "\t\t\t\t\tif(matches(\"" + atom + "\")) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                    w.println(pref + "\t\t\t\t\tif(matchesGroup(\"" + atom.toString().substring(1) + "\", symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
                     consumer.accept(nextSet);
                 });
                 Set<Object> results = item.getStates().stream().filter(s -> nonNull(s.getResult())).map(State::getResult).collect(toSet());
@@ -70,9 +80,10 @@ public class RegularGenerator {
                     w.println(pref + "\t\t\t\t\tif(symbol < 0) throw new IllegalStateException(\"\");");
                     w.println(pref + "\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
                 } else if (results.isEmpty()) {
-                    w.println(pref + "\t\t\t\t\tthrow new IllegalStateException(\"\")");
+                    w.println(pref + "\t\t\t\t\tthrow new IllegalStateException(\"\");");
                 } else {
-                    w.println(pref + "\t\t\t\t\treturn new " + prioritizer.apply(results) + "(mark);");
+                    String type = prioritizer.apply(results);
+                    w.println(pref + "\t\t\t\t\treturn visitor -> visitor.visit" + type.substring(type.lastIndexOf('.') + 1) + "(new " + type + "(mark));");
                 }
             };
             w.println("\t\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ":");
@@ -106,6 +117,7 @@ public class RegularGenerator {
             }
         }, Collections.singleton(dfa.getStart()));
         w.println("\t\t\t}");
+        w.println("\t\t\tbuilder.append((char) symbol);");
         w.println("\t\t}");
         w.println("\t}");
         w.println("}");
