@@ -41,7 +41,7 @@ import java.util.*;
 import static foundation.rpg.lexer.regular.thompson.ThompsonVisitor.epsilon;
 import static java.util.Collections.singleton;
 
-public class Transformer {
+public class GNFATransformer {
 
     public DFA transform(GNFA gnfa) {
         StateSet stateSet = new StateSet();

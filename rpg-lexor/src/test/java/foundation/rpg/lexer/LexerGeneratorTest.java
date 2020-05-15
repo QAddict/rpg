@@ -27,22 +27,31 @@
  *
  */
 
-package foundation.rpg.lexer.regular.dfa;
+package foundation.rpg.lexer;
 
-import foundation.rpg.lexer.regular.ast.*;
-import foundation.rpg.lexer.regular.thompson.GNFA;
-import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
+import foundation.rpg.lexer.regular.RegularParser;
 import org.testng.annotations.Test;
 
+import java.io.PrintWriter;
+
+import static foundation.rpg.lexer.LexerGenerator.*;
 import static java.util.Arrays.asList;
 
-public class TransformerTest {
+public class LexerGeneratorTest {
+
+    private final RegularParser parser = new RegularParser();
 
     @Test
-    public void testTransform() {
-        Node pattern = new Chain(asList(new Char('a'), new Char('b'), new Repetition(new Char('a'))));
-        GNFA gnfa = pattern.accept(new ThompsonVisitor());
-        DFA transform = new GNFATransformer().transform(gnfa);
-        System.out.println(transform);
+    public void testGenerateLexer() {
+        new LexerGenerator().generateLexer(asList(
+                new TokenInfo("TokenTrue", parser.parseText("true"), 1),
+                new TokenInfo("TokenFalse", parser.parseText("false"), 1),
+                new TokenInfo("TokenThrows", parser.parseText("throws"), 1),
+                new TokenInfo("TokenFinal", parser.parseText("final"), 1),
+                new TokenInfo("TokenIdentifier", parser.parsePattern("\\w\\a*"), 0),
+                new TokenInfo("TokenDouble", parser.parsePattern("\\d+[.eE]\\d+"), 0),
+                new TokenInfo("TokenInteger", parser.parsePattern("\\d+"), 0),
+                new TokenInfo("TokenString", parser.parsePattern("'([~'\\]|\\\\['\\nrt])*'"), 0)
+        ), new PrintWriter(System.out));
     }
 }

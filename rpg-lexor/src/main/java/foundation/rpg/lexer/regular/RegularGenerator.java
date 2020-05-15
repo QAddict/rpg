@@ -32,82 +32,83 @@ package foundation.rpg.lexer.regular;
 import foundation.rpg.lexer.regular.ast.*;
 import foundation.rpg.lexer.regular.dfa.DFA;
 import foundation.rpg.lexer.regular.dfa.StateSet;
-import foundation.rpg.lexer.regular.dfa.Transformer;
-import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.State;
-import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
-import foundation.rpg.parser.ParseErrorException;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class RegularGenerator {
-
-    private final RegularParser parser = new RegularParser();
-    private final Transformer transformer = new Transformer();
-    private final ThompsonVisitor visitor = new ThompsonVisitor();
-
-    public Node parsePattern(String pattern) {
-        try {
-            return parser.parse(pattern);
-        } catch (IOException | ParseErrorException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    public Node parseName(String name) {
-        return new Chain(name.chars().mapToObj(Char::new).collect(toList()));
-    }
-
-    public GNFA gnfaFrom(List<Node> patterns) {
-        return visitor.visit(patterns);
-    }
-
-    public DFA transform(GNFA gnfa) {
-        return transformer.transform(gnfa);
-    }
 
     private String escape(Object e) {
         return e.toString().replace("\\", "\\\\").replace("'", "\\'");
     }
 
-    public void generate(DFA dfa, PrintWriter w) {
+    public void generate(DFA dfa, PrintWriter w, Function<Set<Object>, String> prioritizer) {
         Map<StateSet, Integer> states = new HashMap<>();
+        w.println("public class NewLexer implements Lexer<State> {");
+        w.println("\tpublic Token<State> next(Input input) throws IOException {");
+        w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
+        w.println("\t\tint symbol = input.lookahead();");
+        w.println("\t\tPosition mark = input.mark();");
+        w.println("\t\tif(symbol < 0) return new TokenEnd(new End(mark));");
+        w.println("\t\tfor(; true; symbol = input.move().lookahead()) {");
+        w.println("\t\t\tswitch(state) {");
         Bfs.bfs((item, consumer) -> {
-            w.println("\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ": switch(symbol) {");
-            item.getCharTransitions().forEach((atom, nextSet) -> {
-                w.println("\t\t\t\tcase '" + escape(atom) + "': state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break;");
-                consumer.accept(nextSet);
-            });
-            List<Character> invs = item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
-                    .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).collect(toList());
-            if(!invs.isEmpty()) {
-                invs.forEach(c -> w.println("\t\t\t\tcase '" + escape(c) + "':"));
-                w.println("\t\t\t\t\tthrow new IllegalStateException(\"\")");
-            }
-            w.println("\t\t\t\tdefault:");
-            item.getGroupTransitions().forEach((atom, nextSet) -> {
-                w.println("\t\t\t\t\tif(matches(\"" + atom + "\")) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
-                consumer.accept(nextSet);
-            });
-            List<Object> results = item.getStates().stream().filter(s -> nonNull(s.getResult())).map(State::getResult).collect(toList());
-            if(nonNull(item.getDefaultState())) {
-                w.println("\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
-            } else if(results.isEmpty()) {
-                w.println("\t\t\t\t\tthrow new IllegalStateException(\"\")");
+            Consumer<String> r = pref -> {
+                item.getGroupTransitions().forEach((atom, nextSet) -> {
+                    w.println(pref + "\t\t\t\t\tif(matches(\"" + atom + "\")) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                    consumer.accept(nextSet);
+                });
+                Set<Object> results = item.getStates().stream().filter(s -> nonNull(s.getResult())).map(State::getResult).collect(toSet());
+                if (nonNull(item.getDefaultState())) {
+                    w.println(pref + "\t\t\t\t\tif(symbol < 0) throw new IllegalStateException(\"\");");
+                    w.println(pref + "\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
+                } else if (results.isEmpty()) {
+                    w.println(pref + "\t\t\t\t\tthrow new IllegalStateException(\"\")");
+                } else {
+                    w.println(pref + "\t\t\t\t\treturn new " + prioritizer.apply(results) + "(mark);");
+                }
+            };
+            w.println("\t\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ":");
+            int cases = item.getCharTransitions().size() + item.getInversions().size();
+            if(cases > 1) {
+                w.println("\t\t\t\t\tswitch(symbol) {");
+                item.getCharTransitions().forEach((atom, nextSet) -> {
+                    w.println("\t\t\t\t\t\tcase '" + escape(atom) + "': state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break;");
+                    consumer.accept(nextSet);
+                });
+                List<Character> invs = item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
+                        .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).collect(toList());
+                if (!invs.isEmpty()) {
+                    invs.forEach(c -> w.println("\t\t\t\t\t\tcase '" + escape(c) + "':"));
+                    w.println("\t\t\t\t\t\t\tthrow new IllegalStateException(\"\");");
+                }
+                w.println("\t\t\t\t\t\tdefault:");
+                r.accept("\t\t");
+                w.println("\t\t\t\t\t}");
+                w.println("\t\t\t\t\tbreak;");
             } else {
-                w.println("\t\t\t\t\treturn visitor -> visitor.visit(" + results + ");");
+                item.getCharTransitions().forEach((atom, nextSet) -> {
+                    w.println("\t\t\t\t\tif(symbol == '" + escape(atom) + "') { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                    consumer.accept(nextSet);
+                });
+                item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
+                        .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).forEach(c -> {
+                    w.println("\t\t\t\t\tif(symbol == '" + escape(c) + "') throw new IllegalStateException(\"\");");
+                });
+                r.accept("");
             }
-            w.println("\t\t\t}");
         }, Collections.singleton(dfa.getStart()));
+        w.println("\t\t\t}");
+        w.println("\t\t}");
+        w.println("\t}");
+        w.println("}");
         w.flush();
     }
-
 }

@@ -18,6 +18,7 @@ returning user defined root node of the tree.
 * [Meta rules](#meta-rules)
 * [Decomposition of grammar definition](#decomposition-of-grammar-definition)
 * ["No coding" parser](#no-coding-parser)
+* [Resources](#resources)
 
 Imagine your syntax tree factory class is at the same time definition of your parser grammar. That can be achieved
 by small enhancement of the factory.
@@ -235,7 +236,7 @@ public interface MyAstFactory extends WhiteSpaceRules, ListRules {
 
 ```
 
-### "No coding parser"
+## "No coding parser"
 As __RPG__ allows to use any type, including builtin or 3rd party types for representation of the AST
 nodes (and therefore symbols of the grammar), then it makes it very simple to generate data parsers.
 E.g. very simple JSON parser can be constructed with following factory / grammar definition:
@@ -267,3 +268,19 @@ The factory in turn also immediately checks correctness - not allowing duplicate
 
 For full example see json package in rpg-sample-language module. There is also unit test for it.
 
+## Resources
+
+Resources used for implementation of this parser generator:
+
+- [1] [https://en.wikipedia.org/wiki/LR_parser](https://en.wikipedia.org/wiki/LR_parser)
+- [2] [https://cs.wikipedia.org/wiki/LR_syntakticky_analyzator](https://cs.wikipedia.org/wiki/LR_syntaktick%C3%BD_analyz%C3%A1tor)
+- [3] [https://en.wikipedia.org/wiki/Visitor_pattern](https://en.wikipedia.org/wiki/Visitor_pattern)
+- [4] [https://en.wikipedia.org/wiki/Regular_grammar](https://en.wikipedia.org/wiki/Regular_grammar)
+- [5] [https://en.wikipedia.org/wiki/Thompson%27s_construction](https://en.wikipedia.org/wiki/Thompson%27s_construction)
+- [6] [https://en.wikipedia.org/wiki/Powerset_construction](https://en.wikipedia.org/wiki/Powerset_construction)
+- [7] [https://en.wikipedia.org/wiki/Generalized_nondeterministic_finite_automaton](https://en.wikipedia.org/wiki/Generalized_nondeterministic_finite_automaton)
+- [8] [https://en.wikipedia.org/wiki/DFA_minimization](https://en.wikipedia.org/wiki/DFA_minimization)
+- [9] _ČVUT, 1999_, _Češka Milan, Prof. RNDr., CSc., Ježek Karel, doc. Ing., Csc., Melichar Bořivoj, prof. Ing., Dr.Sc., Richta Karel_: Konstrukce překladačů
+- [10] [_2004_, _David R. Tribble:_ Practical LR(k) Parser Construction](http://david.tribble.com/text/lrk_parsing.html)
+- [11] [_2017, Tomáš Vacho_: Algorithms for transformation of regular expressions to finite automata](https://dspace.vsb.cz/bitstream/handle/10084/119008/VAC0089_FEI_N2647_2612T025_2017.pdf?sequence=1)
+- [12] [http://michaluvweb.cz/2015/11/10/ka06-prevod-znka-na-dka/](http://michaluvweb.cz/2015/11/10/ka06-prevod-znka-na-dka/)

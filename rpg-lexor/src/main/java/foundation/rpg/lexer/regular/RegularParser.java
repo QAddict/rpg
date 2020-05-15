@@ -29,15 +29,19 @@
 
 package foundation.rpg.lexer.regular;
 
+import foundation.rpg.lexer.regular.ast.Chain;
+import foundation.rpg.lexer.regular.ast.Char;
 import foundation.rpg.lexer.regular.ast.Node;
 import foundation.rpg.lexer.regular.ast.Pattern;
 import foundation.rpg.parser.Input;
 import foundation.rpg.parser.ParseErrorException;
 import foundation.rpg.parser.Parser;
-import foundation.rpg.parser.TokenInput;
 
 import java.io.IOException;
 import java.io.StringReader;
+
+import static foundation.rpg.parser.TokenInput.tokenInput;
+import static java.util.stream.Collectors.toList;
 
 public class RegularParser extends Parser<Pattern, State> {
 
@@ -47,8 +51,16 @@ public class RegularParser extends Parser<Pattern, State> {
         super(new State1());
     }
 
-    public Node parse(String pattern) throws IOException, ParseErrorException {
-        return parse(TokenInput.tokenInput(new Input(pattern, new StringReader(pattern)), lexer));
+    public Node parsePattern(String pattern) {
+        try {
+            return parse(tokenInput(new Input(pattern, new StringReader(pattern)), lexer));
+        } catch (IOException | ParseErrorException e) {
+            throw new IllegalArgumentException("Unable to parse /" + pattern + "/ " + e.getMessage(), e);
+        }
+    }
+
+    public Node parseText(String text) {
+        return new Chain(text.chars().mapToObj(Char::new).collect(toList()));
     }
 
 }

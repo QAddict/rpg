@@ -30,43 +30,57 @@
 package foundation.rpg.lexer;
 
 import foundation.rpg.lexer.regular.RegularGenerator;
-import foundation.rpg.lexer.regular.RegularParser;
 import foundation.rpg.lexer.regular.ast.Node;
 import foundation.rpg.lexer.regular.dfa.DFA;
 import foundation.rpg.lexer.regular.dfa.GNFATransformer;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
-import org.testng.annotations.Test;
 
 import java.io.PrintWriter;
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.max;
 import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.toMap;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.*;
 
-public class RegularGeneratorTest {
+public class LexerGenerator {
 
-    RegularParser parser = new RegularParser();
-    RegularGenerator generator = new RegularGenerator();
+    private final ThompsonVisitor visitor = new ThompsonVisitor();
+    private final GNFATransformer transformer = new GNFATransformer();
+    private final RegularGenerator generator = new RegularGenerator();
 
-    @Test
-    public void testGnfaFrom() {
-        List<Node> nodes = asList(
-                parser.parseText("else"),
-                parser.parseText("extends"),
-                parser.parsePattern("\\w\\a*"),
-                parser.parsePattern("'([~'\\]|\\\\['\\nrt])*'")
-        );
-        Map<Object, Integer> priorities = IntStream.range(0, nodes.size()).boxed().collect(toMap(nodes::get, i -> nodes.size() - i));
-        GNFA gnfa = new ThompsonVisitor().visit(nodes);
-        System.out.println(gnfa);
-        DFA dfa = new GNFATransformer().transform(gnfa);
-        System.out.println(dfa);
-        Comparator<Object> comparator = comparingInt(priorities::get);
-        generator.generate(dfa, new PrintWriter(System.out), set -> max(set, comparator).toString());
+    public static class TokenInfo {
+        private final Object element;
+        private final Node pattern;
+        private final int priority;
+
+        public TokenInfo(Object element, Node pattern, int priority) {
+            this.element = element;
+            this.pattern = pattern;
+            this.priority = priority;
+        }
+
+        public Object getElement() {
+            return element;
+        }
+
+        public Node getPattern() {
+            return pattern;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+    }
+
+    public void generateLexer(List<TokenInfo> info, PrintWriter w) {
+        Map<Object, TokenInfo> infoMap = info.stream().collect(toMap(TokenInfo::getPattern, identity()));
+        GNFA gnfa = visitor.visit(info.stream().map(TokenInfo::getPattern).collect(toList()));
+        DFA dfa = transformer.transform(gnfa);
+        Comparator<TokenInfo> comparator = comparingInt(TokenInfo::getPriority);
+        generator.generate(dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).getElement().toString());
     }
 
 }

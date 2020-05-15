@@ -47,7 +47,7 @@ public class RegularLexer implements Lexer<State> {
             case '\\': return new TokenBs(new Bs(mark));
             case '|': return new TokenPipe(new Pipe(mark));
             case '*': return new TokenTimes(new Times(mark));
-            //case '+': return new TokenPlus(new Plus(mark));
+            case '+': return new TokenPlus(new Plus(mark));
             case '~': return new TokenTilda(new Tilda(mark));
             case '-': return new TokenMinus(new Minus(mark));
             case '(': return new TokenLPar(new LPar(mark));
