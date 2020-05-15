@@ -41,14 +41,49 @@
     <dependencies>
         <dependency>
             <groupId>foundation.fluent.api</groupId>
-            <artifactId>rpg-apt</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>foundation.fluent.api</groupId>
             <artifactId>rpg-common</artifactId>
-            <version>${project.version}</version>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/generated</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>3.3.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>foundation.fluent.api</groupId>
+                        <artifactId>rpg-apt</artifactId>
+                        <version>0.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <outputDirectory>src/main/generated</outputDirectory>
+                    <processors>
+                        <processor>foundation.rpg.processor.StartSymbolProcessor</processor>
+                    </processors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
