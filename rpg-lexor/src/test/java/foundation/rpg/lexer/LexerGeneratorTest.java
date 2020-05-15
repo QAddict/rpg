@@ -44,14 +44,14 @@ public class LexerGeneratorTest {
     @Test
     public void testGenerateLexer() {
         new LexerGenerator().generateLexer("pkg", "MyLexer", asList(
-                new TokenInfo("TokenTrue", parser.parseText("true"), 1),
-                new TokenInfo("TokenFalse", parser.parseText("false"), 1),
-                new TokenInfo("TokenThrows", parser.parseText("throws"), 1),
-                new TokenInfo("TokenFinal", parser.parseText("final"), 1),
-                new TokenInfo("TokenIdentifier", parser.parsePattern("\\w\\a*"), 0),
-                new TokenInfo("TokenDouble", parser.parsePattern("\\d+[.eE]\\d+"), 0),
-                new TokenInfo("TokenInteger", parser.parsePattern("\\d+"), 0),
-                new TokenInfo("TokenString", parser.parsePattern("'([~'\\]|\\\\['\\nrt])*'"), 0)
+                new TokenInfo("TokenTrue", "TokenTrue", parser.parseText("true"), 1),
+                new TokenInfo("TokenFalse", "TokenFalse", parser.parseText("false"), 1),
+                new TokenInfo("TokenThrows", "TokenThrows", parser.parseText("throws"), 1),
+                new TokenInfo("TokenFinal", "TokenFinal", parser.parseText("final"), 1),
+                new TokenInfo("TokenIdentifier", "TokenIdentifier", parser.parsePattern("\\w\\a*"), 0),
+                new TokenInfo("TokenDouble", "TokenDouble", parser.parsePattern("\\d+[.eE]\\d+"), 0),
+                new TokenInfo("TokenInteger", "TokenInteger", parser.parsePattern("\\d+"), 0),
+                new TokenInfo("TokenString", "TokenString", parser.parsePattern("'([~'\\]|\\\\['\\nrt])*'"), 0)
         ), new PrintWriter(System.out));
     }
 }

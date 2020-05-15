@@ -1,0 +1,167 @@
+package foundation.rpg.sample.json;
+
+import foundation.rpg.parser.Token;
+import foundation.rpg.parser.Lexer;
+import foundation.rpg.parser.Input;
+import foundation.rpg.parser.Position;
+import foundation.rpg.parser.End;
+import java.io.IOException;
+import java.lang.StringBuilder;
+
+public class GeneratedLexer implements Lexer<State> {
+	public Token<State> next(Input input) throws IOException {
+		int state = 0;
+		int symbol = input.lookahead();
+		Position mark = input.position();
+		StringBuilder builder = new StringBuilder();
+		if(symbol < 0) return visitor -> visitor.visitEnd(new End(mark));
+		for(; true; symbol = input.move().lookahead()) {
+			switch(state) {
+				case 0:
+					switch(symbol) {
+						case '[': state = 1; break;
+						case ']': state = 2; break;
+						case '{': state = 3; break;
+						case '}': state = 4; break;
+						case ',': state = 5; break;
+						case ':': state = 6; break;
+						case '\'': state = 7; break;
+						case '"': state = 8; break;
+						default:
+							if(matchesGroup("w", symbol)) { state = 9; break; }
+							if(matchesGroup("d", symbol)) { state = 10; break; }
+							throw new IllegalStateException("");
+					}
+					break;
+				case 1:
+					return visitor -> visitor.visitLBr(new foundation.rpg.common.LBr(mark));
+				case 2:
+					return visitor -> visitor.visitRBr(new foundation.rpg.common.RBr(mark));
+				case 3:
+					return visitor -> visitor.visitLCurl(new foundation.rpg.common.LCurl(mark));
+				case 4:
+					return visitor -> visitor.visitRCurl(new foundation.rpg.common.RCurl(mark));
+				case 5:
+					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(mark));
+				case 6:
+					return visitor -> visitor.visitColon(new foundation.rpg.common.Colon(mark));
+				case 7:
+					switch(symbol) {
+						case '\'': state = 11; break;
+						case '\\': state = 12; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 13; break;
+					}
+					break;
+				case 8:
+					switch(symbol) {
+						case '"': state = 14; break;
+						case '\\': state = 15; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 16; break;
+					}
+					break;
+				case 9:
+					if(matchesGroup("a", symbol)) { state = 17; break; }
+					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+				case 10:
+					switch(symbol) {
+						case '.': state = 18; break;
+						case 'e': state = 18; break;
+						case 'E': state = 18; break;
+						default:
+							if(matchesGroup("d", symbol)) { state = 19; break; }
+							return visitor -> visitor.visitInteger(new java.lang.Integer(builder.toString()));
+					}
+					break;
+				case 11:
+					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+				case 12:
+					switch(symbol) {
+						case '\'': state = 20; break;
+						case '\\': state = 20; break;
+						case 'r': state = 20; break;
+						case 'n': state = 20; break;
+						case 't': state = 20; break;
+						default:
+							throw new IllegalStateException("");
+					}
+					break;
+				case 13:
+					switch(symbol) {
+						case '\\': state = 12; break;
+						case '\'': state = 11; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 13; break;
+					}
+					break;
+				case 14:
+					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+				case 15:
+					switch(symbol) {
+						case '"': state = 21; break;
+						case '\\': state = 21; break;
+						case 'r': state = 21; break;
+						case 'n': state = 21; break;
+						case 't': state = 21; break;
+						default:
+							throw new IllegalStateException("");
+					}
+					break;
+				case 16:
+					switch(symbol) {
+						case '\\': state = 15; break;
+						case '"': state = 14; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 16; break;
+					}
+					break;
+				case 17:
+					if(matchesGroup("a", symbol)) { state = 17; break; }
+					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+				case 18:
+					if(matchesGroup("d", symbol)) { state = 22; break; }
+					throw new IllegalStateException("");
+				case 19:
+					switch(symbol) {
+						case '.': state = 18; break;
+						case 'e': state = 18; break;
+						case 'E': state = 18; break;
+						default:
+							if(matchesGroup("d", symbol)) { state = 19; break; }
+							return visitor -> visitor.visitInteger(new java.lang.Integer(builder.toString()));
+					}
+					break;
+				case 20:
+					switch(symbol) {
+						case '\\': state = 12; break;
+						case '\'': state = 11; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 13; break;
+					}
+					break;
+				case 21:
+					switch(symbol) {
+						case '\\': state = 15; break;
+						case '"': state = 14; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 16; break;
+					}
+					break;
+				case 22:
+					if(matchesGroup("d", symbol)) { state = 23; break; }
+					return visitor -> visitor.visitDouble(new java.lang.Double(builder.toString()));
+				case 23:
+					if(matchesGroup("d", symbol)) { state = 23; break; }
+					return visitor -> visitor.visitDouble(new java.lang.Double(builder.toString()));
+			}
+			builder.append((char) symbol);
+		}
+	}
+}

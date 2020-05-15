@@ -36,7 +36,12 @@ public interface Lexer<S> {
     Token<S> next(Input input) throws ParseErrorException, IOException;
 
     default boolean matchesGroup(String group, int c) {
-        return true;
+        switch (group) {
+            case "w": return Character.isJavaIdentifierStart(c);
+            case "a": return Character.isJavaIdentifierPart(c);
+            case "d": return Character.isDigit(c);
+            default: return false;
+        }
     }
 
 }

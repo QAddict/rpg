@@ -30,6 +30,7 @@
 package foundation.rpg.sample.json;
 
 import foundation.rpg.parser.Input;
+import foundation.rpg.parser.Lexer;
 import foundation.rpg.parser.ParseErrorException;
 import foundation.rpg.parser.Parser;
 
@@ -41,7 +42,7 @@ import static foundation.rpg.parser.TokenInput.tokenInput;
 public class JsonParser {
 
     private final Parser<Object, State> parser = new Parser<>(new State1(new JsonFactory()));
-    private final JsonLexer lexer = new JsonLexer();
+    private final Lexer<State> lexer = new GeneratedLexer();
 
     public Object parse(String json) throws IOException, ParseErrorException {
         return parser.parse(tokenInput(new Input("json", new StringReader(json)), lexer));

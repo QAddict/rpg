@@ -64,6 +64,10 @@ public class AstUtils {
         return map;
     }
 
+    public static String quotedBsEscapedString(String s) {
+        return s.substring(1, s.length() - 2).replace("\\" + s.charAt(0), "" + s.charAt(0));
+    }
+
     public static <K, V> Map<K, V> putUniqueIn(Map<K, V> map, K key, V value, String errorMessage) {
         if(map.containsKey(key)) {
             throw new IllegalStateException(errorMessage);

@@ -33,17 +33,19 @@ import foundation.rpg.Match;
 import foundation.rpg.Name;
 import foundation.rpg.lexer.LexerGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
+import foundation.rpg.parser.Position;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.ElementFilter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static javax.lang.model.util.ElementFilter.constructorsIn;
 
 public class ClassToTokenContext {
 
@@ -58,8 +60,9 @@ public class ClassToTokenContext {
             if(tokenInfo.get(type) instanceof VariableElement)
                 throw new IllegalStateException("Token info already defined at " + tokenInfo.get(type));
             tokenInfo.put(type, var);
+            return;
         }
-        if(isNull(match) && isNull(name) && type instanceof DeclaredType) {
+        if(type instanceof DeclaredType) {
             Element element = ((DeclaredType) type).asElement();
             match = element.getAnnotation(Match.class);
             name = element.getAnnotation(Name.class);
@@ -79,9 +82,12 @@ public class ClassToTokenContext {
         Element element = elementFor(mirror);
         Match match = element.getAnnotation(Match.class);
         Name name = element.getAnnotation(Name.class);
+        Element typeElement = ((DeclaredType) mirror).asElement();
+        boolean acceptsPosition = constructorsIn(typeElement.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(Position.class.getCanonicalName()));
+        String call = "visit" + typeElement.getSimpleName() + "(new " + mirror + "(" + (acceptsPosition ? "mark" : "builder.toString()") + "))";
         if(nonNull(match)) {
-            return new LexerGenerator.TokenInfo(mirror, parser.parsePattern(match.value()), match.priority());
+            return new LexerGenerator.TokenInfo(mirror, call, parser.parsePattern(match.value()), match.priority());
         }
-        return new LexerGenerator.TokenInfo(mirror, parser.parseText(name.value()), name.priority());
+        return new LexerGenerator.TokenInfo(mirror, call, parser.parseText(name.value()), name.priority());
     }
 }

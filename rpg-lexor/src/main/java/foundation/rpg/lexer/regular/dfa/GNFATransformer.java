@@ -63,8 +63,11 @@ public class GNFATransformer {
                             (t.getNode() instanceof Char ? trans : groups).computeIfAbsent(t.getNode(), k -> new StateSet()).add(t.getNext());
                         }
                     });
-            if(!defaultState.getStates().isEmpty())
+            if(!defaultState.getStates().isEmpty()) {
+                e(defaultState);
+                queue.accept(defaultState);
                 set.setDefaultState(cache.computeIfAbsent(defaultState, k -> k));
+            }
             groups.forEach((a, s) -> {
                 e(s);
                 StateSet cachedSet = cache.computeIfAbsent(s, k -> k);

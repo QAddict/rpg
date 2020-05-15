@@ -44,8 +44,8 @@ import static java.util.Collections.emptyMap;
 public class JsonFactory {
 
     @StartSymbol
-    Object               is  (@Match("'([~'\\]|\\\\['\\rnt])*'|\"([~\"\\]|\\\\[\"\\rnt])*\"") String v) { return v; }
-    Object               is  (@Match("\\d*") Integer v)                                                 { return v; }
+    Object               is  (@Match("'([~'\\]|\\\\['\\rnt])*'|\"([~\"\\]|\\\\[\"\\rnt])*\"|\\w\\a*") String v) { return v.startsWith("\"") || v.startsWith("'") ? v.substring(1, v.length() - 1) : v; }
+    Object               is  (@Match("\\d+") Integer v)                                                 { return v; }
     Object               is  (@Match("\\d+[.eE]\\d+") Double v)                                         { return v; }
     Object               is  (LBr o, List<Object> l, RBr c)                                             { return l; }
     Object               is  (LBr o, RBr c)                                                             { return emptyList(); }

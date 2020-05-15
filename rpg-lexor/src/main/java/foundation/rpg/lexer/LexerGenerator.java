@@ -53,11 +53,13 @@ public class LexerGenerator {
 
     public static class TokenInfo {
         private final Object element;
+        private final String call;
         private final Node pattern;
         private final int priority;
 
-        public TokenInfo(Object element, Node pattern, int priority) {
+        public TokenInfo(Object element, String call, Node pattern, int priority) {
             this.element = element;
+            this.call = call;
             this.pattern = pattern;
             this.priority = priority;
         }
@@ -80,7 +82,7 @@ public class LexerGenerator {
         GNFA gnfa = visitor.visit(info.stream().map(TokenInfo::getPattern).collect(toList()));
         DFA dfa = transformer.transform(gnfa);
         Comparator<TokenInfo> comparator = comparingInt(TokenInfo::getPriority);
-        generator.generate(pkg, name, dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).getElement().toString());
+        generator.generate(pkg, name, dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).call);
     }
 
 }

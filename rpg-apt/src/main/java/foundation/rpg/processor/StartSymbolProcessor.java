@@ -72,14 +72,11 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
             System.out.println();
             System.out.println();
             new CodeGenerator(processingEnv.getFiler(), context).generateSources(parser);
-            /*
             new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", context.getGrammar().getTerminals().stream().map(symbol -> {
                 TypeMirror type = context.symbolType(symbol);
                 return tokenContext.tokenInfoFor(type);
             }).collect(toList()), new PrintWriter(processingEnv.getFiler().createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()));
-
-             */
-        } catch (RuntimeException | Error e) {
+        } catch (RuntimeException | Error | IOException e) {
             e.printStackTrace();
         }
     }

@@ -54,73 +54,76 @@ public class RegularGenerator {
     private void i(PrintWriter w, Class<?>... t) {
         for(Class<?> c : t) w.println("import " + c.getCanonicalName() + ";");
     }
-    public void generate(String pkg, String name, DFA dfa, PrintWriter w, Function<Set<Object>, String> prioritizer) {
-        Map<StateSet, Integer> states = new HashMap<>();
-        w.println("package " + pkg + ";");
-        w.println();
-        i(w, Token.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, StringBuilder.class);
-        w.println();
-        w.println("public class " + name + " implements Lexer<State> {");
-        w.println("\tpublic Token<State> next(Input input) throws IOException {");
-        w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
-        w.println("\t\tint symbol = input.lookahead();");
-        w.println("\t\tPosition mark = input.position();");
-        w.println("\t\tStringBuilder builder = new StringBuilder();");
-        w.println("\t\tif(symbol < 0) return visitor -> visitor.visitEnd(new End(mark));");
-        w.println("\t\tfor(; true; symbol = input.move().lookahead()) {");
-        w.println("\t\t\tswitch(state) {");
-        Bfs.bfs((item, consumer) -> {
-            Consumer<String> r = pref -> {
-                item.getGroupTransitions().forEach((atom, nextSet) -> {
-                    w.println(pref + "\t\t\t\t\tif(matchesGroup(\"" + atom.toString().substring(1) + "\", symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
-                    consumer.accept(nextSet);
-                });
-                Set<Object> results = item.getStates().stream().filter(s -> nonNull(s.getResult())).map(State::getResult).collect(toSet());
-                if (nonNull(item.getDefaultState())) {
-                    w.println(pref + "\t\t\t\t\tif(symbol < 0) throw new IllegalStateException(\"\");");
-                    w.println(pref + "\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
-                } else if (results.isEmpty()) {
-                    w.println(pref + "\t\t\t\t\tthrow new IllegalStateException(\"\");");
+    public void generate(String pkg, String name, DFA dfa, PrintWriter ow, Function<Set<Object>, String> prioritizer) {
+        try(PrintWriter w = ow) {
+            Map<StateSet, Integer> states = new HashMap<>();
+            w.println("package " + pkg + ";");
+            w.println();
+            i(w, Token.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, StringBuilder.class);
+            w.println();
+            w.println("public class " + name + " implements Lexer<State> {");
+            w.println("\tpublic Token<State> next(Input input) throws IOException {");
+            w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
+            w.println("\t\tint symbol = input.lookahead();");
+            w.println("\t\tPosition mark = input.position();");
+            w.println("\t\tStringBuilder builder = new StringBuilder();");
+            w.println("\t\tif(symbol < 0) return visitor -> visitor.visitEnd(new End(mark));");
+            w.println("\t\tfor(; true; symbol = input.move().lookahead()) {");
+            w.println("\t\t\tswitch(state) {");
+            Bfs.bfs((item, consumer) -> {
+                Consumer<String> r = pref -> {
+                    item.getGroupTransitions().forEach((atom, nextSet) -> {
+                        w.println(pref + "\t\t\t\t\tif(matchesGroup(\"" + atom.toString().substring(1) + "\", symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                        consumer.accept(nextSet);
+                    });
+                    Set<Object> results = item.getStates().stream().filter(s -> nonNull(s.getResult())).map(State::getResult).collect(toSet());
+                    if (nonNull(item.getDefaultState())) {
+                        w.println(pref + "\t\t\t\t\tif(symbol < 0) throw new IllegalStateException(\"\");");
+                        w.println(pref + "\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
+                        consumer.accept(item.getDefaultState());
+                    } else if (results.isEmpty()) {
+                        w.println(pref + "\t\t\t\t\tthrow new IllegalStateException(\"\");");
+                    } else {
+                        String type = prioritizer.apply(results);
+                        w.println(pref + "\t\t\t\t\treturn visitor -> visitor." + type + ";");
+                    }
+                };
+                w.println("\t\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ":");
+                int cases = item.getCharTransitions().size() + item.getInversions().size();
+                if (cases > 1) {
+                    w.println("\t\t\t\t\tswitch(symbol) {");
+                    item.getCharTransitions().forEach((atom, nextSet) -> {
+                        w.println("\t\t\t\t\t\tcase '" + escape(atom) + "': state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break;");
+                        consumer.accept(nextSet);
+                    });
+                    List<Character> invs = item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
+                            .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).collect(toList());
+                    if (!invs.isEmpty()) {
+                        invs.forEach(c -> w.println("\t\t\t\t\t\tcase '" + escape(c) + "':"));
+                        w.println("\t\t\t\t\t\t\tthrow new IllegalStateException(\"\");");
+                    }
+                    w.println("\t\t\t\t\t\tdefault:");
+                    r.accept("\t\t");
+                    w.println("\t\t\t\t\t}");
+                    w.println("\t\t\t\t\tbreak;");
                 } else {
-                    String type = prioritizer.apply(results);
-                    w.println(pref + "\t\t\t\t\treturn visitor -> visitor.visit" + type.substring(type.lastIndexOf('.') + 1) + "(new " + type + "(mark));");
+                    item.getCharTransitions().forEach((atom, nextSet) -> {
+                        w.println("\t\t\t\t\tif(symbol == '" + escape(atom) + "') { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                        consumer.accept(nextSet);
+                    });
+                    item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
+                            .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).forEach(c -> {
+                        w.println("\t\t\t\t\tif(symbol == '" + escape(c) + "') throw new IllegalStateException(\"\");");
+                    });
+                    r.accept("");
                 }
-            };
-            w.println("\t\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ":");
-            int cases = item.getCharTransitions().size() + item.getInversions().size();
-            if(cases > 1) {
-                w.println("\t\t\t\t\tswitch(symbol) {");
-                item.getCharTransitions().forEach((atom, nextSet) -> {
-                    w.println("\t\t\t\t\t\tcase '" + escape(atom) + "': state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break;");
-                    consumer.accept(nextSet);
-                });
-                List<Character> invs = item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
-                        .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).collect(toList());
-                if (!invs.isEmpty()) {
-                    invs.forEach(c -> w.println("\t\t\t\t\t\tcase '" + escape(c) + "':"));
-                    w.println("\t\t\t\t\t\t\tthrow new IllegalStateException(\"\");");
-                }
-                w.println("\t\t\t\t\t\tdefault:");
-                r.accept("\t\t");
-                w.println("\t\t\t\t\t}");
-                w.println("\t\t\t\t\tbreak;");
-            } else {
-                item.getCharTransitions().forEach((atom, nextSet) -> {
-                    w.println("\t\t\t\t\tif(symbol == '" + escape(atom) + "') { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
-                    consumer.accept(nextSet);
-                });
-                item.getInversions().stream().flatMap(inversion -> inversion.getCharClass().getItems().stream()).flatMap(Item::getChars)
-                        .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).forEach(c -> {
-                    w.println("\t\t\t\t\tif(symbol == '" + escape(c) + "') throw new IllegalStateException(\"\");");
-                });
-                r.accept("");
-            }
-        }, Collections.singleton(dfa.getStart()));
-        w.println("\t\t\t}");
-        w.println("\t\t\tbuilder.append((char) symbol);");
-        w.println("\t\t}");
-        w.println("\t}");
-        w.println("}");
-        w.flush();
+            }, Collections.singleton(dfa.getStart()));
+            w.println("\t\t\t}");
+            w.println("\t\t\tbuilder.append((char) symbol);");
+            w.println("\t\t}");
+            w.println("\t}");
+            w.println("}");
+            w.flush();
+        }
     }
 }

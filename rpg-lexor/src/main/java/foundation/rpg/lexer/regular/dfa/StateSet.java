@@ -64,7 +64,7 @@ public class StateSet {
     }
 
     public void addFailOn(Inversion c) {
-
+        inversions.add(c);
     }
 
     public void setCharTransition(Node a, StateSet set) {
