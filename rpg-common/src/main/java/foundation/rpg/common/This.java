@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.Position;
+import foundation.rpg.parser.TokenDescription;
 
 @Name("this")
 public class This extends Token {
-    public This(Position position) {
+    public This(TokenDescription position) {
         super(position);
     }
 }

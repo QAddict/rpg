@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.Position;
+import foundation.rpg.parser.TokenDescription;
 
 @Name("if")
 public class If extends Token {
-    public If(Position position) {
+    public If(TokenDescription position) {
         super(position);
     }
 }

@@ -32,9 +32,9 @@ package foundation.rpg.common;
 import foundation.rpg.Name;
 import foundation.rpg.parser.TokenDescription;
 
-@Name("||")
-public final class PipePipe extends Token {
-    public PipePipe(TokenDescription position) {
+@Name("^")
+public final class Up extends Token {
+    public Up(TokenDescription position) {
         super(position);
     }
 }

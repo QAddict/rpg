@@ -42,7 +42,7 @@
         <dependency>
             <groupId>foundation.fluent.api</groupId>
             <artifactId>rpg-common</artifactId>
-            <version>0.2</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

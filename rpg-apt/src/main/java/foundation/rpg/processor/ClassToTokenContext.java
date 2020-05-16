@@ -34,6 +34,7 @@ import foundation.rpg.Name;
 import foundation.rpg.lexer.LexerGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
 import foundation.rpg.parser.Position;
+import foundation.rpg.parser.TokenDescription;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
@@ -83,8 +84,8 @@ public class ClassToTokenContext {
         Match match = element.getAnnotation(Match.class);
         Name name = element.getAnnotation(Name.class);
         Element typeElement = ((DeclaredType) mirror).asElement();
-        boolean acceptsPosition = constructorsIn(typeElement.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(Position.class.getCanonicalName()));
-        String call = "visit" + typeElement.getSimpleName() + "(new " + mirror + "(" + (acceptsPosition ? "mark" : "builder.toString()") + "))";
+        boolean acceptsPosition = constructorsIn(typeElement.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(TokenDescription.class.getCanonicalName()));
+        String call = "visit" + typeElement.getSimpleName() + "(new " + mirror + "(" + (acceptsPosition ? "builder.build()" : "builder.build().getContent()") + "))";
         if(nonNull(match)) {
             return new LexerGenerator.TokenInfo(mirror, call, parser.parsePattern(match.value()), match.priority());
         }

@@ -40,21 +40,21 @@ public class RegularLexer implements Lexer<State> {
     @Override
     public Token<State> next(Input input) throws IOException {
         int i = input.lookahead();
-        Position mark = input.position();
+        TokenBuilder mark = new TokenBuilder(input);
         input.move();
         switch (i) {
-            case -1: return new TokenEnd(new End(mark));
-            case '\\': return new TokenBs(new Bs(mark));
-            case '|': return new TokenPipe(new Pipe(mark));
-            case '*': return new TokenTimes(new Times(mark));
-            case '+': return new TokenPlus(new Plus(mark));
-            case '~': return new TokenTilda(new Tilda(mark));
-            case '-': return new TokenMinus(new Minus(mark));
-            case '(': return new TokenLPar(new LPar(mark));
-            case ')': return new TokenRPar(new RPar(mark));
-            case '[': return new TokenLBr(new LBr(mark));
-            case ']': return new TokenRBr(new RBr(mark));
-            case '.': return new TokenDot(new Dot(mark));
+            case -1: return new TokenEnd(new End(mark.build()));
+            case '\\': return new TokenBs(new Bs(mark.build()));
+            case '|': return new TokenPipe(new Pipe(mark.build()));
+            case '*': return new TokenTimes(new Times(mark.build()));
+            case '+': return new TokenPlus(new Plus(mark.build()));
+            case '~': return new TokenTilda(new Tilda(mark.build()));
+            case '-': return new TokenMinus(new Minus(mark.build()));
+            case '(': return new TokenLPar(new LPar(mark.build()));
+            case ')': return new TokenRPar(new RPar(mark.build()));
+            case '[': return new TokenLBr(new LBr(mark.build()));
+            case ']': return new TokenRBr(new RBr(mark.build()));
+            case '.': return new TokenDot(new Dot(mark.build()));
             default: return new TokenCharacter((char) i);
         }
     }

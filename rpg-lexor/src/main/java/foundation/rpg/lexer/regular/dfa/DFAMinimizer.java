@@ -27,14 +27,12 @@
  *
  */
 
-package foundation.rpg.common;
+package foundation.rpg.lexer.regular.dfa;
 
-import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+public class DFAMinimizer {
 
-@Name("||")
-public final class PipePipe extends Token {
-    public PipePipe(TokenDescription position) {
-        super(position);
+    DFA minimize(DFA dfa) {
+        return dfa;
     }
+
 }

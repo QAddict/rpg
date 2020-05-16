@@ -59,16 +59,15 @@ public class RegularGenerator {
             Map<StateSet, Integer> states = new HashMap<>();
             w.println("package " + pkg + ";");
             w.println();
-            i(w, Token.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, StringBuilder.class);
+            i(w, Token.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, TokenBuilder.class);
             w.println();
             w.println("public class " + name + " implements Lexer<State> {");
             w.println("\tpublic Token<State> next(Input input) throws IOException {");
             w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
             w.println("\t\tint symbol = input.lookahead();");
-            w.println("\t\tPosition mark = input.position();");
-            w.println("\t\tStringBuilder builder = new StringBuilder();");
-            w.println("\t\tif(symbol < 0) return visitor -> visitor.visitEnd(new End(mark));");
-            w.println("\t\tfor(; true; symbol = input.move().lookahead()) {");
+            w.println("\t\tTokenBuilder builder = new TokenBuilder(input);");
+            w.println("\t\tif(symbol < 0) return visitor -> visitor.visitEnd(new End(builder.build()));");
+            w.println("\t\tfor(; true; symbol = builder.next()) {");
             w.println("\t\t\tswitch(state) {");
             Bfs.bfs((item, consumer) -> {
                 Consumer<String> r = pref -> {
@@ -119,7 +118,6 @@ public class RegularGenerator {
                 }
             }, Collections.singleton(dfa.getStart()));
             w.println("\t\t\t}");
-            w.println("\t\t\tbuilder.append((char) symbol);");
             w.println("\t\t}");
             w.println("\t}");
             w.println("}");

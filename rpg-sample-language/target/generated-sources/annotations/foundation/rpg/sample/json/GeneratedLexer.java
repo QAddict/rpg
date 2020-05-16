@@ -6,16 +6,15 @@ import foundation.rpg.parser.Input;
 import foundation.rpg.parser.Position;
 import foundation.rpg.parser.End;
 import java.io.IOException;
-import java.lang.StringBuilder;
+import foundation.rpg.parser.TokenBuilder;
 
 public class GeneratedLexer implements Lexer<State> {
 	public Token<State> next(Input input) throws IOException {
 		int state = 0;
 		int symbol = input.lookahead();
-		Position mark = input.position();
-		StringBuilder builder = new StringBuilder();
-		if(symbol < 0) return visitor -> visitor.visitEnd(new End(mark));
-		for(; true; symbol = input.move().lookahead()) {
+		TokenBuilder builder = new TokenBuilder(input);
+		if(symbol < 0) return visitor -> visitor.visitEnd(new End(builder.build()));
+		for(; true; symbol = builder.next()) {
 			switch(state) {
 				case 0:
 					switch(symbol) {
@@ -34,17 +33,17 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 1:
-					return visitor -> visitor.visitLBr(new foundation.rpg.common.LBr(mark));
+					return visitor -> visitor.visitLBr(new foundation.rpg.common.LBr(builder.build()));
 				case 2:
-					return visitor -> visitor.visitRBr(new foundation.rpg.common.RBr(mark));
+					return visitor -> visitor.visitRBr(new foundation.rpg.common.RBr(builder.build()));
 				case 3:
-					return visitor -> visitor.visitLCurl(new foundation.rpg.common.LCurl(mark));
+					return visitor -> visitor.visitLCurl(new foundation.rpg.common.LCurl(builder.build()));
 				case 4:
-					return visitor -> visitor.visitRCurl(new foundation.rpg.common.RCurl(mark));
+					return visitor -> visitor.visitRCurl(new foundation.rpg.common.RCurl(builder.build()));
 				case 5:
-					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(mark));
+					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(builder.build()));
 				case 6:
-					return visitor -> visitor.visitColon(new foundation.rpg.common.Colon(mark));
+					return visitor -> visitor.visitColon(new foundation.rpg.common.Colon(builder.build()));
 				case 7:
 					switch(symbol) {
 						case '\'': state = 11; break;
@@ -65,7 +64,7 @@ public class GeneratedLexer implements Lexer<State> {
 					break;
 				case 9:
 					if(matchesGroup("a", symbol)) { state = 17; break; }
-					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+					return visitor -> visitor.visitString(new java.lang.String(builder.build().getContent()));
 				case 10:
 					switch(symbol) {
 						case '.': state = 18; break;
@@ -73,11 +72,11 @@ public class GeneratedLexer implements Lexer<State> {
 						case 'E': state = 18; break;
 						default:
 							if(matchesGroup("d", symbol)) { state = 19; break; }
-							return visitor -> visitor.visitInteger(new java.lang.Integer(builder.toString()));
+							return visitor -> visitor.visitInteger(new java.lang.Integer(builder.build().getContent()));
 					}
 					break;
 				case 11:
-					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+					return visitor -> visitor.visitString(new java.lang.String(builder.build().getContent()));
 				case 12:
 					switch(symbol) {
 						case '\'': state = 20; break;
@@ -99,7 +98,7 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 14:
-					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+					return visitor -> visitor.visitString(new java.lang.String(builder.build().getContent()));
 				case 15:
 					switch(symbol) {
 						case '"': state = 21; break;
@@ -122,7 +121,7 @@ public class GeneratedLexer implements Lexer<State> {
 					break;
 				case 17:
 					if(matchesGroup("a", symbol)) { state = 17; break; }
-					return visitor -> visitor.visitString(new java.lang.String(builder.toString()));
+					return visitor -> visitor.visitString(new java.lang.String(builder.build().getContent()));
 				case 18:
 					if(matchesGroup("d", symbol)) { state = 22; break; }
 					throw new IllegalStateException("");
@@ -133,7 +132,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case 'E': state = 18; break;
 						default:
 							if(matchesGroup("d", symbol)) { state = 19; break; }
-							return visitor -> visitor.visitInteger(new java.lang.Integer(builder.toString()));
+							return visitor -> visitor.visitInteger(new java.lang.Integer(builder.build().getContent()));
 					}
 					break;
 				case 20:
@@ -156,12 +155,11 @@ public class GeneratedLexer implements Lexer<State> {
 					break;
 				case 22:
 					if(matchesGroup("d", symbol)) { state = 23; break; }
-					return visitor -> visitor.visitDouble(new java.lang.Double(builder.toString()));
+					return visitor -> visitor.visitDouble(new java.lang.Double(builder.build().getContent()));
 				case 23:
 					if(matchesGroup("d", symbol)) { state = 23; break; }
-					return visitor -> visitor.visitDouble(new java.lang.Double(builder.toString()));
+					return visitor -> visitor.visitDouble(new java.lang.Double(builder.build().getContent()));
 			}
-			builder.append((char) symbol);
 		}
 	}
 }

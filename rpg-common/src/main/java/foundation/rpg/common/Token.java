@@ -30,17 +30,16 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.Position;
-import foundation.rpg.parser.Positional;
+import foundation.rpg.parser.TokenDescription;
 
-public class Token implements Positional {
-    private final Position position;
+public class Token {
+    private final TokenDescription position;
 
-    public Token(Position position) {
+    public Token(TokenDescription position) {
         this.position = position;
     }
 
-    public Position position() {
+    public TokenDescription description() {
         return position;
     }
 

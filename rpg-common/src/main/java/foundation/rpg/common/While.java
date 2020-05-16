@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.Position;
+import foundation.rpg.parser.TokenDescription;
 
 @Name("while")
 public class While extends Token {
-    public While(Position position) {
+    public While(TokenDescription position) {
         super(position);
     }
 }

@@ -6,16 +6,15 @@ import foundation.rpg.parser.Input;
 import foundation.rpg.parser.Position;
 import foundation.rpg.parser.End;
 import java.io.IOException;
-import java.lang.StringBuilder;
+import foundation.rpg.parser.TokenBuilder;
 
 public class GeneratedLexer implements Lexer<State> {
 	public Token<State> next(Input input) throws IOException {
 		int state = 0;
 		int symbol = input.lookahead();
-		Position mark = input.position();
-		StringBuilder builder = new StringBuilder();
-		if(symbol < 0) return visitor -> visitor.visitEnd(new End(mark));
-		for(; true; symbol = input.move().lookahead()) {
+		TokenBuilder builder = new TokenBuilder(input);
+		if(symbol < 0) return visitor -> visitor.visitEnd(new End(builder.build()));
+		for(; true; symbol = builder.next()) {
 			switch(state) {
 				case 0:
 					switch(symbol) {
@@ -30,23 +29,22 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 1:
-					return visitor -> visitor.visitDot(new foundation.rpg.common.Dot(mark));
+					return visitor -> visitor.visitDot(new foundation.rpg.common.Dot(builder.build()));
 				case 2:
-					return visitor -> visitor.visitPlus(new foundation.rpg.common.Plus(mark));
+					return visitor -> visitor.visitPlus(new foundation.rpg.common.Plus(builder.build()));
 				case 3:
-					return visitor -> visitor.visitLPar(new foundation.rpg.common.LPar(mark));
+					return visitor -> visitor.visitLPar(new foundation.rpg.common.LPar(builder.build()));
 				case 4:
-					return visitor -> visitor.visitRPar(new foundation.rpg.common.RPar(mark));
+					return visitor -> visitor.visitRPar(new foundation.rpg.common.RPar(builder.build()));
 				case 5:
-					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(mark));
+					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(builder.build()));
 				case 6:
 					if(matchesGroup("a", symbol)) { state = 7; break; }
-					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.toString()));
+					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 				case 7:
 					if(matchesGroup("a", symbol)) { state = 7; break; }
-					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.toString()));
+					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 			}
-			builder.append((char) symbol);
 		}
 	}
 }

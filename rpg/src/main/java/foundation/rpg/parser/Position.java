@@ -31,9 +31,9 @@ package foundation.rpg.parser;
 
 public class Position {
     private final String fileName;
-    private int line = 1;
-    private int character = 0;
-    private int total = 0;
+    private int line;
+    private int character;
+    private int total;
 
     private Position(String fileName, int line, int character, int total) {
         this.fileName = fileName;

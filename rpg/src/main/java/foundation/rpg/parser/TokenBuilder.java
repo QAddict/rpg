@@ -29,7 +29,54 @@
 
 package foundation.rpg.parser;
 
-@FunctionalInterface
-public interface Positional {
-    Position position();
+import java.io.IOException;
+
+/**
+ * Builder of the token description.
+ */
+public final class TokenBuilder {
+
+    /**
+     * Input, on top of which the token is being built.
+     */
+    private final Input input;
+
+    /**
+     * Start position in the input stream.
+     */
+    private final Position start;
+
+    /**
+     * Content builder.
+     */
+    private final StringBuilder contentBuilder = new StringBuilder();
+
+    public TokenBuilder(Input input) {
+        this.input = input;
+        this.start = input.position();
+    }
+
+    TokenBuilder move() throws IOException {
+        contentBuilder.append((char) input.lookahead());
+        input.move();
+        return this;
+    }
+
+    public int next() throws IOException {
+        return move().input.lookahead();
+    }
+
+    public TokenDescription build() {
+        Position end = input.position();
+        return new TokenDescription(
+                start.getFileName(),
+                start.getLine(),
+                start.getCharacter(),
+                start.getTotal(),
+                end.getLine(),
+                end.getCharacter(),
+                end.getTotal(),
+                contentBuilder.toString()
+        );
+    }
 }

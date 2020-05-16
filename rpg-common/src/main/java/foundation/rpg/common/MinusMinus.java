@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.Position;
+import foundation.rpg.parser.TokenDescription;
 
 @Name("--")
 public class MinusMinus extends Token {
-    public MinusMinus(Position position) {
+    public MinusMinus(TokenDescription position) {
         super(position);
     }
 }

@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.Position;
+import foundation.rpg.parser.TokenDescription;
 
 @Name("->")
 public final class MinusGt extends Token {
-    public MinusGt(Position position) {
+    public MinusGt(TokenDescription position) {
         super(position);
     }
 }

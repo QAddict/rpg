@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.Position;
+import foundation.rpg.parser.TokenDescription;
 
 @Name("true")
 public class True extends Token {
-    public True(Position position) {
+    public True(TokenDescription position) {
         super(position);
     }
 }

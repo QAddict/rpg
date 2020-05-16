@@ -30,10 +30,10 @@
 package foundation.rpg.parser;
 
 public final class End {
-    private final Position position;
+    private final TokenDescription position;
 
-    public End(Position position) {
-        this.position = position;
+    public End(TokenDescription description) {
+        this.position = description;
     }
 
     @Override
