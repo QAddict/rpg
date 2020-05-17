@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("&")
-public final class Amp extends Token {
-    public Amp(TokenDescription description) {
+public final class Amp extends Terminal {
+    public Amp(Token description) {
         super(description);
     }
 }

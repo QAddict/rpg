@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("static")
-public class Static extends Token {
-    public Static(TokenDescription position) {
+public class Static extends Terminal {
+    public Static(Token position) {
         super(position);
     }
 }

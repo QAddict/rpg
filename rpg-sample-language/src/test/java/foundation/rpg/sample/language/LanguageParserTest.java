@@ -46,16 +46,16 @@ public class LanguageParserTest {
     @Test
     public void testParser() throws ParseErrorException, IOException {
         Parser<Program, State> parser = new Parser<>(new State1());
-        TokenDescription p = new TokenDescription("", 0, 0, 0, 0, 0, 0, "");
+        Token p = new Token("", 0, 0, 0, 0, 0, 0, "");
         TokenInput<State> lexer = mock(TokenInput.class);
         when(lexer.next()).thenReturn(
-                new TokenComment(new Comment()),
-                new TokenLPar(new LPar(p)),
-                new TokenWhiteSpace(new WhiteSpace(p)),
-                new TokenIdentifier(new Identifier("variable")),
-                new TokenRPar(new RPar(p)),
-                new TokenDot(new Dot(p)),
-                new TokenEnd(new End(p))
+                new ElementComment(new Comment()),
+                new ElementLPar(new LPar(p)),
+                new ElementWhiteSpace(new WhiteSpace(p)),
+                new ElementIdentifier(new Identifier("variable")),
+                new ElementRPar(new RPar(p)),
+                new ElementDot(new Dot(p)),
+                new ElementEnd(new End(p))
         );
         Program program = parser.parse(lexer);
         System.out.println(program);

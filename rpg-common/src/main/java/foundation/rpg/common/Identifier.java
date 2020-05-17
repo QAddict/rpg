@@ -29,12 +29,12 @@
 
 package foundation.rpg.common;
 
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
-public class Identifier extends Token {
+public class Identifier extends Terminal {
     private final String name;
 
-    public Identifier(TokenDescription position, String name) {
+    public Identifier(Token position, String name) {
         super(position);
         this.name = name;
     }

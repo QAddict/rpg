@@ -33,13 +33,13 @@ import java.io.IOException;
 
 public interface TokenInput<S> {
 
-    Token<S> next() throws ParseErrorException, IOException;
+    Element<S> next() throws ParseErrorException, IOException;
 
     Position position();
 
     static <S> TokenInput<S> tokenInput(Input input, Lexer<S> lexer) {
         return new TokenInput<S>() {
-            @Override public Token<S> next() throws ParseErrorException, IOException {
+            @Override public Element<S> next() throws ParseErrorException, IOException {
                 return lexer.next(input);
             }
             @Override public Position position() {

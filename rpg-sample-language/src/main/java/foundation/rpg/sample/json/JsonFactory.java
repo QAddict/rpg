@@ -32,30 +32,38 @@ package foundation.rpg.sample.json;
 import foundation.rpg.Match;
 import foundation.rpg.StartSymbol;
 import foundation.rpg.common.*;
+import foundation.rpg.parser.Token;
 
 import java.util.List;
 import java.util.Map;
 
 import static foundation.rpg.common.AstUtils.*;
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
 @SuppressWarnings("unused")
 public class JsonFactory {
 
-    @StartSymbol
-    Object               is  (@Match("'([~'\\]|\\\\['\\rnt])*'|\"([~\"\\]|\\\\[\"\\rnt])*\"|\\w\\a*") String v) { return v.startsWith("\"") || v.startsWith("'") ? v.substring(1, v.length() - 1) : v; }
-    Object               is  (@Match("\\d+") Integer v)                                                 { return v; }
-    Object               is  (@Match("\\d+[.eE]\\d+") Double v)                                         { return v; }
-    Object               is  (LBr o, List<Object> l, RBr c)                                             { return l; }
-    Object               is  (LBr o, RBr c)                                                             { return emptyList(); }
-    Object               is  (LCurl o, Map<String, Object> m, RCurl c)                                  { return m; }
-    Object               is  (LCurl o, RCurl c)                                                         { return emptyMap(); }
-    List<Object>         is  (Object v)                                                                 { return list(v); }
-    List<Object>         is  (List<Object> l, Comma c, Object v)                                        { return addTo(l, v); }
-    Map<String, Object>  is  (String k, Colon c, Object v)                                              { return map(k, v); }
-    Map<String, Object>  is  (Map<String, Object> m, Comma s, String k, Colon c, Object v)              { return putUniqueIn(m, k, v, "Duplicate key: " + k); }
+    static String  matchQuotedString(@Match("'([~'\\]|\\\\['\\rnt])*'|\"([~\"\\]|\\\\[\"\\rnt])*\"") Token t) { return t.getContent().substring(1, t.length() - 1); }
+    static String  matchIdString    (@Match("\\w\\a*") Token t)                                               { return t.getContent(); }
+    static Integer matchInt         (@Match("\\d+") Token t)                                                  { return parseInt(t.getContent()); }
+    static Double  matchDouble      (@Match("\\d+[.eE]\\d+") Token t)                                         { return parseDouble(t.getContent()); }
 
-    void ignore(@Match("\\s+") WhiteSpace w) { }
+    @StartSymbol
+    Object              is (String v)                                                    { return v; }
+    Object              is (Integer v)                                                   { return v; }
+    Object              is (Double v)                                                    { return v; }
+    Object              is (LBr o, List<Object> l, RBr c)                                { return l; }
+    Object              is (LBr o, RBr c)                                                { return emptyList(); }
+    Object              is (LCurl o, Map<String, Object> m, RCurl c)                     { return m; }
+    Object              is (LCurl o, RCurl c)                                            { return emptyMap(); }
+    List<Object>        is (Object v)                                                    { return list(v); }
+    List<Object>        is (List<Object> l, Comma c, Object v)                           { return addTo(l, v); }
+    Map<String, Object> is (String k, Colon c, Object v)                                 { return map(k, v); }
+    Map<String, Object> is (Map<String, Object> m, Comma s, String k, Colon c, Object v) { return putUniqueIn(m, k, v, "Duplicate key: " + k); }
+
+    void ignore(WhiteSpace w) { }
 
 }

@@ -27,26 +27,10 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.parser;
 
-import foundation.rpg.parser.Token;
-import foundation.rpg.parser.UnexpectedInputException;
+public interface Element<S> {
 
-// Generated token element wrapper for grammar parser.
-public class TokenLPar implements Token<State> {
-    private final foundation.rpg.common.LPar symbol;
+    S accept(S previous) throws UnexpectedInputException;
 
-    public TokenLPar(foundation.rpg.common.LPar symbol) {
-        this.symbol = symbol;
-    }
-
-    @Override
-    public State accept(State state) throws UnexpectedInputException {
-        return state.visitLPar(symbol);
-    }
-
-    @Override
-    public String toString() {
-        return symbol.toString();
-    }
 }

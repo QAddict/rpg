@@ -59,10 +59,10 @@ public class RegularGenerator {
             Map<StateSet, Integer> states = new HashMap<>();
             w.println("package " + pkg + ";");
             w.println();
-            i(w, Token.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, TokenBuilder.class);
+            i(w, Element.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, TokenBuilder.class);
             w.println();
             w.println("public class " + name + " implements Lexer<State> {");
-            w.println("\tpublic Token<State> next(Input input) throws IOException {");
+            w.println("\tpublic Element<State> next(Input input) throws IOException {");
             w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
             w.println("\t\tint symbol = input.lookahead();");
             w.println("\t\tTokenBuilder builder = new TokenBuilder(input);");

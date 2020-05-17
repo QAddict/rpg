@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("enum")
-public class Enum extends Token {
-    public Enum(TokenDescription position) {
+public class Enum extends Terminal {
+    public Enum(Token position) {
         super(position);
     }
 }

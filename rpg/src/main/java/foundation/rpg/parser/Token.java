@@ -29,8 +29,153 @@
 
 package foundation.rpg.parser;
 
-public interface Token<S> {
 
-    S accept(S previous) throws UnexpectedInputException;
+/**
+ * Description of token identified by Lexer.
+ *
+ * It contains full information about it's location and content:
+ *
+ *  - file name
+ *  - start line, column, position
+ *  - end line, column, position
+ *  - string content matched exactly in the file without any processing (e.g. matching string literal ".." still
+ *    contains the quotes)
+ *
+ */
+public final class Token {
+
+    /**
+     * File name (or provided name for non-file streams), where the token was found.
+     */
+    private final String fileName;
+
+    /**
+     * Line in the input, on which the token starts.
+     */
+    private final int startLine;
+
+    /**
+     * Column on the line, where the token content starts.
+     */
+    private final int startCol;
+
+    /**
+     * Position (character-wise) of start of the token in the file (including number of characters of all previous lines).
+     */
+    private final int startPos;
+
+    /**
+     * Line in the input, on which the token ends.
+     */
+    private final int endLine;
+
+    /**
+     * Column on the line, where the token content ends.
+     */
+    private final int endCol;
+
+    /**
+     * Position (character-wise) of end of the token in the file (including number of characters of all previous lines).
+     */
+    private final int endPos;
+
+    /**
+     * String content as-is identified in the source file.
+     */
+    private final String content;
+
+    /**
+     * Constructor of the token description.
+     *
+     * @param fileName File name (or provided name for non-file streams), where the token was found.
+     * @param startLine Line in the input, on which the token starts.
+     * @param startCol Column on the line, where the token content starts.
+     * @param startPos Position (character-wise) of start of the token in the file (including number of characters of all previous lines).
+     * @param endLine Line in the input, on which the token ends.
+     * @param endChar Column on the line, where the token content ends.
+     * @param endPos Position (character-wise) of end of the token in the file (including number of characters of all previous lines).
+     * @param content String content as-is identified in the source file.
+     */
+    public Token(String fileName, int startLine, int startCol, int startPos, int endLine, int endChar, int endPos, String content) {
+        this.fileName = fileName;
+        this.startLine = startLine;
+        this.startCol = startCol;
+        this.startPos = startPos;
+        this.endLine = endLine;
+        this.endCol = endChar;
+        this.endPos = endPos;
+        this.content = content;
+    }
+
+    /**
+     * @return File name (or provided name for non-file streams), where the token was found.
+     */
+    public String getFileName() {
+        return fileName;
+    }
+
+    /**
+     * @return Line in the input, on which the token starts.
+     */
+    public int getStartLine() {
+        return startLine;
+    }
+
+    /**
+     * @return Column on the line, where the token content starts.
+     */
+    public int getStartCol() {
+        return startCol;
+    }
+
+    /**
+     * @return Position (character-wise) of start of the token in the file (including number of characters of all previous lines).
+     */
+    public int getStartPos() {
+        return startPos;
+    }
+
+    /**
+     * @return Line in the input, on which the token ends.
+     */
+    public int getEndLine() {
+        return endLine;
+    }
+
+    /**
+     * @return Column on the line, where the token content ends.
+     */
+    public int getEndCol() {
+        return endCol;
+    }
+
+    /**
+     * @return Position (character-wise) of end of the token in the file (including number of characters of all previous lines).
+     */
+    public int getEndPos() {
+        return endPos;
+    }
+
+    /**
+     * @return String content as-is identified in the source file.
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * @return Length of the identified token.
+     */
+    public int length() {
+        return endPos - startPos;
+    }
+
+    /**
+     * @return String content as-is identified in the source file.
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
 }

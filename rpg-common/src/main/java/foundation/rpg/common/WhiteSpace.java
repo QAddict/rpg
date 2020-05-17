@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Match;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
-@Match("[ \n\r\t][ \n\r\t]*")
-public class WhiteSpace extends Token {
-    public WhiteSpace(TokenDescription position) {
+@Match("\\s+")
+public class WhiteSpace extends Terminal {
+    public WhiteSpace(Token position) {
         super(position);
     }
 }

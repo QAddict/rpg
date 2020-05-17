@@ -39,6 +39,7 @@ import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
 import foundation.rpg.lexer.LexerGenerator;
+import foundation.rpg.parser.Token;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
@@ -75,6 +76,10 @@ public class ClassToGrammarContext {
         return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
     }
 
+    public boolean isLexerRule(ExecutableElement method) {
+        return method.getParameters().size() == 1 && method.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName());
+    }
+
     public ClassToGrammarContext(ExecutableElement startRule, Elements elements, ClassToTokenContext tokenContext) {
         this.tokenContext = tokenContext;
         String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
@@ -83,7 +88,8 @@ public class ClassToGrammarContext {
         factoryClass = startRule.getEnclosingElement();
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
         int priority = priority(factoryClass, 0);
-        List<ExecutableElement> methods = methods(factoryClass).collect(toList());
+        methods(factoryClass).filter(this::isLexerRule).forEach(t -> tokenContext.analyzeToken(t));
+        List<ExecutableElement> methods = methods(factoryClass).filter(m -> !isLexerRule(m)).collect(toList());
         Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
         methods.stream().filter(m -> !hasMetaRuleAnnotation(m)).forEach(method -> {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {

@@ -31,14 +31,14 @@ package foundation.rpg.lexer.regular;
 
 import foundation.rpg.common.*;
 import foundation.rpg.parser.*;
-import foundation.rpg.parser.Token;
+import foundation.rpg.parser.Element;
 
 import java.io.IOException;
 
 public class RegularLexer implements Lexer<State> {
 
     @Override
-    public Token<State> next(Input input) throws IOException {
+    public Element<State> next(Input input) throws IOException {
         int i = input.lookahead();
         TokenBuilder mark = new TokenBuilder(input);
         input.move();

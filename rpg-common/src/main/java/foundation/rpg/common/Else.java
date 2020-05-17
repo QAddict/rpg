@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("else")
-public class Else extends Token {
-    public Else(TokenDescription position) {
+public class Else extends Terminal {
+    public Else(Token position) {
         super(position);
     }
 }

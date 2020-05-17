@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name(",")
-public final class Comma extends Token {
-    public Comma(TokenDescription position) {
+public final class Comma extends Terminal {
+    public Comma(Token position) {
         super(position);
     }
 }

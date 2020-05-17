@@ -1,6 +1,6 @@
 package foundation.rpg.sample.language.ast;
 
-import foundation.rpg.parser.Token;
+import foundation.rpg.parser.Element;
 import foundation.rpg.parser.Lexer;
 import foundation.rpg.parser.Input;
 import foundation.rpg.parser.Position;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import foundation.rpg.parser.TokenBuilder;
 
 public class GeneratedLexer implements Lexer<State> {
-	public Token<State> next(Input input) throws IOException {
+	public Element<State> next(Input input) throws IOException {
 		int state = 0;
 		int symbol = input.lookahead();
 		TokenBuilder builder = new TokenBuilder(input);

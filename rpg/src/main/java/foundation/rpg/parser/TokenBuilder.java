@@ -66,9 +66,9 @@ public final class TokenBuilder {
         return move().input.lookahead();
     }
 
-    public TokenDescription build() {
+    public Token build() {
         Position end = input.position();
-        return new TokenDescription(
+        return new Token(
                 start.getFileName(),
                 start.getLine(),
                 start.getCharacter(),

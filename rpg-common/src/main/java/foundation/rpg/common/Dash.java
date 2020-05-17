@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("-")
-public class Dash extends Token {
-    public Dash(TokenDescription position) {
+public class Dash extends Terminal {
+    public Dash(Token position) {
         super(position);
     }
 }

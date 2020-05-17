@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("||")
-public final class PipePipe extends Token {
-    public PipePipe(TokenDescription position) {
+public final class PipePipe extends Terminal {
+    public PipePipe(Token position) {
         super(position);
     }
 }

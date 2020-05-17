@@ -31,6 +31,7 @@ package foundation.rpg.util;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import static java.util.Collections.emptySet;
 
@@ -59,6 +60,10 @@ public final class MapOfSets<K, V> {
 
     public Set<K> keys() {
         return map.keySet();
+    }
+
+    public Set<V> computeIfAbsent(K key, Function<K, Set<V>> function) {
+        return map.computeIfAbsent(key, function);
     }
 
 }

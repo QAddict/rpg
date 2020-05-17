@@ -33,17 +33,17 @@ import foundation.rpg.Match;
 import foundation.rpg.Name;
 import foundation.rpg.lexer.LexerGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
-import foundation.rpg.parser.Position;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
+import foundation.rpg.util.MapOfSets;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.ElementFilter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
@@ -51,7 +51,7 @@ import static javax.lang.model.util.ElementFilter.constructorsIn;
 public class ClassToTokenContext {
 
     private final RegularParser parser = new RegularParser();
-    private final Map<TypeMirror, Element> tokenInfo = new LinkedHashMap<>();
+    private final MapOfSets<TypeMirror, Element> tokenInfo = new MapOfSets<>();
 
     public void analyzeToken(VariableElement var) {
         Match match = var.getAnnotation(Match.class);
@@ -60,7 +60,7 @@ public class ClassToTokenContext {
         if(nonNull(match) || nonNull(name)) {
             if(tokenInfo.get(type) instanceof VariableElement)
                 throw new IllegalStateException("Token info already defined at " + tokenInfo.get(type));
-            tokenInfo.put(type, var);
+            tokenInfo.add(type, var);
             return;
         }
         if(type instanceof DeclaredType) {
@@ -68,24 +68,44 @@ public class ClassToTokenContext {
             match = element.getAnnotation(Match.class);
             name = element.getAnnotation(Name.class);
             if(nonNull(match) || nonNull(name)) {
-                tokenInfo.put(type, element);
+                tokenInfo.add(type, element);
             }
         }
     }
 
-    public Element elementFor(TypeMirror mirror) {
+    public void analyzeToken(ExecutableElement method) {
+        tokenInfo.add(method.getReturnType(), method);
+    }
+
+    public Set<Element> elementFor(TypeMirror mirror) {
         return tokenInfo.computeIfAbsent(mirror, k -> {
             throw new IllegalArgumentException("No token exists for " + mirror);
         });
     }
 
-    public LexerGenerator.TokenInfo tokenInfoFor(TypeMirror mirror) {
-        Element element = elementFor(mirror);
+    public LexerGenerator.TokenInfo tokenInfoFor(ExecutableElement method) {
+        DeclaredType returnType = (DeclaredType) method.getReturnType();
+        String call = "visit" + returnType.asElement().getSimpleName() + "(" + method.getEnclosingElement() + "." + method.getSimpleName() + "(builder.build()))";
+        VariableElement element = method.getParameters().get(0);
+        return tokenInfo(returnType, element, call);
+    }
+
+    public List<LexerGenerator.TokenInfo> tokenInfoFor(TypeMirror mirror) {
+        Set<Element> elements = elementFor(mirror);
+        Element typeElement = ((DeclaredType) mirror).asElement();
+        return elements.stream().map(element -> {
+            if(element instanceof ExecutableElement) {
+                return tokenInfoFor((ExecutableElement) element);
+            }
+            boolean acceptsPosition = constructorsIn(typeElement.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName()));
+            String call = "visit" + typeElement.getSimpleName() + "(new " + mirror + "(" + (acceptsPosition ? "builder.build()" : "builder.build().getContent()") + "))";
+            return tokenInfo(mirror, element, call);
+        }).collect(Collectors.toList());
+    }
+
+    private LexerGenerator.TokenInfo tokenInfo(TypeMirror mirror, Element element, String call) {
         Match match = element.getAnnotation(Match.class);
         Name name = element.getAnnotation(Name.class);
-        Element typeElement = ((DeclaredType) mirror).asElement();
-        boolean acceptsPosition = constructorsIn(typeElement.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(TokenDescription.class.getCanonicalName()));
-        String call = "visit" + typeElement.getSimpleName() + "(new " + mirror + "(" + (acceptsPosition ? "builder.build()" : "builder.build().getContent()") + "))";
         if(nonNull(match)) {
             return new LexerGenerator.TokenInfo(mirror, call, parser.parsePattern(match.value()), match.priority());
         }

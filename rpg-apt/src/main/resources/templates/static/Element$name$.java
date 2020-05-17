@@ -27,22 +27,22 @@
  *
  */
 
-package foundation.rpg.sample.json;
+package $package$;
 
-import foundation.rpg.parser.Token;
+import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
-public class TokenRBr implements Token<State> {
-    private final foundation.rpg.common.RBr symbol;
+public class $class$ implements Element<State> {
+    private final $type$ symbol;
 
-    public TokenRBr(foundation.rpg.common.RBr symbol) {
+    public $class$($type$ symbol) {
         this.symbol = symbol;
     }
 
     @Override
     public State accept(State state) throws UnexpectedInputException {
-        return state.visitRBr(symbol);
+        return state.visit$name$(symbol);
     }
 
     @Override

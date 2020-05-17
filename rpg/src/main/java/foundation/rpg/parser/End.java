@@ -30,9 +30,9 @@
 package foundation.rpg.parser;
 
 public final class End {
-    private final TokenDescription position;
+    private final Token position;
 
-    public End(TokenDescription description) {
+    public End(Token description) {
         this.position = description;
     }
 

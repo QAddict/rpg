@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("~")
-public final class Tilda extends Token {
-    public Tilda(TokenDescription position) {
+public final class Tilda extends Terminal {
+    public Tilda(Token position) {
         super(position);
     }
 }

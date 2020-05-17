@@ -30,11 +30,11 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
-import foundation.rpg.parser.TokenDescription;
+import foundation.rpg.parser.Token;
 
 @Name("!")
-public class Excl extends Token {
-    public Excl(TokenDescription position) {
+public class Excl extends Terminal {
+    public Excl(Token position) {
         super(position);
     }
 }
