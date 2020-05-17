@@ -284,3 +284,4 @@ Resources used for implementation of this parser generator:
 - [10] [_2004_, _David R. Tribble:_ Practical LR(k) Parser Construction](http://david.tribble.com/text/lrk_parsing.html)
 - [11] [_2017, Tomáš Vacho_: Algorithms for transformation of regular expressions to finite automata](https://dspace.vsb.cz/bitstream/handle/10084/119008/VAC0089_FEI_N2647_2612T025_2017.pdf?sequence=1)
 - [12] [http://michaluvweb.cz/2015/11/10/ka06-prevod-znka-na-dka/](http://michaluvweb.cz/2015/11/10/ka06-prevod-znka-na-dka/)
+- [13] [https://medium.com/@phanindramoganti/regex-under-the-hood-implementing-a-simple-regex-compiler-in-go-ef2af5c6079](https://medium.com/@phanindramoganti/regex-under-the-hood-implementing-a-simple-regex-compiler-in-go-ef2af5c6079)
