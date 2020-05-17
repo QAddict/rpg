@@ -79,7 +79,7 @@ public class ClassToTokenContext {
 
     public Set<Element> elementFor(TypeMirror mirror) {
         return tokenInfo.computeIfAbsent(mirror, k -> {
-            throw new IllegalArgumentException("No token exists for " + mirror);
+            throw new IllegalArgumentException("No token defined for " + mirror + ". Use @Name or @Match annotation on " + mirror + " or in factory method.");
         });
     }
 

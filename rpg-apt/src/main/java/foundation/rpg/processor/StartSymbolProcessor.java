@@ -47,6 +47,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 @SupportedAnnotationTypes("foundation.rpg.StartSymbol")
 public class StartSymbolProcessor extends AbstractProcessor implements Consumer<ExecutableElement> {
@@ -77,7 +78,7 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
                 return tokenContext.tokenInfoFor(type).stream();
             }).collect(toList()), new PrintWriter(processingEnv.getFiler().createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()));
         } catch (RuntimeException | Error | IOException e) {
-            e.printStackTrace();
+            processingEnv.getMessager().printMessage(ERROR, e.toString(), element);
         }
     }
 
