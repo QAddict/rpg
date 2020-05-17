@@ -36,6 +36,7 @@ import foundation.rpg.lexer.regular.dfa.GNFATransformer;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
 
+import javax.lang.model.type.TypeMirror;
 import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.List;
@@ -77,12 +78,12 @@ public class LexerGenerator {
         }
     }
 
-    public void generateLexer(String pkg, String name, List<TokenInfo> info, PrintWriter w) {
+    public void generateLexer(String pkg, String name, List<TokenInfo> info, PrintWriter w, TypeMirror factoryType) {
         Map<Object, TokenInfo> infoMap = info.stream().collect(toMap(TokenInfo::getPattern, identity()));
         GNFA gnfa = visitor.visit(info.stream().map(TokenInfo::getPattern).collect(toList()));
         DFA dfa = transformer.transform(gnfa);
         Comparator<TokenInfo> comparator = comparingInt(TokenInfo::getPriority);
-        generator.generate(pkg, name, dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).call);
+        generator.generate(pkg, name, dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).call, factoryType);
     }
 
 }

@@ -9,6 +9,16 @@ import java.io.IOException;
 import foundation.rpg.parser.TokenBuilder;
 
 public class GeneratedLexer implements Lexer<State> {
+	private final foundation.rpg.sample.json.JsonFactory factory;
+
+	public GeneratedLexer(foundation.rpg.sample.json.JsonFactory factory) {
+		this.factory = factory;
+	}
+
+	public foundation.rpg.sample.json.JsonFactory getFactory() {
+		return factory;
+	}
+
 	public Element<State> next(Input input) throws IOException {
 		int state = 0;
 		int symbol = input.lookahead();
@@ -64,7 +74,7 @@ public class GeneratedLexer implements Lexer<State> {
 					break;
 				case 9:
 					if(matchesGroup("a", symbol)) { state = 17; break; }
-					return visitor -> visitor.visitString(foundation.rpg.sample.json.JsonFactory.matchIdString(builder.build()));
+					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
 				case 10:
 					switch(symbol) {
 						case '.': state = 18; break;
@@ -72,11 +82,11 @@ public class GeneratedLexer implements Lexer<State> {
 						case 'E': state = 18; break;
 						default:
 							if(matchesGroup("d", symbol)) { state = 19; break; }
-							return visitor -> visitor.visitInteger(foundation.rpg.sample.json.JsonFactory.matchInt(builder.build()));
+							return visitor -> visitor.visitInteger(getFactory().matchInt(builder.build()));
 					}
 					break;
 				case 11:
-					return visitor -> visitor.visitString(foundation.rpg.sample.json.JsonFactory.matchQuotedString(builder.build()));
+					return visitor -> visitor.visitString(getFactory().matchQuotedString(builder.build()));
 				case 12:
 					switch(symbol) {
 						case '\'': state = 20; break;
@@ -98,7 +108,7 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 14:
-					return visitor -> visitor.visitString(foundation.rpg.sample.json.JsonFactory.matchQuotedString(builder.build()));
+					return visitor -> visitor.visitString(getFactory().matchQuotedString(builder.build()));
 				case 15:
 					switch(symbol) {
 						case '"': state = 21; break;
@@ -121,7 +131,7 @@ public class GeneratedLexer implements Lexer<State> {
 					break;
 				case 17:
 					if(matchesGroup("a", symbol)) { state = 17; break; }
-					return visitor -> visitor.visitString(foundation.rpg.sample.json.JsonFactory.matchIdString(builder.build()));
+					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
 				case 18:
 					if(matchesGroup("d", symbol)) { state = 22; break; }
 					throw new IllegalStateException("");
@@ -132,7 +142,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case 'E': state = 18; break;
 						default:
 							if(matchesGroup("d", symbol)) { state = 19; break; }
-							return visitor -> visitor.visitInteger(foundation.rpg.sample.json.JsonFactory.matchInt(builder.build()));
+							return visitor -> visitor.visitInteger(getFactory().matchInt(builder.build()));
 					}
 					break;
 				case 20:
@@ -155,10 +165,10 @@ public class GeneratedLexer implements Lexer<State> {
 					break;
 				case 22:
 					if(matchesGroup("d", symbol)) { state = 23; break; }
-					return visitor -> visitor.visitDouble(foundation.rpg.sample.json.JsonFactory.matchDouble(builder.build()));
+					return visitor -> visitor.visitDouble(getFactory().matchDouble(builder.build()));
 				case 23:
 					if(matchesGroup("d", symbol)) { state = 23; break; }
-					return visitor -> visitor.visitDouble(foundation.rpg.sample.json.JsonFactory.matchDouble(builder.build()));
+					return visitor -> visitor.visitDouble(getFactory().matchDouble(builder.build()));
 			}
 		}
 	}

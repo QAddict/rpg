@@ -35,6 +35,7 @@ import foundation.rpg.lexer.regular.dfa.StateSet;
 import foundation.rpg.lexer.regular.thompson.State;
 import foundation.rpg.parser.*;
 
+import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -54,7 +55,7 @@ public class RegularGenerator {
     private void i(PrintWriter w, Class<?>... t) {
         for(Class<?> c : t) w.println("import " + c.getCanonicalName() + ";");
     }
-    public void generate(String pkg, String name, DFA dfa, PrintWriter ow, Function<Set<Object>, String> prioritizer) {
+    public void generate(String pkg, String name, DFA dfa, PrintWriter ow, Function<Set<Object>, String> prioritizer, TypeMirror factoryType) {
         try(PrintWriter w = ow) {
             Map<StateSet, Integer> states = new HashMap<>();
             w.println("package " + pkg + ";");
@@ -62,6 +63,18 @@ public class RegularGenerator {
             i(w, Element.class, Lexer.class, Input.class, Position.class, End.class, IOException.class, TokenBuilder.class);
             w.println();
             w.println("public class " + name + " implements Lexer<State> {");
+            if(nonNull(factoryType)) {
+                w.println("\tprivate final " + factoryType + " factory;");
+                w.println();
+                w.println("\tpublic " + name + "(" + factoryType + " factory) {");
+                w.println("\t\tthis.factory = factory;");
+                w.println("\t}");
+                w.println();
+                w.println("\tpublic " + factoryType + " getFactory() {");
+                w.println("\t\treturn factory;");
+                w.println("\t}");
+                w.println();
+            }
             w.println("\tpublic Element<State> next(Input input) throws IOException {");
             w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
             w.println("\t\tint symbol = input.lookahead();");

@@ -66,7 +66,7 @@ public class RegularGeneratorTest {
         DFA dfa = new GNFATransformer().transform(gnfa);
         System.out.println(dfa);
         Comparator<Object> comparator = comparingInt(priorities::get);
-        generator.generate("pkg", "MyLexer", dfa, new PrintWriter(System.out), set -> max(set, comparator).toString());
+        generator.generate("pkg", "MyLexer", dfa, new PrintWriter(System.out), set -> max(set, comparator).toString(), null);
     }
 
 }

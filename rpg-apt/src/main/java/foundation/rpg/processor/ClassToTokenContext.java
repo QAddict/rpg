@@ -46,12 +46,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
+import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 
 public class ClassToTokenContext {
 
     private final RegularParser parser = new RegularParser();
     private final MapOfSets<TypeMirror, Element> tokenInfo = new MapOfSets<>();
+    private boolean isStatic = true;
 
     public void analyzeToken(VariableElement var) {
         Match match = var.getAnnotation(Match.class);
@@ -74,6 +76,9 @@ public class ClassToTokenContext {
     }
 
     public void analyzeToken(ExecutableElement method) {
+        if(!method.getModifiers().contains(STATIC)) {
+            isStatic = false;
+        }
         tokenInfo.add(method.getReturnType(), method);
     }
 
@@ -85,7 +90,7 @@ public class ClassToTokenContext {
 
     public LexerGenerator.TokenInfo tokenInfoFor(ExecutableElement method) {
         DeclaredType returnType = (DeclaredType) method.getReturnType();
-        String call = "visit" + returnType.asElement().getSimpleName() + "(" + method.getEnclosingElement() + "." + method.getSimpleName() + "(builder.build()))";
+        String call = "visit" + returnType.asElement().getSimpleName() + "(" + (method.getModifiers().contains(STATIC) ? method.getEnclosingElement(): "getFactory()") + "." + method.getSimpleName() + "(builder.build()))";
         VariableElement element = method.getParameters().get(0);
         return tokenInfo(returnType, element, call);
     }
@@ -110,5 +115,9 @@ public class ClassToTokenContext {
             return new LexerGenerator.TokenInfo(mirror, call, parser.parsePattern(match.value()), match.priority());
         }
         return new LexerGenerator.TokenInfo(mirror, call, parser.parseText(name.value()), name.priority());
+    }
+
+    public boolean isStatic() {
+        return isStatic;
     }
 }

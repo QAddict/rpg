@@ -76,7 +76,7 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
             new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", context.getGrammar().getTerminals().stream().flatMap(symbol -> {
                 TypeMirror type = context.symbolType(symbol);
                 return tokenContext.tokenInfoFor(type).stream();
-            }).collect(toList()), new PrintWriter(processingEnv.getFiler().createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()));
+            }).collect(toList()), new PrintWriter(processingEnv.getFiler().createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isStaticFactory() ? null : context.getFactoryClass().asType());
         } catch (RuntimeException | Error | IOException e) {
             processingEnv.getMessager().printMessage(ERROR, e.toString(), element);
         }

@@ -41,8 +41,9 @@ import static foundation.rpg.parser.TokenInput.tokenInput;
 
 public class JsonParser {
 
-    private final Parser<Object, State> parser = new Parser<>(new State1(new JsonFactory()));
-    private final Lexer<State> lexer = new GeneratedLexer();
+    private final JsonFactory factory = new JsonFactory();
+    private final Parser<Object, State> parser = new Parser<>(new State1(factory));
+    private final Lexer<State> lexer = new GeneratedLexer(factory);
 
     public Object parse(String json) throws IOException, ParseErrorException {
         return parser.parse(tokenInput(new Input("json", new StringReader(json)), lexer));
