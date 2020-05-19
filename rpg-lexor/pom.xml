@@ -49,39 +49,20 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/generated</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.bsc.maven</groupId>
-                <artifactId>maven-processor-plugin</artifactId>
-                <version>3.3.3</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>foundation.fluent.api</groupId>
-                        <artifactId>rpg-apt</artifactId>
-                        <version>0.2</version>
-                    </dependency>
-                </dependencies>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <outputDirectory>src/main/generated</outputDirectory>
-                    <processors>
-                        <processor>foundation.rpg.processor.StartSymbolProcessor</processor>
-                    </processors>
+                    <annotationProcessorPaths>
+                        <annotationProcessorPath>
+                            <groupId>foundation.fluent.api</groupId>
+                            <artifactId>rpg-apt-parser-only</artifactId>
+                            <version>${project.version}</version>
+                        </annotationProcessorPath>
+                    </annotationProcessorPaths>
+                    <annotationProcessors>
+                        <annotationProcessor>foundation.rpg.parser.processor.StartSymbolParserOnlyProcessor</annotationProcessor>
+                    </annotationProcessors>
                 </configuration>
             </plugin>
         </plugins>

@@ -27,18 +27,14 @@
  *
  */
 
-package foundation.rpg.processor;
+package foundation.rpg.parser.generator;
 
-import foundation.rpg.Match;
 import foundation.rpg.MetaRule;
-import foundation.rpg.Name;
 import foundation.rpg.Priority;
 import foundation.rpg.StartSymbol;
-import foundation.rpg.generator.TypeUtils;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
-import foundation.rpg.lexer.LexerGenerator;
 import foundation.rpg.parser.Token;
 
 import javax.lang.model.element.*;
@@ -70,7 +66,7 @@ public class ClassToGrammarContext {
     private final Grammar grammar;
     private final boolean isStaticFactory;
     private final Element factoryClass;
-    private final ClassToTokenContext tokenContext;
+    private final EnvironmentGenerator tokenContext;
 
     private Stream<ExecutableElement> methods(Element factory) {
         return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
@@ -80,7 +76,7 @@ public class ClassToGrammarContext {
         return method.getParameters().size() == 1 && method.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName());
     }
 
-    public ClassToGrammarContext(ExecutableElement startRule, Elements elements, ClassToTokenContext tokenContext) {
+    public ClassToGrammarContext(ExecutableElement startRule, Elements elements, EnvironmentGenerator tokenContext) {
         this.tokenContext = tokenContext;
         String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
         Set<Rule> rules = new LinkedHashSet<>();
@@ -88,7 +84,7 @@ public class ClassToGrammarContext {
         factoryClass = startRule.getEnclosingElement();
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
         int priority = priority(factoryClass, 0);
-        methods(factoryClass).filter(this::isLexerRule).forEach(t -> tokenContext.analyzeToken(t));
+        methods(factoryClass).filter(this::isLexerRule).forEach(tokenContext::accept);
         List<ExecutableElement> methods = methods(factoryClass).filter(m -> !isLexerRule(m)).collect(toList());
         Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
         methods.stream().filter(m -> !hasMetaRuleAnnotation(m)).forEach(method -> {
@@ -154,7 +150,7 @@ public class ClassToGrammarContext {
     }
 
     private TypeMirror scanTokens(VariableElement e) {
-        tokenContext.analyzeToken(e);
+        tokenContext.accept(e);
         return e.asType();
     }
 

@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.generator;
+package foundation.rpg.parser.generator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -97,7 +97,7 @@ public class SourceModel {
 
     private static final Pattern FRAGMENT = Pattern.compile("// (.*):");
 
-    static Map<String, String> load(String dir, String type) {
+    public static Map<String, String> load(String dir, String type) {
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(SourceModel.class.getResourceAsStream("/templates/" + dir + "/" + type + ".java")))) {
             Map<String, String> map = new LinkedHashMap<>();
             String name = "";

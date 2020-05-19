@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.generator;
+package foundation.rpg.parser.generator;
 
 import foundation.rpg.automata.LrAction;
 import foundation.rpg.automata.LrItem;
@@ -35,7 +35,6 @@ import foundation.rpg.automata.LrItemSet;
 import foundation.rpg.automata.LrParserAutomata;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
-import foundation.rpg.processor.ClassToGrammarContext;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;
@@ -45,7 +44,7 @@ import java.io.Writer;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static foundation.rpg.generator.SourceModel.Names.*;
+import static foundation.rpg.parser.generator.SourceModel.Names.*;
 import static java.lang.String.join;
 import static java.util.stream.Collectors.*;
 import static javax.lang.model.element.Modifier.STATIC;

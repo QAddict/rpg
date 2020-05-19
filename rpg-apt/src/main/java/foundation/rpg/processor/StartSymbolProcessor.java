@@ -29,57 +29,17 @@
 
 package foundation.rpg.processor;
 
-import foundation.rpg.StartSymbol;
-import foundation.rpg.automata.LrParserAutomata;
-import foundation.rpg.generator.CodeGenerator;
-import foundation.rpg.automata.LrParserConstructor;
-import foundation.rpg.lexer.LexerGenerator;
+import foundation.rpg.parser.generator.EnvironmentGenerator;
+import foundation.rpg.parser.processor.StartSymbolParserOnlyProcessor;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Set;
 import java.util.function.Consumer;
 
-import static java.util.stream.Collectors.toList;
-import static javax.tools.Diagnostic.Kind.ERROR;
-
 @SupportedAnnotationTypes("foundation.rpg.StartSymbol")
-public class StartSymbolProcessor extends AbstractProcessor implements Consumer<ExecutableElement> {
-
+public class StartSymbolProcessor extends StartSymbolParserOnlyProcessor implements Consumer<ExecutableElement> {
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        roundEnv.getElementsAnnotatedWith(StartSymbol.class).stream().map(ExecutableElement.class::cast).forEach(this);
-        return true;
+    public EnvironmentGenerator environmentGenerator() {
+        return new ClassToTokenContext();
     }
-
-    @Override
-    public void accept(ExecutableElement element) {
-        try {
-            ClassToTokenContext tokenContext = new ClassToTokenContext();
-            ClassToGrammarContext context = new ClassToGrammarContext(element, processingEnv.getElementUtils(), tokenContext);
-            System.out.println("Grammar generated from class: " + element.getEnclosingElement());
-            System.out.println(context.getGrammar());
-            System.out.println();
-            System.out.println();
-            LrParserAutomata parser = LrParserConstructor.generateParser(context.getGrammar());
-            System.out.println("Parser description generated from grammar:\n\n");
-            System.out.println(parser);
-            System.out.println();
-            System.out.println();
-            new CodeGenerator(processingEnv.getFiler(), context).generateSources(parser);
-            new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", context.getGrammar().getTerminals().stream().flatMap(symbol -> {
-                TypeMirror type = context.symbolType(symbol);
-                return tokenContext.tokenInfoFor(type).stream();
-            }).collect(toList()), new PrintWriter(processingEnv.getFiler().createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isStaticFactory() ? null : context.getFactoryClass().asType());
-        } catch (RuntimeException | Error | IOException e) {
-            processingEnv.getMessager().printMessage(ERROR, e.toString(), element);
-        }
-    }
-
 }

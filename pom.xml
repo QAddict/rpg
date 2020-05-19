@@ -49,6 +49,7 @@
         <module>rpg-common</module>
         <module>rpg-lexor</module>
         <module>rpg-sample-language</module>
+        <module>rpg-apt-parser-only</module>
     </modules>
 
     <url>https://github.com/c0stra/rpg/wiki/rpg</url>

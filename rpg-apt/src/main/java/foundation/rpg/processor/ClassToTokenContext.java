@@ -34,28 +34,34 @@ import foundation.rpg.Name;
 import foundation.rpg.lexer.LexerGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
 import foundation.rpg.parser.Token;
+import foundation.rpg.parser.generator.ClassToGrammarContext;
+import foundation.rpg.parser.generator.EnvironmentGenerator;
 import foundation.rpg.util.MapOfSets;
 
+import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 
-public class ClassToTokenContext {
+public class ClassToTokenContext implements EnvironmentGenerator {
 
     private final RegularParser parser = new RegularParser();
     private final MapOfSets<TypeMirror, Element> tokenInfo = new MapOfSets<>();
     private boolean isStatic = true;
 
-    public void analyzeToken(VariableElement var) {
+    public void accept(VariableElement var) {
         Match match = var.getAnnotation(Match.class);
         Name name = var.getAnnotation(Name.class);
         TypeMirror type = var.asType();
@@ -75,7 +81,17 @@ public class ClassToTokenContext {
         }
     }
 
-    public void analyzeToken(ExecutableElement method) {
+    @Override
+    public void generate(ClassToGrammarContext context, Filer filer) throws IOException {
+        new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", context.getGrammar().getTerminals().stream().flatMap(symbol -> {
+            TypeMirror type = context.symbolType(symbol);
+            return tokenInfoFor(type).stream();
+        }).collect(toList()), new PrintWriter(filer.createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isStaticFactory() ? null : context.getFactoryClass().asType());
+
+    }
+
+    @Override
+    public void accept(ExecutableElement method) {
         if(!method.getModifiers().contains(STATIC)) {
             isStatic = false;
         }
