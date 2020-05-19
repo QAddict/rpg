@@ -2,7 +2,7 @@
 [![Released version](https://img.shields.io/maven-central/v/foundation.fluent.api/rpg-project.svg)](https://search.maven.org/#search%7Cga%7C1%7Crpg-project)
 [![Build Status](https://travis-ci.org/c0stra/rpg.svg?branch=master)](https://travis-ci.org/c0stra/rpg)
 
-__!!!Under development !!!__ - Parser generator works, Lexer generator missing.
+__!!! Under development !!!__ - API of Lexer, Parser and common tools is not yet stable and may change.
 
 Java Abstract Syntax Tree driven LR0 / LR1 rapid parser generator, generating parser based on Java AST factory methods, and
 returning user defined root node of the tree.
