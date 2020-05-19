@@ -213,7 +213,7 @@ Not supported features (not listed all, but most important examples):
 @Name("+") class Plus {}
 @Name("(") class LPar {}
 @Name(")") class RPar {}
-@Match("\\w\\a*") class Identifier {}
+@Match("\\i\\w*") class Identifier {}
 ```
 
 2. Annotate the symbol anywhere in the any grammar rule. Keep in mind, it can be annotated only once not to introduce conflicts
