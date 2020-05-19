@@ -172,7 +172,7 @@ RGP's regular expressions support following:
 
 | Feature | Example | Description |
 |-------------|-------|------------------|
-| Alternation | `a&#124;b` | Match `a` or `b` |
+| Alternation | <code>a&#124;b</code> | Match `a` or `b` |
 | Concatenation | `ab` | Match exact sequence `ab` |
 | Repetition | `a*` | Matches any number of `a` including 0 |
 | Repetition | `a+` | Matches any number of `a` but at least 1 |
