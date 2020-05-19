@@ -27,31 +27,16 @@
  *
  */
 
-package foundation.rpg.parser;
+package foundation.rpg.common;
 
-import java.io.IOException;
+public final class Patterns {
 
-@FunctionalInterface
-public interface Lexer<S> {
-    Element<S> next(Input input) throws ParseErrorException, IOException;
-
-    static boolean matchesGroup(String group, int c) {
-        switch (group) {
-            case ".": return true;
-            case "w": return Character.isJavaIdentifierPart(c);
-            case "d": return Character.isDigit(c);
-            case "s": return Character.isWhitespace(c);
-            case "i": return Character.isJavaIdentifierStart(c);
-            case "u": return Character.isUnicodeIdentifierStart(c);
-            case "x": return Character.isUnicodeIdentifierPart(c);
-            case "W": return !Character.isJavaIdentifierPart(c);
-            case "D": return !Character.isDigit(c);
-            case "S": return !Character.isWhitespace(c);
-            case "I": return !Character.isJavaIdentifierStart(c);
-            case "U": return !Character.isUnicodeIdentifierStart(c);
-            case "X": return !Character.isUnicodeIdentifierPart(c);
-            default: return false;
-        }
-    }
+    public static final String IDENTIFIER = "\\i\\w*";
+    public static final String UNICODE_IDENTIFIER = "\\u\\x*";
+    public static final String INTEGER = "\\d+";
+    public static final String DOUBLE = "\\d+[.eE]\\d+";
+    public static final String QUOTED_STRING = "'([^'\\]|\\\\['\\rnt])*'";
+    public static final String DOUBLE_QUOTED_STRING = "\"([^\"\\]|\\\\[\"\\rnt])*\"";
+    public static final String ANY_QUOTED_STRING = "'([^'\\]|\\\\['\\rnt])*'|\"([^\"\\]|\\\\[\"\\rnt])*\"";
 
 }

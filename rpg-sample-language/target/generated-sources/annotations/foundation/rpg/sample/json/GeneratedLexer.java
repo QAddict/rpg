@@ -37,8 +37,8 @@ public class GeneratedLexer implements Lexer<State> {
 						case '\'': state = 7; break;
 						case '"': state = 8; break;
 						default:
-							if(matchesGroup("w", symbol)) { state = 9; break; }
-							if(matchesGroup("d", symbol)) { state = 10; break; }
+							if(Lexer.matchesGroup("i", symbol)) { state = 9; break; }
+							if(Lexer.matchesGroup("d", symbol)) { state = 10; break; }
 							throw new IllegalStateException("");
 					}
 					break;
@@ -73,7 +73,7 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 9:
-					if(matchesGroup("a", symbol)) { state = 17; break; }
+					if(Lexer.matchesGroup("w", symbol)) { state = 17; break; }
 					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
 				case 10:
 					switch(symbol) {
@@ -81,7 +81,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case 'e': state = 18; break;
 						case 'E': state = 18; break;
 						default:
-							if(matchesGroup("d", symbol)) { state = 19; break; }
+							if(Lexer.matchesGroup("d", symbol)) { state = 19; break; }
 							return visitor -> visitor.visitInteger(getFactory().matchInt(builder.build()));
 					}
 					break;
@@ -130,10 +130,10 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 17:
-					if(matchesGroup("a", symbol)) { state = 17; break; }
+					if(Lexer.matchesGroup("w", symbol)) { state = 17; break; }
 					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
 				case 18:
-					if(matchesGroup("d", symbol)) { state = 22; break; }
+					if(Lexer.matchesGroup("d", symbol)) { state = 22; break; }
 					throw new IllegalStateException("");
 				case 19:
 					switch(symbol) {
@@ -141,7 +141,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case 'e': state = 18; break;
 						case 'E': state = 18; break;
 						default:
-							if(matchesGroup("d", symbol)) { state = 19; break; }
+							if(Lexer.matchesGroup("d", symbol)) { state = 19; break; }
 							return visitor -> visitor.visitInteger(getFactory().matchInt(builder.build()));
 					}
 					break;
@@ -164,10 +164,10 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 22:
-					if(matchesGroup("d", symbol)) { state = 23; break; }
+					if(Lexer.matchesGroup("d", symbol)) { state = 23; break; }
 					return visitor -> visitor.visitDouble(getFactory().matchDouble(builder.build()));
 				case 23:
-					if(matchesGroup("d", symbol)) { state = 23; break; }
+					if(Lexer.matchesGroup("d", symbol)) { state = 23; break; }
 					return visitor -> visitor.visitDouble(getFactory().matchDouble(builder.build()));
 			}
 		}

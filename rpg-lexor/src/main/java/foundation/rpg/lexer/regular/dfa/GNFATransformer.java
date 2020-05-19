@@ -35,6 +35,7 @@ import foundation.rpg.lexer.regular.Bfs;
 import foundation.rpg.lexer.regular.ast.Char;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.State;
+import foundation.rpg.parser.Lexer;
 
 import java.util.*;
 
@@ -96,12 +97,7 @@ public class GNFATransformer {
     }
 
     private boolean isInGroup(String g, String c) {
-        switch (g) {
-            case "\\w": return Character.isJavaIdentifierStart(c.charAt(0));
-            case "\\a": return Character.isJavaIdentifierPart(c.charAt(0));
-            case "\\d": return Character.isDigit(c.charAt(0));
-            default: return false;
-        }
+        return Lexer.matchesGroup(g.substring(1), c.charAt(0));
     }
 
 }

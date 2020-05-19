@@ -85,7 +85,7 @@ public class RegularGenerator {
             Bfs.bfs((item, consumer) -> {
                 Consumer<String> r = pref -> {
                     item.getGroupTransitions().forEach((atom, nextSet) -> {
-                        w.println(pref + "\t\t\t\t\tif(matchesGroup(\"" + atom.toString().substring(1) + "\", symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                        w.println(pref + "\t\t\t\t\tif(Lexer.matchesGroup(\"" + atom.toString().substring(1) + "\", symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
                         consumer.accept(nextSet);
                     });
                     Set<Object> results = item.getStates().stream().filter(s -> nonNull(s.getResult())).map(State::getResult).collect(toSet());

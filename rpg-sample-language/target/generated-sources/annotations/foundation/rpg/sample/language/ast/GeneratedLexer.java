@@ -24,7 +24,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case ')': state = 4; break;
 						case ',': state = 5; break;
 						default:
-							if(matchesGroup("w", symbol)) { state = 6; break; }
+							if(Lexer.matchesGroup("w", symbol)) { state = 6; break; }
 							throw new IllegalStateException("");
 					}
 					break;
@@ -39,10 +39,10 @@ public class GeneratedLexer implements Lexer<State> {
 				case 5:
 					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(builder.build()));
 				case 6:
-					if(matchesGroup("a", symbol)) { state = 7; break; }
+					if(Lexer.matchesGroup("a", symbol)) { state = 7; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 				case 7:
-					if(matchesGroup("a", symbol)) { state = 7; break; }
+					if(Lexer.matchesGroup("a", symbol)) { state = 7; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 			}
 		}

@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import static foundation.rpg.common.AstUtils.*;
+import static foundation.rpg.common.Patterns.*;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptyList;
@@ -46,10 +47,10 @@ import static java.util.Collections.emptyMap;
 @SuppressWarnings("unused")
 public class JsonFactory {
 
-    String  matchQuotedString(@Match("'([^'\\]|\\\\['\\rnt])*'|\"([^\"\\]|\\\\[\"\\rnt])*\"") Token t) { return t.getContent().substring(1, t.length() - 1); }
-    String  matchIdString    (@Match("\\w\\a*") Token t)                                               { return t.getContent(); }
-    Integer matchInt         (@Match("\\d+") Token t)                                                  { return parseInt(t.getContent()); }
-    Double  matchDouble      (@Match("\\d+[.eE]\\d+") Token t)                                         { return parseDouble(t.getContent()); }
+    String  matchQuotedString(@Match(ANY_QUOTED_STRING) Token t)                         { return t.toString().substring(1, t.length() - 1); }
+    String  matchIdString    (@Match(IDENTIFIER) Token t)                                { return t.toString(); }
+    Integer matchInt         (@Match(INTEGER) Token t)                                   { return parseInt(t.toString()); }
+    Double  matchDouble      (@Match(DOUBLE) Token t)                                    { return parseDouble(t.toString()); }
 
     @StartSymbol
     Object              is (String v)                                                    { return v; }

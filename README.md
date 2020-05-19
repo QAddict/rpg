@@ -14,6 +14,9 @@ returning user defined root node of the tree.
 * [Grammar definition using Java code - re-use AST factory](#rpg---java-rapid-parser-generator)
 * [Solving conflicts using priorities](#solving-conflicts-using-priorities)
 * [Lexer definition](#lexer-definition)
+    * [RPG's regular expressions](#rpgs-regular-expressions)
+    * [Instructions for Lexer generator](#instructions-for-lexer-generator)
+* [Putting generated parser parts together](#putting-generated-parser-parts-together)
 * [Generated Parser - Typesafe heterogeneous active stack](#generated-parser---typesafe-heterogeneous-active-stack)
 * [Meta rules](#meta-rules)
 * [Decomposition of grammar definition](#decomposition-of-grammar-definition)
@@ -153,18 +156,89 @@ One can see, that the generator can be done for any type, inclusing JDK or 3rd p
 should make new parser development really rapid.
 
 ## Lexer definition
-As any parser, we also need to have complementary lexer. It should be generated too (TBD) from yet another additional
+As any parser, we also need to have complementary lexer. It should be generated too from yet another additional
 information - token description (a.k.a. regular expression).
 
-Simply annotate the class representing terminal symbol with `@Name`:
+RPG lexer generator picks token description from annotations.
+
+- Annotation `@Name(String)` is used by the lexer to be matched as-is. That allows usage of any characters, including those,
+  having special meaning in RPG's regular expression.
+- Annotation `@Match(String)` is used by the lexer to match token by RPG's regular expression. Keep in mind, that RPG
+  doesn't implement none of widely used full standards of regular expressions. It implements just limited set of features.
+
+
+### RPG's Regular expressions
+RGP's regular expressions support following:
+
+| Feature | Example | Description |
+|-------------|-------|------------------|
+| Alternation | `a&#124;b` | Match `a` or `b` |
+| Concatenation | `ab` | Match exact sequence `ab` |
+| Repetition | `a*` | Matches any number of `a` including 0 |
+| Repetition | `a+` | Matches any number of `a` but at least 1 |
+| Character class | `[abc]` | Matches `a` or `b` or `c` |
+| Character range | `[a-c]` | Matches `a` or `b` or `c` |
+| Character class inversion | `[^abc]` | Matches characters other than `a`, `b` or `c` |
+| Subpattern (no capturing) | `(a)` | Matches `a`, but useful e.g. for repetition: `(ab)*` |
+| Predefined character class shortcuts | | |
+| Digit | `\d` | Matches any digit |
+| Word | `\w` | Matches any digit or letter or `_` |
+| Whitespace | `\s` | Matches any whitespace character |
+| Not a digit | `\D` | Matches anything else than digit |
+| Not a word | `\W` | Matches anyhing else than digit or letter or `_` |
+| Not whitespace | `\S` | Matches anyhing else than whitespace character |
+| Additional usefull groups| | |
+| Start of identifier | `\i` | Any character or `_` or `$` |
+| Start of unicode identifier | `\u` | Any unicode character or `_` or `$` |
+| Unicode word | `\x` | Any unicode character, digit or `_` or `$` |
+
+Not supported features (not listed all, but most important examples):
+
+| Feature | Example | Description |
+| --- | --- | --- |
+| Optional occurence | `a?` | Match when `a` is present once, or not at all |
+| Repetition with boundaries | `a{3}`, `a{3,6}` | Matches `a` min-to-max times |
+| Possix groups | | |
+| Equivalence classes | | |
+| Back references | | |
+| Anything else not mentioned in the table of supported features | | |
+
+
+### Instructions for Lexer generator
+
+1. Annotate directly the class representing terminal symbol with `@Name` or `@Match`:
 
 ```java
 @Name(".") class Dot {}
 @Name("+") class Plus {}
 @Name("(") class LPar {}
 @Name(")") class RPar {}
-@Pattern("\\w\\a*") class Identifier {}
+@Match("\\w\\a*") class Identifier {}
 ```
+
+2. Annotate the symbol anywhere in the any grammar rule. Keep in mind, it can be annotated only once not to introduce conflicts
+
+```java
+Object is (@Match("\\d+") Integer i) { return i; }
+```
+
+For both cases above, the type representing the terminal symbol needs to have constructor accepting either `Token` describing
+fully the code fragment identified, including file, position, length and actual content, or `String`. Generated lexer will use
+such constructor.
+
+3. Explicit instruction for lexer
+
+If more specific creation of a token is needed, then include special methods in the "grammar" factory class, that instruct
+lexer how to create the instance of terminal. Such method's return type is the type representing terminal symbol, and
+exactly one parameter must be of type `Token`, annotated with the matching instruction:
+
+```java
+Integer integer (@Match("\\d+") Token t) { return Integer.parseInt(t.toString()); }
+```
+
+
+
+## Putting generated parser parts together
 
 Resulting generated code usage example is following:
 
@@ -179,9 +253,6 @@ Program program = parser.parse(input).result();
 ```
 
 Now `Program` is already our totally custom program representation created using our fully controlled `AstFactory`.
-
-The lexer generator is not yet done. Therefore no release is available yet.
-Feel free to checkout and try from sources.
 
 
 ## Generated Parser - Typesafe heterogeneous active stack
