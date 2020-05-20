@@ -53,6 +53,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;
+import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
@@ -85,7 +86,7 @@ public class ClassToGrammarContext {
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
         int priority = priority(factoryClass, 0);
         methods(factoryClass).filter(this::isLexerRule).forEach(tokenContext::accept);
-        List<ExecutableElement> methods = methods(factoryClass).filter(m -> !isLexerRule(m)).collect(toList());
+        List<ExecutableElement> methods = methods(factoryClass).filter(m -> !m.getModifiers().contains(PRIVATE)).filter(m -> !isLexerRule(m)).collect(toList());
         Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
         methods.stream().filter(m -> !hasMetaRuleAnnotation(m)).forEach(method -> {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {
