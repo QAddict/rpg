@@ -29,6 +29,9 @@
 
 package foundation.rpg.grammar;
 
+/**
+ * Representation of the symbol in a grammar
+ */
 public interface Symbol {
     Symbol start = symbol("Start");
     Symbol end = symbol("End");

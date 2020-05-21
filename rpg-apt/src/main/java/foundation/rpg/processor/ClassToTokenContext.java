@@ -34,7 +34,7 @@ import foundation.rpg.Name;
 import foundation.rpg.lexer.LexerGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
 import foundation.rpg.parser.Token;
-import foundation.rpg.parser.generator.ClassToGrammarContext;
+import foundation.rpg.parser.context.ClassToGrammarContext;
 import foundation.rpg.parser.generator.EnvironmentGenerator;
 import foundation.rpg.util.MapOfSets;
 

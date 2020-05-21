@@ -39,11 +39,11 @@ import java.util.List;
 public interface AstFactory extends WhiteSpaceRules, ListRules {
 
     @StartSymbol
-    static Program     is  (@List1 List<Statement> s)                                   { return new Program(s); }
-    static Statement   is  (Expression e, Dot d)                                        { return new ExpressionStatement(e); }
-    static Expression  is  (Expression l, Plus p, Expression r)                         { return new BinaryExpression(l, r); }
-    static Expression  is  (Identifier i)                                               { return i; }
-    static Expression  is  (LPar l, Expression e, RPar r)                               { return e; }
-    static Expression  is  (Identifier i, LPar l, @List3 N<List<Expression>> e, RPar r) { return null; }
+    static Program     is  (@List1 List<Statement> s)                                { return new Program(s); }
+    static Statement   is  (Expression e, Dot d)                                     { return new ExpressionStatement(e); }
+    static Expression  is  (Expression l, Plus p, Expression r)                      { return new BinaryExpression(l, r); }
+    static Expression  is  (Identifier i)                                            { return i; }
+    static Expression  is  (LPar l, Expression e, RPar r)                            { return e; }
+    static Expression  is  (Identifier i, LPar l, @List3 List<Expression> e, RPar r) { return null; }
 
 }

@@ -29,22 +29,22 @@
 
 package foundation.rpg.grammar;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.Collections.unmodifiableList;
 
 public final class Rule {
 
     private final Symbol left;
-    private final List<Symbol> right;
+    private final SymbolString right;
     private final int priority;
 
-    public Rule(Symbol left, List<Symbol> right, int priority) {
+    public Rule(Symbol left, SymbolString right, int priority) {
         this.left = left;
-        this.right = unmodifiableList(new ArrayList<>(right));
+        this.right = right;
         this.priority = priority;
+    }
+    public Rule(Symbol left, List<Symbol> right, int priority) {
+        this(left, new SymbolString(right), priority);
     }
 
     public Rule(Symbol left, List<Symbol> right) {
@@ -55,7 +55,7 @@ public final class Rule {
         return left;
     }
 
-    public List<Symbol> getRight() {
+    public SymbolString getRight() {
         return right;
     }
 

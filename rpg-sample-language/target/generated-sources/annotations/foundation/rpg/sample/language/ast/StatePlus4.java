@@ -36,7 +36,7 @@ Plus4: {
 	Expression -> • Expression Plus Expression [RPar, Plus, Comma]
 	Expression -> • Identifier [RPar, Plus, Comma]
 	Expression -> • LPar Expression RPar [RPar, Plus, Comma]
-	Expression -> • Identifier LPar NOfListOfExpression RPar [RPar, Plus, Comma]
+	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus, Comma]
 }
 
 */

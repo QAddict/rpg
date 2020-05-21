@@ -27,47 +27,14 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.common;
 
-/*
+import foundation.rpg.Name;
+import foundation.rpg.parser.Token;
 
-Plus1: {
-	Expression -> Expression Plus • Expression [Dot, Plus]
-	Expression -> • Expression Plus Expression [Dot, Plus]
-	Expression -> • Identifier [Dot, Plus]
-	Expression -> • LPar Expression RPar [Dot, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [Dot, Plus]
-}
-
-*/
-
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class StatePlus1 extends StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
-// Stack:
-    public StatePlus1(foundation.rpg.common.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
-        super(node, prev);
+@Name("break")
+public class Break extends Terminal {
+    public Break(Token position) {
+        super(position);
     }
-
-
-// Reduce:
-// Shift:
-    @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression3(symbol, this);
-    }
-
-    @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier1(symbol, this);
-    }
-
-    @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar1(symbol, this);
-    }
-
-
-// Accept:
 }

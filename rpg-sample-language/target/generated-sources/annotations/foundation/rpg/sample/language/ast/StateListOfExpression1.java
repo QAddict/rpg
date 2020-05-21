@@ -32,7 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 ListOfExpression1: {
-	NOfListOfExpression -> ListOfExpression • [RPar]
+	Expression -> Identifier LPar ListOfExpression • RPar [Dot, Plus]
+	ListOfExpression -> ListOfExpression • [RPar, Comma]
 	ListOfExpression -> ListOfExpression • Comma Expression [RPar, Comma]
 }
 
@@ -41,9 +42,9 @@ ListOfExpression1: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateListOfExpression1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, State> {
+public class StateListOfExpression1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> {
 // Stack:
-    public StateListOfExpression1(java.util.List<foundation.rpg.sample.language.ast.Expression> node, State prev) {
+    public StateListOfExpression1(java.util.List<foundation.rpg.sample.language.ast.Expression> node, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> prev) {
         super(node, prev);
     }
 
@@ -52,17 +53,18 @@ public class StateListOfExpression1 extends StackState<java.util.List<foundation
     @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
-		State stack1 = this.getPrev();
-        return stack1.visitNOfListOfExpression(foundation.rpg.common.ListRules.isList3(this.getNode())).visitRPar(symbol);
+		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack1 = this.getPrev();
+        return stack1.visitListOfExpression(foundation.rpg.common.ListRules.isList3(this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack1 = this.getPrev();
+        return stack1.visitListOfExpression(foundation.rpg.common.ListRules.isList3(this.getNode())).visitComma(symbol);
     }
 
 
 // Shift:
-    @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) {
-        return new StateComma1(symbol, this);
-    }
-
-
 // Accept:
 }

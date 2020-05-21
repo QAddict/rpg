@@ -38,7 +38,7 @@ ListOfStatement1: {
 	Expression -> • Expression Plus Expression [Dot, Plus]
 	Expression -> • Identifier [Dot, Plus]
 	Expression -> • LPar Expression RPar [Dot, Plus]
-	Expression -> • Identifier LPar NOfListOfExpression RPar [Dot, Plus]
+	Expression -> • Identifier LPar ListOfExpression RPar [Dot, Plus]
 }
 
 */

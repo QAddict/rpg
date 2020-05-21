@@ -27,33 +27,14 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.common;
 
-/*
+import foundation.rpg.Name;
+import foundation.rpg.parser.Token;
 
-NOfListOfExpression2: {
-	Expression -> Identifier LPar NOfListOfExpression • RPar [RPar, Plus]
-}
-
-*/
-
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class StateNOfListOfExpression2 extends StackState<foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> {
-// Stack:
-    public StateNOfListOfExpression2(foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>> node, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> prev) {
-        super(node, prev);
+@Name("continue")
+public class Continue extends Terminal {
+    public Continue(Token position) {
+        super(position);
     }
-
-
-// Reduce:
-// Shift:
-    @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) {
-        return new StateRPar5(symbol, this);
-    }
-
-
-// Accept:
 }

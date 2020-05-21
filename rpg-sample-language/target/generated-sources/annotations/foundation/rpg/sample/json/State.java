@@ -35,18 +35,18 @@ N = [Start, Object, ListOfObject, MapOfObject]
 T = [End, String, Integer, Double, LBr, RBr, LCurl, RCurl, Comma, Colon]
 S = Start
 R = {
-	Start -> [Object, End]
-	Object -> [String]
-	Object -> [Integer]
-	Object -> [Double]
-	Object -> [LBr, ListOfObject, RBr]
-	Object -> [LBr, RBr]
-	Object -> [LCurl, MapOfObject, RCurl]
-	Object -> [LCurl, RCurl]
-	ListOfObject -> [Object]
-	ListOfObject -> [ListOfObject, Comma, Object]
-	MapOfObject -> [String, Colon, Object]
-	MapOfObject -> [MapOfObject, Comma, String, Colon, Object]
+	Start -> Object,End
+	Object -> String
+	Object -> Integer
+	Object -> Double
+	Object -> LBr,ListOfObject,RBr
+	Object -> LBr,RBr
+	Object -> LCurl,MapOfObject,RCurl
+	Object -> LCurl,RCurl
+	ListOfObject -> Object
+	ListOfObject -> ListOfObject,Comma,Object
+	MapOfObject -> String,Colon,Object
+	MapOfObject -> MapOfObject,Comma,String,Colon,Object
 }
 
 1: {

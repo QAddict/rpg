@@ -35,6 +35,7 @@ import foundation.rpg.automata.LrItemSet;
 import foundation.rpg.automata.LrParserAutomata;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
+import foundation.rpg.parser.context.ClassToGrammarContext;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;

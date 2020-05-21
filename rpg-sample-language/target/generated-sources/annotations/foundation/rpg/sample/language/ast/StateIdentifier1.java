@@ -33,7 +33,7 @@ package foundation.rpg.sample.language.ast;
 
 Identifier1: {
 	Expression -> Identifier • [Dot, Plus]
-	Expression -> Identifier • LPar NOfListOfExpression RPar [Dot, Plus]
+	Expression -> Identifier • LPar ListOfExpression RPar [Dot, Plus]
 }
 
 */

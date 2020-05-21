@@ -27,47 +27,59 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.parser.context;
 
-/*
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
+import java.util.Objects;
 
-Plus1: {
-	Expression -> Expression Plus • Expression [Dot, Plus]
-	Expression -> • Expression Plus Expression [Dot, Plus]
-	Expression -> • Identifier [Dot, Plus]
-	Expression -> • LPar Expression RPar [Dot, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [Dot, Plus]
-}
+public final class Entry {
 
-*/
+    private final Element element;
+    private final TypeMirror type;
 
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class StatePlus1 extends StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
-// Stack:
-    public StatePlus1(foundation.rpg.common.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
-        super(node, prev);
+    public Entry(Element element, TypeMirror type) {
+        this.element = element;
+        this.type = type;
     }
 
+    public static Entry entry(ExecutableElement method) {
+        return new Entry(method, method.getReturnType());
+    }
 
-// Reduce:
-// Shift:
+    public static Entry entry(VariableElement parameter) {
+        return entry(parameter, parameter.asType());
+    }
+
+    public static Entry entry(Element parameter, TypeMirror type) {
+        return new Entry(parameter, type);
+    }
+
+    public static Entry typeEntry(Element type) {
+        return new Entry(type, type.asType());
+    }
+
+    public Element getElement() {
+        return element;
+    }
+
+    public TypeMirror getType() {
+        return type;
+    }
+
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression3(symbol, this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entry entry = (Entry) o;
+        return Objects.equals(element, entry.element) &&
+                Objects.equals(type, entry.type);
     }
 
     @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier1(symbol, this);
+    public int hashCode() {
+        return Objects.hash(element, type);
     }
-
-    @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar1(symbol, this);
-    }
-
-
-// Accept:
 }

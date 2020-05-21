@@ -29,16 +29,12 @@
 
 package foundation.rpg.common;
 
-public class N<T> {
+import foundation.rpg.Name;
+import foundation.rpg.parser.Token;
 
-    private final T t;
-
-    public N(T t) {
-        this.t = t;
+@Name("function")
+public class Function extends Terminal {
+    public Function(Token position) {
+        super(position);
     }
-
-    public T get() {
-        return t;
-    }
-
 }

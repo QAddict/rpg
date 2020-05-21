@@ -32,15 +32,15 @@ package foundation.rpg.sample.language.ast;
 /*
 
 LPar6: {
-	Expression -> Identifier LPar • NOfListOfExpression RPar [RPar, Plus]
-	NOfListOfExpression -> • [RPar]
-	NOfListOfExpression -> • ListOfExpression [RPar]
+	Expression -> Identifier LPar • ListOfExpression RPar [RPar, Plus]
+	ListOfExpression -> • [RPar, Comma]
+	ListOfExpression -> • ListOfExpression [RPar, Comma]
 	ListOfExpression -> • Expression [RPar, Comma]
 	ListOfExpression -> • ListOfExpression Comma Expression [RPar, Comma]
 	Expression -> • Expression Plus Expression [RPar, Plus, Comma]
 	Expression -> • Identifier [RPar, Plus, Comma]
 	Expression -> • LPar Expression RPar [RPar, Plus, Comma]
-	Expression -> • Identifier LPar NOfListOfExpression RPar [RPar, Plus, Comma]
+	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus, Comma]
 }
 
 */
@@ -59,19 +59,20 @@ public class StateLPar6 extends StackState<foundation.rpg.common.LPar, StackStat
     @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
-        return this.visitNOfListOfExpression(foundation.rpg.common.ListRules.isList3()).visitRPar(symbol);
+        return this.visitListOfExpression(foundation.rpg.common.ListRules.isList3()).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+        
+        return this.visitListOfExpression(foundation.rpg.common.ListRules.isList3()).visitComma(symbol);
     }
 
 
 // Shift:
     @Override
-    public State visitNOfListOfExpression(foundation.rpg.common.N<java.util.List<foundation.rpg.sample.language.ast.Expression>> symbol) {
-        return new StateNOfListOfExpression2(symbol, this);
-    }
-
-    @Override
     public State visitListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
-        return new StateListOfExpression1(symbol, this);
+        return new StateListOfExpression2(symbol, this);
     }
 
     @Override

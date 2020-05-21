@@ -27,47 +27,64 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.grammar;
 
-/*
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
-Plus1: {
-	Expression -> Expression Plus • Expression [Dot, Plus]
-	Expression -> • Expression Plus Expression [Dot, Plus]
-	Expression -> • Identifier [Dot, Plus]
-	Expression -> • LPar Expression RPar [Dot, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [Dot, Plus]
-}
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.joining;
 
-*/
+public final class SymbolString implements Iterable<Symbol> {
+    private final List<Symbol> symbols;
+    private final int size;
 
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class StatePlus1 extends StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
-// Stack:
-    public StatePlus1(foundation.rpg.common.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
-        super(node, prev);
+    public SymbolString(List<Symbol> symbols) {
+        this.symbols = unmodifiableList(new ArrayList<>(symbols));
+        this.size = symbols.size();
     }
 
+    public List<Symbol> getSymbols() {
+        return symbols;
+    }
 
-// Reduce:
-// Shift:
+    public Symbol get(int i) {
+        return symbols.get(i);
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public Stream<Symbol> stream() {
+        return symbols.stream();
+    }
+
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression3(symbol, this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SymbolString that = (SymbolString) o;
+        return size == that.size &&
+                Objects.equals(symbols, that.symbols);
     }
 
     @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier1(symbol, this);
+    public int hashCode() {
+        return Objects.hash(symbols, size);
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar1(symbol, this);
+    public String toString() {
+        return symbols.stream().map(Object::toString).collect(joining(","));
     }
 
+    @Override
+    public Iterator<Symbol> iterator() {
+        return symbols.iterator();
+    }
 
-// Accept:
 }

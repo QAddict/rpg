@@ -43,8 +43,8 @@ public interface ListRules {
     @List2 static <T> List<T> isList2(T p)                     { return list(p); }
     @List2 static <T> List<T> isList2(List<T> l, Comma c, T p) { return addTo(l, p); }
 
-    @List3 static <T> N<List<T>> isList3()                     { return new N<>(emptyList()); }
-    @List3 static <T> N<List<T>> isList3(@List2 List<T> l)     { return new N<>(l); }
+    @List3 static <T> List<T> isList3()                        { return emptyList(); }
+    @List3 static <T> List<T> isList3(@List2 List<T> l)        { return l; }
 
     @List4 static <T> List<T> isList4 (T t)                    { return list(t); }
     @List4 static <T> List<T> isList4 (List<T> l, T t)         { return addTo(l, t); }

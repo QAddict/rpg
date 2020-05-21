@@ -32,7 +32,7 @@ package foundation.rpg.parser.processor;
 import foundation.rpg.StartSymbol;
 import foundation.rpg.automata.LrParserAutomata;
 import foundation.rpg.automata.LrParserConstructor;
-import foundation.rpg.parser.generator.ClassToGrammarContext;
+import foundation.rpg.parser.context.ClassToGrammarContext;
 import foundation.rpg.parser.generator.CodeGenerator;
 import foundation.rpg.parser.generator.EnvironmentGenerator;
 

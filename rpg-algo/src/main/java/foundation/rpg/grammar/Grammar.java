@@ -32,7 +32,6 @@ package foundation.rpg.grammar;
 import foundation.rpg.util.MapOfSets;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;

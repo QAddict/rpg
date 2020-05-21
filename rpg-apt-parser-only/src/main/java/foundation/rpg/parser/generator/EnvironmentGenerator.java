@@ -29,6 +29,8 @@
 
 package foundation.rpg.parser.generator;
 
+import foundation.rpg.parser.context.ClassToGrammarContext;
+
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
