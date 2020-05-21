@@ -32,11 +32,10 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Comma1: {
-	ListOfExpression -> ListOfExpression Comma • Expression [RPar, Comma]
-	Expression -> • Expression Plus Expression [RPar, Comma, Plus]
-	Expression -> • Identifier [RPar, Comma, Plus]
-	Expression -> • LPar Expression RPar [RPar, Comma, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Comma, Plus]
+	List2ListOfExpression$ -> List2ListOfExpression$ Comma • Expression$$ [RPar, Comma]
+	Expression$$ -> • Identifier [RPar, Comma]
+	Expression$$ -> • LPar Expression$$ RPar [RPar, Comma]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma]
 }
 
 */
@@ -54,18 +53,18 @@ public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackSt
 // Reduce:
 // Shift:
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression9(symbol, this);
+    public State visitExpression$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateExpression$$9(symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier4(symbol, this);
+        return new StateIdentifier5(symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar5(symbol, this);
+        return new StateLPar6(symbol, this);
     }
 
 

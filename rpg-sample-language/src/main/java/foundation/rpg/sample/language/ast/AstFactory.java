@@ -31,19 +31,33 @@ package foundation.rpg.sample.language.ast;
 
 import foundation.rpg.Priority;
 import foundation.rpg.StartSymbol;
+import foundation.rpg.SymbolPart;
 import foundation.rpg.common.*;
 
 import java.util.List;
 
-@Priority(1)
+//@Priority(1)
 public interface AstFactory extends WhiteSpaceRules, ListRules {
 
     @StartSymbol
     static Program     is  (@List1 List<Statement> s)                                { return new Program(s); }
-    static Statement   is  (Expression e, Dot d)                                     { return new ExpressionStatement(e); }
-    static Expression  is  (Expression l, Plus p, Expression r)                      { return new BinaryExpression(l, r); }
+
+    static Statement   is  (@P1 Expression e, Dot d)                                     { return new ExpressionStatement(e); }
+
+    static @P1 Expression is (@P2 Expression e) { return e; }
+    static @P1 Expression  is  (@P1 Expression l, Plus o, @P2 Expression r)                      { return new BinaryExpression(l, r); }
+
+    static @P2 Expression is2 (Expression e) { return e; }
+    static @P2 Expression  is  (@P2 Expression l, Times o, Expression r)                      { return new BinaryExpression(l, r); }
+
     static Expression  is  (Identifier i)                                            { return i; }
+
     static Expression  is  (LPar l, Expression e, RPar r)                            { return e; }
+
     static Expression  is  (Identifier i, LPar l, @List3 List<Expression> e, RPar r) { return null; }
+
+    @SymbolPart @interface P1 {}
+    @SymbolPart @interface P2 {}
+    @SymbolPart @interface P3 {}
 
 }

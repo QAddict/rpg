@@ -29,22 +29,7 @@
 
 package foundation.rpg.common;
 
-import foundation.rpg.Name;
-import foundation.rpg.parser.Token;
+import foundation.rpg.MetaRule;
 
-public class Terminal {
-    private final Token position;
-
-    public Terminal(Token position) {
-        this.position = position;
-    }
-
-    public Token description() {
-        return position;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getAnnotation(Name.class).value();
-    }
-}
+@MetaRule
+public @interface CommaSeparatedNonEmpty {}

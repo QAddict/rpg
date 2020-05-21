@@ -36,8 +36,8 @@ import foundation.rpg.automata.LrParserAutomata;
 import org.testng.annotations.Test;
 
 import static foundation.rpg.generator.GeneratorTest.Symbols.*;
-import static foundation.rpg.generator.RuleBuilder.of;
-import static foundation.rpg.generator.RuleBuilder.rule;
+import static foundation.rpg.grammar.Rule.Builder.of;
+import static foundation.rpg.grammar.Rule.rule;
 import static java.util.Collections.emptySet;
 
 public class GeneratorTest {

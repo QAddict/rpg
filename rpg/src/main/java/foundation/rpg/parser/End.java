@@ -29,11 +29,9 @@
 
 package foundation.rpg.parser;
 
-public final class End {
-    private final Token position;
-
+public final class End extends Terminal {
     public End(Token description) {
-        this.position = description;
+        super(description);
     }
 
     @Override

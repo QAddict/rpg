@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Statement1: {
-	ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
+	List1ListOfStatement -> List1ListOfStatement Statement • [End, Identifier, LPar]
 }
 
 */
@@ -53,7 +53,7 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
         
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitEnd(symbol);
+        return stack2.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitEnd(symbol);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
         
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
+        return stack2.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
         
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitLPar(symbol);
+        return stack2.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1(stack1.getNode(), this.getNode())).visitLPar(symbol);
     }
 
 

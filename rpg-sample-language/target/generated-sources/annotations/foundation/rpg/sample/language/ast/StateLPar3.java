@@ -32,11 +32,10 @@ package foundation.rpg.sample.language.ast;
 /*
 
 LPar3: {
-	Expression -> LPar • Expression RPar [RPar, Plus]
-	Expression -> • Expression Plus Expression [RPar, Plus]
-	Expression -> • Identifier [RPar, Plus]
-	Expression -> • LPar Expression RPar [RPar, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus]
+	Expression$$ -> LPar • Expression$$ RPar [RPar]
+	Expression$$ -> • Identifier [RPar]
+	Expression$$ -> • LPar Expression$$ RPar [RPar]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar]
 }
 
 */
@@ -54,8 +53,8 @@ public class StateLPar3 extends StackState<foundation.rpg.common.LPar, State> {
 // Reduce:
 // Shift:
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression5(symbol, this);
+    public State visitExpression$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateExpression$$6(symbol, this);
     }
 
     @Override

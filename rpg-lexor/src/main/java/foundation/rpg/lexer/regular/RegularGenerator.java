@@ -34,6 +34,7 @@ import foundation.rpg.lexer.regular.dfa.DFA;
 import foundation.rpg.lexer.regular.dfa.StateSet;
 import foundation.rpg.lexer.regular.thompson.State;
 import foundation.rpg.parser.*;
+import foundation.rpg.util.Bfs;
 
 import javax.lang.model.type.TypeMirror;
 import java.io.IOException;

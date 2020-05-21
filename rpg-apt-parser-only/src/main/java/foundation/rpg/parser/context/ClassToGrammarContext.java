@@ -39,6 +39,7 @@ import foundation.rpg.grammar.Symbol;
 import foundation.rpg.parser.Token;
 import foundation.rpg.parser.generator.EnvironmentGenerator;
 import foundation.rpg.parser.generator.TypeUtils;
+import foundation.rpg.util.Bfs;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
@@ -53,8 +54,7 @@ import static foundation.rpg.grammar.Rule.rule;
 import static foundation.rpg.grammar.Symbol.symbol;
 import static foundation.rpg.parser.context.Entry.entry;
 import static foundation.rpg.parser.context.Entry.typeEntry;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
+import static java.util.Collections.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;
@@ -98,7 +98,17 @@ public class ClassToGrammarContext {
                 method.getParameters().forEach(p -> ignored.add(of(entry(p))));
             } else {
                 rules.add(ruleOf(method, priority(method, priority)));
-                addMetaRules(method, metaRules, rules, priority, emptyMap());
+                Map<String, TypeMirror> map = new LinkedHashMap<>();
+                Bfs.bfs((m, q) -> {
+                    m.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(p -> {
+                        DeclaredType l = (DeclaredType) metaSymbol(p.asType(), map);
+                        metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
+                            map.putAll(TypeUtils.resolveParameters(metaRule, l));
+                            rules.add(ruleOf(metaSymbol(entry(metaRule), map), priority, l, metaSymbols(metaRule, map)));
+                            q.accept(metaRule);
+                        });
+                    });
+                }, singleton(method));
             }
         });
         isStaticFactory = methods.stream().anyMatch(method -> method.getModifiers().contains(STATIC));
@@ -148,8 +158,10 @@ public class ClassToGrammarContext {
     }
 
     public Symbol of(Entry element) {
-        TypeMirror mirror = element.getType();
-        return symbolMap.computeIfAbsent(mirror.toString(), key -> {
+        String name = element.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType)
+                .filter(t -> nonNull(t.asElement().getAnnotation(MetaRule.class)) || nonNull(t.asElement().getAnnotation(SymbolPart.class)))
+                .map(a -> a.asElement().toString()).collect(joining()) + element.getType();
+        return symbolMap.computeIfAbsent(name, key -> {
             Symbol s = symbol(uniqueName(element));
             typeMap.put(s, element);
             return s;
@@ -189,7 +201,7 @@ public class ClassToGrammarContext {
 
     private String uniqueName(Entry e) {
         return e.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType)
-                .filter(t -> nonNull(t.getAnnotation(MetaRule.class)) || nonNull(t.getAnnotation(SymbolPart.class)))
+                .filter(t -> nonNull(t.asElement().getAnnotation(MetaRule.class)) || nonNull(t.asElement().getAnnotation(SymbolPart.class)))
                 .map(a -> a.asElement().getSimpleName().toString()).collect(joining()) + uniqueName(e.getType());
     }
 

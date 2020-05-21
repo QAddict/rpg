@@ -20,11 +20,12 @@ public class GeneratedLexer implements Lexer<State> {
 					switch(symbol) {
 						case '.': state = 1; break;
 						case '+': state = 2; break;
-						case '(': state = 3; break;
-						case ')': state = 4; break;
-						case ',': state = 5; break;
+						case '*': state = 3; break;
+						case '(': state = 4; break;
+						case ')': state = 5; break;
+						case ',': state = 6; break;
 						default:
-							if(Lexer.matchesGroup("w", symbol)) { state = 6; break; }
+							if(Lexer.matchesGroup("w", symbol)) { state = 7; break; }
 							throw new IllegalStateException("");
 					}
 					break;
@@ -33,16 +34,18 @@ public class GeneratedLexer implements Lexer<State> {
 				case 2:
 					return visitor -> visitor.visitPlus(new foundation.rpg.common.Plus(builder.build()));
 				case 3:
-					return visitor -> visitor.visitLPar(new foundation.rpg.common.LPar(builder.build()));
+					return visitor -> visitor.visitTimes(new foundation.rpg.common.Times(builder.build()));
 				case 4:
-					return visitor -> visitor.visitRPar(new foundation.rpg.common.RPar(builder.build()));
+					return visitor -> visitor.visitLPar(new foundation.rpg.common.LPar(builder.build()));
 				case 5:
-					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(builder.build()));
+					return visitor -> visitor.visitRPar(new foundation.rpg.common.RPar(builder.build()));
 				case 6:
-					if(Lexer.matchesGroup("a", symbol)) { state = 7; break; }
-					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
+					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(builder.build()));
 				case 7:
-					if(Lexer.matchesGroup("a", symbol)) { state = 7; break; }
+					if(Lexer.matchesGroup("a", symbol)) { state = 8; break; }
+					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
+				case 8:
+					if(Lexer.matchesGroup("a", symbol)) { state = 8; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 			}
 		}

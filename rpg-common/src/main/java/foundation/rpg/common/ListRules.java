@@ -38,17 +38,22 @@ import static java.util.Collections.emptyList;
 public interface ListRules {
 
     @List1 static <T> List<T> isList1 ()                       { return list(); }
-    @List1 static <T> List<T> isList1 (List<T> l, T t)         { return addTo(l, t); }
+    @List1 static <T> List<T> isList1 (@List1 List<T> l, T t)  { return addTo(l, t); }
 
     @List2 static <T> List<T> isList2(T p)                     { return list(p); }
-    @List2 static <T> List<T> isList2(List<T> l, Comma c, T p) { return addTo(l, p); }
+    @List2 static <T> List<T> isList2(@List2 List<T> l, Comma c, T p) { return addTo(l, p); }
 
     @List3 static <T> List<T> isList3()                        { return emptyList(); }
     @List3 static <T> List<T> isList3(@List2 List<T> l)        { return l; }
 
     @List4 static <T> List<T> isList4 (T t)                    { return list(t); }
-    @List4 static <T> List<T> isList4 (List<T> l, T t)         { return addTo(l, t); }
+    @List4 static <T> List<T> isList4 (@List4 List<T> l, T t)  { return addTo(l, t); }
 
     @Opt static <T> T notPresent()                             { return null; }
+
+    @CommaSeparated static <T> List<T> commaSeparated()                                  { return emptyList(); }
+    @CommaSeparated static <T> List<T> commaSeparated(@CommaSeparatedNonEmpty List<T> l) { return l; }
+    @CommaSeparatedNonEmpty static <T> List<T> commaSeparated(T p)                       { return list(p); }
+    @CommaSeparatedNonEmpty static <T> List<T> commaSeparated(@CommaSeparatedNonEmpty List<T> l, Comma c, T p)   { return addTo(l, p); }
 
 }

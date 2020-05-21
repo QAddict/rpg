@@ -31,7 +31,7 @@ package foundation.rpg.lexer.regular.dfa;
 
 import foundation.rpg.lexer.regular.ast.Inversion;
 import foundation.rpg.lexer.regular.ast.Node;
-import foundation.rpg.lexer.regular.Bfs;
+import foundation.rpg.util.Bfs;
 import foundation.rpg.lexer.regular.ast.Char;
 import foundation.rpg.lexer.regular.thompson.GNFA;
 import foundation.rpg.lexer.regular.thompson.State;

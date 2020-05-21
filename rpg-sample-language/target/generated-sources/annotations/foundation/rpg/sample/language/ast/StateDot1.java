@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Dot1: {
-	Statement -> Expression Dot • [End, Identifier, LPar]
+	Statement -> P1Expression Dot • [End, Identifier, LPar]
 }
 
 */

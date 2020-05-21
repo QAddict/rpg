@@ -31,324 +31,307 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-N = [Start, Program, ListOfStatement, Statement, Expression, ListOfExpression]
-T = [End, Dot, Plus, Identifier, LPar, RPar, Comma]
+N = [Start, Program, List1ListOfStatement, Statement, P1Expression, P2Expression$, Expression$$, List3ListOfExpression, List2ListOfExpression$]
+T = [End, Dot, Plus, Times, Identifier, LPar, RPar, Comma]
 S = Start
 R = {
 	Start -> Program,End
-	Program -> ListOfStatement
-	ListOfStatement -> 
-	ListOfStatement -> ListOfStatement,Statement
-	Statement -> Expression,Dot
-	Expression -> Expression,Plus,Expression
-	Expression -> Identifier
-	Expression -> LPar,Expression,RPar
-	Expression -> Identifier,LPar,ListOfExpression,RPar
-	ListOfExpression -> 
-	ListOfExpression -> ListOfExpression
-	ListOfExpression -> Expression
-	ListOfExpression -> ListOfExpression,Comma,Expression
+	Program -> List1ListOfStatement
+	List1ListOfStatement -> 
+	List1ListOfStatement -> List1ListOfStatement,Statement
+	Statement -> P1Expression,Dot
+	P1Expression -> P2Expression$
+	P1Expression -> P1Expression,Plus,P2Expression$
+	P2Expression$ -> Expression$$
+	P2Expression$ -> P2Expression$,Times,Expression$$
+	Expression$$ -> Identifier
+	Expression$$ -> LPar,Expression$$,RPar
+	Expression$$ -> Identifier,LPar,List3ListOfExpression,RPar
+	List3ListOfExpression -> 
+	List3ListOfExpression -> List2ListOfExpression$
+	List2ListOfExpression$ -> Expression$$
+	List2ListOfExpression$ -> List2ListOfExpression$,Comma,Expression$$
 }
 
 1: {
 	Start -> • Program End []
-	Program -> • ListOfStatement [End]
-	ListOfStatement -> • [End, Identifier, LPar]
-	ListOfStatement -> • ListOfStatement Statement [End, Identifier, LPar]
+	Program -> • List1ListOfStatement [End]
+	List1ListOfStatement -> • [End, Identifier, LPar]
+	List1ListOfStatement -> • List1ListOfStatement Statement [End, Identifier, LPar]
 }
 Program1: {
 	Start -> Program • End []
 }
-ListOfStatement1: {
-	Program -> ListOfStatement • [End]
-	ListOfStatement -> ListOfStatement • Statement [End, Identifier, LPar]
-	Statement -> • Expression Dot [End, Identifier, LPar]
-	Expression -> • Expression Plus Expression [Dot, Plus]
-	Expression -> • Identifier [Dot, Plus]
-	Expression -> • LPar Expression RPar [Dot, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [Dot, Plus]
+List1ListOfStatement1: {
+	Program -> List1ListOfStatement • [End]
+	List1ListOfStatement -> List1ListOfStatement • Statement [End, Identifier, LPar]
+	Statement -> • P1Expression Dot [End, Identifier, LPar]
+	P1Expression -> • P2Expression$ [Dot, Plus]
+	P1Expression -> • P1Expression Plus P2Expression$ [Dot, Plus]
+	P2Expression$ -> • Expression$$ [Dot, Times, Plus]
+	P2Expression$ -> • P2Expression$ Times Expression$$ [Dot, Times, Plus]
+	Expression$$ -> • Identifier [Dot, Times, Plus]
+	Expression$$ -> • LPar Expression$$ RPar [Dot, Times, Plus]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Times, Plus]
 }
 End1: {
 	Start -> Program End • []
 }
 Statement1: {
-	ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
+	List1ListOfStatement -> List1ListOfStatement Statement • [End, Identifier, LPar]
 }
-Expression1: {
-	Statement -> Expression • Dot [End, Identifier, LPar]
-	Expression -> Expression • Plus Expression [Dot, Plus]
+P1Expression1: {
+	Statement -> P1Expression • Dot [End, Identifier, LPar]
+	P1Expression -> P1Expression • Plus P2Expression$ [Dot, Plus]
+}
+P2Expression$1: {
+	P1Expression -> P2Expression$ • [Dot, Plus]
+	P2Expression$ -> P2Expression$ • Times Expression$$ [Dot, Times, Plus]
+}
+Expression$$1: {
+	P2Expression$ -> Expression$$ • [Dot, Times, Plus]
 }
 Identifier1: {
-	Expression -> Identifier • [Dot, Plus]
-	Expression -> Identifier • LPar ListOfExpression RPar [Dot, Plus]
+	Expression$$ -> Identifier • [Dot, Times, Plus]
+	Expression$$ -> Identifier • LPar List3ListOfExpression RPar [Dot, Times, Plus]
 }
 LPar1: {
-	Expression -> LPar • Expression RPar [Dot, Plus]
-	Expression -> • Expression Plus Expression [RPar, Plus]
-	Expression -> • Identifier [RPar, Plus]
-	Expression -> • LPar Expression RPar [RPar, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus]
+	Expression$$ -> LPar • Expression$$ RPar [Dot, Times, Plus]
+	Expression$$ -> • Identifier [RPar]
+	Expression$$ -> • LPar Expression$$ RPar [RPar]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar]
 }
 Dot1: {
-	Statement -> Expression Dot • [End, Identifier, LPar]
+	Statement -> P1Expression Dot • [End, Identifier, LPar]
 }
 Plus1: {
-	Expression -> Expression Plus • Expression [Dot, Plus]
-	Expression -> • Expression Plus Expression [Dot, Plus]
-	Expression -> • Identifier [Dot, Plus]
-	Expression -> • LPar Expression RPar [Dot, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [Dot, Plus]
+	P1Expression -> P1Expression Plus • P2Expression$ [Dot, Plus]
+	P2Expression$ -> • Expression$$ [Dot, Plus, Times]
+	P2Expression$ -> • P2Expression$ Times Expression$$ [Dot, Plus, Times]
+	Expression$$ -> • Identifier [Dot, Plus, Times]
+	Expression$$ -> • LPar Expression$$ RPar [Dot, Plus, Times]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Plus, Times]
+}
+Times1: {
+	P2Expression$ -> P2Expression$ Times • Expression$$ [Dot, Times, Plus]
+	Expression$$ -> • Identifier [Dot, Times, Plus]
+	Expression$$ -> • LPar Expression$$ RPar [Dot, Times, Plus]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Times, Plus]
 }
 LPar2: {
-	Expression -> Identifier LPar • ListOfExpression RPar [Dot, Plus]
-	ListOfExpression -> • [RPar, Comma]
-	ListOfExpression -> • ListOfExpression [RPar, Comma]
-	ListOfExpression -> • Expression [RPar, Comma]
-	ListOfExpression -> • ListOfExpression Comma Expression [RPar, Comma]
-	Expression -> • Expression Plus Expression [RPar, Plus, Comma]
-	Expression -> • Identifier [RPar, Plus, Comma]
-	Expression -> • LPar Expression RPar [RPar, Plus, Comma]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus, Comma]
+	Expression$$ -> Identifier LPar • List3ListOfExpression RPar [Dot, Times, Plus]
+	List3ListOfExpression -> • [RPar]
+	List3ListOfExpression -> • List2ListOfExpression$ [RPar]
+	List2ListOfExpression$ -> • Expression$$ [RPar, Comma]
+	List2ListOfExpression$ -> • List2ListOfExpression$ Comma Expression$$ [RPar, Comma]
+	Expression$$ -> • Identifier [RPar, Comma]
+	Expression$$ -> • LPar Expression$$ RPar [RPar, Comma]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma]
 }
-Expression2: {
-	Expression -> LPar Expression • RPar [Dot, Plus]
-	Expression -> Expression • Plus Expression [RPar, Plus]
+Expression$$2: {
+	Expression$$ -> LPar Expression$$ • RPar [Dot, Times, Plus]
 }
 Identifier2: {
-	Expression -> Identifier • [RPar, Plus]
-	Expression -> Identifier • LPar ListOfExpression RPar [RPar, Plus]
+	Expression$$ -> Identifier • [RPar]
+	Expression$$ -> Identifier • LPar List3ListOfExpression RPar [RPar]
 }
 LPar3: {
-	Expression -> LPar • Expression RPar [RPar, Plus]
-	Expression -> • Expression Plus Expression [RPar, Plus]
-	Expression -> • Identifier [RPar, Plus]
-	Expression -> • LPar Expression RPar [RPar, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus]
+	Expression$$ -> LPar • Expression$$ RPar [RPar]
+	Expression$$ -> • Identifier [RPar]
+	Expression$$ -> • LPar Expression$$ RPar [RPar]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar]
 }
-Expression3: {
-	Expression -> Expression Plus Expression • [Dot, Plus]
-	Expression -> Expression • Plus Expression [Dot, Plus]
+P2Expression$2: {
+	P1Expression -> P1Expression Plus P2Expression$ • [Dot, Plus]
+	P2Expression$ -> P2Expression$ • Times Expression$$ [Dot, Plus, Times]
 }
-ListOfExpression1: {
-	Expression -> Identifier LPar ListOfExpression • RPar [Dot, Plus]
-	ListOfExpression -> ListOfExpression • [RPar, Comma]
-	ListOfExpression -> ListOfExpression • Comma Expression [RPar, Comma]
+Expression$$4: {
+	P2Expression$ -> P2Expression$ Times Expression$$ • [Dot, Times, Plus]
 }
-Expression4: {
-	ListOfExpression -> Expression • [RPar, Comma]
-	Expression -> Expression • Plus Expression [RPar, Plus, Comma]
+List3ListOfExpression1: {
+	Expression$$ -> Identifier LPar List3ListOfExpression • RPar [Dot, Times, Plus]
 }
-Identifier4: {
-	Expression -> Identifier • [RPar, Plus, Comma]
-	Expression -> Identifier • LPar ListOfExpression RPar [RPar, Plus, Comma]
+List2ListOfExpression$1: {
+	List3ListOfExpression -> List2ListOfExpression$ • [RPar]
+	List2ListOfExpression$ -> List2ListOfExpression$ • Comma Expression$$ [RPar, Comma]
 }
-LPar5: {
-	Expression -> LPar • Expression RPar [RPar, Plus, Comma]
-	Expression -> • Expression Plus Expression [RPar, Plus]
-	Expression -> • Identifier [RPar, Plus]
-	Expression -> • LPar Expression RPar [RPar, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus]
+Expression$$5: {
+	List2ListOfExpression$ -> Expression$$ • [RPar, Comma]
 }
-RPar1: {
-	Expression -> LPar Expression RPar • [Dot, Plus]
-}
-Plus2: {
-	Expression -> Expression Plus • Expression [RPar, Plus]
-	Expression -> • Expression Plus Expression [RPar, Plus]
-	Expression -> • Identifier [RPar, Plus]
-	Expression -> • LPar Expression RPar [RPar, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus]
+Identifier5: {
+	Expression$$ -> Identifier • [RPar, Comma]
+	Expression$$ -> Identifier • LPar List3ListOfExpression RPar [RPar, Comma]
 }
 LPar6: {
-	Expression -> Identifier LPar • ListOfExpression RPar [RPar, Plus]
-	ListOfExpression -> • [RPar, Comma]
-	ListOfExpression -> • ListOfExpression [RPar, Comma]
-	ListOfExpression -> • Expression [RPar, Comma]
-	ListOfExpression -> • ListOfExpression Comma Expression [RPar, Comma]
-	Expression -> • Expression Plus Expression [RPar, Plus, Comma]
-	Expression -> • Identifier [RPar, Plus, Comma]
-	Expression -> • LPar Expression RPar [RPar, Plus, Comma]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus, Comma]
+	Expression$$ -> LPar • Expression$$ RPar [RPar, Comma]
+	Expression$$ -> • Identifier [RPar]
+	Expression$$ -> • LPar Expression$$ RPar [RPar]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar]
 }
-Expression5: {
-	Expression -> LPar Expression • RPar [RPar, Plus]
-	Expression -> Expression • Plus Expression [RPar, Plus]
+RPar1: {
+	Expression$$ -> LPar Expression$$ RPar • [Dot, Times, Plus]
+}
+LPar7: {
+	Expression$$ -> Identifier LPar • List3ListOfExpression RPar [RPar]
+	List3ListOfExpression -> • [RPar]
+	List3ListOfExpression -> • List2ListOfExpression$ [RPar]
+	List2ListOfExpression$ -> • Expression$$ [RPar, Comma]
+	List2ListOfExpression$ -> • List2ListOfExpression$ Comma Expression$$ [RPar, Comma]
+	Expression$$ -> • Identifier [RPar, Comma]
+	Expression$$ -> • LPar Expression$$ RPar [RPar, Comma]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma]
+}
+Expression$$6: {
+	Expression$$ -> LPar Expression$$ • RPar [RPar]
 }
 RPar2: {
-	Expression -> Identifier LPar ListOfExpression RPar • [Dot, Plus]
+	Expression$$ -> Identifier LPar List3ListOfExpression RPar • [Dot, Times, Plus]
 }
 Comma1: {
-	ListOfExpression -> ListOfExpression Comma • Expression [RPar, Comma]
-	Expression -> • Expression Plus Expression [RPar, Comma, Plus]
-	Expression -> • Identifier [RPar, Comma, Plus]
-	Expression -> • LPar Expression RPar [RPar, Comma, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Comma, Plus]
+	List2ListOfExpression$ -> List2ListOfExpression$ Comma • Expression$$ [RPar, Comma]
+	Expression$$ -> • Identifier [RPar, Comma]
+	Expression$$ -> • LPar Expression$$ RPar [RPar, Comma]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma]
 }
-Plus4: {
-	Expression -> Expression Plus • Expression [RPar, Plus, Comma]
-	Expression -> • Expression Plus Expression [RPar, Plus, Comma]
-	Expression -> • Identifier [RPar, Plus, Comma]
-	Expression -> • LPar Expression RPar [RPar, Plus, Comma]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus, Comma]
+LPar9: {
+	Expression$$ -> Identifier LPar • List3ListOfExpression RPar [RPar, Comma]
+	List3ListOfExpression -> • [RPar]
+	List3ListOfExpression -> • List2ListOfExpression$ [RPar]
+	List2ListOfExpression$ -> • Expression$$ [RPar, Comma]
+	List2ListOfExpression$ -> • List2ListOfExpression$ Comma Expression$$ [RPar, Comma]
+	Expression$$ -> • Identifier [RPar, Comma]
+	Expression$$ -> • LPar Expression$$ RPar [RPar, Comma]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma]
 }
-LPar8: {
-	Expression -> Identifier LPar • ListOfExpression RPar [RPar, Plus, Comma]
-	ListOfExpression -> • [RPar, Comma]
-	ListOfExpression -> • ListOfExpression [RPar, Comma]
-	ListOfExpression -> • Expression [RPar, Comma]
-	ListOfExpression -> • ListOfExpression Comma Expression [RPar, Comma]
-	Expression -> • Expression Plus Expression [RPar, Plus, Comma]
-	Expression -> • Identifier [RPar, Plus, Comma]
-	Expression -> • LPar Expression RPar [RPar, Plus, Comma]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus, Comma]
+Expression$$7: {
+	Expression$$ -> LPar Expression$$ • RPar [RPar, Comma]
 }
-Expression6: {
-	Expression -> LPar Expression • RPar [RPar, Plus, Comma]
-	Expression -> Expression • Plus Expression [RPar, Plus]
-}
-Expression7: {
-	Expression -> Expression Plus Expression • [RPar, Plus]
-	Expression -> Expression • Plus Expression [RPar, Plus]
-}
-ListOfExpression2: {
-	Expression -> Identifier LPar ListOfExpression • RPar [RPar, Plus]
-	ListOfExpression -> ListOfExpression • [RPar, Comma]
-	ListOfExpression -> ListOfExpression • Comma Expression [RPar, Comma]
+List3ListOfExpression2: {
+	Expression$$ -> Identifier LPar List3ListOfExpression • RPar [RPar]
 }
 RPar3: {
-	Expression -> LPar Expression RPar • [RPar, Plus]
+	Expression$$ -> LPar Expression$$ RPar • [RPar]
 }
-Expression9: {
-	ListOfExpression -> ListOfExpression Comma Expression • [RPar, Comma]
-	Expression -> Expression • Plus Expression [RPar, Comma, Plus]
+Expression$$9: {
+	List2ListOfExpression$ -> List2ListOfExpression$ Comma Expression$$ • [RPar, Comma]
 }
-Expression10: {
-	Expression -> Expression Plus Expression • [RPar, Plus, Comma]
-	Expression -> Expression • Plus Expression [RPar, Plus, Comma]
-}
-ListOfExpression3: {
-	Expression -> Identifier LPar ListOfExpression • RPar [RPar, Plus, Comma]
-	ListOfExpression -> ListOfExpression • [RPar, Comma]
-	ListOfExpression -> ListOfExpression • Comma Expression [RPar, Comma]
+List3ListOfExpression3: {
+	Expression$$ -> Identifier LPar List3ListOfExpression • RPar [RPar, Comma]
 }
 RPar4: {
-	Expression -> LPar Expression RPar • [RPar, Plus, Comma]
+	Expression$$ -> LPar Expression$$ RPar • [RPar, Comma]
 }
 RPar5: {
-	Expression -> Identifier LPar ListOfExpression RPar • [RPar, Plus]
+	Expression$$ -> Identifier LPar List3ListOfExpression RPar • [RPar]
 }
 RPar6: {
-	Expression -> Identifier LPar ListOfExpression RPar • [RPar, Plus, Comma]
+	Expression$$ -> Identifier LPar List3ListOfExpression RPar • [RPar, Comma]
 }
 
-1: End -> REDUCE: ListOfStatement -> • [End, Identifier, LPar]
-1: Identifier -> REDUCE: ListOfStatement -> • [End, Identifier, LPar]
-1: LPar -> REDUCE: ListOfStatement -> • [End, Identifier, LPar]
+1: End -> REDUCE: List1ListOfStatement -> • [End, Identifier, LPar]
+1: Identifier -> REDUCE: List1ListOfStatement -> • [End, Identifier, LPar]
+1: LPar -> REDUCE: List1ListOfStatement -> • [End, Identifier, LPar]
 1: Program -> GOTO: Program1
-1: ListOfStatement -> GOTO: ListOfStatement1
+1: List1ListOfStatement -> GOTO: List1ListOfStatement1
 Program1: End -> GOTO: End1
-ListOfStatement1: End -> REDUCE: Program -> ListOfStatement • [End]
-ListOfStatement1: Statement -> GOTO: Statement1
-ListOfStatement1: Expression -> GOTO: Expression1
-ListOfStatement1: Identifier -> GOTO: Identifier1
-ListOfStatement1: LPar -> GOTO: LPar1
+List1ListOfStatement1: End -> REDUCE: Program -> List1ListOfStatement • [End]
+List1ListOfStatement1: Statement -> GOTO: Statement1
+List1ListOfStatement1: P1Expression -> GOTO: P1Expression1
+List1ListOfStatement1: P2Expression$ -> GOTO: P2Expression$1
+List1ListOfStatement1: Expression$$ -> GOTO: Expression$$1
+List1ListOfStatement1: Identifier -> GOTO: Identifier1
+List1ListOfStatement1: LPar -> GOTO: LPar1
 End1:  -> ACCEPT: Start -> Program End • []
-Statement1: End -> REDUCE: ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
-Statement1: Identifier -> REDUCE: ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
-Statement1: LPar -> REDUCE: ListOfStatement -> ListOfStatement Statement • [End, Identifier, LPar]
-Expression1: Dot -> GOTO: Dot1
-Expression1: Plus -> GOTO: Plus1
-Identifier1: Dot -> REDUCE: Expression -> Identifier • [Dot, Plus]
-Identifier1: Plus -> REDUCE: Expression -> Identifier • [Dot, Plus]
+Statement1: End -> REDUCE: List1ListOfStatement -> List1ListOfStatement Statement • [End, Identifier, LPar]
+Statement1: Identifier -> REDUCE: List1ListOfStatement -> List1ListOfStatement Statement • [End, Identifier, LPar]
+Statement1: LPar -> REDUCE: List1ListOfStatement -> List1ListOfStatement Statement • [End, Identifier, LPar]
+P1Expression1: Dot -> GOTO: Dot1
+P1Expression1: Plus -> GOTO: Plus1
+P2Expression$1: Dot -> REDUCE: P1Expression -> P2Expression$ • [Dot, Plus]
+P2Expression$1: Plus -> REDUCE: P1Expression -> P2Expression$ • [Dot, Plus]
+P2Expression$1: Times -> GOTO: Times1
+Expression$$1: Dot -> REDUCE: P2Expression$ -> Expression$$ • [Dot, Times, Plus]
+Expression$$1: Times -> REDUCE: P2Expression$ -> Expression$$ • [Dot, Times, Plus]
+Expression$$1: Plus -> REDUCE: P2Expression$ -> Expression$$ • [Dot, Times, Plus]
+Identifier1: Dot -> REDUCE: Expression$$ -> Identifier • [Dot, Times, Plus]
+Identifier1: Times -> REDUCE: Expression$$ -> Identifier • [Dot, Times, Plus]
+Identifier1: Plus -> REDUCE: Expression$$ -> Identifier • [Dot, Times, Plus]
 Identifier1: LPar -> GOTO: LPar2
-LPar1: Expression -> GOTO: Expression2
+LPar1: Expression$$ -> GOTO: Expression$$2
 LPar1: Identifier -> GOTO: Identifier2
 LPar1: LPar -> GOTO: LPar3
-Dot1: End -> REDUCE: Statement -> Expression Dot • [End, Identifier, LPar]
-Dot1: Identifier -> REDUCE: Statement -> Expression Dot • [End, Identifier, LPar]
-Dot1: LPar -> REDUCE: Statement -> Expression Dot • [End, Identifier, LPar]
-Plus1: Expression -> GOTO: Expression3
+Dot1: End -> REDUCE: Statement -> P1Expression Dot • [End, Identifier, LPar]
+Dot1: Identifier -> REDUCE: Statement -> P1Expression Dot • [End, Identifier, LPar]
+Dot1: LPar -> REDUCE: Statement -> P1Expression Dot • [End, Identifier, LPar]
+Plus1: P2Expression$ -> GOTO: P2Expression$2
+Plus1: Expression$$ -> GOTO: Expression$$1
 Plus1: Identifier -> GOTO: Identifier1
 Plus1: LPar -> GOTO: LPar1
-LPar2: RPar -> REDUCE: ListOfExpression -> • [RPar, Comma]
-LPar2: Comma -> REDUCE: ListOfExpression -> • [RPar, Comma]
-LPar2: ListOfExpression -> GOTO: ListOfExpression1
-LPar2: Expression -> GOTO: Expression4
-LPar2: Identifier -> GOTO: Identifier4
-LPar2: LPar -> GOTO: LPar5
-Expression2: RPar -> GOTO: RPar1
-Expression2: Plus -> GOTO: Plus2
-Identifier2: RPar -> REDUCE: Expression -> Identifier • [RPar, Plus]
-Identifier2: Plus -> REDUCE: Expression -> Identifier • [RPar, Plus]
-Identifier2: LPar -> GOTO: LPar6
-LPar3: Expression -> GOTO: Expression5
+Times1: Expression$$ -> GOTO: Expression$$4
+Times1: Identifier -> GOTO: Identifier1
+Times1: LPar -> GOTO: LPar1
+LPar2: RPar -> REDUCE: List3ListOfExpression -> • [RPar]
+LPar2: List3ListOfExpression -> GOTO: List3ListOfExpression1
+LPar2: List2ListOfExpression$ -> GOTO: List2ListOfExpression$1
+LPar2: Expression$$ -> GOTO: Expression$$5
+LPar2: Identifier -> GOTO: Identifier5
+LPar2: LPar -> GOTO: LPar6
+Expression$$2: RPar -> GOTO: RPar1
+Identifier2: RPar -> REDUCE: Expression$$ -> Identifier • [RPar]
+Identifier2: LPar -> GOTO: LPar7
+LPar3: Expression$$ -> GOTO: Expression$$6
 LPar3: Identifier -> GOTO: Identifier2
 LPar3: LPar -> GOTO: LPar3
-Expression3: Dot -> REDUCE: Expression -> Expression Plus Expression • [Dot, Plus]
-Expression3: Plus -> REDUCE: Expression -> Expression Plus Expression • [Dot, Plus]
-ListOfExpression1: RPar -> REDUCE: ListOfExpression -> ListOfExpression • [RPar, Comma]
-ListOfExpression1: Comma -> REDUCE: ListOfExpression -> ListOfExpression • [RPar, Comma]
-Expression4: RPar -> REDUCE: ListOfExpression -> Expression • [RPar, Comma]
-Expression4: Comma -> REDUCE: ListOfExpression -> Expression • [RPar, Comma]
-Expression4: Plus -> GOTO: Plus4
-Identifier4: RPar -> REDUCE: Expression -> Identifier • [RPar, Plus, Comma]
-Identifier4: Plus -> REDUCE: Expression -> Identifier • [RPar, Plus, Comma]
-Identifier4: Comma -> REDUCE: Expression -> Identifier • [RPar, Plus, Comma]
-Identifier4: LPar -> GOTO: LPar8
-LPar5: Expression -> GOTO: Expression6
-LPar5: Identifier -> GOTO: Identifier2
-LPar5: LPar -> GOTO: LPar3
-RPar1: Dot -> REDUCE: Expression -> LPar Expression RPar • [Dot, Plus]
-RPar1: Plus -> REDUCE: Expression -> LPar Expression RPar • [Dot, Plus]
-Plus2: Expression -> GOTO: Expression7
-Plus2: Identifier -> GOTO: Identifier2
-Plus2: LPar -> GOTO: LPar3
-LPar6: RPar -> REDUCE: ListOfExpression -> • [RPar, Comma]
-LPar6: Comma -> REDUCE: ListOfExpression -> • [RPar, Comma]
-LPar6: ListOfExpression -> GOTO: ListOfExpression2
-LPar6: Expression -> GOTO: Expression4
-LPar6: Identifier -> GOTO: Identifier4
-LPar6: LPar -> GOTO: LPar5
-Expression5: RPar -> GOTO: RPar3
-Expression5: Plus -> GOTO: Plus2
-RPar2: Dot -> REDUCE: Expression -> Identifier LPar ListOfExpression RPar • [Dot, Plus]
-RPar2: Plus -> REDUCE: Expression -> Identifier LPar ListOfExpression RPar • [Dot, Plus]
-Comma1: Expression -> GOTO: Expression9
-Comma1: Identifier -> GOTO: Identifier4
-Comma1: LPar -> GOTO: LPar5
-Plus4: Expression -> GOTO: Expression10
-Plus4: Identifier -> GOTO: Identifier4
-Plus4: LPar -> GOTO: LPar5
-LPar8: RPar -> REDUCE: ListOfExpression -> • [RPar, Comma]
-LPar8: Comma -> REDUCE: ListOfExpression -> • [RPar, Comma]
-LPar8: ListOfExpression -> GOTO: ListOfExpression3
-LPar8: Expression -> GOTO: Expression4
-LPar8: Identifier -> GOTO: Identifier4
-LPar8: LPar -> GOTO: LPar5
-Expression6: RPar -> GOTO: RPar4
-Expression6: Plus -> GOTO: Plus2
-Expression7: RPar -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus]
-Expression7: Plus -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus]
-ListOfExpression2: RPar -> REDUCE: ListOfExpression -> ListOfExpression • [RPar, Comma]
-ListOfExpression2: Comma -> REDUCE: ListOfExpression -> ListOfExpression • [RPar, Comma]
-RPar3: RPar -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus]
-RPar3: Plus -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus]
-Expression9: RPar -> REDUCE: ListOfExpression -> ListOfExpression Comma Expression • [RPar, Comma]
-Expression9: Comma -> REDUCE: ListOfExpression -> ListOfExpression Comma Expression • [RPar, Comma]
-Expression9: Plus -> GOTO: Plus4
-Expression10: RPar -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus, Comma]
-Expression10: Plus -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus, Comma]
-Expression10: Comma -> REDUCE: Expression -> Expression Plus Expression • [RPar, Plus, Comma]
-ListOfExpression3: RPar -> REDUCE: ListOfExpression -> ListOfExpression • [RPar, Comma]
-ListOfExpression3: Comma -> REDUCE: ListOfExpression -> ListOfExpression • [RPar, Comma]
-RPar4: RPar -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus, Comma]
-RPar4: Plus -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus, Comma]
-RPar4: Comma -> REDUCE: Expression -> LPar Expression RPar • [RPar, Plus, Comma]
-RPar5: RPar -> REDUCE: Expression -> Identifier LPar ListOfExpression RPar • [RPar, Plus]
-RPar5: Plus -> REDUCE: Expression -> Identifier LPar ListOfExpression RPar • [RPar, Plus]
-RPar6: RPar -> REDUCE: Expression -> Identifier LPar ListOfExpression RPar • [RPar, Plus, Comma]
-RPar6: Plus -> REDUCE: Expression -> Identifier LPar ListOfExpression RPar • [RPar, Plus, Comma]
-RPar6: Comma -> REDUCE: Expression -> Identifier LPar ListOfExpression RPar • [RPar, Plus, Comma]
+P2Expression$2: Dot -> REDUCE: P1Expression -> P1Expression Plus P2Expression$ • [Dot, Plus]
+P2Expression$2: Plus -> REDUCE: P1Expression -> P1Expression Plus P2Expression$ • [Dot, Plus]
+P2Expression$2: Times -> GOTO: Times1
+Expression$$4: Dot -> REDUCE: P2Expression$ -> P2Expression$ Times Expression$$ • [Dot, Times, Plus]
+Expression$$4: Times -> REDUCE: P2Expression$ -> P2Expression$ Times Expression$$ • [Dot, Times, Plus]
+Expression$$4: Plus -> REDUCE: P2Expression$ -> P2Expression$ Times Expression$$ • [Dot, Times, Plus]
+List3ListOfExpression1: RPar -> GOTO: RPar2
+List2ListOfExpression$1: RPar -> REDUCE: List3ListOfExpression -> List2ListOfExpression$ • [RPar]
+List2ListOfExpression$1: Comma -> GOTO: Comma1
+Expression$$5: RPar -> REDUCE: List2ListOfExpression$ -> Expression$$ • [RPar, Comma]
+Expression$$5: Comma -> REDUCE: List2ListOfExpression$ -> Expression$$ • [RPar, Comma]
+Identifier5: RPar -> REDUCE: Expression$$ -> Identifier • [RPar, Comma]
+Identifier5: Comma -> REDUCE: Expression$$ -> Identifier • [RPar, Comma]
+Identifier5: LPar -> GOTO: LPar9
+LPar6: Expression$$ -> GOTO: Expression$$7
+LPar6: Identifier -> GOTO: Identifier2
+LPar6: LPar -> GOTO: LPar3
+RPar1: Dot -> REDUCE: Expression$$ -> LPar Expression$$ RPar • [Dot, Times, Plus]
+RPar1: Times -> REDUCE: Expression$$ -> LPar Expression$$ RPar • [Dot, Times, Plus]
+RPar1: Plus -> REDUCE: Expression$$ -> LPar Expression$$ RPar • [Dot, Times, Plus]
+LPar7: RPar -> REDUCE: List3ListOfExpression -> • [RPar]
+LPar7: List3ListOfExpression -> GOTO: List3ListOfExpression2
+LPar7: List2ListOfExpression$ -> GOTO: List2ListOfExpression$1
+LPar7: Expression$$ -> GOTO: Expression$$5
+LPar7: Identifier -> GOTO: Identifier5
+LPar7: LPar -> GOTO: LPar6
+Expression$$6: RPar -> GOTO: RPar3
+RPar2: Dot -> REDUCE: Expression$$ -> Identifier LPar List3ListOfExpression RPar • [Dot, Times, Plus]
+RPar2: Times -> REDUCE: Expression$$ -> Identifier LPar List3ListOfExpression RPar • [Dot, Times, Plus]
+RPar2: Plus -> REDUCE: Expression$$ -> Identifier LPar List3ListOfExpression RPar • [Dot, Times, Plus]
+Comma1: Expression$$ -> GOTO: Expression$$9
+Comma1: Identifier -> GOTO: Identifier5
+Comma1: LPar -> GOTO: LPar6
+LPar9: RPar -> REDUCE: List3ListOfExpression -> • [RPar]
+LPar9: List3ListOfExpression -> GOTO: List3ListOfExpression3
+LPar9: List2ListOfExpression$ -> GOTO: List2ListOfExpression$1
+LPar9: Expression$$ -> GOTO: Expression$$5
+LPar9: Identifier -> GOTO: Identifier5
+LPar9: LPar -> GOTO: LPar6
+Expression$$7: RPar -> GOTO: RPar4
+List3ListOfExpression2: RPar -> GOTO: RPar5
+RPar3: RPar -> REDUCE: Expression$$ -> LPar Expression$$ RPar • [RPar]
+Expression$$9: RPar -> REDUCE: List2ListOfExpression$ -> List2ListOfExpression$ Comma Expression$$ • [RPar, Comma]
+Expression$$9: Comma -> REDUCE: List2ListOfExpression$ -> List2ListOfExpression$ Comma Expression$$ • [RPar, Comma]
+List3ListOfExpression3: RPar -> GOTO: RPar6
+RPar4: RPar -> REDUCE: Expression$$ -> LPar Expression$$ RPar • [RPar, Comma]
+RPar4: Comma -> REDUCE: Expression$$ -> LPar Expression$$ RPar • [RPar, Comma]
+RPar5: RPar -> REDUCE: Expression$$ -> Identifier LPar List3ListOfExpression RPar • [RPar]
+RPar6: RPar -> REDUCE: Expression$$ -> Identifier LPar List3ListOfExpression RPar • [RPar, Comma]
+RPar6: Comma -> REDUCE: Expression$$ -> Identifier LPar List3ListOfExpression RPar • [RPar, Comma]
 
 */
 
@@ -381,6 +364,10 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
+    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         return error(symbol);
     }
@@ -401,7 +388,7 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitListOfStatement(java.util.List<foundation.rpg.sample.language.ast.Statement> symbol) throws UnexpectedInputException {
+    public State visitList1ListOfStatement(java.util.List<foundation.rpg.sample.language.ast.Statement> symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -409,11 +396,23 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) throws UnexpectedInputException {
+    public State visitP1Expression(foundation.rpg.sample.language.ast.Expression symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) throws UnexpectedInputException {
+    public State visitP2Expression$(foundation.rpg.sample.language.ast.Expression symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitExpression$$(foundation.rpg.sample.language.ast.Expression symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitList3ListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitList2ListOfExpression$(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

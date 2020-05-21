@@ -27,39 +27,23 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.parser;
 
-/*
+import foundation.rpg.Name;
 
-Expression5: {
-	Expression -> LPar Expression • RPar [RPar, Plus]
-	Expression -> Expression • Plus Expression [RPar, Plus]
-}
+public class Terminal {
+    private final Token position;
 
-*/
-
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class StateExpression5 extends StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.LPar, ? extends State>> {
-// Stack:
-    public StateExpression5(foundation.rpg.sample.language.ast.Expression node, StackState<foundation.rpg.common.LPar, ? extends State> prev) {
-        super(node, prev);
+    public Terminal(Token position) {
+        this.position = position;
     }
 
-
-// Reduce:
-// Shift:
-    @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) {
-        return new StateRPar3(symbol, this);
+    public Token description() {
+        return position;
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) {
-        return new StatePlus2(symbol, this);
+    public String toString() {
+        return getClass().getAnnotation(Name.class).value();
     }
-
-
-// Accept:
 }

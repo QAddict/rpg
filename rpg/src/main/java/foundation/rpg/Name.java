@@ -34,9 +34,30 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Name of a terminal symbol, which is used to find it in source text by Lexer.
+ *
+ * The value() is used by the lexer to find the terminal symbol, and priority() helps resolve, which symbol should be
+ * returned, if more of them matched in the source text (e.g. terminal matched by @Match annotation as well as simple
+ * symbol matched by @Name).
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PARAMETER})
 public @interface Name {
+
+    /**
+     * String name of the annotated type representing terminal symbol. That one is searched in the input source.
+     *
+     * @return String name of the annotated type.
+     */
     String value();
+
+    /**
+     * Priority of the annotated terminal symbol, used in case of match of multiple terminal symbols ion the source
+     * text.
+     *
+     * @return Priority of the annotated symbol.
+     */
     int priority() default 1;
+
 }

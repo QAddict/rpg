@@ -32,5 +32,8 @@ package foundation.rpg;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
+/**
+ * Marker for annotations used for "meta-rule" explosion.
+ */
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface MetaRule {}

@@ -32,8 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Identifier2: {
-	Expression -> Identifier • [RPar, Plus]
-	Expression -> Identifier • LPar ListOfExpression RPar [RPar, Plus]
+	Expression$$ -> Identifier • [RPar]
+	Expression$$ -> Identifier • LPar List3ListOfExpression RPar [RPar]
 }
 
 */
@@ -53,21 +53,14 @@ public class StateIdentifier2 extends StackState<foundation.rpg.sample.language.
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
-    }
-
-    @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
+        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
     }
 
 
 // Shift:
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar6(symbol, this);
+        return new StateLPar7(symbol, this);
     }
 
 

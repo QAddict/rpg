@@ -32,8 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Identifier1: {
-	Expression -> Identifier • [Dot, Plus]
-	Expression -> Identifier • LPar ListOfExpression RPar [Dot, Plus]
+	Expression$$ -> Identifier • [Dot, Times, Plus]
+	Expression$$ -> Identifier • LPar List3ListOfExpression RPar [Dot, Times, Plus]
 }
 
 */
@@ -53,14 +53,21 @@ public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.
     public State visitDot(foundation.rpg.common.Dot symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitDot(symbol);
+        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitDot(symbol);
+    }
+
+    @Override
+    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitTimes(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
+        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
     }
 
 

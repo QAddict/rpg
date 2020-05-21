@@ -27,39 +27,25 @@
  *
  */
 
-package foundation.rpg.sample.language.ast;
+package foundation.rpg.util;
 
-/*
+import java.util.*;
+import java.util.function.Consumer;
 
-Expression2: {
-	Expression -> LPar Expression • RPar [Dot, Plus]
-	Expression -> Expression • Plus Expression [RPar, Plus]
-}
+public class Bfs {
 
-*/
-
-import foundation.rpg.parser.UnexpectedInputException;
-
-// Generated visitor pattern based state for grammar parser.
-public class StateExpression2 extends StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.LPar, ? extends State>> {
-// Stack:
-    public StateExpression2(foundation.rpg.sample.language.ast.Expression node, StackState<foundation.rpg.common.LPar, ? extends State> prev) {
-        super(node, prev);
+    @FunctionalInterface
+    public interface Iteration<T> {
+        void iterate(T item, Consumer<? super T> consumer);
+    }
+    public static <T> void bfs(Iteration<T> iteration, Collection<T> input) {
+        Queue<T> queue = new LinkedList<>(input);
+        Set<T> visited = new HashSet<>(input);
+        while (!queue.isEmpty()) {
+            iteration.iterate(queue.poll(), next -> {
+                if(visited.add(next)) queue.add(next);
+            });
+        }
     }
 
-
-// Reduce:
-// Shift:
-    @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) {
-        return new StateRPar1(symbol, this);
-    }
-
-    @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) {
-        return new StatePlus2(symbol, this);
-    }
-
-
-// Accept:
 }

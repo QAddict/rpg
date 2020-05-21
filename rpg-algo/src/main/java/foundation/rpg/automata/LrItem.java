@@ -103,12 +103,12 @@ public final class LrItem implements Comparable<LrItem> {
     @Override
     public String toString() {
         StringJoiner j = new StringJoiner(" ");
-        for(int i = 0; i < rule.getRight().size(); i++) {
-            if(i == dot) j.add("•");
-            j.add(rule.getRight().get(i).toString());
-        }
-        if(dot == rule.getRight().size())
-            j.add("•");
+        int i = 0;
+        while(i < dot)
+            j.add(rule.getRight().get(i++).toString());
+        j.add("•");
+        while(i < rule.getRight().size())
+            j.add(rule.getRight().get(i++).toString());
         return rule.getLeft() + " -> " + j + " " + lookahead;
     }
 

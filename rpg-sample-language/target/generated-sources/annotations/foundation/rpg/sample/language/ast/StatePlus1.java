@@ -32,11 +32,12 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Plus1: {
-	Expression -> Expression Plus • Expression [Dot, Plus]
-	Expression -> • Expression Plus Expression [Dot, Plus]
-	Expression -> • Identifier [Dot, Plus]
-	Expression -> • LPar Expression RPar [Dot, Plus]
-	Expression -> • Identifier LPar ListOfExpression RPar [Dot, Plus]
+	P1Expression -> P1Expression Plus • P2Expression$ [Dot, Plus]
+	P2Expression$ -> • Expression$$ [Dot, Plus, Times]
+	P2Expression$ -> • P2Expression$ Times Expression$$ [Dot, Plus, Times]
+	Expression$$ -> • Identifier [Dot, Plus, Times]
+	Expression$$ -> • LPar Expression$$ RPar [Dot, Plus, Times]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Plus, Times]
 }
 
 */
@@ -54,8 +55,13 @@ public class StatePlus1 extends StackState<foundation.rpg.common.Plus, StackStat
 // Reduce:
 // Shift:
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression3(symbol, this);
+    public State visitP2Expression$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateP2Expression$2(symbol, this);
+    }
+
+    @Override
+    public State visitExpression$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateExpression$$1(symbol, this);
     }
 
     @Override

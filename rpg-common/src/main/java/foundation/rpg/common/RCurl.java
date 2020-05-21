@@ -30,6 +30,7 @@
 package foundation.rpg.common;
 
 import foundation.rpg.Name;
+import foundation.rpg.parser.Terminal;
 import foundation.rpg.parser.Token;
 
 @Name("}")

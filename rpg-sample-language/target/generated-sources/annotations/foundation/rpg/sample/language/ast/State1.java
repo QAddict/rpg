@@ -33,9 +33,9 @@ package foundation.rpg.sample.language.ast;
 
 1: {
 	Start -> • Program End []
-	Program -> • ListOfStatement [End]
-	ListOfStatement -> • [End, Identifier, LPar]
-	ListOfStatement -> • ListOfStatement Statement [End, Identifier, LPar]
+	Program -> • List1ListOfStatement [End]
+	List1ListOfStatement -> • [End, Identifier, LPar]
+	List1ListOfStatement -> • List1ListOfStatement Statement [End, Identifier, LPar]
 }
 
 */
@@ -49,19 +49,19 @@ public class State1 extends State {
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
         
-        return this.visitListOfStatement(foundation.rpg.common.ListRules.isList1()).visitEnd(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1()).visitEnd(symbol);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
-        return this.visitListOfStatement(foundation.rpg.common.ListRules.isList1()).visitIdentifier(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1()).visitIdentifier(symbol);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) throws UnexpectedInputException {
         
-        return this.visitListOfStatement(foundation.rpg.common.ListRules.isList1()).visitLPar(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1()).visitLPar(symbol);
     }
 
 
@@ -72,8 +72,8 @@ public class State1 extends State {
     }
 
     @Override
-    public State visitListOfStatement(java.util.List<foundation.rpg.sample.language.ast.Statement> symbol) {
-        return new StateListOfStatement1(symbol, this);
+    public State visitList1ListOfStatement(java.util.List<foundation.rpg.sample.language.ast.Statement> symbol) {
+        return new StateList1ListOfStatement1(symbol, this);
     }
 
 

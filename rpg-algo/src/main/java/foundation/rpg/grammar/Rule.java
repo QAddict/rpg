@@ -31,6 +31,11 @@ package foundation.rpg.grammar;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toSet;
 
 public final class Rule {
 
@@ -43,6 +48,7 @@ public final class Rule {
         this.right = right;
         this.priority = priority;
     }
+
     public Rule(Symbol left, List<Symbol> right, int priority) {
         this(left, new SymbolString(right), priority);
     }
@@ -88,5 +94,25 @@ public final class Rule {
 
     public int getPriority() {
         return priority;
+    }
+
+    public static PriorityBuilder rule(Symbol left) {
+        return priority -> right -> new Rule(left, asList(right), priority);
+    }
+
+    public interface Builder {
+        Rule to(Symbol... right);
+
+        @SafeVarargs
+        static <T> Set<T> of(T... items) {
+            return Stream.of(items).collect(toSet());
+        }
+    }
+
+    public interface PriorityBuilder extends Builder {
+        Builder priority(int priority);
+        @Override default Rule to(Symbol... right) {
+            return priority(0).to(right);
+        }
     }
 }

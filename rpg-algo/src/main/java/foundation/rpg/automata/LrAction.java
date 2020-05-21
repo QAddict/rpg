@@ -61,7 +61,7 @@ public interface LrAction {
 
         @Override
         public int priority() {
-            return 0;
+            return to.getItems().stream().mapToInt(i -> i.getRule().getPriority()).max().orElse(0);
         }
     }
 

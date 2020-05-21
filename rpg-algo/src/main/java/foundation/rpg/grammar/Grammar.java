@@ -37,10 +37,22 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toCollection;
 
+/**
+ * Representation of grammar defined a G(N, T, S, R). where N is set of ntereminal symbols, T is set of terminal symbols,
+ * S is start symbol and R is set of rules.
+ *
+ * Additionally our grammar has I set of ignored symbols (e.g. whitespaces).
+ */
 public class Grammar {
 
+    /**
+     * Start symbol of the grammar.
+     */
     private final Symbol start;
-    private final Set<Symbol> symbols = new LinkedHashSet<>();
+
+    /**
+     * Set of all symbols in the grammar excluding the ignored ones.
+     */
     private final Set<Symbol> terminals;
     private final Set<Symbol> nonTerminals;
     private final Set<Rule> rules;
@@ -51,8 +63,6 @@ public class Grammar {
         this.start = start;
         this.terminals = terminals;
         this.nonTerminals = nonTerminals;
-        this.symbols.addAll(terminals);
-        this.symbols.addAll(nonTerminals);
         this.rules = rules;
         this.ignored = ignored;
         rules.forEach(rule -> rulesBySymbol.add(rule.getLeft(), rule));
@@ -81,10 +91,6 @@ public class Grammar {
 
     public Set<Symbol> getNonTerminals() {
         return nonTerminals;
-    }
-
-    public Set<Symbol> getSymbols() {
-        return symbols;
     }
 
     public Set<Rule> getRules() {

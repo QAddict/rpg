@@ -33,6 +33,7 @@ import foundation.rpg.automata.LrAction;
 import foundation.rpg.automata.LrItem;
 import foundation.rpg.automata.LrItemSet;
 import foundation.rpg.automata.LrParserAutomata;
+import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
 import foundation.rpg.parser.context.ClassToGrammarContext;
@@ -47,7 +48,9 @@ import java.util.stream.Stream;
 
 import static foundation.rpg.parser.generator.SourceModel.Names.*;
 import static java.lang.String.join;
+import static java.util.Collections.max;
 import static java.util.stream.Collectors.*;
+import static java.util.stream.Stream.concat;
 import static javax.lang.model.element.Modifier.STATIC;
 
 public class CodeGenerator {
@@ -81,9 +84,10 @@ public class CodeGenerator {
     }
 
     private void generateState(LrParserAutomata parser) {
-        SourceModel code = source("State").set(grammar, parser.getGrammar()).set(automata, parser).set(result, typeOf(parser.getGrammar().getStart()));
-        parser.getGrammar().getIgnored().forEach(s -> code.with(Ignored).set(name, s).set(type, typeOf(s)));
-        parser.getGrammar().getSymbols().stream().filter(s -> !s.equals(parser.getGrammar().getStart())).forEach(s -> code.with(Symbols).set(name, s).set(type, typeOf(s)));
+        Grammar g = parser.getGrammar();
+        SourceModel code = source("State").set(SourceModel.Names.grammar, g).set(automata, parser).set(result, typeOf(g.getStart()));
+        g.getIgnored().forEach(s -> code.with(Ignored).set(name, s).set(type, typeOf(s)));
+        concat(g.getTerminals().stream(), g.getNonTerminals().stream()).filter(s -> !s.equals(g.getStart())).forEach(s -> code.with(Symbols).set(name, s).set(type, typeOf(s)));
         write(code);
     }
 
@@ -109,7 +113,7 @@ public class CodeGenerator {
     }
 
     private void generateState(LrParserAutomata parser, LrItemSet set) {
-        LrItem longest = Collections.max(set.getItems());
+        LrItem longest = max(set.getItems());
         int dot = longest.getDot();
         List<TypeMirror> longestParameters = longest.getRule().getRight().stream().map(context::symbolType).collect(toList());
         String superClass = dot > 0 ? chainedType(longestParameters, dot) : "State";

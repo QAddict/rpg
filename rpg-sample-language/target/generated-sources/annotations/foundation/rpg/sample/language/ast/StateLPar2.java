@@ -32,15 +32,14 @@ package foundation.rpg.sample.language.ast;
 /*
 
 LPar2: {
-	Expression -> Identifier LPar • ListOfExpression RPar [Dot, Plus]
-	ListOfExpression -> • [RPar, Comma]
-	ListOfExpression -> • ListOfExpression [RPar, Comma]
-	ListOfExpression -> • Expression [RPar, Comma]
-	ListOfExpression -> • ListOfExpression Comma Expression [RPar, Comma]
-	Expression -> • Expression Plus Expression [RPar, Plus, Comma]
-	Expression -> • Identifier [RPar, Plus, Comma]
-	Expression -> • LPar Expression RPar [RPar, Plus, Comma]
-	Expression -> • Identifier LPar ListOfExpression RPar [RPar, Plus, Comma]
+	Expression$$ -> Identifier LPar • List3ListOfExpression RPar [Dot, Times, Plus]
+	List3ListOfExpression -> • [RPar]
+	List3ListOfExpression -> • List2ListOfExpression$ [RPar]
+	List2ListOfExpression$ -> • Expression$$ [RPar, Comma]
+	List2ListOfExpression$ -> • List2ListOfExpression$ Comma Expression$$ [RPar, Comma]
+	Expression$$ -> • Identifier [RPar, Comma]
+	Expression$$ -> • LPar Expression$$ RPar [RPar, Comma]
+	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma]
 }
 
 */
@@ -59,35 +58,34 @@ public class StateLPar2 extends StackState<foundation.rpg.common.LPar, StackStat
     @Override
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
-        return this.visitListOfExpression(foundation.rpg.common.ListRules.isList3()).visitRPar(symbol);
-    }
-
-    @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
-        
-        return this.visitListOfExpression(foundation.rpg.common.ListRules.isList3()).visitComma(symbol);
+        return this.visitList3ListOfExpression(foundation.rpg.common.ListRules.isList3()).visitRPar(symbol);
     }
 
 
 // Shift:
     @Override
-    public State visitListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
-        return new StateListOfExpression1(symbol, this);
+    public State visitList3ListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
+        return new StateList3ListOfExpression1(symbol, this);
     }
 
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression4(symbol, this);
+    public State visitList2ListOfExpression$(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
+        return new StateList2ListOfExpression$1(symbol, this);
+    }
+
+    @Override
+    public State visitExpression$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateExpression$$5(symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier4(symbol, this);
+        return new StateIdentifier5(symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar5(symbol, this);
+        return new StateLPar6(symbol, this);
     }
 
 
