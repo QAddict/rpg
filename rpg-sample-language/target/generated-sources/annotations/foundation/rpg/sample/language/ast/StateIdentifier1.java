@@ -32,8 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Identifier1: {
-	Expression$$ -> Identifier • [Dot, Times, Plus]
-	Expression$$ -> Identifier • LPar List3ListOfExpression RPar [Dot, Times, Plus]
+	P3Expression$$$ -> Identifier • [Dot, Times, Plus]
+	P3Expression$$$ -> Identifier • LPar List3ListOfExpression RPar [Dot, Times, Plus]
 }
 
 */
@@ -42,9 +42,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.ast.Identifier, State> {
+
+// NoStack:
 // Stack:
-    public StateIdentifier1(foundation.rpg.sample.language.ast.Identifier node, State prev) {
-        super(node, prev);
+    public StateIdentifier1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Identifier node, State prev) {
+        super(factory, node, prev);
     }
 
 
@@ -53,28 +55,28 @@ public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.
     public State visitDot(foundation.rpg.common.Dot symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitDot(symbol);
+        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitDot(symbol);
     }
 
     @Override
     public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitTimes(symbol);
+        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitTimes(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitPlus(symbol);
+        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitPlus(symbol);
     }
 
 
 // Shift:
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar2(symbol, this);
+        return new StateLPar2(getFactory(), symbol, this);
     }
 
 

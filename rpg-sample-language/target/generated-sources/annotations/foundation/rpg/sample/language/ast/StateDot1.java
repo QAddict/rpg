@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Dot1: {
-	Statement -> P1Expression Dot • [End, Identifier, LPar]
+	Statement -> Expression Dot • [End, Identifier, LPar]
 }
 
 */
@@ -41,9 +41,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
+
+// NoStack:
 // Stack:
-    public StateDot1(foundation.rpg.common.Dot node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
-        super(node, prev);
+    public StateDot1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Dot node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
+        super(factory, node, prev);
     }
 
 
@@ -53,7 +55,7 @@ public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<
         
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitStatement(foundation.rpg.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitEnd(symbol);
+        return stack2.visitStatement(getFactory().is(stack1.getNode(), this.getNode())).visitEnd(symbol);
     }
 
     @Override
@@ -61,7 +63,7 @@ public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<
         
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitStatement(foundation.rpg.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
+        return stack2.visitStatement(getFactory().is(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<
         
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
-        return stack2.visitStatement(foundation.rpg.sample.language.ast.AstFactory.is(stack1.getNode(), this.getNode())).visitLPar(symbol);
+        return stack2.visitStatement(getFactory().is(stack1.getNode(), this.getNode())).visitLPar(symbol);
     }
 
 

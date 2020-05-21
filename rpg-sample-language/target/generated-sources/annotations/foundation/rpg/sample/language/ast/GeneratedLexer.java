@@ -9,6 +9,16 @@ import java.io.IOException;
 import foundation.rpg.parser.TokenBuilder;
 
 public class GeneratedLexer implements Lexer<State> {
+	private final foundation.rpg.sample.language.ast.AstFactory factory;
+
+	public GeneratedLexer(foundation.rpg.sample.language.ast.AstFactory factory) {
+		this.factory = factory;
+	}
+
+	public foundation.rpg.sample.language.ast.AstFactory getFactory() {
+		return factory;
+	}
+
 	public Element<State> next(Input input) throws IOException {
 		int state = 0;
 		int symbol = input.lookahead();

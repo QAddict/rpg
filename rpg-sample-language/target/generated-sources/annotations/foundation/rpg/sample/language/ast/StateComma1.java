@@ -32,10 +32,15 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Comma1: {
-	List2ListOfExpression$ -> List2ListOfExpression$ Comma • Expression$$ [RPar, Comma]
-	Expression$$ -> • Identifier [RPar, Comma]
-	Expression$$ -> • LPar Expression$$ RPar [RPar, Comma]
-	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma]
+	List2ListOfExpression$ -> List2ListOfExpression$ Comma • Expression [RPar, Comma]
+	Expression -> • P1Expression$ [RPar, Comma]
+	P1Expression$ -> • P2Expression$$ [RPar, Comma, Plus]
+	P1Expression$ -> • P1Expression$ Plus P2Expression$$ [RPar, Comma, Plus]
+	P2Expression$$ -> • P3Expression$$$ [RPar, Comma, Times, Plus]
+	P2Expression$$ -> • P2Expression$$ Times P3Expression$$$ [RPar, Comma, Times, Plus]
+	P3Expression$$$ -> • Identifier [RPar, Comma, Times, Plus]
+	P3Expression$$$ -> • LPar Expression RPar [RPar, Comma, Times, Plus]
+	P3Expression$$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma, Times, Plus]
 }
 
 */
@@ -44,27 +49,44 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> {
+
+// NoStack:
 // Stack:
-    public StateComma1(foundation.rpg.common.Comma node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> prev) {
-        super(node, prev);
+    public StateComma1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Comma node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> prev) {
+        super(factory, node, prev);
     }
 
 
 // Reduce:
 // Shift:
     @Override
-    public State visitExpression$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression$$9(symbol, this);
+    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateExpression7(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitP1Expression$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateP1Expression$3(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitP2Expression$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateP2Expression$$4(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitP3Expression$$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateP3Expression$$$5(getFactory(), symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier5(symbol, this);
+        return new StateIdentifier5(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar6(symbol, this);
+        return new StateLPar6(getFactory(), symbol, this);
     }
 
 

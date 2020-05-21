@@ -35,7 +35,8 @@ public class StackState<T, P> extends State {
     private final T node;
     private final P prev;
 
-    public StackState(T node, P prev) {
+    public StackState(foundation.rpg.sample.language.ast.AstFactory factory, T node, P prev) {
+        super(factory);
         this.node = node;
         this.prev = prev;
     }

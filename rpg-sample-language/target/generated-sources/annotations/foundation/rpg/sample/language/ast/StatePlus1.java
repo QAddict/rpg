@@ -32,12 +32,12 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Plus1: {
-	P1Expression -> P1Expression Plus • P2Expression$ [Dot, Plus]
-	P2Expression$ -> • Expression$$ [Dot, Plus, Times]
-	P2Expression$ -> • P2Expression$ Times Expression$$ [Dot, Plus, Times]
-	Expression$$ -> • Identifier [Dot, Plus, Times]
-	Expression$$ -> • LPar Expression$$ RPar [Dot, Plus, Times]
-	Expression$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Plus, Times]
+	P1Expression$ -> P1Expression$ Plus • P2Expression$$ [Dot, Plus]
+	P2Expression$$ -> • P3Expression$$$ [Dot, Plus, Times]
+	P2Expression$$ -> • P2Expression$$ Times P3Expression$$$ [Dot, Plus, Times]
+	P3Expression$$$ -> • Identifier [Dot, Plus, Times]
+	P3Expression$$$ -> • LPar Expression RPar [Dot, Plus, Times]
+	P3Expression$$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Plus, Times]
 }
 
 */
@@ -46,32 +46,34 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StatePlus1 extends StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
+
+// NoStack:
 // Stack:
-    public StatePlus1(foundation.rpg.common.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
-        super(node, prev);
+    public StatePlus1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
+        super(factory, node, prev);
     }
 
 
 // Reduce:
 // Shift:
     @Override
-    public State visitP2Expression$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP2Expression$2(symbol, this);
+    public State visitP2Expression$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateP2Expression$$3(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitExpression$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression$$1(symbol, this);
+    public State visitP3Expression$$$(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateP3Expression$$$1(getFactory(), symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier1(symbol, this);
+        return new StateIdentifier1(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar1(symbol, this);
+        return new StateLPar1(getFactory(), symbol, this);
     }
 
 

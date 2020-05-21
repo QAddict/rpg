@@ -41,9 +41,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateStatement1 extends StackState<foundation.rpg.sample.language.ast.Statement, StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State>> {
+
+// NoStack:
 // Stack:
-    public StateStatement1(foundation.rpg.sample.language.ast.Statement node, StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> prev) {
-        super(node, prev);
+    public StateStatement1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Statement node, StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> prev) {
+        super(factory, node, prev);
     }
 
 

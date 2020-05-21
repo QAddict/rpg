@@ -32,8 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Identifier2: {
-	Expression$$ -> Identifier • [RPar]
-	Expression$$ -> Identifier • LPar List3ListOfExpression RPar [RPar]
+	P3Expression$$$ -> Identifier • [RPar, Times, Plus]
+	P3Expression$$$ -> Identifier • LPar List3ListOfExpression RPar [RPar, Times, Plus]
 }
 
 */
@@ -42,9 +42,11 @@ import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateIdentifier2 extends StackState<foundation.rpg.sample.language.ast.Identifier, State> {
+
+// NoStack:
 // Stack:
-    public StateIdentifier2(foundation.rpg.sample.language.ast.Identifier node, State prev) {
-        super(node, prev);
+    public StateIdentifier2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Identifier node, State prev) {
+        super(factory, node, prev);
     }
 
 
@@ -53,14 +55,28 @@ public class StateIdentifier2 extends StackState<foundation.rpg.sample.language.
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitExpression$$(foundation.rpg.sample.language.ast.AstFactory.is(this.getNode())).visitRPar(symbol);
+        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitTimes(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitPlus(symbol);
     }
 
 
 // Shift:
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar7(symbol, this);
+        return new StateLPar7(getFactory(), symbol, this);
     }
 
 

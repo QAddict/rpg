@@ -111,7 +111,7 @@ public class ClassToGrammarContext {
                 }, singleton(method));
             }
         });
-        isStaticFactory = methods.stream().anyMatch(method -> method.getModifiers().contains(STATIC));
+        isStaticFactory = methods.stream().allMatch(method -> method.getModifiers().contains(STATIC));
         grammar = Grammar.grammar(of(entry(startRule)), rules, ignored);
         typeMap.put(Symbol.start, entry(startRule));
         typeMap.put(Symbol.end, typeEntry(elements.getTypeElement("foundation.rpg.parser.End")));
