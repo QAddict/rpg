@@ -31,8 +31,9 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-Expression2: {
-	AtomicExpression -> LPar Expression • RPar [Dot, Gt, Plus, Times]
+List2ListOfExpression1: {
+	List3ListOfExpression -> List2ListOfExpression • [RPar]
+	List2ListOfExpression -> List2ListOfExpression • Comma Expression [RPar, Comma]
 }
 
 */
@@ -40,20 +41,28 @@ Expression2: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateExpression2 extends StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.LPar, ? extends State>> {
+public class StateList2ListOfExpression1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, State> {
 
 // NoStack:
 // Stack:
-    public StateExpression2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, StackState<foundation.rpg.common.LPar, ? extends State> prev) {
+    public StateList2ListOfExpression1(foundation.rpg.sample.language.ast.AstFactory factory, java.util.List<foundation.rpg.sample.language.ast.Expression> node, State prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
+    @Override
+    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitList3ListOfExpression(foundation.rpg.common.ListRules.isList3(this.getNode())).visitRPar(symbol);
+    }
+
+
 // Shift:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) {
-        return new StateRPar1(getFactory(), symbol, this);
+    public State visitComma(foundation.rpg.common.Comma symbol) {
+        return new StateComma1(getFactory(), symbol, this);
     }
 
 

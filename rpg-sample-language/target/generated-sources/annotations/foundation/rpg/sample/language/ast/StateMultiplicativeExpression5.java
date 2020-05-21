@@ -31,9 +31,9 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-Identifier5: {
-	P3Expression$$$ -> Identifier • [RPar, Times, Plus, Comma]
-	P3Expression$$$ -> Identifier • LPar List3ListOfExpression RPar [RPar, Times, Plus, Comma]
+MultiplicativeExpression5: {
+	AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Times, Comma]
 }
 
 */
@@ -41,11 +41,11 @@ Identifier5: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateIdentifier5 extends StackState<foundation.rpg.sample.language.ast.Identifier, State> {
+public class StateMultiplicativeExpression5 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
 
 // NoStack:
 // Stack:
-    public StateIdentifier5(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Identifier node, State prev) {
+    public StateMultiplicativeExpression5(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(factory, node, prev);
     }
 
@@ -55,35 +55,35 @@ public class StateIdentifier5 extends StackState<foundation.rpg.sample.language.
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitRPar(symbol);
+        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitTimes(symbol);
+        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitGt(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitPlus(symbol);
+        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitPlus(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitP3Expression$$$(getFactory().is(this.getNode())).visitComma(symbol);
+        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitComma(symbol);
     }
 
 
 // Shift:
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar9(getFactory(), symbol, this);
+    public State visitTimes(foundation.rpg.common.Times symbol) {
+        return new StateTimes4(getFactory(), symbol, this);
     }
 
 

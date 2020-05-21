@@ -32,15 +32,17 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Comma1: {
-	List2ListOfExpression$ -> List2ListOfExpression$ Comma • Expression [RPar, Comma]
-	Expression -> • P1Expression$ [RPar, Comma]
-	P1Expression$ -> • P2Expression$$ [RPar, Comma, Plus]
-	P1Expression$ -> • P1Expression$ Plus P2Expression$$ [RPar, Comma, Plus]
-	P2Expression$$ -> • P3Expression$$$ [RPar, Comma, Times, Plus]
-	P2Expression$$ -> • P2Expression$$ Times P3Expression$$$ [RPar, Comma, Times, Plus]
-	P3Expression$$$ -> • Identifier [RPar, Comma, Times, Plus]
-	P3Expression$$$ -> • LPar Expression RPar [RPar, Comma, Times, Plus]
-	P3Expression$$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma, Times, Plus]
+	List2ListOfExpression -> List2ListOfExpression Comma • Expression [RPar, Comma]
+	Expression -> • RelationalExpression [RPar, Comma]
+	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Comma, Gt]
+	RelationalExpression -> • AdditionalExpression [RPar, Comma, Gt]
+	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	AdditionalExpression -> • MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Comma, Gt, Plus, Times]
+	MultiplicativeExpression -> • AtomicExpression [RPar, Comma, Gt, Plus, Times]
+	AtomicExpression -> • Identifier [RPar, Comma, Gt, Plus, Times]
+	AtomicExpression -> • LPar Expression RPar [RPar, Comma, Gt, Plus, Times]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma, Gt, Plus, Times]
 }
 
 */
@@ -65,28 +67,33 @@ public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackSt
     }
 
     @Override
-    public State visitP1Expression$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP1Expression$3(getFactory(), symbol, this);
+    public State visitRelationalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateRelationalExpression3(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitP2Expression$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP2Expression$$4(getFactory(), symbol, this);
+    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAdditionalExpression4(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitP3Expression$$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP3Expression$$$5(getFactory(), symbol, this);
+    public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateMultiplicativeExpression5(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAtomicExpression6(getFactory(), symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier5(getFactory(), symbol, this);
+        return new StateIdentifier6(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar6(getFactory(), symbol, this);
+        return new StateLPar7(getFactory(), symbol, this);
     }
 
 

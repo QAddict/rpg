@@ -31,8 +31,9 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-P3Expression$$$1: {
-	P2Expression$$ -> P3Expression$$$ • [Dot, Times, Plus]
+RelationalExpression1: {
+	Expression -> RelationalExpression • [Dot]
+	RelationalExpression -> RelationalExpression • Gt AdditionalExpression [Dot, Gt]
 }
 
 */
@@ -40,11 +41,11 @@ P3Expression$$$1: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateP3Expression$$$1 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
+public class StateRelationalExpression1 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
 
 // NoStack:
 // Stack:
-    public StateP3Expression$$$1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
+    public StateRelationalExpression1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(factory, node, prev);
     }
 
@@ -54,24 +55,16 @@ public class StateP3Expression$$$1 extends StackState<foundation.rpg.sample.lang
     public State visitDot(foundation.rpg.common.Dot symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitP2Expression$$(getFactory().is3(this.getNode())).visitDot(symbol);
-    }
-
-    @Override
-    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitP2Expression$$(getFactory().is3(this.getNode())).visitTimes(symbol);
-    }
-
-    @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitP2Expression$$(getFactory().is3(this.getNode())).visitPlus(symbol);
+        return stack1.visitExpression(getFactory().is(this.getNode())).visitDot(symbol);
     }
 
 
 // Shift:
+    @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) {
+        return new StateGt1(getFactory(), symbol, this);
+    }
+
+
 // Accept:
 }

@@ -29,49 +29,24 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-P3Expression$$$2: {
-	P2Expression$$ -> P3Expression$$$ • [RPar, Times, Plus]
-}
-
-*/
-
+import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
-// Generated visitor pattern based state for grammar parser.
-public class StateP3Expression$$$2 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
+// Generated token element wrapper for grammar parser.
+public class ElementGt implements Element<State> {
+    private final foundation.rpg.common.Gt symbol;
 
-// NoStack:
-// Stack:
-    public StateP3Expression$$$2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
-        super(factory, node, prev);
-    }
-
-
-// Reduce:
-    @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitP2Expression$$(getFactory().is3(this.getNode())).visitRPar(symbol);
+    public ElementGt(foundation.rpg.common.Gt symbol) {
+        this.symbol = symbol;
     }
 
     @Override
-    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitP2Expression$$(getFactory().is3(this.getNode())).visitTimes(symbol);
+    public State accept(State state) throws UnexpectedInputException {
+        return state.visitGt(symbol);
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitP2Expression$$(getFactory().is3(this.getNode())).visitPlus(symbol);
+    public String toString() {
+        return symbol.toString();
     }
-
-
-// Shift:
-// Accept:
 }

@@ -31,11 +31,15 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-Times4: {
-	MultiplicativeExpression -> MultiplicativeExpression Times • AtomicExpression [RPar, Gt, Plus, Times, Comma]
-	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times, Comma]
-	AtomicExpression -> • LPar Expression RPar [RPar, Gt, Plus, Times, Comma]
-	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times, Comma]
+Gt2: {
+	RelationalExpression -> RelationalExpression Gt • AdditionalExpression [RPar, Gt]
+	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
+	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
+	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
+	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
+	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
+	AtomicExpression -> • LPar Expression RPar [RPar, Gt, Plus, Times]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times]
 }
 
 */
@@ -43,11 +47,11 @@ Times4: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateTimes4 extends StackState<foundation.rpg.common.Times, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
+public class StateGt2 extends StackState<foundation.rpg.common.Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateTimes4(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Times node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
+    public StateGt2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Gt node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -55,18 +59,28 @@ public class StateTimes4 extends StackState<foundation.rpg.common.Times, StackSt
 // Reduce:
 // Shift:
     @Override
+    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAdditionalExpression7(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateMultiplicativeExpression2(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAtomicExpression16(getFactory(), symbol, this);
+        return new StateAtomicExpression2(getFactory(), symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier6(getFactory(), symbol, this);
+        return new StateIdentifier2(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar7(getFactory(), symbol, this);
+        return new StateLPar3(getFactory(), symbol, this);
     }
 
 

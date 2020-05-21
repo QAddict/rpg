@@ -200,14 +200,15 @@ public class ClassToGrammarContext {
     }
 
     private String uniqueName(Entry e) {
-        return e.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType)
+        String prefix = e.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType)
                 .filter(t -> nonNull(t.asElement().getAnnotation(MetaRule.class)) || nonNull(t.asElement().getAnnotation(SymbolPart.class)))
-                .map(a -> a.asElement().getSimpleName().toString()).collect(joining()) + uniqueName(e.getType());
+                .map(a -> a.asElement().getSimpleName().toString()).collect(joining());
+        return uniqueName(prefix, e.getType());
     }
 
-    private String uniqueName(TypeMirror typeMirror) {
+    private String uniqueName(String prefix, TypeMirror typeMirror) {
         String full = typeMirror.toString().replaceAll(">", "");
-        String s = Stream.of(full.split("<")).map(p -> p.substring(p.lastIndexOf(".") + 1)).collect(joining("Of"));
+        String s = prefix + Stream.of(full.split("<")).map(p -> p.substring(p.lastIndexOf(".") + 1)).collect(joining("Of"));
         while(!usedNames.add(s)) {
             s = s + "$";
         }

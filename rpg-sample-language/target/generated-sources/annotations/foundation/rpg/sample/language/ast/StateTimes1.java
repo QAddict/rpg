@@ -32,10 +32,10 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Times1: {
-	P2Expression$$ -> P2Expression$$ Times • P3Expression$$$ [Dot, Times, Plus]
-	P3Expression$$$ -> • Identifier [Dot, Times, Plus]
-	P3Expression$$$ -> • LPar Expression RPar [Dot, Times, Plus]
-	P3Expression$$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Times, Plus]
+	MultiplicativeExpression -> MultiplicativeExpression Times • AtomicExpression [Dot, Gt, Plus, Times]
+	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
+	AtomicExpression -> • LPar Expression RPar [Dot, Gt, Plus, Times]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [Dot, Gt, Plus, Times]
 }
 
 */
@@ -55,8 +55,8 @@ public class StateTimes1 extends StackState<foundation.rpg.common.Times, StackSt
 // Reduce:
 // Shift:
     @Override
-    public State visitP3Expression$$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP3Expression$$$4(getFactory(), symbol, this);
+    public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAtomicExpression5(getFactory(), symbol, this);
     }
 
     @Override

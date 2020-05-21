@@ -35,14 +35,16 @@ List1ListOfStatement1: {
 	Program -> List1ListOfStatement • [End]
 	List1ListOfStatement -> List1ListOfStatement • Statement [End, Identifier, LPar]
 	Statement -> • Expression Dot [End, Identifier, LPar]
-	Expression -> • P1Expression$ [Dot]
-	P1Expression$ -> • P2Expression$$ [Dot, Plus]
-	P1Expression$ -> • P1Expression$ Plus P2Expression$$ [Dot, Plus]
-	P2Expression$$ -> • P3Expression$$$ [Dot, Times, Plus]
-	P2Expression$$ -> • P2Expression$$ Times P3Expression$$$ [Dot, Times, Plus]
-	P3Expression$$$ -> • Identifier [Dot, Times, Plus]
-	P3Expression$$$ -> • LPar Expression RPar [Dot, Times, Plus]
-	P3Expression$$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Times, Plus]
+	Expression -> • RelationalExpression [Dot]
+	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [Dot, Gt]
+	RelationalExpression -> • AdditionalExpression [Dot, Gt]
+	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
+	AdditionalExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
+	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
+	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
+	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
+	AtomicExpression -> • LPar Expression RPar [Dot, Gt, Plus, Times]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [Dot, Gt, Plus, Times]
 }
 
 */
@@ -80,18 +82,23 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
-    public State visitP1Expression$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP1Expression$1(getFactory(), symbol, this);
+    public State visitRelationalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateRelationalExpression1(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitP2Expression$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP2Expression$$1(getFactory(), symbol, this);
+    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAdditionalExpression1(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitP3Expression$$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP3Expression$$$1(getFactory(), symbol, this);
+    public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateMultiplicativeExpression1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAtomicExpression1(getFactory(), symbol, this);
     }
 
     @Override

@@ -32,12 +32,12 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Plus1: {
-	P1Expression$ -> P1Expression$ Plus • P2Expression$$ [Dot, Plus]
-	P2Expression$$ -> • P3Expression$$$ [Dot, Plus, Times]
-	P2Expression$$ -> • P2Expression$$ Times P3Expression$$$ [Dot, Plus, Times]
-	P3Expression$$$ -> • Identifier [Dot, Plus, Times]
-	P3Expression$$$ -> • LPar Expression RPar [Dot, Plus, Times]
-	P3Expression$$$ -> • Identifier LPar List3ListOfExpression RPar [Dot, Plus, Times]
+	AdditionalExpression -> AdditionalExpression Plus • MultiplicativeExpression [Dot, Gt, Plus]
+	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
+	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
+	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
+	AtomicExpression -> • LPar Expression RPar [Dot, Gt, Plus, Times]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [Dot, Gt, Plus, Times]
 }
 
 */
@@ -57,13 +57,13 @@ public class StatePlus1 extends StackState<foundation.rpg.common.Plus, StackStat
 // Reduce:
 // Shift:
     @Override
-    public State visitP2Expression$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP2Expression$$3(getFactory(), symbol, this);
+    public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateMultiplicativeExpression4(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitP3Expression$$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP3Expression$$$1(getFactory(), symbol, this);
+    public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAtomicExpression1(getFactory(), symbol, this);
     }
 
     @Override

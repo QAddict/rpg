@@ -40,9 +40,9 @@ public class AstFactory implements WhiteSpaceRules, ListRules {
     Program                    is  (@List1 List<Statement> s)                                       { return new Program(s); }
     Statement                  is  (Expression e, Dot d)                                            { return new ExpressionStatement(e); }
     Expression                 is  (@Relational Expression e)                                       { return e; }
-    @Relational Expression     is1 (@Relational Expression l, Plus o, @Additional Expression r)     { return new BinaryExpression(l, r); }
+    @Relational Expression     is  (@Relational Expression l, Gt o, @Additional Expression r)       { return new BinaryExpression(l, r); }
     @Relational Expression     is1 (@Additional Expression e)                                       { return e; }
-    @Additional Expression     is2 (@Additional Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
+    @Additional Expression     is  (@Additional Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
     @Additional Expression     is2 (@Multiplicative Expression e)                                   { return e; }
     @Multiplicative Expression is  (@Multiplicative Expression l, Times o, @Atomic Expression r)    { return new BinaryExpression(l, r); }
     @Multiplicative Expression is3 (@Atomic Expression e)                                           { return e; }

@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Expression3: {
-	List2ListOfExpression$ -> Expression • [RPar, Comma]
+	List2ListOfExpression -> Expression • [RPar, Comma]
 }
 
 */
@@ -54,14 +54,14 @@ public class StateExpression3 extends StackState<foundation.rpg.sample.language.
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitList2ListOfExpression$(foundation.rpg.common.ListRules.isList2(this.getNode())).visitRPar(symbol);
+        return stack1.visitList2ListOfExpression(foundation.rpg.common.ListRules.isList2(this.getNode())).visitRPar(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitList2ListOfExpression$(foundation.rpg.common.ListRules.isList2(this.getNode())).visitComma(symbol);
+        return stack1.visitList2ListOfExpression(foundation.rpg.common.ListRules.isList2(this.getNode())).visitComma(symbol);
     }
 
 

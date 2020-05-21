@@ -31,16 +31,13 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-LPar6: {
-	P3Expression$$$ -> LPar • Expression RPar [RPar, Times, Plus, Comma]
-	Expression -> • P1Expression$ [RPar]
-	P1Expression$ -> • P2Expression$$ [RPar, Plus]
-	P1Expression$ -> • P1Expression$ Plus P2Expression$$ [RPar, Plus]
-	P2Expression$$ -> • P3Expression$$$ [RPar, Times, Plus]
-	P2Expression$$ -> • P2Expression$$ Times P3Expression$$$ [RPar, Times, Plus]
-	P3Expression$$$ -> • Identifier [RPar, Times, Plus]
-	P3Expression$$$ -> • LPar Expression RPar [RPar, Times, Plus]
-	P3Expression$$$ -> • Identifier LPar List3ListOfExpression RPar [RPar, Times, Plus]
+Plus4: {
+	AdditionalExpression -> AdditionalExpression Plus • MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Comma, Times]
+	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Comma, Times]
+	AtomicExpression -> • Identifier [RPar, Gt, Plus, Comma, Times]
+	AtomicExpression -> • LPar Expression RPar [RPar, Gt, Plus, Comma, Times]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Comma, Times]
 }
 
 */
@@ -48,11 +45,11 @@ LPar6: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateLPar6 extends StackState<foundation.rpg.common.LPar, State> {
+public class StatePlus4 extends StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateLPar6(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.LPar node, State prev) {
+    public StatePlus4(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -60,33 +57,23 @@ public class StateLPar6 extends StackState<foundation.rpg.common.LPar, State> {
 // Reduce:
 // Shift:
     @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression5(getFactory(), symbol, this);
+    public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateMultiplicativeExpression13(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitP1Expression$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP1Expression$2(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitP2Expression$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP2Expression$$2(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitP3Expression$$$(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateP3Expression$$$2(getFactory(), symbol, this);
+    public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAtomicExpression6(getFactory(), symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier2(getFactory(), symbol, this);
+        return new StateIdentifier6(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.LPar symbol) {
-        return new StateLPar3(getFactory(), symbol, this);
+        return new StateLPar7(getFactory(), symbol, this);
     }
 
 

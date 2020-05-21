@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Expression7: {
-	List2ListOfExpression$ -> List2ListOfExpression$ Comma Expression • [RPar, Comma]
+	List2ListOfExpression -> List2ListOfExpression Comma Expression • [RPar, Comma]
 }
 
 */
@@ -56,7 +56,7 @@ public class StateExpression7 extends StackState<foundation.rpg.sample.language.
 		StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> stack1 = this.getPrev();
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitList2ListOfExpression$(foundation.rpg.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
+        return stack3.visitList2ListOfExpression(foundation.rpg.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class StateExpression7 extends StackState<foundation.rpg.sample.language.
 		StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> stack1 = this.getPrev();
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitList2ListOfExpression$(foundation.rpg.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
+        return stack3.visitList2ListOfExpression(foundation.rpg.common.ListRules.isList2(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
     }
 
 

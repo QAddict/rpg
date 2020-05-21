@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Expression4: {
-	P3Expression$$$ -> LPar Expression • RPar [RPar, Times, Plus]
+	AtomicExpression -> LPar Expression • RPar [RPar, Gt, Plus, Times]
 }
 
 */

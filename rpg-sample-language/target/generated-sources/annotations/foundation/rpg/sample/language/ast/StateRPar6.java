@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 RPar6: {
-	P3Expression$$$ -> Identifier LPar List3ListOfExpression RPar • [RPar, Times, Plus, Comma]
+	AtomicExpression -> Identifier LPar List3ListOfExpression RPar • [RPar, Gt, Plus, Times, Comma]
 }
 
 */
@@ -57,17 +57,17 @@ public class StateRPar6 extends StackState<foundation.rpg.common.RPar, StackStat
 		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
-        return stack4.visitP3Expression$$$(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
+        return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
         
 		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
 		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
-        return stack4.visitP3Expression$$$(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitTimes(symbol);
+        return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitGt(symbol);
     }
 
     @Override
@@ -77,7 +77,17 @@ public class StateRPar6 extends StackState<foundation.rpg.common.RPar, StackStat
 		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
-        return stack4.visitP3Expression$$$(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
+        return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
+    }
+
+    @Override
+    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+        
+		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
+		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
+		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
+		State stack4 = stack3.getPrev();
+        return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitTimes(symbol);
     }
 
     @Override
@@ -87,7 +97,7 @@ public class StateRPar6 extends StackState<foundation.rpg.common.RPar, StackStat
 		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
-        return stack4.visitP3Expression$$$(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
+        return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
     }
 
 

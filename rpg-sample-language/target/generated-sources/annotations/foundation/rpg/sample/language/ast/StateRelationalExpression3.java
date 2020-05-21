@@ -31,9 +31,9 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-List2ListOfExpression$1: {
-	List3ListOfExpression -> List2ListOfExpression$ • [RPar]
-	List2ListOfExpression$ -> List2ListOfExpression$ • Comma Expression [RPar, Comma]
+RelationalExpression3: {
+	Expression -> RelationalExpression • [RPar, Comma]
+	RelationalExpression -> RelationalExpression • Gt AdditionalExpression [RPar, Gt, Comma]
 }
 
 */
@@ -41,11 +41,11 @@ List2ListOfExpression$1: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateList2ListOfExpression$1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, State> {
+public class StateRelationalExpression3 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
 
 // NoStack:
 // Stack:
-    public StateList2ListOfExpression$1(foundation.rpg.sample.language.ast.AstFactory factory, java.util.List<foundation.rpg.sample.language.ast.Expression> node, State prev) {
+    public StateRelationalExpression3(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(factory, node, prev);
     }
 
@@ -55,14 +55,21 @@ public class StateList2ListOfExpression$1 extends StackState<java.util.List<foun
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitList3ListOfExpression(foundation.rpg.common.ListRules.isList3(this.getNode())).visitRPar(symbol);
+        return stack1.visitExpression(getFactory().is(this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitExpression(getFactory().is(this.getNode())).visitComma(symbol);
     }
 
 
 // Shift:
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) {
-        return new StateComma1(getFactory(), symbol, this);
+    public State visitGt(foundation.rpg.common.Gt symbol) {
+        return new StateGt3(getFactory(), symbol, this);
     }
 
 

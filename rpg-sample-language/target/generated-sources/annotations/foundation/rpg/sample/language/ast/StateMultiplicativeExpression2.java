@@ -31,9 +31,9 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-P2Expression$$2: {
-	P1Expression$ -> P2Expression$$ • [RPar, Plus]
-	P2Expression$$ -> P2Expression$$ • Times P3Expression$$$ [RPar, Times, Plus]
+MultiplicativeExpression2: {
+	AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
+	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Times]
 }
 
 */
@@ -41,11 +41,11 @@ P2Expression$$2: {
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateP2Expression$$2 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
+public class StateMultiplicativeExpression2 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
 
 // NoStack:
 // Stack:
-    public StateP2Expression$$2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
+    public StateMultiplicativeExpression2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(factory, node, prev);
     }
 
@@ -55,14 +55,21 @@ public class StateP2Expression$$2 extends StackState<foundation.rpg.sample.langu
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitP1Expression$(getFactory().is2(this.getNode())).visitRPar(symbol);
+        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitRPar(symbol);
+    }
+
+    @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitGt(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitP1Expression$(getFactory().is2(this.getNode())).visitPlus(symbol);
+        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitPlus(symbol);
     }
 
 
