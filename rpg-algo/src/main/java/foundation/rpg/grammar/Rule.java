@@ -97,21 +97,22 @@ public final class Rule {
     }
 
     public static PriorityBuilder rule(Symbol left) {
-        return priority -> right -> new Rule(left, asList(right), priority);
+        return priority -> right -> new Rule(left, right, priority);
     }
 
     public interface Builder {
-        Rule to(Symbol... right);
+        default Rule to(Symbol... right) { return to(asList(right)); }
+        Rule to(List<Symbol> right);
 
         @SafeVarargs
-        static <T> Set<T> of(T... items) {
+        static <T> Set<T> setOf(T... items) {
             return Stream.of(items).collect(toSet());
         }
     }
 
     public interface PriorityBuilder extends Builder {
         Builder priority(int priority);
-        @Override default Rule to(Symbol... right) {
+        @Override default Rule to(List<Symbol> right) {
             return priority(0).to(right);
         }
     }

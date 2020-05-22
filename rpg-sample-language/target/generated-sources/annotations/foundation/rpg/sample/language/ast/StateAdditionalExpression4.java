@@ -33,7 +33,7 @@ package foundation.rpg.sample.language.ast;
 
 AdditionalExpression4: {
 	RelationalExpression -> AdditionalExpression • [RPar, Gt, Comma]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [RPar, Plus, Gt, Comma]
 }
 
 */
@@ -55,21 +55,21 @@ public class StateAdditionalExpression4 extends StackState<foundation.rpg.sample
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitRelationalExpression(getFactory().is1(this.getNode())).visitRPar(symbol);
+        return stack1.visitRelationalExpression(getFactory().is2(this.getNode())).visitRPar(symbol);
     }
 
     @Override
     public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitRelationalExpression(getFactory().is1(this.getNode())).visitGt(symbol);
+        return stack1.visitRelationalExpression(getFactory().is2(this.getNode())).visitGt(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitRelationalExpression(getFactory().is1(this.getNode())).visitComma(symbol);
+        return stack1.visitRelationalExpression(getFactory().is2(this.getNode())).visitComma(symbol);
     }
 
 

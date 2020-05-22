@@ -27,9 +27,10 @@
  *
  */
 
-package foundation.rpg.common;
+package foundation.rpg;
 
-import foundation.rpg.Precedence;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
-@Precedence
-public @interface Atomic {}
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Precedence {}

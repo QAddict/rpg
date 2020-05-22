@@ -32,8 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 MultiplicativeExpression5: {
-	AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
-	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Times, Comma]
+	AdditionalExpression -> MultiplicativeExpression • [RPar, Plus, Gt, Comma]
+	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Plus, Times, Gt, Comma]
 }
 
 */
@@ -55,28 +55,28 @@ public class StateMultiplicativeExpression5 extends StackState<foundation.rpg.sa
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitRPar(symbol);
-    }
-
-    @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitGt(symbol);
+        return stack1.visitAdditionalExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitPlus(symbol);
+        return stack1.visitAdditionalExpression((this.getNode())).visitPlus(symbol);
+    }
+
+    @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitAdditionalExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitAdditionalExpression(getFactory().is2(this.getNode())).visitComma(symbol);
+        return stack1.visitAdditionalExpression((this.getNode())).visitComma(symbol);
     }
 
 

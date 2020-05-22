@@ -75,4 +75,8 @@ public class AstUtils {
         return putIn(map, key, value);
     }
 
+    public static <T> T is (T t) {
+        return t;
+    }
+
 }

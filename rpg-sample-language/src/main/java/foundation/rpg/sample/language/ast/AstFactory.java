@@ -41,11 +41,8 @@ public class AstFactory implements WhiteSpaceRules, ListRules {
     Statement                  is  (Expression e, Dot d)                                            { return new ExpressionStatement(e); }
     Expression                 is  (@Relational Expression e)                                       { return e; }
     @Relational Expression     is  (@Relational Expression l, Gt o, @Additional Expression r)       { return new BinaryExpression(l, r); }
-    @Relational Expression     is1 (@Additional Expression e)                                       { return e; }
     @Additional Expression     is  (@Additional Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
-    @Additional Expression     is2 (@Multiplicative Expression e)                                   { return e; }
     @Multiplicative Expression is  (@Multiplicative Expression l, Times o, @Atomic Expression r)    { return new BinaryExpression(l, r); }
-    @Multiplicative Expression is3 (@Atomic Expression e)                                           { return e; }
     @Atomic Expression         is  (Identifier i)                                                   { return i; }
     @Atomic Expression         is  (LPar l, Expression e, RPar r)                                   { return e; }
     @Atomic Expression         is  (Identifier i, LPar l, @List3 List<Expression> e, RPar r)        { return null; }

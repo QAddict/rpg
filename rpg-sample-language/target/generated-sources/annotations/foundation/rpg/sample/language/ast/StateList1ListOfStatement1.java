@@ -36,15 +36,15 @@ List1ListOfStatement1: {
 	List1ListOfStatement -> List1ListOfStatement • Statement [End, Identifier, LPar]
 	Statement -> • Expression Dot [End, Identifier, LPar]
 	Expression -> • RelationalExpression [Dot]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [Dot, Gt]
 	RelationalExpression -> • AdditionalExpression [Dot, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
-	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
-	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
-	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
-	AtomicExpression -> • LPar Expression RPar [Dot, Gt, Plus, Times]
-	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [Dot, Gt, Plus, Times]
+	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [Dot, Gt]
+	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [Dot, Plus, Gt]
+	AdditionalExpression -> • MultiplicativeExpression [Dot, Plus, Gt]
+	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Plus, Times, Gt]
+	MultiplicativeExpression -> • AtomicExpression [Dot, Plus, Times, Gt]
+	AtomicExpression -> • Identifier [Dot, Plus, Times, Gt]
+	AtomicExpression -> • LPar Expression RPar [Dot, Plus, Times, Gt]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [Dot, Plus, Times, Gt]
 }
 
 */

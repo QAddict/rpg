@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 AtomicExpression6: {
-	MultiplicativeExpression -> AtomicExpression • [RPar, Gt, Plus, Times, Comma]
+	MultiplicativeExpression -> AtomicExpression • [RPar, Plus, Times, Gt, Comma]
 }
 
 */
@@ -54,35 +54,35 @@ public class StateAtomicExpression6 extends StackState<foundation.rpg.sample.lan
     public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitRPar(symbol);
-    }
-
-    @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitGt(symbol);
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitPlus(symbol);
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitPlus(symbol);
     }
 
     @Override
     public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitTimes(symbol);
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitTimes(symbol);
+    }
+
+    @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitComma(symbol);
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitComma(symbol);
     }
 
 

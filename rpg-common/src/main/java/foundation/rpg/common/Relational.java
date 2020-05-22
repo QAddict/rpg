@@ -29,7 +29,7 @@
 
 package foundation.rpg.common;
 
-import foundation.rpg.SymbolPart;
+import foundation.rpg.Precedence;
 
-@SymbolPart
+@Precedence
 public @interface Relational {}

@@ -36,7 +36,7 @@ import foundation.rpg.automata.LrParserAutomata;
 import org.testng.annotations.Test;
 
 import static foundation.rpg.generator.GeneratorTest.Symbols.*;
-import static foundation.rpg.grammar.Rule.Builder.of;
+import static foundation.rpg.grammar.Rule.Builder.setOf;
 import static foundation.rpg.grammar.Rule.rule;
 import static java.util.Collections.emptySet;
 
@@ -46,7 +46,7 @@ public class GeneratorTest {
 
     @Test
     public void testParser() {
-        Grammar grammar = new Grammar(S, of(ε, a), of(S, A), of(
+        Grammar grammar = new Grammar(S, setOf(ε, a), setOf(S, A), setOf(
                 rule(S).to(A, ε),
                 rule(A).to(a, A)
         ), emptySet());

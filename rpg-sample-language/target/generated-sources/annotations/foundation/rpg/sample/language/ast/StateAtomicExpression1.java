@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 AtomicExpression1: {
-	MultiplicativeExpression -> AtomicExpression • [Dot, Gt, Plus, Times]
+	MultiplicativeExpression -> AtomicExpression • [Dot, Plus, Times, Gt]
 }
 
 */
@@ -54,28 +54,28 @@ public class StateAtomicExpression1 extends StackState<foundation.rpg.sample.lan
     public State visitDot(foundation.rpg.common.Dot symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitDot(symbol);
-    }
-
-    @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitGt(symbol);
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitDot(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitPlus(symbol);
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitPlus(symbol);
     }
 
     @Override
     public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression(getFactory().is3(this.getNode())).visitTimes(symbol);
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitTimes(symbol);
+    }
+
+    @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitGt(symbol);
     }
 
 

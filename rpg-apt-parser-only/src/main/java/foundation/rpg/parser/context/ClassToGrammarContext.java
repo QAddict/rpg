@@ -29,10 +29,7 @@
 
 package foundation.rpg.parser.context;
 
-import foundation.rpg.MetaRule;
-import foundation.rpg.Priority;
-import foundation.rpg.StartSymbol;
-import foundation.rpg.SymbolPart;
+import foundation.rpg.*;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
@@ -93,6 +90,7 @@ public class ClassToGrammarContext {
         methods(factoryClass).filter(this::isLexerRule).forEach(tokenContext::accept);
         List<ExecutableElement> methods = methods(factoryClass).filter(m -> !m.getModifiers().contains(PRIVATE)).filter(m -> !isLexerRule(m)).collect(toList());
         Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
+        Set<ExecutableElement> precedenceRules = new LinkedHashSet<>();
         methods.stream().filter(m -> !hasMetaRuleAnnotation(m)).forEach(method -> {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {
                 method.getParameters().forEach(p -> ignored.add(of(entry(p))));
@@ -109,23 +107,30 @@ public class ClassToGrammarContext {
                         });
                     });
                 }, singleton(method));
+                if(method.getAnnotationMirrors().stream().anyMatch(m -> nonNull(m.getAnnotationType().asElement().getAnnotation(Precedence.class)))) {
+                    precedenceRules.add(method);
+                }
             }
         });
         isStaticFactory = methods.stream().allMatch(method -> method.getModifiers().contains(STATIC));
         grammar = Grammar.grammar(of(entry(startRule)), rules, ignored);
         typeMap.put(Symbol.start, entry(startRule));
         typeMap.put(Symbol.end, typeEntry(elements.getTypeElement("foundation.rpg.parser.End")));
+        precedenceRules.forEach(m -> {
+            Element lower = findPrecedence(m);
+            List<? extends VariableElement> args = m.getParameters().stream().filter(p -> nonNull(findPrecedence(p))).collect(toList());
+            Map<Element, ? extends List<? extends VariableElement>> precedence = args.stream().collect(groupingBy(this::findPrecedence));
+            if(precedence.size() == 2 && precedence.containsKey(lower)) {
+                Set<Element> keys = precedence.keySet();
+                keys.remove(lower);
+                Rule rule = rule(of(entry(m))).to(of(entry(precedence.get(keys.iterator().next()).get(0))));
+                rules.add(rule);
+            }
+        });
     }
 
-    private void addMetaRules(ExecutableElement method, Map<String, List<ExecutableElement>> metaRules, Set<Rule> rules, int priority, Map<String, TypeMirror> pMap) {
-        method.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(p -> {
-            DeclaredType l = (DeclaredType) metaSymbol(p.asType(), pMap);
-            metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
-                Map<String, TypeMirror> map = pMap.isEmpty() ? TypeUtils.resolveParameters(metaRule, l) : pMap;
-                rules.add(ruleOf(metaSymbol(entry(metaRule), map), priority, l, metaSymbols(metaRule, map)));
-                addMetaRules(metaRule, metaRules, rules, priority, map);
-            });
-        });
+    private Element findPrecedence(Element e) {
+        return e.getAnnotationMirrors().stream().map(m -> m.getAnnotationType().asElement()).filter(a -> nonNull(a.getAnnotation(Precedence.class))).findFirst().orElse(null);
     }
 
     private boolean isMetaRuleAnnotation(AnnotationMirror a) {
@@ -157,10 +162,16 @@ public class ClassToGrammarContext {
         return isNull(annotation) ? defaultPriority : annotation.value();
     }
 
+    private boolean includeAnnotation(Element e) {
+        return nonNull(e.getAnnotation(MetaRule.class)) || nonNull(e.getAnnotation(SymbolPart.class)) || nonNull(e.getAnnotation(Precedence.class));
+    }
+
+    private Stream<Element> includedAnnotations(Entry element) {
+        return element.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType).map(DeclaredType::asElement).filter(this::includeAnnotation);
+    }
+
     public Symbol of(Entry element) {
-        String name = element.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType)
-                .filter(t -> nonNull(t.asElement().getAnnotation(MetaRule.class)) || nonNull(t.asElement().getAnnotation(SymbolPart.class)))
-                .map(a -> a.asElement().toString()).collect(joining()) + element.getType();
+        String name = includedAnnotations(element).map(Object::toString).collect(joining()) + element.getType();
         return symbolMap.computeIfAbsent(name, key -> {
             Symbol s = symbol(uniqueName(element));
             typeMap.put(s, element);
@@ -200,9 +211,7 @@ public class ClassToGrammarContext {
     }
 
     private String uniqueName(Entry e) {
-        String prefix = e.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType)
-                .filter(t -> nonNull(t.asElement().getAnnotation(MetaRule.class)) || nonNull(t.asElement().getAnnotation(SymbolPart.class)))
-                .map(a -> a.asElement().getSimpleName().toString()).collect(joining());
+        String prefix = includedAnnotations(e).map(a -> a.getSimpleName().toString()).collect(joining());
         return uniqueName(prefix, e.getType());
     }
 

@@ -32,4 +32,4 @@ package foundation.rpg.common;
 import foundation.rpg.Precedence;
 
 @Precedence
-public @interface Atomic {}
+public @interface Ternary {}

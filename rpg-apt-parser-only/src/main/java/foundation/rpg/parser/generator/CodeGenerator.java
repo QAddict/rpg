@@ -49,6 +49,7 @@ import java.util.stream.Stream;
 import static foundation.rpg.parser.generator.SourceModel.Names.*;
 import static java.lang.String.join;
 import static java.util.Collections.max;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Stream.concat;
 import static javax.lang.model.element.Modifier.STATIC;
@@ -105,7 +106,7 @@ public class CodeGenerator {
     }
 
     private String methodName(ExecutableElement method) {
-        return (method.getModifiers().contains(STATIC) ? method.getEnclosingElement() : "getFactory()") + "." + method.getSimpleName();
+        return isNull(method) ? "" : (method.getModifiers().contains(STATIC) ? method.getEnclosingElement() : "getFactory()") + "." + method.getSimpleName();
     }
 
     private TypeMirror typeOf(Symbol symbol) {
@@ -138,7 +139,7 @@ public class CodeGenerator {
             private String visitCall(LrItem item, SourceModel fragment) {
                 Rule rule = item.getRule();
                 ExecutableElement method = context.methodOf(rule);
-                int size = method.getParameters().size();
+                int size = isNull(method) ? 1 : method.getParameters().size();
                 String state = "this";
                 StringBuilder b = new StringBuilder();
                 String[] p = new String[size];
