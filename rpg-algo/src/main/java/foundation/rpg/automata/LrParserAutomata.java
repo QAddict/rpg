@@ -68,7 +68,7 @@ public class LrParserAutomata {
     private void action(LrItemSet from, Symbol symbol, LrAction action) {
         Map<Symbol, LrAction> actionMap = actions.computeIfAbsent(from, k -> new LinkedHashMap<>());
         if(actionMap.containsKey(symbol))
-            throw new IllegalStateException("Conflict at: " + from + " for symbol: " + symbol + ": " + actionMap.get(symbol) + " / " + action + "\n\nCurrent parser state:\n" + this);
+            throw new IllegalStateException("Conflict at state: " + from.getName() + " for symbol: " + symbol + ": " + actionMap.get(symbol) + " / " + action + "\n\n" + from + "\n\nGrammar:\n" + grammar + "\n\nCurrent parser state:\n" + this);
         actionMap.put(symbol, action);
     }
 
