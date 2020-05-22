@@ -72,14 +72,7 @@ public class ClassToTokenContext implements EnvironmentGenerator {
             tokenInfo.add(type, var);
             return;
         }
-        if(type instanceof DeclaredType) {
-            Element element = ((DeclaredType) type).asElement();
-            match = element.getAnnotation(Match.class);
-            name = element.getAnnotation(Name.class);
-            if(nonNull(match) || nonNull(name)) {
-                tokenInfo.add(type, element);
-            }
-        }
+        accept(type);
     }
 
     @Override
@@ -89,6 +82,18 @@ public class ClassToTokenContext implements EnvironmentGenerator {
             return tokenInfoFor(type).stream();
         }).collect(toList()), new PrintWriter(filer.createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isStaticFactory() ? null : context.getFactoryClass().asType());
 
+    }
+
+    @Override
+    public void accept(TypeMirror type) {
+        if(type instanceof DeclaredType) {
+            Element element = ((DeclaredType) type).asElement();
+            Match match = element.getAnnotation(Match.class);
+            Name name = element.getAnnotation(Name.class);
+            if(nonNull(match) || nonNull(name)) {
+                tokenInfo.add(type, element);
+            }
+        }
     }
 
     @Override

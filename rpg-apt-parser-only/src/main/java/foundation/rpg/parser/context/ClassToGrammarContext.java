@@ -148,7 +148,9 @@ public class ClassToGrammarContext {
     }
 
     private Entry metaSymbol(Entry t, Map<String, TypeMirror> map) {
-        return entry(t.getElement(), map.getOrDefault(t.getType().toString(), t.getType()));
+        TypeMirror typeMirror = map.getOrDefault(t.getType().toString(), t.getType());
+        tokenContext.accept(typeMirror);
+        return entry(t.getElement(), typeMirror);
     }
 
     private TypeMirror metaSymbol(TypeMirror t, Map<String, TypeMirror> map) {

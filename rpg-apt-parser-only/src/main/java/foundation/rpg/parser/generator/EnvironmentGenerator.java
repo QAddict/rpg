@@ -34,6 +34,7 @@ import foundation.rpg.parser.context.ClassToGrammarContext;
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
 
 public interface EnvironmentGenerator {
@@ -42,4 +43,7 @@ public interface EnvironmentGenerator {
     void accept(VariableElement e);
 
     void generate(ClassToGrammarContext context, Filer filer) throws IOException;
+
+    void accept(TypeMirror typeMirror);
+
 }
