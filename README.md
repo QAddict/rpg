@@ -343,6 +343,7 @@ For full example see json package in rpg-sample-language module. There is also u
 
 Resources used for implementation of this parser generator:
 
+- [0] [https://en.wikipedia.org/wiki/Abstract_syntax_tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
 - [1] [https://en.wikipedia.org/wiki/LR_parser](https://en.wikipedia.org/wiki/LR_parser)
 - [2] [https://cs.wikipedia.org/wiki/LR_syntakticky_analyzator](https://cs.wikipedia.org/wiki/LR_syntaktick%C3%BD_analyz%C3%A1tor)
 - [3] [https://en.wikipedia.org/wiki/Visitor_pattern](https://en.wikipedia.org/wiki/Visitor_pattern)
