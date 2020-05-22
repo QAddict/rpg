@@ -102,22 +102,22 @@ the the factory, which in turn defines our grammar rules:
 ```java
 package foundation.rpg.sample.language.ast;
 
-import foundation.rpg.Priority;
 import foundation.rpg.StartSymbol;
+import foundation.rpg.common.*;
 
 import java.util.List;
 
 import static foundation.rpg.common.AstUtils.addTo;
 import static foundation.rpg.common.AstUtils.list;
 
-@RulePriority(1)
-public interface AstFactory {
+public class AstFactory implements WhiteSpaceRules, ListRules {
 
     @StartSymbol
     static Program         is  (List<Statement> s, End e)            { return new Program(s); }
     static List<Statement> is  ()                                    { return list(); }
     static List<Statement> is  (List<Statement> l, Statement s)      { return addTo(l, s); }
     static Statement       is  (Expression e, Dot d)                 { return new ExpressionStatement(e); }
+    static @Additional Expression is (@Atomic Expression e) { return e; }
     static Expression      is  (Expression l, Plus p, Expression r)  { return new BinaryExpression(l, r); }
     static Expression      is  (Identifier i)                        { return i; }
     static Expression      is  (LPar l, Expression e, RPar r)        { return e; }

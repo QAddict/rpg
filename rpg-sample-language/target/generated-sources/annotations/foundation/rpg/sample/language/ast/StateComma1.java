@@ -34,15 +34,15 @@ package foundation.rpg.sample.language.ast;
 Comma1: {
 	List2ListOfExpression -> List2ListOfExpression Comma • Expression [RPar, Comma]
 	Expression -> • RelationalExpression [RPar, Comma]
-	RelationalExpression -> • AdditionalExpression [RPar, Comma, Gt]
 	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Comma, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Comma, Plus, Gt]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Comma, Plus, Gt]
-	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Comma, Plus, Times, Gt]
-	MultiplicativeExpression -> • AtomicExpression [RPar, Comma, Plus, Times, Gt]
-	AtomicExpression -> • Identifier [RPar, Comma, Plus, Times, Gt]
-	AtomicExpression -> • LPar Expression RPar [RPar, Comma, Plus, Times, Gt]
-	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma, Plus, Times, Gt]
+	RelationalExpression -> • AdditionalExpression [RPar, Comma, Gt]
+	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	AdditionalExpression -> • MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Comma, Gt, Plus, Times]
+	MultiplicativeExpression -> • AtomicExpression [RPar, Comma, Gt, Plus, Times]
+	AtomicExpression -> • Identifier [RPar, Comma, Gt, Plus, Times]
+	AtomicExpression -> • LPar Expression RPar [RPar, Comma, Gt, Plus, Times]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma, Gt, Plus, Times]
 }
 
 */

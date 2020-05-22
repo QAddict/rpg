@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 AtomicExpression6: {
-	MultiplicativeExpression -> AtomicExpression • [RPar, Plus, Times, Gt, Comma]
+	MultiplicativeExpression -> AtomicExpression • [RPar, Gt, Plus, Times, Comma]
 }
 
 */
@@ -58,6 +58,13 @@ public class StateAtomicExpression6 extends StackState<foundation.rpg.sample.lan
     }
 
     @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitMultiplicativeExpression((this.getNode())).visitGt(symbol);
+    }
+
+    @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
@@ -69,13 +76,6 @@ public class StateAtomicExpression6 extends StackState<foundation.rpg.sample.lan
         
 		State stack1 = this.getPrev();
         return stack1.visitMultiplicativeExpression((this.getNode())).visitTimes(symbol);
-    }
-
-    @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitMultiplicativeExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override

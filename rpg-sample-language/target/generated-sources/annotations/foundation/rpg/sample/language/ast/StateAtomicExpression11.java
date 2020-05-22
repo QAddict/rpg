@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 AtomicExpression11: {
-	MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [RPar, Plus, Times, Gt]
+	MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [RPar, Gt, Plus, Times]
 }
 
 */
@@ -60,6 +60,15 @@ public class StateAtomicExpression11 extends StackState<foundation.rpg.sample.la
     }
 
     @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.rpg.common.Times, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
+		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
+		State stack3 = stack2.getPrev();
+        return stack3.visitMultiplicativeExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitGt(symbol);
+    }
+
+    @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		StackState<foundation.rpg.common.Times, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
@@ -75,15 +84,6 @@ public class StateAtomicExpression11 extends StackState<foundation.rpg.sample.la
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitMultiplicativeExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitTimes(symbol);
-    }
-
-    @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.Times, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
-		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
-		State stack3 = stack2.getPrev();
-        return stack3.visitMultiplicativeExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitGt(symbol);
     }
 
 

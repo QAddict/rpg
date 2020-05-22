@@ -52,7 +52,6 @@ import static foundation.rpg.grammar.Symbol.symbol;
 import static foundation.rpg.parser.context.Entry.entry;
 import static foundation.rpg.parser.context.Entry.typeEntry;
 import static java.util.Collections.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;
 import static javax.lang.model.element.Modifier.PRIVATE;
@@ -86,7 +85,6 @@ public class ClassToGrammarContext {
         Set<Symbol> ignored = new LinkedHashSet<>();
         factoryClass = startRule.getEnclosingElement();
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
-        int priority = priority(factoryClass, 0);
         methods(factoryClass).filter(this::isLexerRule).forEach(tokenContext::accept);
         List<ExecutableElement> methods = methods(factoryClass).filter(m -> !m.getModifiers().contains(PRIVATE)).filter(m -> !isLexerRule(m)).collect(toList());
         Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
@@ -95,14 +93,14 @@ public class ClassToGrammarContext {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {
                 method.getParameters().forEach(p -> ignored.add(of(entry(p))));
             } else {
-                rules.add(ruleOf(method, priority(method, priority)));
+                rules.add(ruleOf(method));
                 Map<String, TypeMirror> map = new LinkedHashMap<>();
                 Bfs.bfs((m, q) -> {
                     m.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(p -> {
                         DeclaredType l = (DeclaredType) metaSymbol(p.asType(), map);
                         metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
                             map.putAll(TypeUtils.resolveParameters(metaRule, l));
-                            rules.add(ruleOf(metaSymbol(entry(metaRule), map), priority, l, metaSymbols(metaRule, map)));
+                            rules.add(ruleOf(metaSymbol(entry(metaRule), map), l, metaSymbols(metaRule, map)));
                             q.accept(metaRule);
                         });
                     });
@@ -157,11 +155,6 @@ public class ClassToGrammarContext {
         return map.getOrDefault(t.toString(), t);
     }
 
-    public int priority(Element element, int defaultPriority) {
-        Priority annotation = element.getAnnotation(Priority.class);
-        return isNull(annotation) ? defaultPriority : annotation.value();
-    }
-
     private boolean includeAnnotation(Element e) {
         return nonNull(e.getAnnotation(MetaRule.class)) || nonNull(e.getAnnotation(SymbolPart.class)) || nonNull(e.getAnnotation(Precedence.class));
     }
@@ -179,8 +172,8 @@ public class ClassToGrammarContext {
         });
     }
 
-    public Rule ruleOf(ExecutableElement method, int priority) {
-        return ruleOf(entry(method), priority, method.getReturnType(), method.getParameters().stream().map(this::scanTokens).collect(toList()));
+    public Rule ruleOf(ExecutableElement method) {
+        return ruleOf(entry(method), method.getReturnType(), method.getParameters().stream().map(this::scanTokens).collect(toList()));
     }
 
     private Entry scanTokens(VariableElement e) {
@@ -188,8 +181,8 @@ public class ClassToGrammarContext {
         return entry(e);
     }
 
-    public Rule ruleOf(Entry method, int priority, TypeMirror l, List<? extends Entry> r) {
-        Rule rule = rule(of(method), r.stream().map(this::of).collect(toList()), priority);
+    public Rule ruleOf(Entry method, TypeMirror l, List<? extends Entry> r) {
+        Rule rule = rule(of(method), r.stream().map(this::of).collect(toList()));
         ruleAssociation.put(rule, (ExecutableElement) method.getElement());
         return rule;
     }

@@ -32,8 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 MultiplicativeExpression13: {
-	AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Plus, Gt, Comma]
-	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Plus, Gt, Comma, Times]
+	AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Comma, Times]
 }
 
 */
@@ -61,21 +61,21 @@ public class StateMultiplicativeExpression13 extends StackState<foundation.rpg.s
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
-		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
-		State stack3 = stack2.getPrev();
-        return stack3.visitAdditionalExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
-    }
-
-    @Override
     public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
         
 		StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitAdditionalExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitGt(symbol);
+    }
+
+    @Override
+    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+        
+		StackState<foundation.rpg.common.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
+		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
+		State stack3 = stack2.getPrev();
+        return stack3.visitAdditionalExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
     }
 
     @Override

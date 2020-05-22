@@ -41,20 +41,14 @@ public final class Rule {
 
     private final Symbol left;
     private final SymbolString right;
-    private final int priority;
 
-    public Rule(Symbol left, SymbolString right, int priority) {
+    public Rule(Symbol left, SymbolString right) {
         this.left = left;
         this.right = right;
-        this.priority = priority;
-    }
-
-    public Rule(Symbol left, List<Symbol> right, int priority) {
-        this(left, new SymbolString(right), priority);
     }
 
     public Rule(Symbol left, List<Symbol> right) {
-        this(left, right, 0);
+        this(left, new SymbolString(right));
     }
 
     public Symbol getLeft() {
@@ -65,12 +59,8 @@ public final class Rule {
         return right;
     }
 
-    public static Rule rule(Symbol left, List<Symbol> right, int priority) {
-        return new Rule(left, right, priority);
-    }
-
     public static Rule rule(Symbol left, List<Symbol> right) {
-        return new Rule(left, right, 0);
+        return new Rule(left, right);
     }
 
 
@@ -92,12 +82,8 @@ public final class Rule {
         return left + " -> " + right;
     }
 
-    public int getPriority() {
-        return priority;
-    }
-
-    public static PriorityBuilder rule(Symbol left) {
-        return priority -> right -> new Rule(left, right, priority);
+    public static Builder rule(Symbol left) {
+        return right -> Rule.rule(left, right);
     }
 
     public interface Builder {
@@ -110,10 +96,4 @@ public final class Rule {
         }
     }
 
-    public interface PriorityBuilder extends Builder {
-        Builder priority(int priority);
-        @Override default Rule to(List<Symbol> right) {
-            return priority(0).to(right);
-        }
-    }
 }

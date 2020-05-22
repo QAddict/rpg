@@ -34,7 +34,6 @@ import java.util.Objects;
 public interface LrAction {
 
     void accept(LrActionVisitor visitor);
-    int priority();
 
     interface LrActionVisitor {
         void visitGoto(LrItemSet set);
@@ -58,11 +57,6 @@ public interface LrAction {
         public void accept(LrActionVisitor visitor) {
             visitor.visitGoto(to);
         }
-
-        @Override
-        public int priority() {
-            return to.getItems().stream().mapToInt(i -> i.getRule().getPriority()).max().orElse(0);
-        }
     }
 
     class Reduce implements LrAction {
@@ -80,11 +74,6 @@ public interface LrAction {
         @Override
         public void accept(LrActionVisitor visitor) {
             visitor.visitReduction(item);
-        }
-
-        @Override
-        public int priority() {
-            return item.getRule().getPriority();
         }
 
         @Override
@@ -116,11 +105,6 @@ public interface LrAction {
         @Override
         public void accept(LrActionVisitor visitor) {
             visitor.visitAccept(item);
-        }
-
-        @Override
-        public int priority() {
-            return item.getRule().getPriority();
         }
     }
 }

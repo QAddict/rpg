@@ -32,8 +32,8 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Identifier2: {
-	AtomicExpression -> Identifier • [RPar, Plus, Times, Gt]
-	AtomicExpression -> Identifier • LPar List3ListOfExpression RPar [RPar, Plus, Times, Gt]
+	AtomicExpression -> Identifier • [RPar, Gt, Plus, Times]
+	AtomicExpression -> Identifier • LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times]
 }
 
 */
@@ -59,6 +59,13 @@ public class StateIdentifier2 extends StackState<foundation.rpg.sample.language.
     }
 
     @Override
+    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+        
+		State stack1 = this.getPrev();
+        return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitGt(symbol);
+    }
+
+    @Override
     public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
@@ -70,13 +77,6 @@ public class StateIdentifier2 extends StackState<foundation.rpg.sample.language.
         
 		State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitTimes(symbol);
-    }
-
-    @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
-        return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitGt(symbol);
     }
 
 

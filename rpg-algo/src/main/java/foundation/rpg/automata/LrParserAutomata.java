@@ -67,20 +67,9 @@ public class LrParserAutomata {
 
     private void action(LrItemSet from, Symbol symbol, LrAction action) {
         Map<Symbol, LrAction> actionMap = actions.computeIfAbsent(from, k -> new LinkedHashMap<>());
-        // Help resolve Shift / Reduce, Reduce / Reduce conflicts with rule priorities.
-        if(actionMap.containsKey(symbol)) {
-            LrAction currentAction = actionMap.get(symbol);
-            if(action.priority() == currentAction.priority()) {
-                if(!action.equals(currentAction))
-                    throw new IllegalStateException("Conflict at: " + from + " for symbol: " + symbol + ": " + currentAction + " / " + action + "\n\nCurrent parser state:\n" + this);
-            }
-            System.out.println("Resolving conflict using priority at: " + from + " for symbol: " + symbol + ": " + currentAction + " (priority=" + currentAction.priority() + ") / " + action + " (priority=" + action.priority() + ")");
-            if(action.priority() > currentAction.priority()) {
-                actionMap.put(symbol, action);
-            }
-        } else {
-            actionMap.put(symbol, action);
-        }
+        if(actionMap.containsKey(symbol))
+            throw new IllegalStateException("Conflict at: " + from + " for symbol: " + symbol + ": " + actionMap.get(symbol) + " / " + action + "\n\nCurrent parser state:\n" + this);
+        actionMap.put(symbol, action);
     }
 
     public void transition(LrItemSet from, Symbol symbol, LrItemSet to) {

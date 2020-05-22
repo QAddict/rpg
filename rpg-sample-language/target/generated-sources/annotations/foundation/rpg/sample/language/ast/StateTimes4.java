@@ -32,10 +32,10 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Times4: {
-	MultiplicativeExpression -> MultiplicativeExpression Times • AtomicExpression [RPar, Plus, Times, Gt, Comma]
-	AtomicExpression -> • Identifier [RPar, Plus, Times, Gt, Comma]
-	AtomicExpression -> • LPar Expression RPar [RPar, Plus, Times, Gt, Comma]
-	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Plus, Times, Gt, Comma]
+	MultiplicativeExpression -> MultiplicativeExpression Times • AtomicExpression [RPar, Gt, Plus, Times, Comma]
+	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times, Comma]
+	AtomicExpression -> • LPar Expression RPar [RPar, Gt, Plus, Times, Comma]
+	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times, Comma]
 }
 
 */
