@@ -37,7 +37,7 @@ Expression1: {
 
 */
 
-import foundation.rpg.common.symbols.Dot;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateExpression1 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
@@ -52,7 +52,7 @@ public class StateExpression1 extends StackState<foundation.rpg.sample.language.
 // Reduce:
 // Shift:
     @Override
-    public State visitDot(Dot symbol) {
+    public State visitDot(foundation.rpg.common.symbols.Dot symbol) {
         return new StateDot1(getFactory(), symbol, this);
     }
 

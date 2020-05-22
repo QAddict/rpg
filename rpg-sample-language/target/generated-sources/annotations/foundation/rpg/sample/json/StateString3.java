@@ -37,7 +37,7 @@ String3: {
 
 */
 
-import foundation.rpg.common.symbols.Colon;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateString3 extends StackState<java.lang.String, State> {
@@ -52,7 +52,7 @@ public class StateString3 extends StackState<java.lang.String, State> {
 // Reduce:
 // Shift:
     @Override
-    public State visitColon(Colon symbol) {
+    public State visitColon(foundation.rpg.common.symbols.Colon symbol) {
         return new StateColon1(getFactory(), symbol, this);
     }
 

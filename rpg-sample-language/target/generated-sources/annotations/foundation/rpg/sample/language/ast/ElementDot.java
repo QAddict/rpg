@@ -29,15 +29,14 @@
 
 package foundation.rpg.sample.language.ast;
 
-import foundation.rpg.common.symbols.Dot;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementDot implements Element<State> {
-    private final Dot symbol;
+    private final foundation.rpg.common.symbols.Dot symbol;
 
-    public ElementDot(Dot symbol) {
+    public ElementDot(foundation.rpg.common.symbols.Dot symbol) {
         this.symbol = symbol;
     }
 

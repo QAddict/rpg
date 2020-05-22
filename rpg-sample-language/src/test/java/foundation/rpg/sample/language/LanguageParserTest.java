@@ -49,7 +49,7 @@ public class LanguageParserTest {
         Token p = new Token("", 0, 0, 0, 0, 0, 0, "");
         TokenInput<State> lexer = mock(TokenInput.class);
         when(lexer.next()).thenReturn(
-                new ElementComment(new Comment()),
+                new ElementComment(new Comment(p)),
                 new ElementLPar(new LPar(p)),
                 new ElementWhiteSpace(new WhiteSpace(p)),
                 new ElementIdentifier(new Identifier("variable")),

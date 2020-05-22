@@ -29,15 +29,14 @@
 
 package foundation.rpg.sample.json;
 
-import foundation.rpg.common.symbols.LCurl;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementLCurl implements Element<State> {
-    private final LCurl symbol;
+    private final foundation.rpg.common.symbols.LCurl symbol;
 
-    public ElementLCurl(LCurl symbol) {
+    public ElementLCurl(foundation.rpg.common.symbols.LCurl symbol) {
         this.symbol = symbol;
     }
 

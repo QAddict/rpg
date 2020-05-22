@@ -29,15 +29,14 @@
 
 package foundation.rpg.sample.language.ast;
 
-import foundation.rpg.common.symbols.WhiteSpace;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementWhiteSpace implements Element<State> {
-    private final WhiteSpace symbol;
+    private final foundation.rpg.common.symbols.WhiteSpace symbol;
 
-    public ElementWhiteSpace(WhiteSpace symbol) {
+    public ElementWhiteSpace(foundation.rpg.common.symbols.WhiteSpace symbol) {
         this.symbol = symbol;
     }
 

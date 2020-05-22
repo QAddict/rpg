@@ -33,13 +33,11 @@ package foundation.rpg.sample.language.ast;
 
 RelationalExpression1: {
 	Expression -> RelationalExpression • [Dot]
-	RelationalExpression -> RelationalExpression • Gt AdditionalExpression [Dot, Gt]
+	RelationalExpression -> RelationalExpression • Gt AdditiveExpression [Dot, Gt]
 }
 
 */
 
-import foundation.rpg.common.symbols.Dot;
-import foundation.rpg.common.symbols.Gt;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -54,7 +52,7 @@ public class StateRelationalExpression1 extends StackState<foundation.rpg.sample
 
 // Reduce:
     @Override
-    public State visitDot(Dot symbol) throws UnexpectedInputException {
+    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitExpression(getFactory().is(this.getNode())).visitDot(symbol);
@@ -63,7 +61,7 @@ public class StateRelationalExpression1 extends StackState<foundation.rpg.sample
 
 // Shift:
     @Override
-    public State visitGt(Gt symbol) {
+    public State visitGt(foundation.rpg.common.symbols.Gt symbol) {
         return new StateGt1(getFactory(), symbol, this);
     }
 

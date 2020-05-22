@@ -38,10 +38,10 @@ LPar8: {
 	List2ListOfExpression -> • Expression [RPar, Comma]
 	List2ListOfExpression -> • List2ListOfExpression Comma Expression [RPar, Comma]
 	Expression -> • RelationalExpression [RPar, Comma]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt, Comma]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt, Comma]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt, Comma]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt, Comma]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times, Comma]
@@ -51,26 +51,23 @@ LPar8: {
 
 */
 
-import foundation.rpg.common.rules.ListRules;
-import foundation.rpg.common.symbols.LPar;
-import foundation.rpg.common.symbols.RPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateLPar8 extends StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> {
+public class StateLPar8 extends StackState<foundation.rpg.common.symbols.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateLPar8(foundation.rpg.sample.language.ast.AstFactory factory, LPar node, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> prev) {
+    public StateLPar8(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.symbols.LPar node, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitRPar(RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
         
-        return this.visitList3ListOfExpression(ListRules.isList3()).visitRPar(symbol);
+        return this.visitList3ListOfExpression(foundation.rpg.common.rules.ListRules.isList3()).visitRPar(symbol);
     }
 
 
@@ -96,8 +93,8 @@ public class StateLPar8 extends StackState<LPar, StackState<foundation.rpg.sampl
     }
 
     @Override
-    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditionalExpression4(getFactory(), symbol, this);
+    public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAdditiveExpression4(getFactory(), symbol, this);
     }
 
     @Override
@@ -116,7 +113,7 @@ public class StateLPar8 extends StackState<LPar, StackState<foundation.rpg.sampl
     }
 
     @Override
-    public State visitLPar(LPar symbol) {
+    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar7(getFactory(), symbol, this);
     }
 

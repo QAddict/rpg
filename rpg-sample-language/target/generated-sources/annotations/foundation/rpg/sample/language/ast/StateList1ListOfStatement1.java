@@ -36,10 +36,10 @@ List1ListOfStatement1: {
 	List1ListOfStatement -> List1ListOfStatement • Statement [End, Identifier, LPar]
 	Statement -> • Expression Dot [End, Identifier, LPar]
 	Expression -> • RelationalExpression [Dot]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [Dot, Gt]
-	RelationalExpression -> • AdditionalExpression [Dot, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [Dot, Gt]
+	RelationalExpression -> • AdditiveExpression [Dot, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
@@ -49,7 +49,6 @@ List1ListOfStatement1: {
 
 */
 
-import foundation.rpg.common.symbols.LPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -88,8 +87,8 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
-    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditionalExpression1(getFactory(), symbol, this);
+    public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAdditiveExpression1(getFactory(), symbol, this);
     }
 
     @Override
@@ -108,7 +107,7 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
-    public State visitLPar(LPar symbol) {
+    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar1(getFactory(), symbol, this);
     }
 

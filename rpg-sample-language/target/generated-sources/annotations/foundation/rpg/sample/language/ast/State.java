@@ -31,7 +31,7 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-N = [Start, Program, List1ListOfStatement, Statement, Expression, RelationalExpression, AdditionalExpression, MultiplicativeExpression, AtomicExpression, List3ListOfExpression, List2ListOfExpression]
+N = [Start, Program, List1ListOfStatement, Statement, Expression, RelationalExpression, AdditiveExpression, MultiplicativeExpression, AtomicExpression, List3ListOfExpression, List2ListOfExpression]
 T = [End, Dot, Gt, Plus, Times, Identifier, LPar, RPar, Comma]
 S = Start
 R = {
@@ -41,8 +41,8 @@ R = {
 	List1ListOfStatement -> List1ListOfStatement,Statement
 	Statement -> Expression,Dot
 	Expression -> RelationalExpression
-	RelationalExpression -> RelationalExpression,Gt,AdditionalExpression
-	AdditionalExpression -> AdditionalExpression,Plus,MultiplicativeExpression
+	RelationalExpression -> RelationalExpression,Gt,AdditiveExpression
+	AdditiveExpression -> AdditiveExpression,Plus,MultiplicativeExpression
 	MultiplicativeExpression -> MultiplicativeExpression,Times,AtomicExpression
 	AtomicExpression -> Identifier
 	AtomicExpression -> LPar,Expression,RPar
@@ -51,8 +51,8 @@ R = {
 	List3ListOfExpression -> List2ListOfExpression
 	List2ListOfExpression -> Expression
 	List2ListOfExpression -> List2ListOfExpression,Comma,Expression
-	RelationalExpression -> AdditionalExpression
-	AdditionalExpression -> MultiplicativeExpression
+	RelationalExpression -> AdditiveExpression
+	AdditiveExpression -> MultiplicativeExpression
 	MultiplicativeExpression -> AtomicExpression
 }
 
@@ -70,10 +70,10 @@ List1ListOfStatement1: {
 	List1ListOfStatement -> List1ListOfStatement • Statement [End, Identifier, LPar]
 	Statement -> • Expression Dot [End, Identifier, LPar]
 	Expression -> • RelationalExpression [Dot]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [Dot, Gt]
-	RelationalExpression -> • AdditionalExpression [Dot, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [Dot, Gt]
+	RelationalExpression -> • AdditiveExpression [Dot, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
@@ -91,14 +91,14 @@ Expression1: {
 }
 RelationalExpression1: {
 	Expression -> RelationalExpression • [Dot]
-	RelationalExpression -> RelationalExpression • Gt AdditionalExpression [Dot, Gt]
+	RelationalExpression -> RelationalExpression • Gt AdditiveExpression [Dot, Gt]
 }
-AdditionalExpression1: {
-	RelationalExpression -> AdditionalExpression • [Dot, Gt]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [Dot, Gt, Plus]
+AdditiveExpression1: {
+	RelationalExpression -> AdditiveExpression • [Dot, Gt]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [Dot, Gt, Plus]
 }
 MultiplicativeExpression1: {
-	AdditionalExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
+	AdditiveExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
 	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [Dot, Gt, Plus, Times]
 }
 AtomicExpression1: {
@@ -111,10 +111,10 @@ Identifier1: {
 LPar1: {
 	AtomicExpression -> LPar • Expression RPar [Dot, Gt, Plus, Times]
 	Expression -> • RelationalExpression [RPar]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
@@ -125,9 +125,9 @@ Dot1: {
 	Statement -> Expression Dot • [End, Identifier, LPar]
 }
 Gt1: {
-	RelationalExpression -> RelationalExpression Gt • AdditionalExpression [Dot, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
+	RelationalExpression -> RelationalExpression Gt • AdditiveExpression [Dot, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
@@ -135,7 +135,7 @@ Gt1: {
 	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [Dot, Gt, Plus, Times]
 }
 Plus1: {
-	AdditionalExpression -> AdditionalExpression Plus • MultiplicativeExpression [Dot, Gt, Plus]
+	AdditiveExpression -> AdditiveExpression Plus • MultiplicativeExpression [Dot, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
@@ -155,10 +155,10 @@ LPar2: {
 	List2ListOfExpression -> • Expression [RPar, Comma]
 	List2ListOfExpression -> • List2ListOfExpression Comma Expression [RPar, Comma]
 	Expression -> • RelationalExpression [RPar, Comma]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt, Comma]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt, Comma]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt, Comma]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt, Comma]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times, Comma]
@@ -170,14 +170,14 @@ Expression2: {
 }
 RelationalExpression2: {
 	Expression -> RelationalExpression • [RPar]
-	RelationalExpression -> RelationalExpression • Gt AdditionalExpression [RPar, Gt]
+	RelationalExpression -> RelationalExpression • Gt AdditiveExpression [RPar, Gt]
 }
-AdditionalExpression2: {
-	RelationalExpression -> AdditionalExpression • [RPar, Gt]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [RPar, Gt, Plus]
+AdditiveExpression2: {
+	RelationalExpression -> AdditiveExpression • [RPar, Gt]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [RPar, Gt, Plus]
 }
 MultiplicativeExpression2: {
-	AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
+	AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
 	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Times]
 }
 AtomicExpression2: {
@@ -190,22 +190,22 @@ Identifier2: {
 LPar3: {
 	AtomicExpression -> LPar • Expression RPar [RPar, Gt, Plus, Times]
 	Expression -> • RelationalExpression [RPar]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
 	AtomicExpression -> • LPar Expression RPar [RPar, Gt, Plus, Times]
 	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times]
 }
-AdditionalExpression3: {
-	RelationalExpression -> RelationalExpression Gt AdditionalExpression • [Dot, Gt]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [Dot, Gt, Plus]
+AdditiveExpression3: {
+	RelationalExpression -> RelationalExpression Gt AdditiveExpression • [Dot, Gt]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [Dot, Gt, Plus]
 }
 MultiplicativeExpression4: {
-	AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
+	AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
 	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [Dot, Gt, Plus, Times]
 }
 AtomicExpression5: {
@@ -223,14 +223,14 @@ Expression3: {
 }
 RelationalExpression3: {
 	Expression -> RelationalExpression • [RPar, Comma]
-	RelationalExpression -> RelationalExpression • Gt AdditionalExpression [RPar, Gt, Comma]
+	RelationalExpression -> RelationalExpression • Gt AdditiveExpression [RPar, Gt, Comma]
 }
-AdditionalExpression4: {
-	RelationalExpression -> AdditionalExpression • [RPar, Gt, Comma]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
+AdditiveExpression4: {
+	RelationalExpression -> AdditiveExpression • [RPar, Gt, Comma]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
 }
 MultiplicativeExpression5: {
-	AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Times, Comma]
 }
 AtomicExpression6: {
@@ -243,10 +243,10 @@ Identifier6: {
 LPar7: {
 	AtomicExpression -> LPar • Expression RPar [RPar, Gt, Plus, Times, Comma]
 	Expression -> • RelationalExpression [RPar]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
@@ -257,9 +257,9 @@ RPar1: {
 	AtomicExpression -> LPar Expression RPar • [Dot, Gt, Plus, Times]
 }
 Gt2: {
-	RelationalExpression -> RelationalExpression Gt • AdditionalExpression [RPar, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
+	RelationalExpression -> RelationalExpression Gt • AdditiveExpression [RPar, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
@@ -267,7 +267,7 @@ Gt2: {
 	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times]
 }
 Plus2: {
-	AdditionalExpression -> AdditionalExpression Plus • MultiplicativeExpression [RPar, Gt, Plus]
+	AdditiveExpression -> AdditiveExpression Plus • MultiplicativeExpression [RPar, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
@@ -287,10 +287,10 @@ LPar8: {
 	List2ListOfExpression -> • Expression [RPar, Comma]
 	List2ListOfExpression -> • List2ListOfExpression Comma Expression [RPar, Comma]
 	Expression -> • RelationalExpression [RPar, Comma]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt, Comma]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt, Comma]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt, Comma]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt, Comma]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times, Comma]
@@ -306,10 +306,10 @@ RPar2: {
 Comma1: {
 	List2ListOfExpression -> List2ListOfExpression Comma • Expression [RPar, Comma]
 	Expression -> • RelationalExpression [RPar, Comma]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Comma, Gt]
-	RelationalExpression -> • AdditionalExpression [RPar, Comma, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Comma, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Comma, Gt]
+	RelationalExpression -> • AdditiveExpression [RPar, Comma, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Comma, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Comma, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Comma, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Comma, Gt, Plus, Times]
@@ -317,9 +317,9 @@ Comma1: {
 	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Comma, Gt, Plus, Times]
 }
 Gt3: {
-	RelationalExpression -> RelationalExpression Gt • AdditionalExpression [RPar, Gt, Comma]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Comma, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Comma, Plus]
+	RelationalExpression -> RelationalExpression Gt • AdditiveExpression [RPar, Gt, Comma]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Comma, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Comma, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Comma, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Comma, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Comma, Plus, Times]
@@ -327,7 +327,7 @@ Gt3: {
 	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Comma, Plus, Times]
 }
 Plus4: {
-	AdditionalExpression -> AdditionalExpression Plus • MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> AdditiveExpression Plus • MultiplicativeExpression [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Comma, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Comma, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Comma, Times]
@@ -347,10 +347,10 @@ LPar10: {
 	List2ListOfExpression -> • Expression [RPar, Comma]
 	List2ListOfExpression -> • List2ListOfExpression Comma Expression [RPar, Comma]
 	Expression -> • RelationalExpression [RPar, Comma]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt, Comma]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt, Comma]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt, Comma]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt, Comma]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times, Comma]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times, Comma]
@@ -360,12 +360,12 @@ LPar10: {
 Expression5: {
 	AtomicExpression -> LPar Expression • RPar [RPar, Gt, Plus, Times, Comma]
 }
-AdditionalExpression7: {
-	RelationalExpression -> RelationalExpression Gt AdditionalExpression • [RPar, Gt]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [RPar, Gt, Plus]
+AdditiveExpression7: {
+	RelationalExpression -> RelationalExpression Gt AdditiveExpression • [RPar, Gt]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [RPar, Gt, Plus]
 }
 MultiplicativeExpression9: {
-	AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
+	AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
 	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Times]
 }
 AtomicExpression11: {
@@ -380,12 +380,12 @@ RPar3: {
 Expression7: {
 	List2ListOfExpression -> List2ListOfExpression Comma Expression • [RPar, Comma]
 }
-AdditionalExpression10: {
-	RelationalExpression -> RelationalExpression Gt AdditionalExpression • [RPar, Gt, Comma]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [RPar, Gt, Comma, Plus]
+AdditiveExpression10: {
+	RelationalExpression -> RelationalExpression Gt AdditiveExpression • [RPar, Gt, Comma]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [RPar, Gt, Comma, Plus]
 }
 MultiplicativeExpression13: {
-	AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Comma, Times]
 }
 AtomicExpression16: {
@@ -414,7 +414,7 @@ List1ListOfStatement1: End -> REDUCE: Program -> List1ListOfStatement • [End]
 List1ListOfStatement1: Statement -> GOTO: Statement1
 List1ListOfStatement1: Expression -> GOTO: Expression1
 List1ListOfStatement1: RelationalExpression -> GOTO: RelationalExpression1
-List1ListOfStatement1: AdditionalExpression -> GOTO: AdditionalExpression1
+List1ListOfStatement1: AdditiveExpression -> GOTO: AdditiveExpression1
 List1ListOfStatement1: MultiplicativeExpression -> GOTO: MultiplicativeExpression1
 List1ListOfStatement1: AtomicExpression -> GOTO: AtomicExpression1
 List1ListOfStatement1: Identifier -> GOTO: Identifier1
@@ -426,12 +426,12 @@ Statement1: LPar -> REDUCE: List1ListOfStatement -> List1ListOfStatement Stateme
 Expression1: Dot -> GOTO: Dot1
 RelationalExpression1: Dot -> REDUCE: Expression -> RelationalExpression • [Dot]
 RelationalExpression1: Gt -> GOTO: Gt1
-AdditionalExpression1: Dot -> REDUCE: RelationalExpression -> AdditionalExpression • [Dot, Gt]
-AdditionalExpression1: Gt -> REDUCE: RelationalExpression -> AdditionalExpression • [Dot, Gt]
-AdditionalExpression1: Plus -> GOTO: Plus1
-MultiplicativeExpression1: Dot -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
-MultiplicativeExpression1: Gt -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
-MultiplicativeExpression1: Plus -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
+AdditiveExpression1: Dot -> REDUCE: RelationalExpression -> AdditiveExpression • [Dot, Gt]
+AdditiveExpression1: Gt -> REDUCE: RelationalExpression -> AdditiveExpression • [Dot, Gt]
+AdditiveExpression1: Plus -> GOTO: Plus1
+MultiplicativeExpression1: Dot -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
+MultiplicativeExpression1: Gt -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
+MultiplicativeExpression1: Plus -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [Dot, Gt, Plus]
 MultiplicativeExpression1: Times -> GOTO: Times1
 AtomicExpression1: Dot -> REDUCE: MultiplicativeExpression -> AtomicExpression • [Dot, Gt, Plus, Times]
 AtomicExpression1: Gt -> REDUCE: MultiplicativeExpression -> AtomicExpression • [Dot, Gt, Plus, Times]
@@ -444,7 +444,7 @@ Identifier1: Times -> REDUCE: AtomicExpression -> Identifier • [Dot, Gt, Plus,
 Identifier1: LPar -> GOTO: LPar2
 LPar1: Expression -> GOTO: Expression2
 LPar1: RelationalExpression -> GOTO: RelationalExpression2
-LPar1: AdditionalExpression -> GOTO: AdditionalExpression2
+LPar1: AdditiveExpression -> GOTO: AdditiveExpression2
 LPar1: MultiplicativeExpression -> GOTO: MultiplicativeExpression2
 LPar1: AtomicExpression -> GOTO: AtomicExpression2
 LPar1: Identifier -> GOTO: Identifier2
@@ -452,7 +452,7 @@ LPar1: LPar -> GOTO: LPar3
 Dot1: End -> REDUCE: Statement -> Expression Dot • [End, Identifier, LPar]
 Dot1: Identifier -> REDUCE: Statement -> Expression Dot • [End, Identifier, LPar]
 Dot1: LPar -> REDUCE: Statement -> Expression Dot • [End, Identifier, LPar]
-Gt1: AdditionalExpression -> GOTO: AdditionalExpression3
+Gt1: AdditiveExpression -> GOTO: AdditiveExpression3
 Gt1: MultiplicativeExpression -> GOTO: MultiplicativeExpression1
 Gt1: AtomicExpression -> GOTO: AtomicExpression1
 Gt1: Identifier -> GOTO: Identifier1
@@ -469,7 +469,7 @@ LPar2: List3ListOfExpression -> GOTO: List3ListOfExpression1
 LPar2: List2ListOfExpression -> GOTO: List2ListOfExpression1
 LPar2: Expression -> GOTO: Expression3
 LPar2: RelationalExpression -> GOTO: RelationalExpression3
-LPar2: AdditionalExpression -> GOTO: AdditionalExpression4
+LPar2: AdditiveExpression -> GOTO: AdditiveExpression4
 LPar2: MultiplicativeExpression -> GOTO: MultiplicativeExpression5
 LPar2: AtomicExpression -> GOTO: AtomicExpression6
 LPar2: Identifier -> GOTO: Identifier6
@@ -477,12 +477,12 @@ LPar2: LPar -> GOTO: LPar7
 Expression2: RPar -> GOTO: RPar1
 RelationalExpression2: RPar -> REDUCE: Expression -> RelationalExpression • [RPar]
 RelationalExpression2: Gt -> GOTO: Gt2
-AdditionalExpression2: RPar -> REDUCE: RelationalExpression -> AdditionalExpression • [RPar, Gt]
-AdditionalExpression2: Gt -> REDUCE: RelationalExpression -> AdditionalExpression • [RPar, Gt]
-AdditionalExpression2: Plus -> GOTO: Plus2
-MultiplicativeExpression2: RPar -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
-MultiplicativeExpression2: Gt -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
-MultiplicativeExpression2: Plus -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
+AdditiveExpression2: RPar -> REDUCE: RelationalExpression -> AdditiveExpression • [RPar, Gt]
+AdditiveExpression2: Gt -> REDUCE: RelationalExpression -> AdditiveExpression • [RPar, Gt]
+AdditiveExpression2: Plus -> GOTO: Plus2
+MultiplicativeExpression2: RPar -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
+MultiplicativeExpression2: Gt -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
+MultiplicativeExpression2: Plus -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
 MultiplicativeExpression2: Times -> GOTO: Times2
 AtomicExpression2: RPar -> REDUCE: MultiplicativeExpression -> AtomicExpression • [RPar, Gt, Plus, Times]
 AtomicExpression2: Gt -> REDUCE: MultiplicativeExpression -> AtomicExpression • [RPar, Gt, Plus, Times]
@@ -495,17 +495,17 @@ Identifier2: Times -> REDUCE: AtomicExpression -> Identifier • [RPar, Gt, Plus
 Identifier2: LPar -> GOTO: LPar8
 LPar3: Expression -> GOTO: Expression4
 LPar3: RelationalExpression -> GOTO: RelationalExpression2
-LPar3: AdditionalExpression -> GOTO: AdditionalExpression2
+LPar3: AdditiveExpression -> GOTO: AdditiveExpression2
 LPar3: MultiplicativeExpression -> GOTO: MultiplicativeExpression2
 LPar3: AtomicExpression -> GOTO: AtomicExpression2
 LPar3: Identifier -> GOTO: Identifier2
 LPar3: LPar -> GOTO: LPar3
-AdditionalExpression3: Dot -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditionalExpression • [Dot, Gt]
-AdditionalExpression3: Gt -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditionalExpression • [Dot, Gt]
-AdditionalExpression3: Plus -> GOTO: Plus1
-MultiplicativeExpression4: Dot -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
-MultiplicativeExpression4: Gt -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
-MultiplicativeExpression4: Plus -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
+AdditiveExpression3: Dot -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditiveExpression • [Dot, Gt]
+AdditiveExpression3: Gt -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditiveExpression • [Dot, Gt]
+AdditiveExpression3: Plus -> GOTO: Plus1
+MultiplicativeExpression4: Dot -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
+MultiplicativeExpression4: Gt -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
+MultiplicativeExpression4: Plus -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
 MultiplicativeExpression4: Times -> GOTO: Times1
 AtomicExpression5: Dot -> REDUCE: MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [Dot, Gt, Plus, Times]
 AtomicExpression5: Gt -> REDUCE: MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [Dot, Gt, Plus, Times]
@@ -519,14 +519,14 @@ Expression3: Comma -> REDUCE: List2ListOfExpression -> Expression • [RPar, Com
 RelationalExpression3: RPar -> REDUCE: Expression -> RelationalExpression • [RPar, Comma]
 RelationalExpression3: Comma -> REDUCE: Expression -> RelationalExpression • [RPar, Comma]
 RelationalExpression3: Gt -> GOTO: Gt3
-AdditionalExpression4: RPar -> REDUCE: RelationalExpression -> AdditionalExpression • [RPar, Gt, Comma]
-AdditionalExpression4: Gt -> REDUCE: RelationalExpression -> AdditionalExpression • [RPar, Gt, Comma]
-AdditionalExpression4: Comma -> REDUCE: RelationalExpression -> AdditionalExpression • [RPar, Gt, Comma]
-AdditionalExpression4: Plus -> GOTO: Plus4
-MultiplicativeExpression5: RPar -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
-MultiplicativeExpression5: Gt -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
-MultiplicativeExpression5: Plus -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
-MultiplicativeExpression5: Comma -> REDUCE: AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+AdditiveExpression4: RPar -> REDUCE: RelationalExpression -> AdditiveExpression • [RPar, Gt, Comma]
+AdditiveExpression4: Gt -> REDUCE: RelationalExpression -> AdditiveExpression • [RPar, Gt, Comma]
+AdditiveExpression4: Comma -> REDUCE: RelationalExpression -> AdditiveExpression • [RPar, Gt, Comma]
+AdditiveExpression4: Plus -> GOTO: Plus4
+MultiplicativeExpression5: RPar -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+MultiplicativeExpression5: Gt -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+MultiplicativeExpression5: Plus -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+MultiplicativeExpression5: Comma -> REDUCE: AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus, Comma]
 MultiplicativeExpression5: Times -> GOTO: Times4
 AtomicExpression6: RPar -> REDUCE: MultiplicativeExpression -> AtomicExpression • [RPar, Gt, Plus, Times, Comma]
 AtomicExpression6: Gt -> REDUCE: MultiplicativeExpression -> AtomicExpression • [RPar, Gt, Plus, Times, Comma]
@@ -541,7 +541,7 @@ Identifier6: Comma -> REDUCE: AtomicExpression -> Identifier • [RPar, Gt, Plus
 Identifier6: LPar -> GOTO: LPar10
 LPar7: Expression -> GOTO: Expression5
 LPar7: RelationalExpression -> GOTO: RelationalExpression2
-LPar7: AdditionalExpression -> GOTO: AdditionalExpression2
+LPar7: AdditiveExpression -> GOTO: AdditiveExpression2
 LPar7: MultiplicativeExpression -> GOTO: MultiplicativeExpression2
 LPar7: AtomicExpression -> GOTO: AtomicExpression2
 LPar7: Identifier -> GOTO: Identifier2
@@ -550,7 +550,7 @@ RPar1: Dot -> REDUCE: AtomicExpression -> LPar Expression RPar • [Dot, Gt, Plu
 RPar1: Gt -> REDUCE: AtomicExpression -> LPar Expression RPar • [Dot, Gt, Plus, Times]
 RPar1: Plus -> REDUCE: AtomicExpression -> LPar Expression RPar • [Dot, Gt, Plus, Times]
 RPar1: Times -> REDUCE: AtomicExpression -> LPar Expression RPar • [Dot, Gt, Plus, Times]
-Gt2: AdditionalExpression -> GOTO: AdditionalExpression7
+Gt2: AdditiveExpression -> GOTO: AdditiveExpression7
 Gt2: MultiplicativeExpression -> GOTO: MultiplicativeExpression2
 Gt2: AtomicExpression -> GOTO: AtomicExpression2
 Gt2: Identifier -> GOTO: Identifier2
@@ -567,7 +567,7 @@ LPar8: List3ListOfExpression -> GOTO: List3ListOfExpression2
 LPar8: List2ListOfExpression -> GOTO: List2ListOfExpression1
 LPar8: Expression -> GOTO: Expression3
 LPar8: RelationalExpression -> GOTO: RelationalExpression3
-LPar8: AdditionalExpression -> GOTO: AdditionalExpression4
+LPar8: AdditiveExpression -> GOTO: AdditiveExpression4
 LPar8: MultiplicativeExpression -> GOTO: MultiplicativeExpression5
 LPar8: AtomicExpression -> GOTO: AtomicExpression6
 LPar8: Identifier -> GOTO: Identifier6
@@ -579,12 +579,12 @@ RPar2: Plus -> REDUCE: AtomicExpression -> Identifier LPar List3ListOfExpression
 RPar2: Times -> REDUCE: AtomicExpression -> Identifier LPar List3ListOfExpression RPar • [Dot, Gt, Plus, Times]
 Comma1: Expression -> GOTO: Expression7
 Comma1: RelationalExpression -> GOTO: RelationalExpression3
-Comma1: AdditionalExpression -> GOTO: AdditionalExpression4
+Comma1: AdditiveExpression -> GOTO: AdditiveExpression4
 Comma1: MultiplicativeExpression -> GOTO: MultiplicativeExpression5
 Comma1: AtomicExpression -> GOTO: AtomicExpression6
 Comma1: Identifier -> GOTO: Identifier6
 Comma1: LPar -> GOTO: LPar7
-Gt3: AdditionalExpression -> GOTO: AdditionalExpression10
+Gt3: AdditiveExpression -> GOTO: AdditiveExpression10
 Gt3: MultiplicativeExpression -> GOTO: MultiplicativeExpression5
 Gt3: AtomicExpression -> GOTO: AtomicExpression6
 Gt3: Identifier -> GOTO: Identifier6
@@ -601,18 +601,18 @@ LPar10: List3ListOfExpression -> GOTO: List3ListOfExpression3
 LPar10: List2ListOfExpression -> GOTO: List2ListOfExpression1
 LPar10: Expression -> GOTO: Expression3
 LPar10: RelationalExpression -> GOTO: RelationalExpression3
-LPar10: AdditionalExpression -> GOTO: AdditionalExpression4
+LPar10: AdditiveExpression -> GOTO: AdditiveExpression4
 LPar10: MultiplicativeExpression -> GOTO: MultiplicativeExpression5
 LPar10: AtomicExpression -> GOTO: AtomicExpression6
 LPar10: Identifier -> GOTO: Identifier6
 LPar10: LPar -> GOTO: LPar7
 Expression5: RPar -> GOTO: RPar4
-AdditionalExpression7: RPar -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditionalExpression • [RPar, Gt]
-AdditionalExpression7: Gt -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditionalExpression • [RPar, Gt]
-AdditionalExpression7: Plus -> GOTO: Plus2
-MultiplicativeExpression9: RPar -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
-MultiplicativeExpression9: Gt -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
-MultiplicativeExpression9: Plus -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
+AdditiveExpression7: RPar -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditiveExpression • [RPar, Gt]
+AdditiveExpression7: Gt -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditiveExpression • [RPar, Gt]
+AdditiveExpression7: Plus -> GOTO: Plus2
+MultiplicativeExpression9: RPar -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
+MultiplicativeExpression9: Gt -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
+MultiplicativeExpression9: Plus -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus]
 MultiplicativeExpression9: Times -> GOTO: Times2
 AtomicExpression11: RPar -> REDUCE: MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [RPar, Gt, Plus, Times]
 AtomicExpression11: Gt -> REDUCE: MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [RPar, Gt, Plus, Times]
@@ -625,14 +625,14 @@ RPar3: Plus -> REDUCE: AtomicExpression -> LPar Expression RPar • [RPar, Gt, P
 RPar3: Times -> REDUCE: AtomicExpression -> LPar Expression RPar • [RPar, Gt, Plus, Times]
 Expression7: RPar -> REDUCE: List2ListOfExpression -> List2ListOfExpression Comma Expression • [RPar, Comma]
 Expression7: Comma -> REDUCE: List2ListOfExpression -> List2ListOfExpression Comma Expression • [RPar, Comma]
-AdditionalExpression10: RPar -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditionalExpression • [RPar, Gt, Comma]
-AdditionalExpression10: Gt -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditionalExpression • [RPar, Gt, Comma]
-AdditionalExpression10: Comma -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditionalExpression • [RPar, Gt, Comma]
-AdditionalExpression10: Plus -> GOTO: Plus4
-MultiplicativeExpression13: RPar -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
-MultiplicativeExpression13: Gt -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
-MultiplicativeExpression13: Plus -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
-MultiplicativeExpression13: Comma -> REDUCE: AdditionalExpression -> AdditionalExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+AdditiveExpression10: RPar -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditiveExpression • [RPar, Gt, Comma]
+AdditiveExpression10: Gt -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditiveExpression • [RPar, Gt, Comma]
+AdditiveExpression10: Comma -> REDUCE: RelationalExpression -> RelationalExpression Gt AdditiveExpression • [RPar, Gt, Comma]
+AdditiveExpression10: Plus -> GOTO: Plus4
+MultiplicativeExpression13: RPar -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+MultiplicativeExpression13: Gt -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+MultiplicativeExpression13: Plus -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
+MultiplicativeExpression13: Comma -> REDUCE: AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [RPar, Gt, Plus, Comma]
 MultiplicativeExpression13: Times -> GOTO: Times4
 AtomicExpression16: RPar -> REDUCE: MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [RPar, Gt, Plus, Times, Comma]
 AtomicExpression16: Gt -> REDUCE: MultiplicativeExpression -> MultiplicativeExpression Times AtomicExpression • [RPar, Gt, Plus, Times, Comma]
@@ -657,7 +657,6 @@ RPar6: Comma -> REDUCE: AtomicExpression -> Identifier LPar List3ListOfExpressio
 
 */
 
-import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.StateBase;
 
@@ -674,11 +673,11 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
     // Ignored:
-    public State visitWhiteSpace(WhiteSpace symbol) {
+    public State visitWhiteSpace(foundation.rpg.common.symbols.WhiteSpace symbol) {
         return this;
     }
 
-    public State visitComment(Comment symbol) {
+    public State visitComment(foundation.rpg.common.symbols.Comment symbol) {
         return this;
     }
 
@@ -688,19 +687,19 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitDot(Dot symbol) throws UnexpectedInputException {
+    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitGt(Gt symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitPlus(Plus symbol) throws UnexpectedInputException {
+    public State visitPlus(foundation.rpg.common.symbols.Plus symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitTimes(Times symbol) throws UnexpectedInputException {
+    public State visitTimes(foundation.rpg.common.symbols.Times symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -708,15 +707,15 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitLPar(LPar symbol) throws UnexpectedInputException {
+    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitRPar(RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitComma(Comma symbol) throws UnexpectedInputException {
+    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -740,7 +739,7 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) throws UnexpectedInputException {
+    public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

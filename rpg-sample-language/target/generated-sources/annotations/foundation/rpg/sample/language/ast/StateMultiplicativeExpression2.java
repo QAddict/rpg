@@ -32,16 +32,12 @@ package foundation.rpg.sample.language.ast;
 /*
 
 MultiplicativeExpression2: {
-	AdditionalExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
+	AdditiveExpression -> MultiplicativeExpression • [RPar, Gt, Plus]
 	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [RPar, Gt, Plus, Times]
 }
 
 */
 
-import foundation.rpg.common.symbols.Gt;
-import foundation.rpg.common.symbols.Plus;
-import foundation.rpg.common.symbols.RPar;
-import foundation.rpg.common.symbols.Times;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -56,30 +52,30 @@ public class StateMultiplicativeExpression2 extends StackState<foundation.rpg.sa
 
 // Reduce:
     @Override
-    public State visitRPar(RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitAdditionalExpression((this.getNode())).visitRPar(symbol);
+        return stack1.visitAdditiveExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitGt(Gt symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitAdditionalExpression((this.getNode())).visitGt(symbol);
+        return stack1.visitAdditiveExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override
-    public State visitPlus(Plus symbol) throws UnexpectedInputException {
+    public State visitPlus(foundation.rpg.common.symbols.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitAdditionalExpression((this.getNode())).visitPlus(symbol);
+        return stack1.visitAdditiveExpression((this.getNode())).visitPlus(symbol);
     }
 
 
 // Shift:
     @Override
-    public State visitTimes(Times symbol) {
+    public State visitTimes(foundation.rpg.common.symbols.Times symbol) {
         return new StateTimes2(getFactory(), symbol, this);
     }
 

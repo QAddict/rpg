@@ -34,10 +34,10 @@ package foundation.rpg.sample.language.ast;
 Comma1: {
 	List2ListOfExpression -> List2ListOfExpression Comma • Expression [RPar, Comma]
 	Expression -> • RelationalExpression [RPar, Comma]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Comma, Gt]
-	RelationalExpression -> • AdditionalExpression [RPar, Comma, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Comma, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Comma, Gt]
+	RelationalExpression -> • AdditiveExpression [RPar, Comma, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Comma, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Comma, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Comma, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Comma, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Comma, Gt, Plus, Times]
@@ -47,15 +47,14 @@ Comma1: {
 
 */
 
-import foundation.rpg.common.symbols.Comma;
-import foundation.rpg.common.symbols.LPar;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateComma1 extends StackState<Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> {
+public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateComma1(foundation.rpg.sample.language.ast.AstFactory factory, Comma node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> prev) {
+    public StateComma1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.symbols.Comma node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -73,8 +72,8 @@ public class StateComma1 extends StackState<Comma, StackState<java.util.List<fou
     }
 
     @Override
-    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditionalExpression4(getFactory(), symbol, this);
+    public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAdditiveExpression4(getFactory(), symbol, this);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class StateComma1 extends StackState<Comma, StackState<java.util.List<fou
     }
 
     @Override
-    public State visitLPar(LPar symbol) {
+    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar7(getFactory(), symbol, this);
     }
 

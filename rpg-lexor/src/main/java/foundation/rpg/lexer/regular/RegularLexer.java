@@ -46,7 +46,7 @@ public class RegularLexer implements Lexer<State> {
             case -1: return new ElementEnd(new End(mark.build()));
             case '\\': return new ElementBs(new Bs(mark.build()));
             case '|': return new ElementPipe(new Pipe(mark.build()));
-            case '*': return new ElementTimes(new Times(mark.build()));
+            case '*': return new ElementStar(new Star(mark.build()));
             case '+': return new ElementPlus(new Plus(mark.build()));
             case '^': return new ElementUp(new Up(mark.build()));
             case '-': return new ElementMinus(new Minus(mark.build()));

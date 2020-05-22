@@ -29,5 +29,14 @@
 
 package foundation.rpg.common.symbols;
 
-public class Comment {
+import foundation.rpg.Match;
+import foundation.rpg.common.Patterns;
+import foundation.rpg.parser.Terminal;
+import foundation.rpg.parser.Token;
+
+@Match(Patterns.C_COMMENT)
+public class Comment extends Terminal {
+    public Comment(Token position) {
+        super(position);
+    }
 }

@@ -91,7 +91,7 @@ public class ClassToGrammarContext {
         Set<ExecutableElement> precedenceRules = new LinkedHashSet<>();
         methods.stream().filter(m -> !hasMetaRuleAnnotation(m)).forEach(method -> {
             if(method.getReturnType().getKind().equals(TypeKind.VOID)) {
-                method.getParameters().forEach(p -> ignored.add(of(entry(p))));
+                method.getParameters().forEach(p -> ignored.add(of(scanTokens(p))));
             } else {
                 rules.add(ruleOf(method));
                 Map<String, TypeMirror> map = new LinkedHashMap<>();

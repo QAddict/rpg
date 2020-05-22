@@ -31,51 +31,44 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-AdditionalExpression3: {
-	RelationalExpression -> RelationalExpression Gt AdditionalExpression • [Dot, Gt]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [Dot, Gt, Plus]
+AdditiveExpression1: {
+	RelationalExpression -> AdditiveExpression • [Dot, Gt]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [Dot, Gt, Plus]
 }
 
 */
 
-import foundation.rpg.common.symbols.Dot;
-import foundation.rpg.common.symbols.Gt;
-import foundation.rpg.common.symbols.Plus;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateAdditionalExpression3 extends StackState<foundation.rpg.sample.language.ast.Expression, StackState<Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>>> {
+public class StateAdditiveExpression1 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
 
 // NoStack:
 // Stack:
-    public StateAdditionalExpression3(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, StackState<Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> prev) {
+    public StateAdditiveExpression1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitDot(Dot symbol) throws UnexpectedInputException {
+    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
         
-		StackState<Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
-		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
-		State stack3 = stack2.getPrev();
-        return stack3.visitRelationalExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitDot(symbol);
+		State stack1 = this.getPrev();
+        return stack1.visitRelationalExpression((this.getNode())).visitDot(symbol);
     }
 
     @Override
-    public State visitGt(Gt symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
         
-		StackState<Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
-		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
-		State stack3 = stack2.getPrev();
-        return stack3.visitRelationalExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitGt(symbol);
+		State stack1 = this.getPrev();
+        return stack1.visitRelationalExpression((this.getNode())).visitGt(symbol);
     }
 
 
 // Shift:
     @Override
-    public State visitPlus(Plus symbol) {
+    public State visitPlus(foundation.rpg.common.symbols.Plus symbol) {
         return new StatePlus1(getFactory(), symbol, this);
     }
 

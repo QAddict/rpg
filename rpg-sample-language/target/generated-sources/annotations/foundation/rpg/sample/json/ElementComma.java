@@ -29,15 +29,14 @@
 
 package foundation.rpg.sample.json;
 
-import foundation.rpg.common.symbols.Comma;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementComma implements Element<State> {
-    private final Comma symbol;
+    private final foundation.rpg.common.symbols.Comma symbol;
 
-    public ElementComma(Comma symbol) {
+    public ElementComma(foundation.rpg.common.symbols.Comma symbol) {
         this.symbol = symbol;
     }
 

@@ -34,10 +34,10 @@ package foundation.rpg.sample.language.ast;
 LPar7: {
 	AtomicExpression -> LPar • Expression RPar [RPar, Gt, Plus, Times, Comma]
 	Expression -> • RelationalExpression [RPar]
-	RelationalExpression -> • RelationalExpression Gt AdditionalExpression [RPar, Gt]
-	RelationalExpression -> • AdditionalExpression [RPar, Gt]
-	AdditionalExpression -> • AdditionalExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
-	AdditionalExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
+	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [RPar, Gt]
+	RelationalExpression -> • AdditiveExpression [RPar, Gt]
+	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
+	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
@@ -47,14 +47,14 @@ LPar7: {
 
 */
 
-import foundation.rpg.common.symbols.LPar;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateLPar7 extends StackState<LPar, State> {
+public class StateLPar7 extends StackState<foundation.rpg.common.symbols.LPar, State> {
 
 // NoStack:
 // Stack:
-    public StateLPar7(foundation.rpg.sample.language.ast.AstFactory factory, LPar node, State prev) {
+    public StateLPar7(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.symbols.LPar node, State prev) {
         super(factory, node, prev);
     }
 
@@ -72,8 +72,8 @@ public class StateLPar7 extends StackState<LPar, State> {
     }
 
     @Override
-    public State visitAdditionalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditionalExpression2(getFactory(), symbol, this);
+    public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
+        return new StateAdditiveExpression2(getFactory(), symbol, this);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class StateLPar7 extends StackState<LPar, State> {
     }
 
     @Override
-    public State visitLPar(LPar symbol) {
+    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar3(getFactory(), symbol, this);
     }
 

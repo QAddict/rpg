@@ -29,15 +29,14 @@
 
 package foundation.rpg.sample.language.ast;
 
-import foundation.rpg.common.symbols.RPar;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementRPar implements Element<State> {
-    private final RPar symbol;
+    private final foundation.rpg.common.symbols.RPar symbol;
 
-    public ElementRPar(RPar symbol) {
+    public ElementRPar(foundation.rpg.common.symbols.RPar symbol) {
         this.symbol = symbol;
     }
 

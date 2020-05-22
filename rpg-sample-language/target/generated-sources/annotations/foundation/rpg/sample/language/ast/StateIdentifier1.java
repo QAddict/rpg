@@ -38,7 +38,6 @@ Identifier1: {
 
 */
 
-import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -53,28 +52,28 @@ public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.
 
 // Reduce:
     @Override
-    public State visitDot(Dot symbol) throws UnexpectedInputException {
+    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitDot(symbol);
     }
 
     @Override
-    public State visitGt(Gt symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitGt(symbol);
     }
 
     @Override
-    public State visitPlus(Plus symbol) throws UnexpectedInputException {
+    public State visitPlus(foundation.rpg.common.symbols.Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitPlus(symbol);
     }
 
     @Override
-    public State visitTimes(Times symbol) throws UnexpectedInputException {
+    public State visitTimes(foundation.rpg.common.symbols.Times symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitTimes(symbol);
@@ -83,7 +82,7 @@ public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.
 
 // Shift:
     @Override
-    public State visitLPar(LPar symbol) {
+    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar2(getFactory(), symbol, this);
     }
 

@@ -37,8 +37,6 @@ Double5: {
 
 */
 
-import foundation.rpg.common.symbols.Comma;
-import foundation.rpg.common.symbols.RCurl;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -53,14 +51,14 @@ public class StateDouble5 extends StackState<java.lang.Double, State> {
 
 // Reduce:
     @Override
-    public State visitRCurl(RCurl symbol) throws UnexpectedInputException {
+    public State visitRCurl(foundation.rpg.common.symbols.RCurl symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitObject(getFactory().is(this.getNode())).visitRCurl(symbol);
     }
 
     @Override
-    public State visitComma(Comma symbol) throws UnexpectedInputException {
+    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitObject(getFactory().is(this.getNode())).visitComma(symbol);

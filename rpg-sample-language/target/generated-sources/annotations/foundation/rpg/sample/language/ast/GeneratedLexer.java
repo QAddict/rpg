@@ -1,9 +1,9 @@
 package foundation.rpg.sample.language.ast;
 
-import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.Lexer;
 import foundation.rpg.parser.Input;
+import foundation.rpg.parser.Position;
 import foundation.rpg.parser.End;
 import java.io.IOException;
 import foundation.rpg.parser.TokenBuilder;
@@ -35,31 +35,76 @@ public class GeneratedLexer implements Lexer<State> {
 						case '(': state = 5; break;
 						case ')': state = 6; break;
 						case ',': state = 7; break;
+						case '/': state = 8; break;
 						default:
-							if(Lexer.matchesGroup("w", symbol)) { state = 8; break; }
+							if(Lexer.matchesGroup("w", symbol)) { state = 9; break; }
+							if(Lexer.matchesGroup("s", symbol)) { state = 10; break; }
 							throw new IllegalStateException("");
 					}
 					break;
 				case 1:
-					return visitor -> visitor.visitDot(new Dot(builder.build()));
+					return visitor -> visitor.visitDot(new foundation.rpg.common.symbols.Dot(builder.build()));
 				case 2:
-					return visitor -> visitor.visitGt(new Gt(builder.build()));
+					return visitor -> visitor.visitGt(new foundation.rpg.common.symbols.Gt(builder.build()));
 				case 3:
-					return visitor -> visitor.visitPlus(new Plus(builder.build()));
+					return visitor -> visitor.visitPlus(new foundation.rpg.common.symbols.Plus(builder.build()));
 				case 4:
-					return visitor -> visitor.visitTimes(new Times(builder.build()));
+					return visitor -> visitor.visitTimes(new foundation.rpg.common.symbols.Times(builder.build()));
 				case 5:
-					return visitor -> visitor.visitLPar(new LPar(builder.build()));
+					return visitor -> visitor.visitLPar(new foundation.rpg.common.symbols.LPar(builder.build()));
 				case 6:
-					return visitor -> visitor.visitRPar(new RPar(builder.build()));
+					return visitor -> visitor.visitRPar(new foundation.rpg.common.symbols.RPar(builder.build()));
 				case 7:
-					return visitor -> visitor.visitComma(new Comma(builder.build()));
+					return visitor -> visitor.visitComma(new foundation.rpg.common.symbols.Comma(builder.build()));
 				case 8:
-					if(Lexer.matchesGroup("a", symbol)) { state = 9; break; }
-					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
+					if(symbol == '*') { state = 11; break; }
+					throw new IllegalStateException("");
 				case 9:
-					if(Lexer.matchesGroup("a", symbol)) { state = 9; break; }
+					if(Lexer.matchesGroup("a", symbol)) { state = 12; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
+				case 10:
+					if(Lexer.matchesGroup("s", symbol)) { state = 13; break; }
+					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
+				case 11:
+					switch(symbol) {
+						case '*': state = 14; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
+				case 12:
+					if(Lexer.matchesGroup("a", symbol)) { state = 12; break; }
+					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
+				case 13:
+					if(Lexer.matchesGroup("s", symbol)) { state = 13; break; }
+					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
+				case 14:
+					switch(symbol) {
+						case '/': state = 16; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 17; break;
+					}
+					break;
+				case 15:
+					switch(symbol) {
+						case '*': state = 14; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
+				case 16:
+					return visitor -> visitor.visitComment(new foundation.rpg.common.symbols.Comment(builder.build()));
+				case 17:
+					switch(symbol) {
+						case '*': state = 14; break;
+						default:
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
 			}
 		}
 	}

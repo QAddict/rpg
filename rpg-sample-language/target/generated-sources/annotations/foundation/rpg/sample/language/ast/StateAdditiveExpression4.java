@@ -31,46 +31,42 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-AdditionalExpression4: {
-	RelationalExpression -> AdditionalExpression • [RPar, Gt, Comma]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
+AdditiveExpression4: {
+	RelationalExpression -> AdditiveExpression • [RPar, Gt, Comma]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [RPar, Gt, Plus, Comma]
 }
 
 */
 
-import foundation.rpg.common.symbols.Comma;
-import foundation.rpg.common.symbols.Gt;
-import foundation.rpg.common.symbols.Plus;
-import foundation.rpg.common.symbols.RPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateAdditionalExpression4 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
+public class StateAdditiveExpression4 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
 
 // NoStack:
 // Stack:
-    public StateAdditionalExpression4(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
+    public StateAdditiveExpression4(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitRPar(RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitRelationalExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitGt(Gt symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitRelationalExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override
-    public State visitComma(Comma symbol) throws UnexpectedInputException {
+    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitRelationalExpression((this.getNode())).visitComma(symbol);
@@ -79,7 +75,7 @@ public class StateAdditionalExpression4 extends StackState<foundation.rpg.sample
 
 // Shift:
     @Override
-    public State visitPlus(Plus symbol) {
+    public State visitPlus(foundation.rpg.common.symbols.Plus symbol) {
         return new StatePlus4(getFactory(), symbol, this);
     }
 

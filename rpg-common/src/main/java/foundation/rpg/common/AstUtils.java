@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.common.symbols;
+package foundation.rpg.common;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

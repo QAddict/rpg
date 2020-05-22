@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 
@@ -83,7 +84,7 @@ public class ClassToTokenContext implements EnvironmentGenerator {
 
     @Override
     public void generate(ClassToGrammarContext context, Filer filer) throws IOException {
-        new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", context.getGrammar().getTerminals().stream().flatMap(symbol -> {
+        new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).flatMap(symbol -> {
             TypeMirror type = context.symbolType(symbol);
             return tokenInfoFor(type).stream();
         }).collect(toList()), new PrintWriter(filer.createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isStaticFactory() ? null : context.getFactoryClass().asType());

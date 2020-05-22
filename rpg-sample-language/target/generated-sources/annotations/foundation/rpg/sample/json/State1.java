@@ -44,8 +44,7 @@ package foundation.rpg.sample.json;
 
 */
 
-import foundation.rpg.common.symbols.LBr;
-import foundation.rpg.common.symbols.LCurl;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
 public class State1 extends State {
@@ -80,12 +79,12 @@ public class State1 extends State {
     }
 
     @Override
-    public State visitLBr(LBr symbol) {
+    public State visitLBr(foundation.rpg.common.symbols.LBr symbol) {
         return new StateLBr1(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitLCurl(LCurl symbol) {
+    public State visitLCurl(foundation.rpg.common.symbols.LCurl symbol) {
         return new StateLCurl1(getFactory(), symbol, this);
     }
 

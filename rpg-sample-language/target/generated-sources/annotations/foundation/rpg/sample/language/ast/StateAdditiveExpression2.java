@@ -31,38 +31,35 @@ package foundation.rpg.sample.language.ast;
 
 /*
 
-AdditionalExpression1: {
-	RelationalExpression -> AdditionalExpression • [Dot, Gt]
-	AdditionalExpression -> AdditionalExpression • Plus MultiplicativeExpression [Dot, Gt, Plus]
+AdditiveExpression2: {
+	RelationalExpression -> AdditiveExpression • [RPar, Gt]
+	AdditiveExpression -> AdditiveExpression • Plus MultiplicativeExpression [RPar, Gt, Plus]
 }
 
 */
 
-import foundation.rpg.common.symbols.Dot;
-import foundation.rpg.common.symbols.Gt;
-import foundation.rpg.common.symbols.Plus;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateAdditionalExpression1 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
+public class StateAdditiveExpression2 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
 
 // NoStack:
 // Stack:
-    public StateAdditionalExpression1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
+    public StateAdditiveExpression2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitDot(Dot symbol) throws UnexpectedInputException {
+    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitRelationalExpression((this.getNode())).visitDot(symbol);
+        return stack1.visitRelationalExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitGt(Gt symbol) throws UnexpectedInputException {
+    public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitRelationalExpression((this.getNode())).visitGt(symbol);
@@ -71,8 +68,8 @@ public class StateAdditionalExpression1 extends StackState<foundation.rpg.sample
 
 // Shift:
     @Override
-    public State visitPlus(Plus symbol) {
-        return new StatePlus1(getFactory(), symbol, this);
+    public State visitPlus(foundation.rpg.common.symbols.Plus symbol) {
+        return new StatePlus2(getFactory(), symbol, this);
     }
 
 

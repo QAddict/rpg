@@ -44,17 +44,14 @@ Colon2: {
 
 */
 
-import foundation.rpg.common.symbols.Colon;
-import foundation.rpg.common.symbols.Comma;
-import foundation.rpg.common.symbols.LBr;
-import foundation.rpg.common.symbols.LCurl;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateColon2 extends StackState<Colon, StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> {
+public class StateColon2 extends StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> {
 
 // NoStack:
 // Stack:
-    public StateColon2(foundation.rpg.sample.json.JsonFactory factory, Colon node, StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> prev) {
+    public StateColon2(foundation.rpg.sample.json.JsonFactory factory, foundation.rpg.common.symbols.Colon node, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> prev) {
         super(factory, node, prev);
     }
 
@@ -82,12 +79,12 @@ public class StateColon2 extends StackState<Colon, StackState<java.lang.String, 
     }
 
     @Override
-    public State visitLBr(LBr symbol) {
+    public State visitLBr(foundation.rpg.common.symbols.LBr symbol) {
         return new StateLBr5(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitLCurl(LCurl symbol) {
+    public State visitLCurl(foundation.rpg.common.symbols.LCurl symbol) {
         return new StateLCurl5(getFactory(), symbol, this);
     }
 

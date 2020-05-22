@@ -46,9 +46,10 @@ import static java.util.stream.Collectors.toList;
 public class RegularParser extends Parser<Pattern, State> {
 
     private static final RegularLexer lexer = new RegularLexer();
+    private static final RegularExpressionFactory factory = new RegularExpressionFactory();
 
     public RegularParser() {
-        super(new State1());
+        super(new State1(factory));
     }
 
     public Node parsePattern(String pattern) {

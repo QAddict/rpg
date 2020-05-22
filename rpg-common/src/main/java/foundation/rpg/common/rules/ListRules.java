@@ -33,8 +33,8 @@ import foundation.rpg.common.symbols.Comma;
 
 import java.util.List;
 
-import static foundation.rpg.common.symbols.AstUtils.addTo;
-import static foundation.rpg.common.symbols.AstUtils.list;
+import static foundation.rpg.common.AstUtils.addTo;
+import static foundation.rpg.common.AstUtils.list;
 import static java.util.Collections.emptyList;
 
 public interface ListRules {

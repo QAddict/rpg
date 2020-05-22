@@ -107,8 +107,8 @@ import foundation.rpg.common.*;
 
 import java.util.List;
 
-import static foundation.rpg.common.symbols.AstUtils.addTo;
-import static foundation.rpg.common.symbols.AstUtils.list;
+import static foundation.rpg.common.AstUtils.addTo;
+import static foundation.rpg.common.AstUtils.list;
 
 public class AstFactory implements WhiteSpaceRules, ListRules {
 

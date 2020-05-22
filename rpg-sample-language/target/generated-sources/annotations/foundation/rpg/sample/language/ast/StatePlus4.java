@@ -32,7 +32,7 @@ package foundation.rpg.sample.language.ast;
 /*
 
 Plus4: {
-	AdditionalExpression -> AdditionalExpression Plus • MultiplicativeExpression [RPar, Gt, Plus, Comma]
+	AdditiveExpression -> AdditiveExpression Plus • MultiplicativeExpression [RPar, Gt, Plus, Comma]
 	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Comma, Times]
 	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Comma, Times]
 	AtomicExpression -> • Identifier [RPar, Gt, Plus, Comma, Times]
@@ -42,15 +42,14 @@ Plus4: {
 
 */
 
-import foundation.rpg.common.symbols.LPar;
-import foundation.rpg.common.symbols.Plus;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StatePlus4 extends StackState<Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
+public class StatePlus4 extends StackState<foundation.rpg.common.symbols.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StatePlus4(foundation.rpg.sample.language.ast.AstFactory factory, Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
+    public StatePlus4(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.symbols.Plus node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -73,7 +72,7 @@ public class StatePlus4 extends StackState<Plus, StackState<foundation.rpg.sampl
     }
 
     @Override
-    public State visitLPar(LPar symbol) {
+    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar7(getFactory(), symbol, this);
     }
 

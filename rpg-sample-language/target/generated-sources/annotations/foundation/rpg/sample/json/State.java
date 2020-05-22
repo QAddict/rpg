@@ -381,7 +381,6 @@ RCurl6: Comma -> REDUCE: Object -> LCurl MapOfObject RCurl • [RCurl, Comma]
 
 */
 
-import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.StateBase;
 
@@ -398,7 +397,7 @@ public class State extends StateBase<java.lang.Object> {
     }
 
     // Ignored:
-    public State visitWhiteSpace(WhiteSpace symbol) {
+    public State visitWhiteSpace(foundation.rpg.common.symbols.WhiteSpace symbol) {
         return this;
     }
 
@@ -420,27 +419,27 @@ public class State extends StateBase<java.lang.Object> {
         return error(symbol);
     }
 
-    public State visitLBr(LBr symbol) throws UnexpectedInputException {
+    public State visitLBr(foundation.rpg.common.symbols.LBr symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitRBr(RBr symbol) throws UnexpectedInputException {
+    public State visitRBr(foundation.rpg.common.symbols.RBr symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitLCurl(LCurl symbol) throws UnexpectedInputException {
+    public State visitLCurl(foundation.rpg.common.symbols.LCurl symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitRCurl(RCurl symbol) throws UnexpectedInputException {
+    public State visitRCurl(foundation.rpg.common.symbols.RCurl symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitComma(Comma symbol) throws UnexpectedInputException {
+    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitColon(Colon symbol) throws UnexpectedInputException {
+    public State visitColon(foundation.rpg.common.symbols.Colon symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

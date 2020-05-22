@@ -37,39 +37,36 @@ Object7: {
 
 */
 
-import foundation.rpg.common.symbols.Colon;
-import foundation.rpg.common.symbols.Comma;
-import foundation.rpg.common.symbols.RCurl;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateObject7 extends StackState<java.lang.Object, StackState<Colon, StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>>> {
+public class StateObject7 extends StackState<java.lang.Object, StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>>> {
 
 // NoStack:
 // Stack:
-    public StateObject7(foundation.rpg.sample.json.JsonFactory factory, java.lang.Object node, StackState<Colon, StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> prev) {
+    public StateObject7(foundation.rpg.sample.json.JsonFactory factory, java.lang.Object node, StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitRCurl(RCurl symbol) throws UnexpectedInputException {
+    public State visitRCurl(foundation.rpg.common.symbols.RCurl symbol) throws UnexpectedInputException {
         
-		StackState<Colon, StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
-		StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> stack2 = stack1.getPrev();
-		StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> stack3 = stack2.getPrev();
+		StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
+		StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> stack2 = stack1.getPrev();
+		StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> stack3 = stack2.getPrev();
 		StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State> stack4 = stack3.getPrev();
 		State stack5 = stack4.getPrev();
         return stack5.visitMapOfObject(getFactory().is(stack4.getNode(), stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitRCurl(symbol);
     }
 
     @Override
-    public State visitComma(Comma symbol) throws UnexpectedInputException {
+    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
         
-		StackState<Colon, StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
-		StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> stack2 = stack1.getPrev();
-		StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> stack3 = stack2.getPrev();
+		StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
+		StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> stack2 = stack1.getPrev();
+		StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> stack3 = stack2.getPrev();
 		StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State> stack4 = stack3.getPrev();
 		State stack5 = stack4.getPrev();
         return stack5.visitMapOfObject(getFactory().is(stack4.getNode(), stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);

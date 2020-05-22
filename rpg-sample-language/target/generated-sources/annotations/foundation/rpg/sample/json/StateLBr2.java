@@ -47,16 +47,14 @@ LBr2: {
 
 */
 
-import foundation.rpg.common.symbols.LBr;
-import foundation.rpg.common.symbols.LCurl;
-import foundation.rpg.common.symbols.RBr;
+import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateLBr2 extends StackState<LBr, State> {
+public class StateLBr2 extends StackState<foundation.rpg.common.symbols.LBr, State> {
 
 // NoStack:
 // Stack:
-    public StateLBr2(foundation.rpg.sample.json.JsonFactory factory, LBr node, State prev) {
+    public StateLBr2(foundation.rpg.sample.json.JsonFactory factory, foundation.rpg.common.symbols.LBr node, State prev) {
         super(factory, node, prev);
     }
 
@@ -69,7 +67,7 @@ public class StateLBr2 extends StackState<LBr, State> {
     }
 
     @Override
-    public State visitRBr(RBr symbol) {
+    public State visitRBr(foundation.rpg.common.symbols.RBr symbol) {
         return new StateRBr3(getFactory(), symbol, this);
     }
 
@@ -94,12 +92,12 @@ public class StateLBr2 extends StackState<LBr, State> {
     }
 
     @Override
-    public State visitLBr(LBr symbol) {
+    public State visitLBr(foundation.rpg.common.symbols.LBr symbol) {
         return new StateLBr2(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitLCurl(LCurl symbol) {
+    public State visitLCurl(foundation.rpg.common.symbols.LCurl symbol) {
         return new StateLCurl2(getFactory(), symbol, this);
     }
 
