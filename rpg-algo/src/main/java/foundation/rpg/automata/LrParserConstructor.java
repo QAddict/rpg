@@ -29,6 +29,7 @@
 
 package foundation.rpg.automata;
 
+import foundation.rpg.grammar.First;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
@@ -39,7 +40,6 @@ import java.util.stream.Collectors;
 
 import static foundation.rpg.automata.LrItem.lrItem;
 import static foundation.rpg.grammar.Symbol.any;
-import static foundation.rpg.grammar.Symbol.ε;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;
@@ -48,39 +48,12 @@ public class LrParserConstructor {
 
     private final Grammar grammar;
 
-    private final MapOfSets<Symbol, Symbol> first = new MapOfSets<>();
+    private final First first;
     private final Map<Symbol, Integer> counters = new LinkedHashMap<>();
 
     public LrParserConstructor(Grammar grammar) {
         this.grammar = grammar.augmented();
-        countFirst();
-    }
-
-    private void countFirst() {
-        grammar.getTerminals().forEach(symbol -> first.add(symbol, symbol));
-        while (addedFirstSymbol());
-    }
-
-    private Set<Symbol> addedEpsilon(Rule rule) {
-        Set<Symbol> symbols = new LinkedHashSet<>();
-        for(Symbol s : rule.getRight()) {
-            symbols.addAll(first.get(s));
-            if(!symbols.contains(ε))
-                return symbols;
-            symbols.remove(ε);
-        }
-        symbols.add(ε);
-        return symbols;
-    }
-
-    private boolean addedFirstSymbol() {
-        for(Symbol symbol : grammar.getNonTerminals()) {
-            for(Rule rule : grammar.rulesFor(symbol)) {
-                if(first.add(symbol, addedEpsilon(rule)))
-                    return true;
-            }
-        }
-        return false;
+        this.first = new First(this.grammar);
     }
 
     public LrParserAutomata constructAutomata() {
@@ -125,7 +98,7 @@ public class LrParserConstructor {
         while(!queue.isEmpty()) {
             LrItem item = queue.poll();
             if(closure.add(item) && !item.isEnd()) {
-                grammar.rulesFor(item.symbolAtDot()).stream().map(rule -> lrItem(rule, follow(item))).forEach(queue::add);
+                grammar.rulesFor(item.symbolAtDot()).stream().map(rule -> lrItem(rule, first.follow(item.afterDot(), item.getLookahead()))).forEach(queue::add);
             }
         }
         // Merge rules with same lookahead
@@ -135,17 +108,6 @@ public class LrParserConstructor {
             else return i.mergeLookahead(t);
         }));
         return new LrItemSet("" + symbol + counters.compute(symbol, (s, i) -> isNull(i) ? 1 : i+1), aggregator.entrySet().stream().flatMap(e -> e.getValue().values().stream()).collect(Collectors.toCollection(LinkedHashSet::new)));
-    }
-
-    public Set<Symbol> follow(LrItem item) {
-        Set<Symbol> follow = new LinkedHashSet<>();
-        for(int i = item.getDot() + 1; i < item.getRule().getRight().size(); i++) {
-            follow.addAll(first.get(item.getRule().getRight().get(i)));
-            if(!follow.contains(ε)) return follow;
-            follow.remove(ε);
-        }
-        follow.addAll(item.getLookahead());
-        return follow;
     }
 
     public static LrParserAutomata generateParser(Grammar grammar) {

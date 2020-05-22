@@ -27,48 +27,59 @@
  *
  */
 
-package foundation.rpg.automata;
+package foundation.rpg.grammar;
 
-import java.util.*;
+import foundation.rpg.util.MapOfSets;
 
-import static java.util.stream.Collectors.joining;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-public class LrItemSet {
+import static foundation.rpg.grammar.Symbol.ε;
 
-    private final String name;
-    private final Set<LrItem> closure;
-    private final int hash;
+public class First {
 
-    public LrItemSet(String name, Set<LrItem> closure) {
-        this.name = name;
-        this.closure = closure;
-        this.hash = Objects.hash(closure);
+    private final MapOfSets<Symbol, Symbol> first = new MapOfSets<>();
+
+    public First(Grammar grammar) {
+        grammar.getTerminals().forEach(symbol -> first.add(symbol, symbol));
+        while (addedFirstSymbol(grammar));
     }
 
-    public Set<LrItem> getItems() {
-        return closure;
+
+    private boolean addedFirstSymbol(Grammar grammar) {
+        for(Symbol symbol : grammar.getNonTerminals()) {
+            for(Rule rule : grammar.rulesFor(symbol)) {
+                if(first.add(symbol, addedEpsilon(rule)))
+                    return true;
+            }
+        }
+        return false;
     }
 
-    public String getName() {
-        return name;
+
+    private Set<Symbol> addedEpsilon(Rule rule) {
+        Set<Symbol> symbols = new LinkedHashSet<>();
+        for(Symbol s : rule.getRight()) {
+            symbols.addAll(first.get(s));
+            if(!symbols.contains(ε))
+                return symbols;
+            symbols.remove(ε);
+        }
+        symbols.add(ε);
+        return symbols;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LrItemSet that = (LrItemSet) o;
-        return Objects.equals(closure, that.closure);
+
+    public Set<Symbol> follow(SymbolString string, Set<Symbol> lookahead) {
+        Set<Symbol> follow = new LinkedHashSet<>();
+        for(Symbol symbol : string) {
+            follow.addAll(first.get(symbol));
+            if(!follow.contains(ε)) return follow;
+            follow.remove(ε);
+        }
+        follow.addAll(lookahead);
+        return follow;
     }
 
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
-    @Override
-    public String toString() {
-        return name + closure.stream().map(Objects::toString).collect(joining("\n\t", ": {\n\t", "\n}"));
-    }
 
 }

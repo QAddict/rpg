@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static java.lang.System.currentTimeMillis;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 @SupportedAnnotationTypes("foundation.rpg.StartSymbol")
@@ -62,19 +63,26 @@ public class StartSymbolParserOnlyProcessor extends AbstractProcessor implements
     @Override
     public void accept(ExecutableElement element) {
         try {
+            long start = currentTimeMillis();
             EnvironmentGenerator environmentGenerator = environmentGenerator();
             ClassToGrammarContext context = new ClassToGrammarContext(element, processingEnv.getElementUtils(), environmentGenerator);
-            System.out.println("Grammar generated from class: " + element.getEnclosingElement());
+            long gc = currentTimeMillis();
+            System.out.println("Grammar generated from class: " + element.getEnclosingElement() + " in " + (gc - start) + "ms");
             System.out.println(context.getGrammar());
             System.out.println();
             System.out.println();
             LrParserAutomata parser = LrParserConstructor.generateParser(context.getGrammar());
-            System.out.println("Parser description generated from grammar:\n\n");
+            long gp = currentTimeMillis();
+            System.out.println("Parser description generated from grammar in " + (gp - gc) + "ms:\n\n");
             System.out.println(parser);
             System.out.println();
             System.out.println();
             new CodeGenerator(processingEnv.getFiler(), context).generateSources(parser);
+            long gs = currentTimeMillis();
+            System.out.println("Source code generated in " + (gs - gp) + "ms");
             environmentGenerator.generate(context, processingEnv.getFiler());
+            long gl = currentTimeMillis();
+            System.out.println("Env code generated in " + (gl - gs) + "ms");
         } catch (RuntimeException | Error | IOException e) {
             processingEnv.getMessager().printMessage(ERROR, e.toString(), element);
         }

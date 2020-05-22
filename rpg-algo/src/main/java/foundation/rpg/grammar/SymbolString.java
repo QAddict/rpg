@@ -36,15 +36,18 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.hash;
 import static java.util.stream.Collectors.joining;
 
 public final class SymbolString implements Iterable<Symbol> {
     private final List<Symbol> symbols;
     private final int size;
+    private final int hash;
 
     public SymbolString(List<Symbol> symbols) {
         this.symbols = unmodifiableList(new ArrayList<>(symbols));
         this.size = symbols.size();
+        this.hash = hash(symbols, size);
     }
 
     public List<Symbol> getSymbols() {
@@ -74,7 +77,7 @@ public final class SymbolString implements Iterable<Symbol> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(symbols, size);
+        return hash;
     }
 
     @Override
@@ -85,6 +88,10 @@ public final class SymbolString implements Iterable<Symbol> {
     @Override
     public Iterator<Symbol> iterator() {
         return symbols.iterator();
+    }
+
+    public SymbolString substring(int dot) {
+        return new SymbolString(symbols.subList(dot, size));
     }
 
 }

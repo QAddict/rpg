@@ -35,16 +35,19 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static java.util.Objects.hash;
 import static java.util.stream.Collectors.toSet;
 
 public final class Rule {
 
     private final Symbol left;
     private final SymbolString right;
+    private final int hash;
 
     public Rule(Symbol left, SymbolString right) {
         this.left = left;
         this.right = right;
+        this.hash = hash(left, right);
     }
 
     public Rule(Symbol left, List<Symbol> right) {
@@ -74,7 +77,7 @@ public final class Rule {
 
     @Override
     public int hashCode() {
-        return Objects.hash(left, right);
+        return hash;
     }
 
     @Override

@@ -31,22 +31,24 @@ package foundation.rpg.automata;
 
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
+import foundation.rpg.grammar.SymbolString;
 
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
+
+import static java.util.Objects.hash;
 
 public final class LrItem implements Comparable<LrItem> {
 
     private final int dot;
     private final Rule rule;
     private final Set<Symbol> lookahead;
+    private final int hash;
 
     private LrItem(int dot, Rule rule, Set<Symbol> lookahead) {
         this.dot = dot;
         this.rule = rule;
-        this.lookahead = lookahead;
+        this.lookahead = Collections.unmodifiableSet(lookahead);
+        this.hash = hash(dot, rule, lookahead);
     }
 
     public static LrItem lrItem(Rule rule, Set<Symbol> lookahead) {
@@ -97,7 +99,7 @@ public final class LrItem implements Comparable<LrItem> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(dot, rule, lookahead);
+        return hash;
     }
 
     @Override
@@ -116,6 +118,10 @@ public final class LrItem implements Comparable<LrItem> {
         Set<Symbol> merged = new LinkedHashSet<>(t.lookahead);
         merged.addAll(lookahead);
         return new LrItem(dot, rule, merged);
+    }
+
+    public SymbolString afterDot() {
+        return getRule().getRight().substring(getDot() + 1);
     }
 
 }
