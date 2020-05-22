@@ -51,7 +51,7 @@ public class LexerGeneratorTest {
                 new TokenInfo("TokenIdentifier", "TokenIdentifier", parser.parsePattern("\\w\\a*"), 0),
                 new TokenInfo("TokenDouble", "TokenDouble", parser.parsePattern("\\d+[.eE]\\d+"), 0),
                 new TokenInfo("TokenInteger", "TokenInteger", parser.parsePattern("\\d+"), 0),
-                new TokenInfo("TokenString", "TokenString", parser.parsePattern("'([^'\\]|\\\\[^\\nrt])*'"), 0)
+                new TokenInfo("TokenString", "TokenString", parser.parsePattern("'([^'\\\\]|\\\\[^\\\\nrt])*'"), 0)
         ), new PrintWriter(System.out), null);
     }
 }

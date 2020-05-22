@@ -58,13 +58,18 @@ public class RegularExpressionFactory implements ListRules {
     Node        is  (Bs b, Bs g)                              { return new Char('\\'); }
     Node        is  (Bs b, Dot d)                             { return new Char('.'); }
     Node        is  (Bs b, Star s)                            { return new Char('*'); }
+    Node        is  (Bs b, LBr s)                             { return new Char('['); }
     Node        is  (Dot d )                                  { return new Group('.'); }
+    Node        is  (Up u)                                    { return new Char('^'); }
     Node        is  (LBr l, @List4 List<Item> i, RBr r)       { return new CharClass(i); }
     Node        is  (LBr l, Up t, @List4 List<Item> i, RBr r) { return new Inversion(new CharClass(i)); }
     Item        is1 (Character c)                             { return new Char(c); }
-    Item        is  (Bs bs)                                   { return new Char('\\'); }
     Item        is1 (Dot dot)                                 { return new Char('.'); }
     Item        is1 (Star s)                                  { return new Char('*'); }
+    Item        is1 (LBr s)                                   { return new Char('['); }
+    Item        is1 (Pipe s)                                  { return new Char('|'); }
+    Item        is1 (Bs bs, Bs b)                             { return new Char('\\'); }
+    Item        is1 (Bs bs, RBr b)                            { return new Char(']'); }
     Item        is  (Character s, Minus m, Character e)       { return new Range(s, e); }
 
 }

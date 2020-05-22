@@ -58,7 +58,7 @@ public class RegularGeneratorTest {
                 parser.parseText("else"),
                 parser.parseText("extends"),
                 parser.parsePattern("\\w\\a*"),
-                parser.parsePattern("'([^'\\]|\\\\['\\nrt])*'")
+                parser.parsePattern("'([^'\\\\]|\\\\['\\\\nrt])*'")
         );
         Map<Object, Integer> priorities = IntStream.range(0, nodes.size()).boxed().collect(toMap(nodes::get, i -> nodes.size() - i));
         GNFA gnfa = new ThompsonVisitor().visit(nodes);
