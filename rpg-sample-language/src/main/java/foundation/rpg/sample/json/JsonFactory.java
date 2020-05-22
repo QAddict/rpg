@@ -31,14 +31,14 @@ package foundation.rpg.sample.json;
 
 import foundation.rpg.Match;
 import foundation.rpg.StartSymbol;
-import foundation.rpg.common.*;
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.Token;
 
 import java.util.List;
 import java.util.Map;
 
-import static foundation.rpg.common.AstUtils.*;
-import static foundation.rpg.common.Patterns.*;
+import static foundation.rpg.common.symbols.AstUtils.*;
+import static foundation.rpg.common.symbols.Patterns.*;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptyList;

@@ -37,14 +37,16 @@ Dot1: {
 
 */
 
+import foundation.rpg.common.symbols.Dot;
+import foundation.rpg.common.symbols.LPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
+public class StateDot1 extends StackState<Dot, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateDot1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Dot node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
+    public StateDot1(foundation.rpg.sample.language.ast.AstFactory factory, Dot node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -67,7 +69,7 @@ public class StateDot1 extends StackState<foundation.rpg.common.Dot, StackState<
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) throws UnexpectedInputException {
+    public State visitLPar(LPar symbol) throws UnexpectedInputException {
         
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();

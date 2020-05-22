@@ -29,14 +29,15 @@
 
 package foundation.rpg.sample.language.ast;
 
+import foundation.rpg.common.symbols.Times;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementTimes implements Element<State> {
-    private final foundation.rpg.common.Times symbol;
+    private final Times symbol;
 
-    public ElementTimes(foundation.rpg.common.Times symbol) {
+    public ElementTimes(Times symbol) {
         this.symbol = symbol;
     }
 

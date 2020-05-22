@@ -38,14 +38,16 @@ ListOfObject3: {
 
 */
 
-import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.common.symbols.Comma;
+import foundation.rpg.common.symbols.LBr;
+import foundation.rpg.common.symbols.RBr;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateListOfObject3 extends StackState<java.util.List<java.lang.Object>, StackState<foundation.rpg.common.LBr, ? extends State>> {
+public class StateListOfObject3 extends StackState<java.util.List<java.lang.Object>, StackState<LBr, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateListOfObject3(foundation.rpg.sample.json.JsonFactory factory, java.util.List<java.lang.Object> node, StackState<foundation.rpg.common.LBr, ? extends State> prev) {
+    public StateListOfObject3(foundation.rpg.sample.json.JsonFactory factory, java.util.List<java.lang.Object> node, StackState<LBr, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -53,12 +55,12 @@ public class StateListOfObject3 extends StackState<java.util.List<java.lang.Obje
 // Reduce:
 // Shift:
     @Override
-    public State visitRBr(foundation.rpg.common.RBr symbol) {
+    public State visitRBr(RBr symbol) {
         return new StateRBr6(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) {
+    public State visitComma(Comma symbol) {
         return new StateComma1(getFactory(), symbol, this);
     }
 

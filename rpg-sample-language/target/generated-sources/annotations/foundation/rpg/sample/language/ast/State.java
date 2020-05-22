@@ -657,6 +657,7 @@ RPar6: Comma -> REDUCE: AtomicExpression -> Identifier LPar List3ListOfExpressio
 
 */
 
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.StateBase;
 
@@ -673,11 +674,11 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
     // Ignored:
-    public State visitWhiteSpace(foundation.rpg.common.WhiteSpace symbol) {
+    public State visitWhiteSpace(WhiteSpace symbol) {
         return this;
     }
 
-    public State visitComment(foundation.rpg.common.Comment symbol) {
+    public State visitComment(Comment symbol) {
         return this;
     }
 
@@ -687,19 +688,19 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitDot(foundation.rpg.common.Dot symbol) throws UnexpectedInputException {
+    public State visitDot(Dot symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+    public State visitGt(Gt symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+    public State visitPlus(Plus symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+    public State visitTimes(Times symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -707,15 +708,15 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitLPar(foundation.rpg.common.LPar symbol) throws UnexpectedInputException {
+    public State visitLPar(LPar symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(RPar symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+    public State visitComma(Comma symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

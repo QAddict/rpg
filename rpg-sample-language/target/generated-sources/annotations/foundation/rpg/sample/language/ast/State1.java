@@ -40,6 +40,8 @@ package foundation.rpg.sample.language.ast;
 
 */
 
+import foundation.rpg.common.rules.ListRules;
+import foundation.rpg.common.symbols.LPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -56,19 +58,19 @@ public class State1 extends State {
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1()).visitEnd(symbol);
+        return this.visitList1ListOfStatement(ListRules.isList1()).visitEnd(symbol);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1()).visitIdentifier(symbol);
+        return this.visitList1ListOfStatement(ListRules.isList1()).visitIdentifier(symbol);
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) throws UnexpectedInputException {
+    public State visitLPar(LPar symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.ListRules.isList1()).visitLPar(symbol);
+        return this.visitList1ListOfStatement(ListRules.isList1()).visitLPar(symbol);
     }
 
 

@@ -1,9 +1,9 @@
 package foundation.rpg.sample.json;
 
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.Lexer;
 import foundation.rpg.parser.Input;
-import foundation.rpg.parser.Position;
 import foundation.rpg.parser.End;
 import java.io.IOException;
 import foundation.rpg.parser.TokenBuilder;
@@ -43,17 +43,17 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 1:
-					return visitor -> visitor.visitLBr(new foundation.rpg.common.LBr(builder.build()));
+					return visitor -> visitor.visitLBr(new LBr(builder.build()));
 				case 2:
-					return visitor -> visitor.visitRBr(new foundation.rpg.common.RBr(builder.build()));
+					return visitor -> visitor.visitRBr(new RBr(builder.build()));
 				case 3:
-					return visitor -> visitor.visitLCurl(new foundation.rpg.common.LCurl(builder.build()));
+					return visitor -> visitor.visitLCurl(new LCurl(builder.build()));
 				case 4:
-					return visitor -> visitor.visitRCurl(new foundation.rpg.common.RCurl(builder.build()));
+					return visitor -> visitor.visitRCurl(new RCurl(builder.build()));
 				case 5:
-					return visitor -> visitor.visitComma(new foundation.rpg.common.Comma(builder.build()));
+					return visitor -> visitor.visitComma(new Comma(builder.build()));
 				case 6:
-					return visitor -> visitor.visitColon(new foundation.rpg.common.Colon(builder.build()));
+					return visitor -> visitor.visitColon(new Colon(builder.build()));
 				case 7:
 					switch(symbol) {
 						case '\'': state = 11; break;

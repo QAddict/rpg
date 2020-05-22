@@ -37,54 +37,55 @@ RPar2: {
 
 */
 
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateRPar2 extends StackState<foundation.rpg.common.RPar, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>>> {
+public class StateRPar2 extends StackState<RPar, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>>> {
 
 // NoStack:
 // Stack:
-    public StateRPar2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.RPar node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> prev) {
+    public StateRPar2(foundation.rpg.sample.language.ast.AstFactory factory, RPar node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitDot(foundation.rpg.common.Dot symbol) throws UnexpectedInputException {
+    public State visitDot(Dot symbol) throws UnexpectedInputException {
         
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
-		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
+		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
+		StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
         return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitDot(symbol);
     }
 
     @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+    public State visitGt(Gt symbol) throws UnexpectedInputException {
         
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
-		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
+		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
+		StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
         return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitGt(symbol);
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+    public State visitPlus(Plus symbol) throws UnexpectedInputException {
         
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
-		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
+		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
+		StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
         return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);
     }
 
     @Override
-    public State visitTimes(foundation.rpg.common.Times symbol) throws UnexpectedInputException {
+    public State visitTimes(Times symbol) throws UnexpectedInputException {
         
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
-		StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
+		StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
+		StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
         return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitTimes(symbol);

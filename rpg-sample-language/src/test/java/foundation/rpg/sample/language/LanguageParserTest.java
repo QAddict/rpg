@@ -29,7 +29,7 @@
 
 package foundation.rpg.sample.language;
 
-import foundation.rpg.common.*;
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.*;
 import foundation.rpg.sample.language.ast.Identifier;
 import foundation.rpg.sample.language.ast.Program;

@@ -37,14 +37,15 @@ List3ListOfExpression1: {
 
 */
 
-import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.common.symbols.LPar;
+import foundation.rpg.common.symbols.RPar;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateList3ListOfExpression1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> {
+public class StateList3ListOfExpression1 extends StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> {
 
 // NoStack:
 // Stack:
-    public StateList3ListOfExpression1(foundation.rpg.sample.language.ast.AstFactory factory, java.util.List<foundation.rpg.sample.language.ast.Expression> node, StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> prev) {
+    public StateList3ListOfExpression1(foundation.rpg.sample.language.ast.AstFactory factory, java.util.List<foundation.rpg.sample.language.ast.Expression> node, StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> prev) {
         super(factory, node, prev);
     }
 
@@ -52,7 +53,7 @@ public class StateList3ListOfExpression1 extends StackState<java.util.List<found
 // Reduce:
 // Shift:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) {
+    public State visitRPar(RPar symbol) {
         return new StateRPar2(getFactory(), symbol, this);
     }
 

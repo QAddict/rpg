@@ -49,6 +49,7 @@ List1ListOfStatement1: {
 
 */
 
+import foundation.rpg.common.symbols.LPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -107,7 +108,7 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
+    public State visitLPar(LPar symbol) {
         return new StateLPar1(getFactory(), symbol, this);
     }
 

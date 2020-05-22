@@ -30,7 +30,15 @@
 package foundation.rpg.sample.language.ast;
 
 import foundation.rpg.StartSymbol;
-import foundation.rpg.common.*;
+import foundation.rpg.common.precedence.Additive;
+import foundation.rpg.common.precedence.Atomic;
+import foundation.rpg.common.precedence.Multiplicative;
+import foundation.rpg.common.precedence.Relational;
+import foundation.rpg.common.rules.List1;
+import foundation.rpg.common.rules.List3;
+import foundation.rpg.common.rules.ListRules;
+import foundation.rpg.common.rules.WhiteSpaceRules;
+import foundation.rpg.common.symbols.*;
 
 import java.util.List;
 
@@ -40,8 +48,9 @@ public class AstFactory implements WhiteSpaceRules, ListRules {
     Program                    is  (@List1 List<Statement> s)                                       { return new Program(s); }
     Statement                  is  (Expression e, Dot d)                                            { return new ExpressionStatement(e); }
     Expression                 is  (@Relational Expression e)                                       { return e; }
-    @Relational Expression     is  (@Relational Expression l, Gt o, @Additional Expression r)       { return new BinaryExpression(l, r); }
-    @Additional Expression     is  (@Additional Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
+    @Relational Expression     is  (@Relational Expression l, Gt o, @Additive Expression r)       { return new BinaryExpression(l, r); }
+    @Additive
+    Expression     is  (@Additive Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
     @Multiplicative Expression is  (@Multiplicative Expression l, Times o, @Atomic Expression r)    { return new BinaryExpression(l, r); }
     @Atomic Expression         is  (Identifier i)                                                   { return i; }
     @Atomic Expression         is  (LPar l, Expression e, RPar r)                                   { return e; }

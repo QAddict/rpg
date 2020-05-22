@@ -47,14 +47,15 @@ Comma1: {
 
 */
 
-import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.common.symbols.Comma;
+import foundation.rpg.common.symbols.LPar;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> {
+public class StateComma1 extends StackState<Comma, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateComma1(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Comma node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> prev) {
+    public StateComma1(foundation.rpg.sample.language.ast.AstFactory factory, Comma node, StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -92,7 +93,7 @@ public class StateComma1 extends StackState<foundation.rpg.common.Comma, StackSt
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
+    public State visitLPar(LPar symbol) {
         return new StateLPar7(getFactory(), symbol, this);
     }
 

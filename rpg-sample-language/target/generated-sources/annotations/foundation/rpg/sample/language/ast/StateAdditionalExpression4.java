@@ -38,6 +38,10 @@ AdditionalExpression4: {
 
 */
 
+import foundation.rpg.common.symbols.Comma;
+import foundation.rpg.common.symbols.Gt;
+import foundation.rpg.common.symbols.Plus;
+import foundation.rpg.common.symbols.RPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -52,21 +56,21 @@ public class StateAdditionalExpression4 extends StackState<foundation.rpg.sample
 
 // Reduce:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitRelationalExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+    public State visitGt(Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitRelationalExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+    public State visitComma(Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitRelationalExpression((this.getNode())).visitComma(symbol);
@@ -75,7 +79,7 @@ public class StateAdditionalExpression4 extends StackState<foundation.rpg.sample
 
 // Shift:
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) {
+    public State visitPlus(Plus symbol) {
         return new StatePlus4(getFactory(), symbol, this);
     }
 

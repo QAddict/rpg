@@ -37,6 +37,9 @@ Expression3: {
 
 */
 
+import foundation.rpg.common.rules.ListRules;
+import foundation.rpg.common.symbols.Comma;
+import foundation.rpg.common.symbols.RPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -51,17 +54,17 @@ public class StateExpression3 extends StackState<foundation.rpg.sample.language.
 
 // Reduce:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitList2ListOfExpression(foundation.rpg.common.ListRules.isList2(this.getNode())).visitRPar(symbol);
+        return stack1.visitList2ListOfExpression(ListRules.isList2(this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+    public State visitComma(Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
-        return stack1.visitList2ListOfExpression(foundation.rpg.common.ListRules.isList2(this.getNode())).visitComma(symbol);
+        return stack1.visitList2ListOfExpression(ListRules.isList2(this.getNode())).visitComma(symbol);
     }
 
 

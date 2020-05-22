@@ -30,13 +30,15 @@
 package foundation.rpg.lexer.regular;
 
 import foundation.rpg.StartSymbol;
-import foundation.rpg.common.*;
+import foundation.rpg.common.rules.List4;
+import foundation.rpg.common.rules.ListRules;
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.lexer.regular.ast.*;
 
 import java.util.List;
 
-import static foundation.rpg.common.AstUtils.addTo;
-import static foundation.rpg.common.AstUtils.list;
+import static foundation.rpg.common.symbols.AstUtils.addTo;
+import static foundation.rpg.common.symbols.AstUtils.list;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 

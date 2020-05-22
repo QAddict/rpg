@@ -38,6 +38,7 @@ MultiplicativeExpression5: {
 
 */
 
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -52,28 +53,28 @@ public class StateMultiplicativeExpression5 extends StackState<foundation.rpg.sa
 
 // Reduce:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(RPar symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAdditionalExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
-    public State visitGt(foundation.rpg.common.Gt symbol) throws UnexpectedInputException {
+    public State visitGt(Gt symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAdditionalExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override
-    public State visitPlus(foundation.rpg.common.Plus symbol) throws UnexpectedInputException {
+    public State visitPlus(Plus symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAdditionalExpression((this.getNode())).visitPlus(symbol);
     }
 
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+    public State visitComma(Comma symbol) throws UnexpectedInputException {
         
 		State stack1 = this.getPrev();
         return stack1.visitAdditionalExpression((this.getNode())).visitComma(symbol);
@@ -82,7 +83,7 @@ public class StateMultiplicativeExpression5 extends StackState<foundation.rpg.sa
 
 // Shift:
     @Override
-    public State visitTimes(foundation.rpg.common.Times symbol) {
+    public State visitTimes(Times symbol) {
         return new StateTimes4(getFactory(), symbol, this);
     }
 

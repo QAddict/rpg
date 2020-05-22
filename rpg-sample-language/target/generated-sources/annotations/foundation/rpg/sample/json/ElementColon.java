@@ -29,14 +29,15 @@
 
 package foundation.rpg.sample.json;
 
+import foundation.rpg.common.symbols.Colon;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementColon implements Element<State> {
-    private final foundation.rpg.common.Colon symbol;
+    private final Colon symbol;
 
-    public ElementColon(foundation.rpg.common.Colon symbol) {
+    public ElementColon(Colon symbol) {
         this.symbol = symbol;
     }
 

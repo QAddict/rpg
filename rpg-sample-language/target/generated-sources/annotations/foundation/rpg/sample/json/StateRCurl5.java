@@ -37,31 +37,34 @@ RCurl5: {
 
 */
 
+import foundation.rpg.common.symbols.Comma;
+import foundation.rpg.common.symbols.LCurl;
+import foundation.rpg.common.symbols.RCurl;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateRCurl5 extends StackState<foundation.rpg.common.RCurl, StackState<foundation.rpg.common.LCurl, ? extends State>> {
+public class StateRCurl5 extends StackState<RCurl, StackState<LCurl, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateRCurl5(foundation.rpg.sample.json.JsonFactory factory, foundation.rpg.common.RCurl node, StackState<foundation.rpg.common.LCurl, ? extends State> prev) {
+    public StateRCurl5(foundation.rpg.sample.json.JsonFactory factory, RCurl node, StackState<LCurl, ? extends State> prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitRCurl(foundation.rpg.common.RCurl symbol) throws UnexpectedInputException {
+    public State visitRCurl(RCurl symbol) throws UnexpectedInputException {
         
-		StackState<foundation.rpg.common.LCurl, ? extends State> stack1 = this.getPrev();
+		StackState<LCurl, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitObject(getFactory().is(stack1.getNode(), this.getNode())).visitRCurl(symbol);
     }
 
     @Override
-    public State visitComma(foundation.rpg.common.Comma symbol) throws UnexpectedInputException {
+    public State visitComma(Comma symbol) throws UnexpectedInputException {
         
-		StackState<foundation.rpg.common.LCurl, ? extends State> stack1 = this.getPrev();
+		StackState<LCurl, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitObject(getFactory().is(stack1.getNode(), this.getNode())).visitComma(symbol);
     }

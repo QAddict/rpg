@@ -29,14 +29,15 @@
 
 package foundation.rpg.sample.language.ast;
 
+import foundation.rpg.common.symbols.Comment;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementComment implements Element<State> {
-    private final foundation.rpg.common.Comment symbol;
+    private final Comment symbol;
 
-    public ElementComment(foundation.rpg.common.Comment symbol) {
+    public ElementComment(Comment symbol) {
         this.symbol = symbol;
     }
 

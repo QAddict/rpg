@@ -37,14 +37,16 @@ RCurl3: {
 
 */
 
+import foundation.rpg.common.symbols.LCurl;
+import foundation.rpg.common.symbols.RCurl;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateRCurl3 extends StackState<foundation.rpg.common.RCurl, StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.LCurl, ? extends State>>> {
+public class StateRCurl3 extends StackState<RCurl, StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<LCurl, ? extends State>>> {
 
 // NoStack:
 // Stack:
-    public StateRCurl3(foundation.rpg.sample.json.JsonFactory factory, foundation.rpg.common.RCurl node, StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.LCurl, ? extends State>> prev) {
+    public StateRCurl3(foundation.rpg.sample.json.JsonFactory factory, RCurl node, StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<LCurl, ? extends State>> prev) {
         super(factory, node, prev);
     }
 
@@ -53,8 +55,8 @@ public class StateRCurl3 extends StackState<foundation.rpg.common.RCurl, StackSt
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
         
-		StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.LCurl, ? extends State>> stack1 = this.getPrev();
-		StackState<foundation.rpg.common.LCurl, ? extends State> stack2 = stack1.getPrev();
+		StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<LCurl, ? extends State>> stack1 = this.getPrev();
+		StackState<LCurl, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitEnd(symbol);
     }

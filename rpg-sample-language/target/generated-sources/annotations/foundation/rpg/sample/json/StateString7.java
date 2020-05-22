@@ -37,14 +37,15 @@ String7: {
 
 */
 
-import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.common.symbols.Colon;
+import foundation.rpg.common.symbols.Comma;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateString7 extends StackState<java.lang.String, StackState<foundation.rpg.common.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> {
+public class StateString7 extends StackState<java.lang.String, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> {
 
 // NoStack:
 // Stack:
-    public StateString7(foundation.rpg.sample.json.JsonFactory factory, java.lang.String node, StackState<foundation.rpg.common.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> prev) {
+    public StateString7(foundation.rpg.sample.json.JsonFactory factory, java.lang.String node, StackState<Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> prev) {
         super(factory, node, prev);
     }
 
@@ -52,7 +53,7 @@ public class StateString7 extends StackState<java.lang.String, StackState<founda
 // Reduce:
 // Shift:
     @Override
-    public State visitColon(foundation.rpg.common.Colon symbol) {
+    public State visitColon(Colon symbol) {
         return new StateColon2(getFactory(), symbol, this);
     }
 

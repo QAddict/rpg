@@ -107,8 +107,8 @@ import foundation.rpg.common.*;
 
 import java.util.List;
 
-import static foundation.rpg.common.AstUtils.addTo;
-import static foundation.rpg.common.AstUtils.list;
+import static foundation.rpg.common.symbols.AstUtils.addTo;
+import static foundation.rpg.common.symbols.AstUtils.list;
 
 public class AstFactory implements WhiteSpaceRules, ListRules {
 
@@ -360,3 +360,4 @@ Resources used for implementation of this parser generator:
 - [15] [_1997_, _Tim A. Wagner, Susan L. Graham_, Efficient and flexible incrementall parsing. _ACM Transactions on Programming Languages and Systems_ (ftp://ftp.cs.berkeley.edu/pub/sggs/toplas-parsing.ps)](ftp://ftp.cs.berkeley.edu/pub/sggs/toplas-parsing.ps)
 - [16] [_1998_, _Tim A. Wagner, Susan L. Graham_, Modeling user-provided whitespace and comments in an incremental software development environment. _Software - Practice and Experience_ (ftp://ftp.cs.berkeley.edu/pub/sggs/whitespace.ps)](ftp://ftp.cs.berkeley.edu/pub/sggs/whitespace.ps)
 - [17] [https://microsoft.github.io/language-server-protocol/](https://microsoft.github.io/language-server-protocol/)
+- [18] [https://en.wikipedia.org/wiki/Dangling_else](https://en.wikipedia.org/wiki/Dangling_else)

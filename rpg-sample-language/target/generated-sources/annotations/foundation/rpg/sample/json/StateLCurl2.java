@@ -40,14 +40,15 @@ LCurl2: {
 
 */
 
-import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.common.symbols.LCurl;
+import foundation.rpg.common.symbols.RCurl;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateLCurl2 extends StackState<foundation.rpg.common.LCurl, State> {
+public class StateLCurl2 extends StackState<LCurl, State> {
 
 // NoStack:
 // Stack:
-    public StateLCurl2(foundation.rpg.sample.json.JsonFactory factory, foundation.rpg.common.LCurl node, State prev) {
+    public StateLCurl2(foundation.rpg.sample.json.JsonFactory factory, LCurl node, State prev) {
         super(factory, node, prev);
     }
 
@@ -60,7 +61,7 @@ public class StateLCurl2 extends StackState<foundation.rpg.common.LCurl, State> 
     }
 
     @Override
-    public State visitRCurl(foundation.rpg.common.RCurl symbol) {
+    public State visitRCurl(RCurl symbol) {
         return new StateRCurl2(getFactory(), symbol, this);
     }
 

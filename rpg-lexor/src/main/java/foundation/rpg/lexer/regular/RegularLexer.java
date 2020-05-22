@@ -29,7 +29,7 @@
 
 package foundation.rpg.lexer.regular;
 
-import foundation.rpg.common.*;
+import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.*;
 import foundation.rpg.parser.Element;
 

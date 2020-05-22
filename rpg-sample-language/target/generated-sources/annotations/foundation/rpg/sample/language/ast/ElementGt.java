@@ -29,14 +29,15 @@
 
 package foundation.rpg.sample.language.ast;
 
+import foundation.rpg.common.symbols.Gt;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementGt implements Element<State> {
-    private final foundation.rpg.common.Gt symbol;
+    private final Gt symbol;
 
-    public ElementGt(foundation.rpg.common.Gt symbol) {
+    public ElementGt(Gt symbol) {
         this.symbol = symbol;
     }
 

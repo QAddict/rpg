@@ -44,14 +44,15 @@ Gt2: {
 
 */
 
-import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.common.symbols.Gt;
+import foundation.rpg.common.symbols.LPar;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateGt2 extends StackState<foundation.rpg.common.Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
+public class StateGt2 extends StackState<Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateGt2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Gt node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
+    public StateGt2(foundation.rpg.sample.language.ast.AstFactory factory, Gt node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -79,7 +80,7 @@ public class StateGt2 extends StackState<foundation.rpg.common.Gt, StackState<fo
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
+    public State visitLPar(LPar symbol) {
         return new StateLPar3(getFactory(), symbol, this);
     }
 

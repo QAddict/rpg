@@ -40,14 +40,15 @@ Times2: {
 
 */
 
-import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.common.symbols.LPar;
+import foundation.rpg.common.symbols.Times;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateTimes2 extends StackState<foundation.rpg.common.Times, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
+public class StateTimes2 extends StackState<Times, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateTimes2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.Times node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
+    public StateTimes2(foundation.rpg.sample.language.ast.AstFactory factory, Times node, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -65,7 +66,7 @@ public class StateTimes2 extends StackState<foundation.rpg.common.Times, StackSt
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
+    public State visitLPar(LPar symbol) {
         return new StateLPar3(getFactory(), symbol, this);
     }
 

@@ -51,23 +51,26 @@ LPar2: {
 
 */
 
+import foundation.rpg.common.rules.ListRules;
+import foundation.rpg.common.symbols.LPar;
+import foundation.rpg.common.symbols.RPar;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateLPar2 extends StackState<foundation.rpg.common.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> {
+public class StateLPar2 extends StackState<LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateLPar2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.common.LPar node, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> prev) {
+    public StateLPar2(foundation.rpg.sample.language.ast.AstFactory factory, LPar node, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> prev) {
         super(factory, node, prev);
     }
 
 
 // Reduce:
     @Override
-    public State visitRPar(foundation.rpg.common.RPar symbol) throws UnexpectedInputException {
+    public State visitRPar(RPar symbol) throws UnexpectedInputException {
         
-        return this.visitList3ListOfExpression(foundation.rpg.common.ListRules.isList3()).visitRPar(symbol);
+        return this.visitList3ListOfExpression(ListRules.isList3()).visitRPar(symbol);
     }
 
 
@@ -113,7 +116,7 @@ public class StateLPar2 extends StackState<foundation.rpg.common.LPar, StackStat
     }
 
     @Override
-    public State visitLPar(foundation.rpg.common.LPar symbol) {
+    public State visitLPar(LPar symbol) {
         return new StateLPar7(getFactory(), symbol, this);
     }
 

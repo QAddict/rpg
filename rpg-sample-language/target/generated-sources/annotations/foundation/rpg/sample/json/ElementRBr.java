@@ -29,14 +29,15 @@
 
 package foundation.rpg.sample.json;
 
+import foundation.rpg.common.symbols.RBr;
 import foundation.rpg.parser.Element;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated token element wrapper for grammar parser.
 public class ElementRBr implements Element<State> {
-    private final foundation.rpg.common.RBr symbol;
+    private final RBr symbol;
 
-    public ElementRBr(foundation.rpg.common.RBr symbol) {
+    public ElementRBr(RBr symbol) {
         this.symbol = symbol;
     }
 
