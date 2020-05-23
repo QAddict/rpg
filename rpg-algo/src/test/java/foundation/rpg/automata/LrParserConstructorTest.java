@@ -27,31 +27,34 @@
  *
  */
 
-package foundation.rpg.generator;
+package foundation.rpg.automata;
 
 import foundation.rpg.grammar.Grammar;
-import foundation.rpg.grammar.Symbol;
-import foundation.rpg.automata.LrParserConstructor;
-import foundation.rpg.automata.LrParserAutomata;
 import org.testng.annotations.Test;
 
-import static foundation.rpg.generator.GeneratorTest.Symbols.*;
+import static foundation.rpg.automata.Symbols.*;
 import static foundation.rpg.grammar.Rule.setOf;
 import static foundation.rpg.grammar.Rule.rule;
 import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 
-public class GeneratorTest {
+public class LrParserConstructorTest {
 
-    public enum Symbols implements Symbol { S, A, a }
+    private final Grammar grammar = Grammar.grammar(S, setOf(
+            rule(S).to(A, ε),
+            rule(A).to(a, A)
+    ), emptySet());
 
     @Test
     public void testParser() {
-        Grammar grammar = new Grammar(S, setOf(ε, a), setOf(S, A), setOf(
-                rule(S).to(A, ε),
-                rule(A).to(a, A)
-        ), emptySet());
         LrParserAutomata parser = LrParserConstructor.generateParser(grammar);
         System.out.println(parser);
+    }
+
+    @Test
+    public void testClosure() {
+        LrItemSet closure = new LrParserConstructor(grammar).closure(a, grammar.rulesFor(A).stream().map(r -> LrItem.lrItem(r, setOf(ε))).collect(toSet()));
+        System.out.println(closure);
     }
 
 }
