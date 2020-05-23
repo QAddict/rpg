@@ -27,25 +27,6 @@
  *
  */
 
-package foundation.rpg.util;
+package foundation.rpg.grammar;
 
-import java.util.*;
-import java.util.function.Consumer;
-
-public class Bfs {
-
-    @FunctionalInterface
-    public interface Iteration<T> {
-        void iterate(T item, Consumer<? super T> consumer);
-    }
-    public static <T> void bfs(Iteration<T> iteration, Collection<T> input) {
-        Queue<T> queue = new LinkedList<>(input);
-        Set<T> visited = new HashSet<>(input);
-        while (!queue.isEmpty()) {
-            iteration.iterate(queue.poll(), next -> {
-                if(visited.add(next)) queue.add(next);
-            });
-        }
-    }
-
-}
+enum Symbols implements Symbol { S, A, B, C, a, b, c }

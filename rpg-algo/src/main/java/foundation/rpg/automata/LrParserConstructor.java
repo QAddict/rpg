@@ -33,6 +33,7 @@ import foundation.rpg.grammar.First;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
+import foundation.rpg.util.Bfs;
 import foundation.rpg.util.MapOfSets;
 
 import java.util.*;
@@ -57,50 +58,37 @@ public class LrParserConstructor {
     }
 
     public LrParserAutomata constructAutomata() {
-        Queue<LrItemSet> processingSets = new LinkedList<>();
         LrItemSet start = closure(any, grammar.rulesFor(grammar.getStart()).stream().map(rule -> lrItem(rule, emptySet())).collect(toSet()));
         LrParserAutomata parser = new LrParserAutomata(start, grammar);
         parser.addState(start);
-        processingSets.add(start);
-        while(!processingSets.isEmpty()) {
-            LrItemSet set = processingSets.poll();
-            MapOfSets<Symbol, LrItem> transitions = transitions(parser, set);
-            transitions.forEach((transitionSymbol, baseSet) -> {
-                LrItemSet nextSet = closure(transitionSymbol, baseSet);
-                if(parser.addState(nextSet)) {
-                    processingSets.add(nextSet);
-                }
-                parser.transition(set, transitionSymbol, nextSet);
-            });
-        }
+        Bfs.withItem(start, (set, queue) -> transitions(parser, set).forEach((transitionSymbol, baseSet) -> {
+            LrItemSet nextSet = closure(transitionSymbol, baseSet);
+            parser.addState(nextSet);
+            queue.accept(nextSet);
+            parser.transition(set, transitionSymbol, nextSet);
+        }));
         return parser;
     }
 
-    public MapOfSets<Symbol, LrItem> transitions(LrParserAutomata parser, LrItemSet set) {
+    public static MapOfSets<Symbol, LrItem> transitions(LrParserAutomata parser, LrItemSet set) {
         MapOfSets<Symbol, LrItem> transitions = new MapOfSets<>();
         set.getItems().forEach(lrItem -> {
-            if(lrItem.isEnd()) {
-                if(lrItem.getLookahead().isEmpty()) {
+            if(lrItem.isEnd())
+                if(lrItem.getLookahead().isEmpty())
                     parser.accept(set, lrItem);
-                } else {
+                else
                     lrItem.getLookahead().forEach(lookahead -> parser.reduction(set, lookahead, lrItem));
-                }
-            } else {
+            else
                 transitions.add(lrItem.symbolAtDot(), lrItem.moveDot());
-            }
         });
         return transitions;
     }
 
     public LrItemSet closure(Symbol symbol, Set<LrItem> base) {
-        Queue<LrItem> queue = new ArrayDeque<>(base);
-        Set<LrItem> closure = new LinkedHashSet<>();
-        while(!queue.isEmpty()) {
-            LrItem item = queue.poll();
-            if(closure.add(item) && !item.isEnd()) {
-                grammar.rulesFor(item.symbolAtDot()).stream().map(rule -> lrItem(rule, first.follow(item.afterDot(), item.getLookahead()))).forEach(queue::add);
-            }
-        }
+        Set<LrItem> closure = Bfs.withCollection(base, (item, queue) -> {
+            if(!item.isEnd())
+                grammar.rulesFor(item.symbolAtDot()).stream().map(rule -> lrItem(rule, first.follow(item.afterDot(), item.getLookahead()))).forEach(queue);
+        });
         // Merge rules with same lookahead
         Map<Integer, Map<Rule, LrItem>> aggregator = new LinkedHashMap<>();
         closure.forEach(i -> aggregator.computeIfAbsent(i.getDot(), d -> new LinkedHashMap<>()).compute(i.getRule(), (r, t) -> {

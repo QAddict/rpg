@@ -40,7 +40,6 @@ import foundation.rpg.parser.Lexer;
 import java.util.*;
 
 import static foundation.rpg.lexer.regular.thompson.ThompsonVisitor.epsilon;
-import static java.util.Collections.singleton;
 
 public class GNFATransformer {
 
@@ -50,7 +49,7 @@ public class GNFATransformer {
         stateSet.add(start);
         e(stateSet);
         Map<StateSet, StateSet> cache = new LinkedHashMap<>();
-        Bfs.bfs((set, queue) -> {
+        Bfs.withItem(stateSet, (set, queue) -> {
             Map<Node, StateSet> trans = new LinkedHashMap<>();
             Map<Node, StateSet> groups = new LinkedHashMap<>();
             Set<Inversion> inv = new LinkedHashSet<>();
@@ -83,17 +82,17 @@ public class GNFATransformer {
                 set.setCharTransition(a, cache.computeIfAbsent(s, k -> k));
                 queue.accept(s);
             });
-        }, singleton(stateSet));
+        });
         return new DFA(stateSet);
     }
 
     private void e(StateSet stateSet) {
-        Bfs.bfs((state, queue) -> state.getTransitions().forEach(t -> {
+        Bfs.withCollection(stateSet.getStates(), (state, queue) -> state.getTransitions().forEach(t -> {
             if(t.getNode() == epsilon) {
                 stateSet.add(t.getNext());
                 queue.accept(t.getNext());
             }
-        }), stateSet.getStates());
+        }));
     }
 
     private boolean isInGroup(String g, String c) {

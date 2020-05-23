@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.hash;
 import static java.util.stream.Collectors.joining;
@@ -90,8 +91,8 @@ public final class SymbolString implements Iterable<Symbol> {
         return symbols.iterator();
     }
 
-    public SymbolString substring(int dot) {
-        return new SymbolString(symbols.subList(dot, size));
+    public SymbolString substring(int from) {
+        return new SymbolString(from < size ? symbols.subList(from, size) : emptyList());
     }
 
 }

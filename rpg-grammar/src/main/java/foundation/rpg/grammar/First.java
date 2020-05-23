@@ -36,13 +36,17 @@ import java.util.Set;
 
 import static foundation.rpg.grammar.Symbol.ε;
 
-public class First {
+public final class First {
 
     private final MapOfSets<Symbol, Symbol> first = new MapOfSets<>();
 
     public First(Grammar grammar) {
         grammar.getTerminals().forEach(symbol -> first.add(symbol, symbol));
         while (addedFirstSymbol(grammar));
+    }
+
+    public Set<Symbol> first(Symbol symbol) {
+        return first.get(symbol);
     }
 
 
@@ -60,7 +64,7 @@ public class First {
     private Set<Symbol> addedEpsilon(Rule rule) {
         Set<Symbol> symbols = new LinkedHashSet<>();
         for(Symbol s : rule.getRight()) {
-            symbols.addAll(first.get(s));
+            symbols.addAll(first(s));
             if(!symbols.contains(ε))
                 return symbols;
             symbols.remove(ε);
@@ -73,7 +77,7 @@ public class First {
     public Set<Symbol> follow(SymbolString string, Set<Symbol> lookahead) {
         Set<Symbol> follow = new LinkedHashSet<>();
         for(Symbol symbol : string) {
-            follow.addAll(first.get(symbol));
+            follow.addAll(first(symbol));
             if(!follow.contains(ε)) return follow;
             follow.remove(ε);
         }

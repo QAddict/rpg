@@ -31,5 +31,12 @@ package foundation.rpg.common.rules;
 
 import foundation.rpg.MetaRule;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 @MetaRule
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD})
 public @interface CommaSeparatedNonEmpty {}

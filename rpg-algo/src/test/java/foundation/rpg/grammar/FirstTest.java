@@ -27,16 +27,35 @@
  *
  */
 
-package foundation.rpg.common.rules;
+package foundation.rpg.grammar;
 
-import foundation.rpg.MetaRule;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static foundation.rpg.grammar.Grammar.grammar;
+import static foundation.rpg.grammar.Rule.rule;
+import static foundation.rpg.grammar.Rule.setOf;
+import static foundation.rpg.grammar.Symbol.ε;
+import static foundation.rpg.grammar.Symbols.*;
+import static java.util.Collections.*;
 
-@MetaRule
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface CommaSeparated {}
+public class FirstTest {
+
+    private final First first = new First(grammar(S, setOf(
+            rule(S).to(A, end),
+            rule(A).to(),
+            rule(A).to(a)
+    ), emptySet()));
+
+
+    @Test
+    public void testFirst() {
+        Assert.assertEquals(first.first(A), setOf(a, ε));
+    }
+
+
+    @Test
+    public void testFollow() {
+        Assert.assertEquals(first.follow(new SymbolString(singletonList(A)), setOf(end)), setOf(a, end));
+    }
+}

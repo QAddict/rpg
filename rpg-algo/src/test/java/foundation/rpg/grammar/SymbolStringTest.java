@@ -27,16 +27,25 @@
  *
  */
 
-package foundation.rpg.common.rules;
+package foundation.rpg.grammar;
 
-import foundation.rpg.MetaRule;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static foundation.rpg.grammar.Symbols.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
-@MetaRule
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface CommaSeparated {}
+public class SymbolStringTest {
+
+    @Test
+    public void testSubstring() {
+        Assert.assertEquals(new SymbolString(asList(A, B, C)).substring(0), new SymbolString(asList(A, B, C)));
+        Assert.assertEquals(new SymbolString(asList(A, B, C)).substring(1), new SymbolString(asList(B, C)));
+        Assert.assertEquals(new SymbolString(asList(A, B, C)).substring(2), new SymbolString(singletonList(C)));
+        Assert.assertEquals(new SymbolString(asList(A, B, C)).substring(3), new SymbolString(emptyList()));
+        Assert.assertEquals(new SymbolString(asList(A, B, C)).substring(4), new SymbolString(emptyList()));
+    }
+
+}

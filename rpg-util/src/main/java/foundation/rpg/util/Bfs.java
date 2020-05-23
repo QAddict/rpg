@@ -27,16 +27,33 @@
  *
  */
 
-package foundation.rpg.common.rules;
+package foundation.rpg.util;
 
-import foundation.rpg.MetaRule;
+import java.util.*;
+import java.util.function.Consumer;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static java.util.Collections.singletonList;
 
-@MetaRule
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface CommaSeparated {}
+public class Bfs {
+
+    @FunctionalInterface
+    public interface Iteration<T> {
+        void iterate(T item, Consumer<? super T> consumer);
+    }
+
+    public static <T> Set<T> withCollection(Collection<T> input, Iteration<T> iteration) {
+        Queue<T> queue = new LinkedList<>(input);
+        Set<T> visited = new LinkedHashSet<>(input);
+        while (!queue.isEmpty()) {
+            iteration.iterate(queue.poll(), next -> {
+                if(visited.add(next)) queue.add(next);
+            });
+        }
+        return visited;
+    }
+
+    public static <T> Set<T> withItem(T input, Iteration<T> iteration) {
+        return withCollection(singletonList(input), iteration);
+    }
+
+}

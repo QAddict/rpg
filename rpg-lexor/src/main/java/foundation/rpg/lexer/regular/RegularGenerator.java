@@ -83,7 +83,7 @@ public class RegularGenerator {
             w.println("\t\tif(symbol < 0) return visitor -> visitor.visitEnd(new End(builder.build()));");
             w.println("\t\tfor(; true; symbol = builder.next()) {");
             w.println("\t\t\tswitch(state) {");
-            Bfs.bfs((item, consumer) -> {
+            Bfs.withItem(dfa.getStart(), (item, consumer) -> {
                 Consumer<String> r = pref -> {
                     item.getGroupTransitions().forEach((atom, nextSet) -> {
                         w.println(pref + "\t\t\t\t\tif(Lexer.matchesGroup(\"" + atom.toString().substring(1) + "\", symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
@@ -130,7 +130,7 @@ public class RegularGenerator {
                     });
                     r.accept("");
                 }
-            }, Collections.singleton(dfa.getStart()));
+            });
             w.println("\t\t\t}");
             w.println("\t\t}");
             w.println("\t}");

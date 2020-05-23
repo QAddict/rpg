@@ -95,7 +95,7 @@ public class ClassToGrammarContext {
             } else {
                 rules.add(ruleOf(method));
                 Map<String, TypeMirror> map = new LinkedHashMap<>();
-                Bfs.bfs((m, q) -> {
+                Bfs.withItem(method, (m, q) -> {
                     m.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(p -> {
                         DeclaredType l = (DeclaredType) metaSymbol(p.asType(), map);
                         metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
@@ -104,7 +104,7 @@ public class ClassToGrammarContext {
                             q.accept(metaRule);
                         });
                     });
-                }, singleton(method));
+                });
                 if(method.getAnnotationMirrors().stream().anyMatch(m -> nonNull(m.getAnnotationType().asElement().getAnnotation(Precedence.class)))) {
                     precedenceRules.add(method);
                 }

@@ -36,7 +36,7 @@ import foundation.rpg.automata.LrParserAutomata;
 import org.testng.annotations.Test;
 
 import static foundation.rpg.generator.GeneratorTest.Symbols.*;
-import static foundation.rpg.grammar.Rule.Builder.setOf;
+import static foundation.rpg.grammar.Rule.setOf;
 import static foundation.rpg.grammar.Rule.rule;
 import static java.util.Collections.emptySet;
 

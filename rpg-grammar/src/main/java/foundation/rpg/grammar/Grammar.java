@@ -43,7 +43,7 @@ import static java.util.stream.Collectors.toCollection;
  *
  * Additionally our grammar has I set of ignored symbols (e.g. whitespaces).
  */
-public class Grammar {
+public final class Grammar {
 
     /**
      * Start symbol of the grammar.

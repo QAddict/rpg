@@ -89,14 +89,14 @@ public final class Rule {
         return right -> Rule.rule(left, right);
     }
 
+    @SafeVarargs
+    public static <T> Set<T> setOf(T... items) {
+        return Stream.of(items).collect(toSet());
+    }
+
     public interface Builder {
         default Rule to(Symbol... right) { return to(asList(right)); }
         Rule to(List<Symbol> right);
-
-        @SafeVarargs
-        static <T> Set<T> setOf(T... items) {
-            return Stream.of(items).collect(toSet());
-        }
     }
 
 }
