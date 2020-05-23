@@ -29,10 +29,10 @@
 
 package foundation.rpg.parser.generator;
 
-import foundation.rpg.automata.LrAction;
-import foundation.rpg.automata.LrItem;
-import foundation.rpg.automata.LrItemSet;
-import foundation.rpg.automata.LrParserAutomata;
+import foundation.rpg.lr1.LrAction;
+import foundation.rpg.lr1.LrItem;
+import foundation.rpg.lr1.LrItemSet;
+import foundation.rpg.lr1.LrParserAutomata;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;

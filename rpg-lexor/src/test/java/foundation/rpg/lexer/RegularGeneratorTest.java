@@ -31,11 +31,12 @@ package foundation.rpg.lexer;
 
 import foundation.rpg.lexer.regular.RegularGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
+import foundation.rpg.lexer.regular.RegularTypes;
 import foundation.rpg.lexer.regular.ast.Node;
-import foundation.rpg.lexer.regular.dfa.DFA;
-import foundation.rpg.lexer.regular.dfa.GNFATransformer;
-import foundation.rpg.lexer.regular.thompson.GNFA;
-import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
+import foundation.rpg.dfa.DFA;
+import foundation.rpg.dfa.GNFATransformer;
+import foundation.rpg.gnfa.GNFA;
+import foundation.rpg.lexer.regular.ThompsonVisitor;
 import org.testng.annotations.Test;
 
 import java.io.PrintWriter;
@@ -61,12 +62,13 @@ public class RegularGeneratorTest {
                 parser.parsePattern("'([^'\\\\]|\\\\['\\\\nrt])*'")
         );
         Map<Object, Integer> priorities = IntStream.range(0, nodes.size()).boxed().collect(toMap(nodes::get, i -> nodes.size() - i));
-        GNFA gnfa = new ThompsonVisitor().visit(nodes);
+        ThompsonVisitor thompsonVisitor = new ThompsonVisitor();
+        GNFA gnfa = thompsonVisitor.visit(nodes);
         System.out.println(gnfa);
-        DFA dfa = new GNFATransformer().transform(gnfa);
+        DFA dfa = new GNFATransformer(new RegularTypes()).transform(gnfa);
         System.out.println(dfa);
         Comparator<Object> comparator = comparingInt(priorities::get);
-        generator.generate("pkg", "MyLexer", dfa, new PrintWriter(System.out), set -> max(set, comparator).toString(), null);
+        generator.generate("pkg", "MyLexer", dfa, thompsonVisitor.getFinalStates(), new PrintWriter(System.out), set -> max(set, comparator).toString(), null);
     }
 
 }

@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.automata;
+package foundation.rpg.lr1;
 
 import foundation.rpg.grammar.First;
 import foundation.rpg.grammar.Grammar;
@@ -39,7 +39,7 @@ import foundation.rpg.util.MapOfSets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static foundation.rpg.automata.LrItem.lrItem;
+import static foundation.rpg.lr1.LrItem.lrItem;
 import static foundation.rpg.grammar.Symbol.any;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;

@@ -27,76 +27,48 @@
  *
  */
 
-package foundation.rpg.lexer.regular.dfa;
-
-import foundation.rpg.lexer.regular.ast.Inversion;
-import foundation.rpg.lexer.regular.ast.Node;
-import foundation.rpg.lexer.regular.thompson.State;
+package foundation.rpg.lr1;
 
 import java.util.*;
 
-public class StateSet {
+import static java.util.stream.Collectors.joining;
 
-    private final Set<State> states = new LinkedHashSet<>();
-    private final Map<Node, StateSet> charTransitions = new LinkedHashMap<>();
-    private final Map<Node, StateSet> groupTransitions = new LinkedHashMap<>();
-    private final Set<Inversion> inversions = new LinkedHashSet<>();
-    private StateSet defaultState;
+public class LrItemSet {
 
-    public void add(State state) {
-        states.add(state);
+    private final String name;
+    private final Set<LrItem> closure;
+    private final int hash;
+
+    public LrItemSet(String name, Set<LrItem> closure) {
+        this.name = name;
+        this.closure = closure;
+        this.hash = Objects.hash(closure);
     }
 
-    public void addAll(StateSet state) {
-        states.addAll(state.states);
+    public Set<LrItem> getItems() {
+        return closure;
     }
 
-    public Set<State> getStates() {
-        return states;
-    }
-
-    public StateSet getDefaultState() {
-        return defaultState;
-    }
-
-    public void setDefaultState(StateSet defaultState) {
-        this.defaultState = defaultState;
-    }
-
-    public void addFailOn(Inversion c) {
-        inversions.add(c);
-    }
-
-    public void setCharTransition(Node a, StateSet set) {
-        this.charTransitions.put(a, set);
-    }
-
-    public void setGroupTransition(Node a, StateSet set) {
-        this.groupTransitions.put(a, set);
-    }
-
-    public Map<Node, StateSet> getCharTransitions() {
-        return charTransitions;
-    }
-
-    public Map<Node, StateSet> getGroupTransitions() {
-        return groupTransitions;
-    }
-
-    public Set<Inversion> getInversions() {
-        return inversions;
+    public String getName() {
+        return name;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StateSet stateSet = (StateSet) o;
-        return states.equals(stateSet.states);
+        LrItemSet that = (LrItemSet) o;
+        return Objects.equals(closure, that.closure);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(states);
+        return hash;
     }
+
+    @Override
+    public String toString() {
+        return name + closure.stream().map(Objects::toString).collect(joining("\n\t", ": {\n\t", "\n}"));
+    }
+
 }

@@ -27,21 +27,32 @@
  *
  */
 
-package foundation.rpg.lexer.regular.dfa;
+package foundation.rpg.dfa;
 
-import foundation.rpg.lexer.regular.ast.Inversion;
-import foundation.rpg.lexer.regular.ast.Node;
+import foundation.rpg.gnfa.GNFA;
+import foundation.rpg.gnfa.State;
 import foundation.rpg.util.Bfs;
-import foundation.rpg.lexer.regular.ast.Char;
-import foundation.rpg.lexer.regular.thompson.GNFA;
-import foundation.rpg.lexer.regular.thompson.State;
-import foundation.rpg.parser.Lexer;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
-import static foundation.rpg.lexer.regular.thompson.ThompsonVisitor.epsilon;
+import static foundation.rpg.gnfa.Thompson.epsilon;
 
 public class GNFATransformer {
+
+    public GNFATransformer(Types types) {
+        this.types = types;
+    }
+
+    public interface Types {
+        boolean isInversion(Object input);
+        boolean isGroup(Object input);
+        boolean isInGroup(Object group, Object input);
+    }
+
+    private final Types types;
 
     public DFA transform(GNFA gnfa) {
         StateSet stateSet = new StateSet();
@@ -50,17 +61,17 @@ public class GNFATransformer {
         e(stateSet);
         Map<StateSet, StateSet> cache = new LinkedHashMap<>();
         Bfs.withItem(stateSet, (set, queue) -> {
-            Map<Node, StateSet> trans = new LinkedHashMap<>();
-            Map<Node, StateSet> groups = new LinkedHashMap<>();
-            Set<Inversion> inv = new LinkedHashSet<>();
+            Map<Object, StateSet> trans = new LinkedHashMap<>();
+            Map<Object, StateSet> groups = new LinkedHashMap<>();
+            Set<Object> inv = new LinkedHashSet<>();
             StateSet defaultState = new StateSet();
-            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getNode() != epsilon)
+            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getInput() != epsilon)
                     .forEach(t -> {
-                        if(t.getNode() instanceof Inversion) {
+                        if(types.isInversion(t.getInput())) {
                             defaultState.add(t.getNext());
-                            set.addFailOn((Inversion) t.getNode());
+                            set.addFailOn(t.getInput());
                         } else {
-                            (t.getNode() instanceof Char ? trans : groups).computeIfAbsent(t.getNode(), k -> new StateSet()).add(t.getNext());
+                            (types.isGroup(t.getInput()) ? groups : trans).computeIfAbsent(t.getInput(), k -> new StateSet()).add(t.getNext());
                         }
                     });
             if(!defaultState.getStates().isEmpty()) {
@@ -72,7 +83,7 @@ public class GNFATransformer {
                 e(s);
                 StateSet cachedSet = cache.computeIfAbsent(s, k -> k);
                 trans.forEach((c, as) -> {
-                    if(isInGroup(a.toString(), c.toString())) as.addAll(s);
+                    if(types.isInGroup(a, c)) as.addAll(s);
                 });
                 set.setGroupTransition(a, cachedSet);
                 queue.accept(s);
@@ -88,15 +99,11 @@ public class GNFATransformer {
 
     private void e(StateSet stateSet) {
         Bfs.withCollection(stateSet.getStates(), (state, queue) -> state.getTransitions().forEach(t -> {
-            if(t.getNode() == epsilon) {
+            if(t.getInput() == epsilon) {
                 stateSet.add(t.getNext());
                 queue.accept(t.getNext());
             }
         }));
-    }
-
-    private boolean isInGroup(String g, String c) {
-        return Lexer.matchesGroup(g.substring(1), c.charAt(0));
     }
 
 }

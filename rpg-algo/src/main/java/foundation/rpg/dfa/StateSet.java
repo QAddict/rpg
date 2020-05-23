@@ -27,48 +27,75 @@
  *
  */
 
-package foundation.rpg.automata;
+package foundation.rpg.dfa;
+
+
+import foundation.rpg.gnfa.State;
 
 import java.util.*;
 
-import static java.util.stream.Collectors.joining;
+public class StateSet {
 
-public class LrItemSet {
+    private final Set<State> states = new LinkedHashSet<>();
+    private final Map<Object, StateSet> charTransitions = new LinkedHashMap<>();
+    private final Map<Object, StateSet> groupTransitions = new LinkedHashMap<>();
+    private final Set<Object> inversions = new LinkedHashSet<>();
+    private StateSet defaultState;
 
-    private final String name;
-    private final Set<LrItem> closure;
-    private final int hash;
-
-    public LrItemSet(String name, Set<LrItem> closure) {
-        this.name = name;
-        this.closure = closure;
-        this.hash = Objects.hash(closure);
+    public void add(State state) {
+        states.add(state);
     }
 
-    public Set<LrItem> getItems() {
-        return closure;
+    public void addAll(StateSet state) {
+        states.addAll(state.states);
     }
 
-    public String getName() {
-        return name;
+    public Set<State> getStates() {
+        return states;
+    }
+
+    public StateSet getDefaultState() {
+        return defaultState;
+    }
+
+    public void setDefaultState(StateSet defaultState) {
+        this.defaultState = defaultState;
+    }
+
+    public void addFailOn(Object c) {
+        inversions.add(c);
+    }
+
+    public void setCharTransition(Object a, StateSet set) {
+        this.charTransitions.put(a, set);
+    }
+
+    public void setGroupTransition(Object a, StateSet set) {
+        this.groupTransitions.put(a, set);
+    }
+
+    public Map<Object, StateSet> getCharTransitions() {
+        return charTransitions;
+    }
+
+    public Map<Object, StateSet> getGroupTransitions() {
+        return groupTransitions;
+    }
+
+    public Set<Object> getInversions() {
+        return inversions;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LrItemSet that = (LrItemSet) o;
-        return Objects.equals(closure, that.closure);
+        StateSet stateSet = (StateSet) o;
+        return states.equals(stateSet.states);
     }
 
     @Override
     public int hashCode() {
-        return hash;
+        return Objects.hash(states);
     }
-
-    @Override
-    public String toString() {
-        return name + closure.stream().map(Objects::toString).collect(joining("\n\t", ": {\n\t", "\n}"));
-    }
-
 }

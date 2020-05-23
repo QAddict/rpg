@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.automata;
+package foundation.rpg.lr1;
 
 import java.util.Objects;
 

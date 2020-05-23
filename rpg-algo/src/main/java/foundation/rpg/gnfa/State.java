@@ -27,34 +27,22 @@
  *
  */
 
-package foundation.rpg.automata;
+package foundation.rpg.gnfa;
 
-import foundation.rpg.grammar.Grammar;
-import org.testng.annotations.Test;
+import java.util.ArrayList;
+import java.util.List;
 
-import static foundation.rpg.automata.Symbols.*;
-import static foundation.rpg.grammar.Rule.setOf;
-import static foundation.rpg.grammar.Rule.rule;
-import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.toSet;
+public class State {
 
-public class LrParserConstructorTest {
+    private final List<Transition> transitions = new ArrayList<>();
 
-    private final Grammar grammar = Grammar.grammar(S, setOf(
-            rule(S).to(A, ε),
-            rule(A).to(a, A)
-    ), emptySet());
-
-    @Test
-    public void testParser() {
-        LrParserAutomata parser = LrParserConstructor.generateParser(grammar);
-        System.out.println(parser);
+    public void add(Object input, State end) {
+        transitions.add(new Transition(input, end));
     }
 
-    @Test
-    public void testClosure() {
-        LrItemSet closure = new LrParserConstructor(grammar).closure(a, grammar.rulesFor(A).stream().map(r -> LrItem.lrItem(r, setOf(ε))).collect(toSet()));
-        System.out.println(closure);
+    public List<Transition> getTransitions() {
+        return transitions;
     }
+
 
 }

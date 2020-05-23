@@ -27,22 +27,8 @@
  *
  */
 
-package foundation.rpg.lexer.regular.thompson;
+package foundation.rpg.lr1;
 
-public class GNFA {
-    private final State start;
-    private final State end;
+import foundation.rpg.grammar.Symbol;
 
-    public GNFA(State start, State end) {
-        this.start = start;
-        this.end = end;
-    }
-
-    public State getStart() {
-        return start;
-    }
-
-    public State getEnd() {
-        return end;
-    }
-}
+public enum Symbols implements Symbol { S, A, a }

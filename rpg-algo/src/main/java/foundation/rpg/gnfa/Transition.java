@@ -27,8 +27,23 @@
  *
  */
 
-package foundation.rpg.automata;
+package foundation.rpg.gnfa;
 
-import foundation.rpg.grammar.Symbol;
+public class Transition {
+    private final Object input;
+    private final State next;
 
-public enum Symbols implements Symbol { S, A, a }
+    public Transition(Object input, State next) {
+        this.input = input;
+        this.next = next;
+    }
+
+    public Object getInput() {
+        return input;
+    }
+
+    public State getNext() {
+        return next;
+    }
+
+}

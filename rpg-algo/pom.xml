@@ -38,12 +38,4 @@
 
     <artifactId>rpg-algo</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>foundation.fluent.api</groupId>
-            <artifactId>rpg-util</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
 </project>

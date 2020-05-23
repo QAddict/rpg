@@ -27,56 +27,16 @@
  *
  */
 
-package foundation.rpg.lexer.regular.thompson;
+package foundation.rpg.dfa;
 
-import foundation.rpg.lexer.regular.ast.Node;
+public class DFA {
+    private final StateSet start;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class State {
-
-    private Object result;
-
-    private final List<Transition> transitions = new ArrayList<>();
-
-    public interface In {
-
+    public DFA(StateSet start) {
+        this.start = start;
     }
 
-    public void add(Node epsilon, State end) {
-        transitions.add(new Transition(epsilon, end));
+    public StateSet getStart() {
+        return start;
     }
-
-    public List<Transition> getTransitions() {
-        return transitions;
-    }
-
-    public State setResult(Object result) {
-        this.result = result;
-        return this;
-    }
-
-    public Object getResult() {
-        return result;
-    }
-
-    public static class Transition {
-        private final Node node;
-        private final State next;
-
-        private Transition(Node node, State next) {
-            this.node = node;
-            this.next = next;
-        }
-
-        public Node getNode() {
-            return node;
-        }
-
-        public State getNext() {
-            return next;
-        }
-    }
-
 }

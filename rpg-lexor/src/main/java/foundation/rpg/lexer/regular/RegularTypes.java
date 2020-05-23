@@ -27,12 +27,28 @@
  *
  */
 
-package foundation.rpg.lexer.regular.dfa;
+package foundation.rpg.lexer.regular;
 
-public class DFAMinimizer {
+import foundation.rpg.dfa.GNFATransformer;
+import foundation.rpg.lexer.regular.ast.Group;
+import foundation.rpg.lexer.regular.ast.Inversion;
+import foundation.rpg.parser.Lexer;
 
-    DFA minimize(DFA dfa) {
-        return dfa;
+public class RegularTypes implements GNFATransformer.Types {
+
+    @Override
+    public boolean isInversion(Object input) {
+        return input instanceof Inversion;
+    }
+
+    @Override
+    public boolean isGroup(Object input) {
+        return input instanceof Group;
+    }
+
+    @Override
+    public boolean isInGroup(Object group, Object input) {
+        return Lexer.matchesGroup(group.toString(), input.toString().charAt(0));
     }
 
 }

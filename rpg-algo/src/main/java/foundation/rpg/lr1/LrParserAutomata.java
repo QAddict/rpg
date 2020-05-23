@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.automata;
+package foundation.rpg.lr1;
 
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Symbol;

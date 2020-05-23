@@ -27,16 +27,34 @@
  *
  */
 
-package foundation.rpg.lexer.regular.dfa;
+package foundation.rpg.lr1;
 
-public class DFA {
-    private final StateSet start;
+import foundation.rpg.grammar.Grammar;
+import org.testng.annotations.Test;
 
-    public DFA(StateSet start) {
-        this.start = start;
+import static foundation.rpg.lr1.Symbols.*;
+import static foundation.rpg.grammar.Rule.setOf;
+import static foundation.rpg.grammar.Rule.rule;
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
+
+public class LrParserConstructorTest {
+
+    private final Grammar grammar = Grammar.grammar(S, setOf(
+            rule(S).to(A, ε),
+            rule(A).to(a, A)
+    ), emptySet());
+
+    @Test
+    public void testParser() {
+        LrParserAutomata parser = LrParserConstructor.generateParser(grammar);
+        System.out.println(parser);
     }
 
-    public StateSet getStart() {
-        return start;
+    @Test
+    public void testClosure() {
+        LrItemSet closure = new LrParserConstructor(grammar).closure(a, grammar.rulesFor(A).stream().map(r -> LrItem.lrItem(r, setOf(ε))).collect(toSet()));
+        System.out.println(closure);
     }
+
 }

@@ -27,25 +27,22 @@
  *
  */
 
-package foundation.rpg.lexer.regular.dfa;
+package foundation.rpg.gnfa;
 
-import foundation.rpg.lexer.regular.RegularTypes;
-import foundation.rpg.lexer.regular.ast.*;
-import foundation.rpg.gnfa.GNFA;
-import foundation.rpg.dfa.GNFATransformer;
-import foundation.rpg.dfa.DFA;
-import foundation.rpg.lexer.regular.ThompsonVisitor;
-import org.testng.annotations.Test;
+public class GNFA {
+    private final State start;
+    private final State end;
 
-import static java.util.Arrays.asList;
+    public GNFA(State start, State end) {
+        this.start = start;
+        this.end = end;
+    }
 
-public class TransformerTest {
+    public State getStart() {
+        return start;
+    }
 
-    @Test
-    public void testTransform() {
-        Node pattern = new Chain(asList(new Char('a'), new Char('b'), new Repetition(new Char('a'))));
-        GNFA gnfa = pattern.accept(new ThompsonVisitor());
-        DFA transform = new GNFATransformer(new RegularTypes()).transform(gnfa);
-        System.out.println(transform);
+    public State getEnd() {
+        return end;
     }
 }

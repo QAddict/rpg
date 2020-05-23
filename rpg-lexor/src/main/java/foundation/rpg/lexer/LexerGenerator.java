@@ -30,11 +30,12 @@
 package foundation.rpg.lexer;
 
 import foundation.rpg.lexer.regular.RegularGenerator;
+import foundation.rpg.lexer.regular.RegularTypes;
 import foundation.rpg.lexer.regular.ast.Node;
-import foundation.rpg.lexer.regular.dfa.DFA;
-import foundation.rpg.lexer.regular.dfa.GNFATransformer;
-import foundation.rpg.lexer.regular.thompson.GNFA;
-import foundation.rpg.lexer.regular.thompson.ThompsonVisitor;
+import foundation.rpg.dfa.DFA;
+import foundation.rpg.dfa.GNFATransformer;
+import foundation.rpg.gnfa.GNFA;
+import foundation.rpg.lexer.regular.ThompsonVisitor;
 
 import javax.lang.model.type.TypeMirror;
 import java.io.PrintWriter;
@@ -49,7 +50,7 @@ import static java.util.stream.Collectors.*;
 public class LexerGenerator {
 
     private final ThompsonVisitor visitor = new ThompsonVisitor();
-    private final GNFATransformer transformer = new GNFATransformer();
+    private final GNFATransformer transformer = new GNFATransformer(new RegularTypes());
     private final RegularGenerator generator = new RegularGenerator();
 
     public static class TokenInfo {
@@ -83,7 +84,7 @@ public class LexerGenerator {
         GNFA gnfa = visitor.visit(info.stream().map(TokenInfo::getPattern).collect(toList()));
         DFA dfa = transformer.transform(gnfa);
         Comparator<TokenInfo> comparator = comparingInt(TokenInfo::getPriority);
-        generator.generate(pkg, name, dfa, w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).call, factoryType);
+        generator.generate(pkg, name, dfa, visitor.getFinalStates(), w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).call, factoryType);
     }
 
 }
