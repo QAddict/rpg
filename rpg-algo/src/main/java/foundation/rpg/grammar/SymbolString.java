@@ -92,7 +92,7 @@ public final class SymbolString implements Iterable<Symbol> {
     }
 
     public SymbolString substring(int from) {
-        return new SymbolString(from < size ? symbols.subList(from, size) : emptyList());
+        return new SymbolString(from < size() ? symbols.subList(from, size) : emptyList());
     }
 
 }

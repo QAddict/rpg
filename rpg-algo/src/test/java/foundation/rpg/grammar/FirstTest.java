@@ -29,7 +29,6 @@
 
 package foundation.rpg.grammar;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static foundation.rpg.grammar.Grammar.grammar;
@@ -38,24 +37,27 @@ import static foundation.rpg.grammar.Rule.setOf;
 import static foundation.rpg.grammar.Symbol.ε;
 import static foundation.rpg.grammar.Symbols.*;
 import static java.util.Collections.*;
+import static org.testng.Assert.assertEquals;
 
 public class FirstTest {
 
     private final First first = new First(grammar(S, setOf(
             rule(S).to(A, end),
             rule(A).to(),
-            rule(A).to(a)
+            rule(A).to(A, B),
+            rule(B).to(a),
+            rule(B).to(b)
     ), emptySet()));
 
 
     @Test
     public void testFirst() {
-        Assert.assertEquals(first.first(A), setOf(a, ε));
+        assertEquals(first.first(A), setOf(a, b, ε));
     }
 
 
     @Test
     public void testFollow() {
-        Assert.assertEquals(first.follow(new SymbolString(singletonList(A)), setOf(end)), setOf(a, end));
+        assertEquals(first.follow(new SymbolString(singletonList(A)), setOf(end)), setOf(b, a, end));
     }
 }

@@ -41,7 +41,7 @@
     <dependencies>
         <dependency>
             <groupId>foundation.fluent.api</groupId>
-            <artifactId>rpg-grammar</artifactId>
+            <artifactId>rpg-util</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

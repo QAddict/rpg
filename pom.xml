@@ -50,7 +50,6 @@
         <module>rpg-lexor</module>
         <module>rpg-sample-language</module>
         <module>rpg-apt-parser-only</module>
-        <module>rpg-grammar</module>
         <module>rpg-util</module>
     </modules>
 
