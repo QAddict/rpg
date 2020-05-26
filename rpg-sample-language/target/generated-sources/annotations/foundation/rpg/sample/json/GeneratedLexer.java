@@ -74,30 +74,30 @@ public class GeneratedLexer implements Lexer<State> {
 				case 8:
 					return visitor -> visitor.visitRCurl(new foundation.rpg.common.symbols.RCurl(builder.build()));
 				case 9:
-					if(Lexer.matchesGroup('s', symbol)) { state = 18; break; }
+					if(Lexer.matchesGroup('s', symbol)) { state = 9; break; }
 					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
 				case 10:
 					switch(symbol) {
-						case 'e': state = 19; break;
-						case 'E': state = 19; break;
-						case '.': state = 19; break;
+						case 'e': state = 18; break;
+						case 'E': state = 18; break;
+						case '.': state = 18; break;
 						default:
-							if(Lexer.matchesGroup('d', symbol)) { state = 20; break; }
+							if(Lexer.matchesGroup('d', symbol)) { state = 10; break; }
 							return visitor -> visitor.visitInteger(getFactory().matchInt(builder.build()));
 					}
 					break;
 				case 11:
-					if(Lexer.matchesGroup('w', symbol)) { state = 21; break; }
+					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
 					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
 				case 12:
 					return visitor -> visitor.visitString(getFactory().matchQuotedString(builder.build()));
 				case 13:
 					switch(symbol) {
-						case '"': state = 22; break;
-						case 'r': state = 22; break;
-						case 't': state = 22; break;
-						case '\\': state = 22; break;
-						case 'n': state = 22; break;
+						case '"': state = 20; break;
+						case 'r': state = 20; break;
+						case 't': state = 20; break;
+						case '\\': state = 20; break;
+						case 'n': state = 20; break;
 						default:
 							throw new IllegalStateException("");
 					}
@@ -115,11 +115,11 @@ public class GeneratedLexer implements Lexer<State> {
 					return visitor -> visitor.visitString(getFactory().matchQuotedString(builder.build()));
 				case 16:
 					switch(symbol) {
-						case 'r': state = 23; break;
-						case 't': state = 23; break;
-						case '\'': state = 23; break;
-						case '\\': state = 23; break;
-						case 'n': state = 23; break;
+						case 'r': state = 21; break;
+						case 't': state = 21; break;
+						case '\'': state = 21; break;
+						case '\\': state = 21; break;
+						case 'n': state = 21; break;
 						default:
 							throw new IllegalStateException("");
 					}
@@ -134,25 +134,12 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 18:
-					if(Lexer.matchesGroup('s', symbol)) { state = 18; break; }
-					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
-				case 19:
-					if(Lexer.matchesGroup('d', symbol)) { state = 24; break; }
+					if(Lexer.matchesGroup('d', symbol)) { state = 22; break; }
 					throw new IllegalStateException("");
-				case 20:
-					switch(symbol) {
-						case 'e': state = 19; break;
-						case 'E': state = 19; break;
-						case '.': state = 19; break;
-						default:
-							if(Lexer.matchesGroup('d', symbol)) { state = 20; break; }
-							return visitor -> visitor.visitInteger(getFactory().matchInt(builder.build()));
-					}
-					break;
-				case 21:
-					if(Lexer.matchesGroup('w', symbol)) { state = 21; break; }
+				case 19:
+					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
 					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
-				case 22:
+				case 20:
 					switch(symbol) {
 						case '"': state = 12; break;
 						case '\\': state = 13; break;
@@ -161,7 +148,7 @@ public class GeneratedLexer implements Lexer<State> {
 							state = 14; break;
 					}
 					break;
-				case 23:
+				case 21:
 					switch(symbol) {
 						case '\'': state = 15; break;
 						case '\\': state = 16; break;
@@ -170,11 +157,8 @@ public class GeneratedLexer implements Lexer<State> {
 							state = 17; break;
 					}
 					break;
-				case 24:
-					if(Lexer.matchesGroup('d', symbol)) { state = 25; break; }
-					return visitor -> visitor.visitDouble(getFactory().matchDouble(builder.build()));
-				case 25:
-					if(Lexer.matchesGroup('d', symbol)) { state = 25; break; }
+				case 22:
+					if(Lexer.matchesGroup('d', symbol)) { state = 22; break; }
 					return visitor -> visitor.visitDouble(getFactory().matchDouble(builder.build()));
 			}
 		}

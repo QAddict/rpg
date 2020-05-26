@@ -74,6 +74,17 @@ public class Thompson {
         return new GNFA(start, end);
     }
 
+    public GNFA string(String string) {
+        State start = state("");
+        State curr = start;
+        for(int i = 0 ; i < string.length(); i++) {
+            State next = state("");
+            curr.add(string.charAt(i), next);
+            curr = next;
+        }
+        return new GNFA(start, curr);
+    }
+
     public GNFA chain(Stream<GNFA> gnfas) {
         Iterator<GNFA> i = gnfas.iterator();
         if(!i.hasNext()) return transition(epsilon);

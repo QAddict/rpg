@@ -29,37 +29,35 @@
 
 package foundation.rpg.lexer;
 
+import foundation.rpg.gnfa.State;
+import foundation.rpg.gnfa.Thompson;
 import foundation.rpg.lexer.regular.RegularGenerator;
 import foundation.rpg.lexer.regular.RegularTypes;
-import foundation.rpg.lexer.regular.ast.Node;
 import foundation.rpg.dfa.DFA;
 import foundation.rpg.dfa.GNFATransformer;
 import foundation.rpg.gnfa.GNFA;
-import foundation.rpg.lexer.regular.ThompsonVisitor;
 
 import javax.lang.model.type.TypeMirror;
 import java.io.PrintWriter;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Comparator.comparingInt;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.*;
 
 public class LexerGenerator {
 
-    private final ThompsonVisitor visitor = new ThompsonVisitor();
     private final GNFATransformer transformer = new GNFATransformer(new RegularTypes());
     private final RegularGenerator generator = new RegularGenerator();
 
     public static class TokenInfo {
         private final Object element;
         private final String call;
-        private final Node pattern;
+        private final GNFA pattern;
         private final int priority;
 
-        public TokenInfo(Object element, String call, Node pattern, int priority) {
+        public TokenInfo(Object element, String call, GNFA pattern, int priority) {
             this.element = element;
             this.call = call;
             this.pattern = pattern;
@@ -70,7 +68,7 @@ public class LexerGenerator {
             return element;
         }
 
-        public Node getPattern() {
+        public GNFA getPattern() {
             return pattern;
         }
 
@@ -80,11 +78,14 @@ public class LexerGenerator {
     }
 
     public void generateLexer(String pkg, String name, List<TokenInfo> info, PrintWriter w, TypeMirror factoryType) {
-        Map<Object, TokenInfo> infoMap = info.stream().collect(toMap(TokenInfo::getPattern, identity()));
-        GNFA gnfa = visitor.visit(info.stream().map(TokenInfo::getPattern).collect(toList()));
+        Map<State, TokenInfo> finalStates = new HashMap<>();
+        GNFA gnfa = new Thompson().alternation(info.stream().map(i -> {
+            finalStates.put(i.getPattern().getEnd(), i);
+            return i.getPattern();
+        }));
         DFA dfa = transformer.transform(gnfa);
         Comparator<TokenInfo> comparator = comparingInt(TokenInfo::getPriority);
-        generator.generate(pkg, name, dfa, visitor.getFinalStates(), w, set -> set.stream().map(infoMap::get).max(comparator).orElseThrow(() -> new IllegalArgumentException("")).call, factoryType);
+        generator.generate(pkg, name, dfa, finalStates, w, set -> set.stream().max(comparator).orElseThrow(() -> new IllegalArgumentException("")).call, factoryType);
     }
 
 }

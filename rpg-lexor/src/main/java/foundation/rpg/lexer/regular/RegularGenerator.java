@@ -29,7 +29,6 @@
 
 package foundation.rpg.lexer.regular;
 
-import foundation.rpg.lexer.regular.ast.*;
 import foundation.rpg.dfa.DFA;
 import foundation.rpg.dfa.StateSet;
 import foundation.rpg.gnfa.State;
@@ -45,7 +44,6 @@ import java.util.function.Function;
 
 import static foundation.rpg.dfa.StateSet.isError;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public class RegularGenerator {
@@ -58,7 +56,7 @@ public class RegularGenerator {
         for(Class<?> c : t) w.println("import " + c.getCanonicalName() + ";");
     }
 
-    public void generate(String pkg, String name, DFA dfa, Map<State, Node> finalStates, PrintWriter ow, Function<Set<Object>, String> prioritizer, TypeMirror factoryType) {
+    public <T> void generate(String pkg, String name, DFA dfa, Map<State, T> finalStates, PrintWriter ow, Function<Set<T>, String> prioritizer, TypeMirror factoryType) {
         try(PrintWriter w = ow) {
             Map<StateSet, Integer> states = new HashMap<>();
             w.println("package " + pkg + ";");
@@ -91,7 +89,7 @@ public class RegularGenerator {
                         w.println(pref + "\t\t\t\t\tif(Lexer.matchesGroup('" + atom + "', symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
                         consumer.accept(nextSet);
                     });
-                    Set<Object> results = item.getStates().stream().filter(finalStates::containsKey).map(finalStates::get).collect(toSet());
+                    Set<T> results = item.getStates().stream().filter(finalStates::containsKey).map(finalStates::get).collect(toSet());
                     if (!isError(item.getDefaultState())) {
                         w.println(pref + "\t\t\t\t\tif(symbol < 0) throw new IllegalStateException(\"\");");
                         w.println(pref + "\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");

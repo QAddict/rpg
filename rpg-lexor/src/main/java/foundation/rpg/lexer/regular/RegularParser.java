@@ -29,10 +29,8 @@
 
 package foundation.rpg.lexer.regular;
 
-import foundation.rpg.lexer.regular.ast.Chain;
-import foundation.rpg.lexer.regular.ast.Char;
-import foundation.rpg.lexer.regular.ast.Node;
-import foundation.rpg.lexer.regular.ast.Pattern;
+import foundation.rpg.gnfa.GNFA;
+import foundation.rpg.gnfa.Thompson;
 import foundation.rpg.parser.Input;
 import foundation.rpg.parser.ParseErrorException;
 import foundation.rpg.parser.Parser;
@@ -41,18 +39,18 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import static foundation.rpg.parser.TokenInput.tokenInput;
-import static java.util.stream.Collectors.toList;
 
-public class RegularParser extends Parser<Pattern, State> {
+public class RegularParser extends Parser<GNFA, State> {
 
+    private static final Thompson thompson = new Thompson();
     private static final RegularLexer lexer = new RegularLexer();
-    private static final RegularExpressionFactory factory = new RegularExpressionFactory();
+    private static final RegularGNFAFactory factory = new RegularGNFAFactory(thompson);
 
     public RegularParser() {
         super(new State1(factory));
     }
 
-    public Node parsePattern(String pattern) {
+    public GNFA parsePattern(String pattern) {
         try {
             return parse(tokenInput(new Input(pattern, new StringReader(pattern)), lexer));
         } catch (IOException | ParseErrorException e) {
@@ -60,8 +58,8 @@ public class RegularParser extends Parser<Pattern, State> {
         }
     }
 
-    public Node parseText(String text) {
-        return new Chain(text.chars().mapToObj(Char::new).collect(toList()));
+    public GNFA parseText(String text) {
+        return thompson.string(text);
     }
 
 }

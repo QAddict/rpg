@@ -60,35 +60,32 @@ public class GeneratedLexer implements Lexer<State> {
 					if(symbol == '*') { state = 11; break; }
 					throw new IllegalStateException("");
 				case 9:
-					if(Lexer.matchesGroup('s', symbol)) { state = 12; break; }
+					if(Lexer.matchesGroup('s', symbol)) { state = 9; break; }
 					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
 				case 10:
-					if(Lexer.matchesGroup('a', symbol)) { state = 13; break; }
+					if(Lexer.matchesGroup('a', symbol)) { state = 12; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 				case 11:
-					if(symbol == '*') { state = 14; break; }
+					if(symbol == '*') { state = 13; break; }
 					if(symbol < 0) throw new IllegalStateException("");
-					state = 15; break;
+					state = 14; break;
 				case 12:
-					if(Lexer.matchesGroup('s', symbol)) { state = 12; break; }
-					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
-				case 13:
-					if(Lexer.matchesGroup('a', symbol)) { state = 13; break; }
+					if(Lexer.matchesGroup('a', symbol)) { state = 12; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
+				case 13:
+					if(symbol == '/') { state = 15; break; }
+					if(symbol < 0) throw new IllegalStateException("");
+					state = 16; break;
 				case 14:
-					if(symbol == '/') { state = 16; break; }
+					if(symbol == '*') { state = 13; break; }
 					if(symbol < 0) throw new IllegalStateException("");
-					state = 17; break;
+					state = 14; break;
 				case 15:
-					if(symbol == '*') { state = 14; break; }
-					if(symbol < 0) throw new IllegalStateException("");
-					state = 15; break;
-				case 16:
 					return visitor -> visitor.visitComment(new foundation.rpg.common.symbols.Comment(builder.build()));
-				case 17:
-					if(symbol == '*') { state = 14; break; }
+				case 16:
+					if(symbol == '*') { state = 13; break; }
 					if(symbol < 0) throw new IllegalStateException("");
-					state = 15; break;
+					state = 14; break;
 			}
 		}
 	}

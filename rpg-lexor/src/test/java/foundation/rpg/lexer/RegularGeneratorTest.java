@@ -29,14 +29,13 @@
 
 package foundation.rpg.lexer;
 
+import foundation.rpg.gnfa.Thompson;
 import foundation.rpg.lexer.regular.RegularGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
 import foundation.rpg.lexer.regular.RegularTypes;
-import foundation.rpg.lexer.regular.ast.Node;
 import foundation.rpg.dfa.DFA;
 import foundation.rpg.dfa.GNFATransformer;
 import foundation.rpg.gnfa.GNFA;
-import foundation.rpg.lexer.regular.ThompsonVisitor;
 import org.testng.annotations.Test;
 
 import java.io.PrintWriter;
@@ -44,6 +43,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
 import static java.util.Collections.max;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toMap;
@@ -55,20 +55,20 @@ public class RegularGeneratorTest {
 
     @Test
     public void testGnfaFrom() {
-        List<Node> nodes = asList(
+        List<GNFA> nodes = asList(
                 parser.parseText("else"),
                 parser.parseText("extends"),
                 parser.parsePattern("\\w\\a*"),
                 parser.parsePattern("'([^'\\\\]|\\\\['\\\\nrt])*'")
         );
         Map<Object, Integer> priorities = IntStream.range(0, nodes.size()).boxed().collect(toMap(nodes::get, i -> nodes.size() - i));
-        ThompsonVisitor thompsonVisitor = new ThompsonVisitor();
-        GNFA gnfa = thompsonVisitor.visit(nodes);
+        Thompson thompson = new Thompson();
+        GNFA gnfa = thompson.alternation(nodes.stream());
         System.out.println(gnfa);
         DFA dfa = new GNFATransformer(new RegularTypes()).transform(gnfa);
         System.out.println(dfa);
         Comparator<Object> comparator = comparingInt(priorities::get);
-        generator.generate("pkg", "MyLexer", dfa, thompsonVisitor.getFinalStates(), new PrintWriter(System.out), set -> max(set, comparator).toString(), null);
+        generator.generate("pkg", "MyLexer", dfa, emptyMap(), new PrintWriter(System.out), set -> max(set, comparator).toString(), null);
     }
 
 }
