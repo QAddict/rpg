@@ -110,17 +110,17 @@ import java.util.List;
 import static foundation.rpg.common.AstUtils.addTo;
 import static foundation.rpg.common.AstUtils.list;
 
-public class AstFactory implements WhiteSpaceRules, ListRules {
+public class AstFactory {
 
     @StartSymbol
-    static Program         is  (List<Statement> s, End e)            { return new Program(s); }
-    static List<Statement> is  ()                                    { return list(); }
-    static List<Statement> is  (List<Statement> l, Statement s)      { return addTo(l, s); }
-    static Statement       is  (Expression e, Dot d)                 { return new ExpressionStatement(e); }
-    static @Additional Expression is (@Atomic Expression e) { return e; }
-    static Expression      is  (Expression l, Plus p, Expression r)  { return new BinaryExpression(l, r); }
-    static Expression      is  (Identifier i)                        { return i; }
-    static Expression      is  (LPar l, Expression e, RPar r)        { return e; }
+    Program              is (List<Statement> s, End e)            { return new Program(s); }
+    List<Statement>      is ()                                    { return list(); }
+    List<Statement>      is (List<Statement> l, Statement s)      { return addTo(l, s); }
+    Statement            is (Expression e, Dot d)                 { return new ExpressionStatement(e); }
+    @Additive Expression is (@Atomic Expression e)                { return e; }
+    Expression           is (Expression l, Plus p, Expression r)  { return new BinaryExpression(l, r); }
+    Expression           is (Identifier i)                        { return i; }
+    Expression           is (LPar l, Expression e, RPar r)        { return e; }
 
     static void ignore(WhiteSpace w) {}
     static void ignore(Comment c) {}
