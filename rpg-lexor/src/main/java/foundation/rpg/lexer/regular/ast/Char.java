@@ -72,4 +72,9 @@ public class Char implements Node, Item {
     public Stream<Character> getChars() {
         return Stream.of(value);
     }
+
+    public char getValue() {
+        return value;
+    }
+
 }

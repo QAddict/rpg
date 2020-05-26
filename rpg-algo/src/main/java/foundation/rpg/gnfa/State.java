@@ -29,20 +29,70 @@
 
 package foundation.rpg.gnfa;
 
-import java.util.ArrayList;
-import java.util.List;
+import foundation.rpg.util.MapOfSets;
 
-public class State {
+import java.util.Set;
 
-    private final List<Transition> transitions = new ArrayList<>();
+import static java.util.Collections.singleton;
 
-    public void add(Object input, State end) {
-        transitions.add(new Transition(input, end));
+public final class State {
+
+    public static final State ERROR = new State();
+
+    private final String name;
+    private final MapOfSets<Character, State> transitions = new MapOfSets<>();
+    private final MapOfSets<Character, State> groups = new MapOfSets<>();
+    private final State defaultState;
+
+    private State(String name, State defaultState) {
+        this.name = name;
+        this.defaultState = defaultState;
     }
 
-    public List<Transition> getTransitions() {
+    private State() {
+        this.defaultState = this;
+        this.name = "ERROR";
+    }
+
+    public static State state(String name) {
+        return new State(name, ERROR);
+    }
+
+    public static State state(String name, State defaultState) {
+        return new State(name, defaultState);
+    }
+
+    public void add(Character character, State next) {
+        transitions.add(character, next);
+    }
+
+    public void addGroup(Character character, State next) {
+        groups.add(character, next);
+    }
+
+    public MapOfSets<Character, State> getTransitions() {
         return transitions;
     }
 
+    public MapOfSets<Character, State> getGroups() {
+        return groups;
+    }
+
+    public State getDefaultState() {
+        return defaultState;
+    }
+
+    public Set<State> get(Character character) {
+        return transitions.getOrDefault(character, singleton(defaultState));
+    }
+
+    public Set<State> getGroup(Character character) {
+        return groups.getOrDefault(character, singleton(defaultState));
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "/" + name;
+    }
 
 }

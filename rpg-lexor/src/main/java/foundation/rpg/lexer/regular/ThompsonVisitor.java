@@ -32,7 +32,6 @@ package foundation.rpg.lexer.regular;
 import foundation.rpg.gnfa.State;
 import foundation.rpg.gnfa.Thompson;
 import foundation.rpg.gnfa.GNFA;
-import foundation.rpg.lexer.regular.Visitor;
 import foundation.rpg.lexer.regular.ast.*;
 
 import java.util.HashMap;
@@ -48,22 +47,22 @@ public class ThompsonVisitor implements Visitor<GNFA> {
 
     @Override
     public GNFA visit(Char character) {
-        return thompson.transition(character);
+        return thompson.transition(character.getValue());
     }
 
     @Override
     public GNFA visit(Group group) {
-        return thompson.transition(group);
+        return thompson.group(group.getName());
     }
 
     @Override
     public GNFA visit(Range range) {
-        return thompson.transitions(rangeClosed(range.getStart(), range.getEnd()).mapToObj(Char::new));
+        return thompson.transitions(rangeClosed(range.getStart(), range.getEnd()).mapToObj(Character.class::cast));
     }
 
     @Override
     public GNFA visit(Inversion inversion) {
-        return thompson.transition(inversion);
+        return thompson.inversions(inversion.getCharClass().getItems().stream().flatMap(Item::getChars));
     }
 
     @Override
@@ -88,7 +87,7 @@ public class ThompsonVisitor implements Visitor<GNFA> {
 
     @Override
     public GNFA visit(CharClass charClass) {
-        return thompson.transitions(charClass.getItems().stream().flatMap(Item::getChars).map(Char::new));
+        return thompson.transitions(charClass.getItems().stream().flatMap(Item::getChars).map(Character.class::cast));
     }
 
     public GNFA visit(List<Node> patterns) {

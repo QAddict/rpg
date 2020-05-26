@@ -36,18 +36,23 @@ import java.util.*;
 
 public class StateSet {
 
-    private final Set<State> states = new LinkedHashSet<>();
+    private static final StateSet ERROR = new StateSet(Collections.singleton(State.ERROR));
+    private final Set<State> states;
     private final Map<Object, StateSet> charTransitions = new LinkedHashMap<>();
     private final Map<Object, StateSet> groupTransitions = new LinkedHashMap<>();
-    private final Set<Object> inversions = new LinkedHashSet<>();
-    private StateSet defaultState;
+    private StateSet defaultState = ERROR;
+
+    public StateSet(Set<State> states) {
+        this.states = states;
+    }
+
+    public StateSet setDefaultState(StateSet defaultState) {
+        this.defaultState = defaultState;
+        return this;
+    }
 
     public void add(State state) {
         states.add(state);
-    }
-
-    public void addAll(StateSet state) {
-        states.addAll(state.states);
     }
 
     public Set<State> getStates() {
@@ -56,14 +61,6 @@ public class StateSet {
 
     public StateSet getDefaultState() {
         return defaultState;
-    }
-
-    public void setDefaultState(StateSet defaultState) {
-        this.defaultState = defaultState;
-    }
-
-    public void addFailOn(Object c) {
-        inversions.add(c);
     }
 
     public void setCharTransition(Object a, StateSet set) {
@@ -82,10 +79,6 @@ public class StateSet {
         return groupTransitions;
     }
 
-    public Set<Object> getInversions() {
-        return inversions;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,5 +90,9 @@ public class StateSet {
     @Override
     public int hashCode() {
         return Objects.hash(states);
+    }
+
+    public static boolean isError(StateSet stateSet) {
+        return ERROR.equals(stateSet);
     }
 }

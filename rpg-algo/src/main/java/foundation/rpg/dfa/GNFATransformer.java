@@ -32,13 +32,14 @@ package foundation.rpg.dfa;
 import foundation.rpg.gnfa.GNFA;
 import foundation.rpg.gnfa.State;
 import foundation.rpg.util.Bfs;
+import foundation.rpg.util.MapOfSets;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 import static foundation.rpg.gnfa.Thompson.epsilon;
+import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.*;
 
 public class GNFATransformer {
 
@@ -46,64 +47,50 @@ public class GNFATransformer {
         this.types = types;
     }
 
+    @FunctionalInterface
     public interface Types {
-        boolean isInversion(Object input);
-        boolean isGroup(Object input);
-        boolean isInGroup(Object group, Object input);
+        boolean isInGroup(Character group, Character input);
     }
 
     private final Types types;
 
     public DFA transform(GNFA gnfa) {
-        StateSet stateSet = new StateSet();
-        State start = gnfa.getStart();
-        stateSet.add(start);
-        e(stateSet);
-        Map<StateSet, StateSet> cache = new LinkedHashMap<>();
+        Map<Set<State>, StateSet> cache = new LinkedHashMap<>();
+        StateSet stateSet = stateSet(new LinkedHashSet<>(singleton(gnfa.getStart())), cache, s -> {});
         Bfs.withItem(stateSet, (set, queue) -> {
-            Map<Object, StateSet> trans = new LinkedHashMap<>();
-            Map<Object, StateSet> groups = new LinkedHashMap<>();
-            Set<Object> inv = new LinkedHashSet<>();
-            StateSet defaultState = new StateSet();
-            set.getStates().stream().flatMap(s -> s.getTransitions().stream()).filter(t -> t.getInput() != epsilon)
-                    .forEach(t -> {
-                        if(types.isInversion(t.getInput())) {
-                            defaultState.add(t.getNext());
-                            set.addFailOn(t.getInput());
-                        } else {
-                            (types.isGroup(t.getInput()) ? groups : trans).computeIfAbsent(t.getInput(), k -> new StateSet()).add(t.getNext());
-                        }
-                    });
-            if(!defaultState.getStates().isEmpty()) {
-                e(defaultState);
-                queue.accept(defaultState);
-                set.setDefaultState(cache.computeIfAbsent(defaultState, k -> k));
-            }
+            Set<State> states = set.getStates();
+            set.setDefaultState(stateSet(states.stream().map(State::getDefaultState).collect(toSet()), cache, queue));
+            MapOfSets<Character, State> groups = new MapOfSets<>();
+            MapOfSets<Character, State> trans = new MapOfSets<>();
+            Set<Character> charKeys = states.stream().flatMap(s -> s.getTransitions().keys().stream().filter(k -> k != epsilon)).collect(toSet());
+            Set<Character> groupKeys = states.stream().flatMap(s -> s.getGroups().keys().stream().filter(k -> k != epsilon)).collect(toSet());
+            states.forEach(s -> charKeys.forEach(k -> trans.add(k, s.get(k))));
+            states.forEach(s -> groupKeys.forEach(k -> groups.add(k, s.getGroup(k))));
             groups.forEach((a, s) -> {
-                e(s);
-                StateSet cachedSet = cache.computeIfAbsent(s, k -> k);
                 trans.forEach((c, as) -> {
                     if(types.isInGroup(a, c)) as.addAll(s);
                 });
-                set.setGroupTransition(a, cachedSet);
-                queue.accept(s);
+                set.setGroupTransition(a, stateSet(s, cache, queue));
             });
-            trans.forEach((a, s) -> {
-                e(s);
-                set.setCharTransition(a, cache.computeIfAbsent(s, k -> k));
-                queue.accept(s);
-            });
+            trans.forEach((a, s) -> set.setCharTransition(a, stateSet(s, cache, queue)));
         });
         return new DFA(stateSet);
     }
 
-    private void e(StateSet stateSet) {
-        Bfs.withCollection(stateSet.getStates(), (state, queue) -> state.getTransitions().forEach(t -> {
-            if(t.getInput() == epsilon) {
-                stateSet.add(t.getNext());
-                queue.accept(t.getNext());
+    private static Set<State> epsilonClosure(Set<State> stateSet) {
+        Bfs.withCollection(stateSet, (state, queue) -> state.getTransitions().forEach((k, n) -> {
+            if(k == epsilon) {
+                stateSet.addAll(n);
+                n.forEach(queue);
             }
         }));
+        return stateSet;
+    }
+
+    public StateSet stateSet(Set<State> states, Map<Set<State>, StateSet> cache, Consumer<StateSet> queue) {
+        StateSet stateSet = cache.computeIfAbsent(epsilonClosure(states), StateSet::new);
+        queue.accept(stateSet);
+        return stateSet;
     }
 
 }

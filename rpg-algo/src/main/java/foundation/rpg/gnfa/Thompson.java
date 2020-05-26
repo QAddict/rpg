@@ -32,25 +32,45 @@ package foundation.rpg.gnfa;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import static foundation.rpg.gnfa.State.state;
+
 public class Thompson {
 
-    public static final Object epsilon = null;
+    public static final Character epsilon = null;
 
     public GNFA empty() {
         return transition(epsilon);
     }
 
-    public GNFA transition(Object input) {
-        State start = new State();
-        State end = new State();
+    public GNFA transition(Character input) {
+        State start = state(input + ">");
+        State end = state("<" + input);
         start.add(input, end);
         return new GNFA(start, end);
     }
 
-    public GNFA transitions(Stream<Object> inputs) {
-        State start = new State();
-        State end = new State();
+    public GNFA group(Character input) {
+        State start = state(input + ":g>");
+        State end = state("<:g" + input);
+        start.addGroup(input, end);
+        return new GNFA(start, end);
+    }
+
+    public GNFA any() {
+        return inversions(Stream.empty());
+    }
+
+    public GNFA transitions(Stream<Character> inputs) {
+        State start = state("[]>");
+        State end = state("<[]");
         inputs.forEach(input -> start.add(input, end));
+        return new GNFA(start, end);
+    }
+
+    public GNFA inversions(Stream<Character> inputs) {
+        State end = state("<[]!");
+        State start = state("![]>", end);
+        inputs.forEach(input -> start.add(input, State.ERROR));
         return new GNFA(start, end);
     }
 
@@ -68,8 +88,8 @@ public class Thompson {
     }
 
     public GNFA alternation(Stream<GNFA> gnfas) {
-        State start = new State();
-        State end = new State();
+        State start = state("(");
+        State end = state(")");
         gnfas.forEach(gnfa -> {
             start.add(epsilon, gnfa.getStart());
             gnfa.getEnd().add(epsilon, end);
@@ -78,8 +98,8 @@ public class Thompson {
     }
 
     public GNFA repetition(GNFA gnfa) {
-        State start = new State();
-        State end = new State();
+        State start = state("rep>");
+        State end = state("<rep");
         start.add(epsilon, end);
         gnfa.getEnd().add(epsilon, gnfa.getStart());
         start.add(epsilon, gnfa.getStart());

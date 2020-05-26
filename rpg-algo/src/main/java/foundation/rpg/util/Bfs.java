@@ -38,7 +38,7 @@ public class Bfs {
 
     @FunctionalInterface
     public interface Iteration<T> {
-        void iterate(T item, Consumer<? super T> consumer);
+        void iterate(T item, Consumer<T> consumer);
     }
 
     public static <T> Set<T> withCollection(Collection<T> input, Iteration<T> iteration) {

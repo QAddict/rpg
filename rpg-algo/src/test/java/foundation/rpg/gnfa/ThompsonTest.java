@@ -29,21 +29,28 @@
 
 package foundation.rpg.gnfa;
 
-public class Transition {
-    private final Object input;
-    private final State next;
+import foundation.rpg.dfa.DFA;
+import foundation.rpg.dfa.GNFATransformer;
+import foundation.rpg.dfa.StateSet;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-    public Transition(Object input, State next) {
-        this.input = input;
-        this.next = next;
-    }
+import java.util.stream.Stream;
 
-    public Object getInput() {
-        return input;
-    }
+import static foundation.rpg.dfa.StateSet.isError;
 
-    public State getNext() {
-        return next;
+public class ThompsonTest {
+    private final Thompson thompson = new Thompson();
+
+    @Test
+    public void testRepeatInversion() {
+        GNFA repetition = thompson.repetition(thompson.inversions(Stream.of('a', 'b')));
+        DFA transform = new GNFATransformer((g, c) -> true).transform(repetition);
+        StateSet defaultState = transform.getStart().getDefaultState();
+        StateSet nextDefaultState = defaultState.getDefaultState();
+        System.out.println(nextDefaultState);
+        Assert.assertFalse(isError(defaultState));
+        Assert.assertFalse(isError(nextDefaultState));
     }
 
 }

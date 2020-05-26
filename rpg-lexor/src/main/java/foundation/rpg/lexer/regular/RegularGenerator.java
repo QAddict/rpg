@@ -43,6 +43,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static foundation.rpg.dfa.StateSet.isError;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -87,11 +88,11 @@ public class RegularGenerator {
             Bfs.withItem(dfa.getStart(), (item, consumer) -> {
                 Consumer<String> r = pref -> {
                     item.getGroupTransitions().forEach((atom, nextSet) -> {
-                        w.println(pref + "\t\t\t\t\tif(Lexer.matchesGroup(\"" + atom.toString().substring(1) + "\", symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                        w.println(pref + "\t\t\t\t\tif(Lexer.matchesGroup('" + atom + "', symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
                         consumer.accept(nextSet);
                     });
                     Set<Object> results = item.getStates().stream().filter(finalStates::containsKey).map(finalStates::get).collect(toSet());
-                    if (nonNull(item.getDefaultState())) {
+                    if (!isError(item.getDefaultState())) {
                         w.println(pref + "\t\t\t\t\tif(symbol < 0) throw new IllegalStateException(\"\");");
                         w.println(pref + "\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
                         consumer.accept(item.getDefaultState());
@@ -103,31 +104,21 @@ public class RegularGenerator {
                     }
                 };
                 w.println("\t\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ":");
-                int cases = item.getCharTransitions().size() + item.getInversions().size();
+                int cases = item.getCharTransitions().size();
                 if (cases > 1) {
                     w.println("\t\t\t\t\tswitch(symbol) {");
                     item.getCharTransitions().forEach((atom, nextSet) -> {
-                        w.println("\t\t\t\t\t\tcase '" + escape(atom) + "': state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break;");
+                        w.println("\t\t\t\t\t\tcase '" + escape(atom) + "': " + stateBranch(nextSet, states));
                         consumer.accept(nextSet);
                     });
-                    List<Character> invs = item.getInversions().stream().flatMap(inversion -> ((Inversion) inversion).getCharClass().getItems().stream()).flatMap(Item::getChars)
-                            .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).collect(toList());
-                    if (!invs.isEmpty()) {
-                        invs.forEach(c -> w.println("\t\t\t\t\t\tcase '" + escape(c) + "':"));
-                        w.println("\t\t\t\t\t\t\tthrow new IllegalStateException(\"\");");
-                    }
                     w.println("\t\t\t\t\t\tdefault:");
                     r.accept("\t\t");
                     w.println("\t\t\t\t\t}");
                     w.println("\t\t\t\t\tbreak;");
                 } else {
                     item.getCharTransitions().forEach((atom, nextSet) -> {
-                        w.println("\t\t\t\t\tif(symbol == '" + escape(atom) + "') { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
+                        w.println("\t\t\t\t\tif(symbol == '" + escape(atom) + "') { " + stateBranch(nextSet, states) + " }");
                         consumer.accept(nextSet);
-                    });
-                    item.getInversions().stream().flatMap(inversion -> ((Inversion) inversion).getCharClass().getItems().stream()).flatMap(Item::getChars)
-                            .filter(c -> !item.getCharTransitions().containsKey(new Char(c))).forEach(c -> {
-                        w.println("\t\t\t\t\tif(symbol == '" + escape(c) + "') throw new IllegalStateException(\"\");");
                     });
                     r.accept("");
                 }
@@ -139,4 +130,9 @@ public class RegularGenerator {
             w.flush();
         }
     }
+
+    private String stateBranch(StateSet stateSet, Map<StateSet, Integer> states) {
+        return isError(stateSet) ? "throw new IllegalStateException(\"\");" : "state = " + states.computeIfAbsent(stateSet, k -> states.size()) + "; break;";
+    }
+
 }

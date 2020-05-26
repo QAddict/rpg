@@ -45,8 +45,8 @@
     <modules>
         <module>rpg</module>
         <module>rpg-algo</module>
-        <module>rpg-apt</module>
         <module>rpg-apt-parser-only</module>
+        <module>rpg-apt</module>
         <module>rpg-common</module>
         <module>rpg-lexor</module>
         <module>rpg-sample-language</module>

@@ -34,14 +34,14 @@ import foundation.rpg.lexer.regular.Visitor;
 import java.util.Objects;
 
 public class Group implements Node {
-    private final char g;
+    private final char name;
 
-    public Group(char g) {
-        this.g = g;
+    public Group(char name) {
+        this.name = name;
     }
 
-    public char getG() {
-        return g;
+    public char getName() {
+        return name;
     }
 
     @Override
@@ -54,17 +54,17 @@ public class Group implements Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return g == group.g;
+        return name == group.name;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(g);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
-        return "\\" + g;
+        return "\\" + name;
     }
 
 }
