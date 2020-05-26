@@ -113,14 +113,14 @@ import static foundation.rpg.common.AstUtils.list;
 public class AstFactory {
 
     @StartSymbol
-    Program              is (List<Statement> s, End e)            { return new Program(s); }
-    List<Statement>      is ()                                    { return list(); }
-    List<Statement>      is (List<Statement> l, Statement s)      { return addTo(l, s); }
-    Statement            is (Expression e, Dot d)                 { return new ExpressionStatement(e); }
-    @Additive Expression is (@Atomic Expression e)                { return e; }
-    Expression           is (Expression l, Plus p, Expression r)  { return new BinaryExpression(l, r); }
-    Expression           is (Identifier i)                        { return i; }
-    Expression           is (LPar l, Expression e, RPar r)        { return e; }
+    Program              is (List<Statement> s, End e)                             { return new Program(s); }
+    List<Statement>      is ()                                                     { return list(); }
+    List<Statement>      is (List<Statement> l, Statement s)                       { return addTo(l, s); }
+    Statement            is (@Additive Expression e, Dot d)                        { return new ExpressionStatement(e); }
+    @Additive Expression is (@Atomic Expression e)                                 { return e; }
+    @Additive Expression is (@Additive Expression l, Plus p, @Atomic Expression r) { return new BinaryExpression(l, r); }
+    @Atomic Expression   is (Identifier i)                                         { return i; }
+    @Atomic Expression   is (LPar l, Expression e, RPar r)                         { return e; }
 
     static void ignore(WhiteSpace w) {}
     static void ignore(Comment c) {}
