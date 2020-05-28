@@ -27,36 +27,23 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.generator;
 
-import foundation.rpg.common.symbols.*;
-import foundation.rpg.parser.*;
-import foundation.rpg.parser.Element;
+import foundation.rpg.generator.context.ClassToGrammarContext;
 
+import javax.annotation.processing.Filer;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
 
-public class RegularLexer implements Lexer<State> {
+public interface EnvironmentGenerator {
+    void accept(ExecutableElement t);
 
-    @Override
-    public Element<State> next(Input input) throws IOException {
-        int i = input.lookahead();
-        TokenBuilder mark = new TokenBuilder(input);
-        input.move();
-        switch (i) {
-            case -1: return new ElementEnd(new End(mark.build()));
-            case '\\': return new ElementBs(new Bs(mark.build()));
-            case '|': return new ElementPipe(new Pipe(mark.build()));
-            case '*': return new ElementStar(new Star(mark.build()));
-            case '+': return new ElementPlus(new Plus(mark.build()));
-            case '^': return new ElementUp(new Up(mark.build()));
-            case '-': return new ElementMinus(new Minus(mark.build()));
-            case '(': return new ElementLPar(new LPar(mark.build()));
-            case ')': return new ElementRPar(new RPar(mark.build()));
-            case '[': return new ElementLBr(new LBr(mark.build()));
-            case ']': return new ElementRBr(new RBr(mark.build()));
-            case '.': return new ElementDot(new Dot(mark.build()));
-            default: return new ElementCharacter((char) i);
-        }
-    }
+    void accept(VariableElement e);
+
+    void generate(ClassToGrammarContext context, Filer filer) throws IOException;
+
+    void accept(TypeMirror typeMirror);
 
 }

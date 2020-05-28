@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.parser.generator;
+package foundation.rpg.generator;
 
 import java.io.BufferedReader;
 import java.io.IOException;

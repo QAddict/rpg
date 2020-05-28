@@ -27,23 +27,59 @@
  *
  */
 
-package foundation.rpg.parser.generator;
+package foundation.rpg.generator.context;
 
-import foundation.rpg.parser.context.ClassToGrammarContext;
-
-import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
-import java.io.IOException;
+import java.util.Objects;
 
-public interface EnvironmentGenerator {
-    void accept(ExecutableElement t);
+public final class Entry {
 
-    void accept(VariableElement e);
+    private final Element element;
+    private final TypeMirror type;
 
-    void generate(ClassToGrammarContext context, Filer filer) throws IOException;
+    public Entry(Element element, TypeMirror type) {
+        this.element = element;
+        this.type = type;
+    }
 
-    void accept(TypeMirror typeMirror);
+    public static Entry entry(ExecutableElement method) {
+        return new Entry(method, method.getReturnType());
+    }
 
+    public static Entry entry(VariableElement parameter) {
+        return entry(parameter, parameter.asType());
+    }
+
+    public static Entry entry(Element parameter, TypeMirror type) {
+        return new Entry(parameter, type);
+    }
+
+    public static Entry typeEntry(Element type) {
+        return new Entry(type, type.asType());
+    }
+
+    public Element getElement() {
+        return element;
+    }
+
+    public TypeMirror getType() {
+        return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entry entry = (Entry) o;
+        return Objects.equals(element, entry.element) &&
+                Objects.equals(type, entry.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(element, type);
+    }
 }

@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.parser.generator;
+package foundation.rpg.generator;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.*;

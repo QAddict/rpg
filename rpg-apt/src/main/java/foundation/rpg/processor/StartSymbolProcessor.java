@@ -29,17 +29,60 @@
 
 package foundation.rpg.processor;
 
-import foundation.rpg.parser.generator.EnvironmentGenerator;
-import foundation.rpg.parser.processor.StartSymbolParserOnlyProcessor;
+import foundation.rpg.StartSymbol;
+import foundation.rpg.lr1.LrParserAutomata;
+import foundation.rpg.lr1.LrParserConstructor;
+import foundation.rpg.generator.context.ClassToGrammarContext;
+import foundation.rpg.generator.CodeGenerator;
+import foundation.rpg.generator.EnvironmentGenerator;
 
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import java.io.IOException;
+import java.util.Set;
 import java.util.function.Consumer;
 
+import static java.lang.System.currentTimeMillis;
+import static javax.tools.Diagnostic.Kind.ERROR;
+
 @SupportedAnnotationTypes("foundation.rpg.StartSymbol")
-public class StartSymbolProcessor extends StartSymbolParserOnlyProcessor implements Consumer<ExecutableElement> {
+public class StartSymbolProcessor extends AbstractProcessor implements Consumer<ExecutableElement> {
+
     @Override
-    public EnvironmentGenerator environmentGenerator() {
-        return new ClassToTokenContext();
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        roundEnv.getElementsAnnotatedWith(StartSymbol.class).stream().map(ExecutableElement.class::cast).forEach(this);
+        return true;
     }
+
+    @Override
+    public void accept(ExecutableElement element) {
+        try {
+            long start = currentTimeMillis();
+            EnvironmentGenerator environmentGenerator = new ClassToTokenContext();
+            ClassToGrammarContext context = new ClassToGrammarContext(element, processingEnv.getElementUtils(), environmentGenerator);
+            long gc = currentTimeMillis();
+            System.out.println("Grammar generated from class: " + element.getEnclosingElement() + " in " + (gc - start) + "ms");
+            System.out.println(context.getGrammar());
+            System.out.println();
+            System.out.println();
+            LrParserAutomata parser = LrParserConstructor.generateParser(context.getGrammar());
+            long gp = currentTimeMillis();
+            System.out.println("Parser description generated from grammar in " + (gp - gc) + "ms:\n\n");
+            System.out.println(parser);
+            System.out.println();
+            System.out.println();
+            new CodeGenerator(processingEnv.getFiler(), context).generateSources(parser);
+            long gs = currentTimeMillis();
+            System.out.println("Source code generated in " + (gs - gp) + "ms");
+            environmentGenerator.generate(context, processingEnv.getFiler());
+            long gl = currentTimeMillis();
+            System.out.println("Env code generated in " + (gl - gs) + "ms");
+        } catch (RuntimeException | Error | IOException e) {
+            processingEnv.getMessager().printMessage(ERROR, e.toString(), element);
+        }
+    }
+
 }

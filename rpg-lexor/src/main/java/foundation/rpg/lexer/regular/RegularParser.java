@@ -31,35 +31,88 @@ package foundation.rpg.lexer.regular;
 
 import foundation.rpg.gnfa.GNFA;
 import foundation.rpg.gnfa.Thompson;
-import foundation.rpg.parser.Input;
-import foundation.rpg.parser.ParseErrorException;
-import foundation.rpg.parser.Parser;
 
-import java.io.IOException;
-import java.io.StringReader;
+import java.util.stream.Stream;
 
-import static foundation.rpg.parser.TokenInput.tokenInput;
+import static java.util.stream.IntStream.range;
+import static java.util.stream.Stream.of;
 
-public class RegularParser extends Parser<GNFA, State> {
+public class RegularParser {
 
-    private static final Thompson thompson = new Thompson();
-    private static final RegularLexer lexer = new RegularLexer();
-    private static final RegularGNFAFactory factory = new RegularGNFAFactory(thompson);
+    private final Thompson thompson = new Thompson();
 
-    public RegularParser() {
-        super(new State1(factory));
-    }
-
-    public GNFA parsePattern(String pattern) {
-        try {
-            return parse(tokenInput(new Input(pattern, new StringReader(pattern)), lexer));
-        } catch (IOException | ParseErrorException e) {
-            throw new IllegalArgumentException("Unable to parse /" + pattern + "/ " + e.getMessage(), e);
-        }
+    public GNFA parsePattern(String string) {
+        return parse(new In(string));
     }
 
     public GNFA parseText(String text) {
         return thompson.string(text);
     }
+
+    GNFA parse(In in) {
+        GNFA left = parseChain(in);
+        return in.testAndConsume('|') ? thompson.alternation(of(left, parse(in))) : left;
+    }
+
+    GNFA parseEsc(In in) {
+        char c = in.consume("Unfinished escape sequence");
+        switch (c) {
+            case '.':
+            case '[':
+            case '(':
+            case ')':
+            case '|':
+            case '\\': return thompson.transition(c);
+            default: return thompson.group(c);
+        }
+    }
+
+    GNFA parseChain(In in) {
+        switch (in.get()) {
+            case -1:
+            case '|':
+            case ')': return thompson.empty();
+            default: return thompson.chain(of(parseFactor(parseInput(in), in), parseChain(in)));
+        }
+    }
+
+    GNFA parseFactor(GNFA factor, In in) {
+        if(in.testAndConsume('*'))
+            return thompson.repetition(factor);
+        if(in.testAndConsume('+'))
+            return thompson.chain(of(factor, thompson.repetition(factor)));
+        return factor;
+    }
+
+    GNFA parseInput(In in) {
+        int c = in.consume();
+        switch (c) {
+            case -1: return thompson.empty();
+            case '\\': return parseEsc(in);
+            case '.': return thompson.any();
+            case '[': return parseChars(in);
+            case '(':
+                GNFA sub = parse(in);
+                if(!in.testAndConsume(')')) throw new IllegalStateException("Missing )");
+                return sub;
+            default: return thompson.transition((char) c);
+        }
+    }
+
+    GNFA parseChars(In in) {
+        return in.testAndConsume('^') ? thompson.inversions(parseClass(in)) : thompson.transitions(parseClass(in));
+    }
+
+    Stream<Character> parseClass(In in) {
+        Stream<Character> left = parseCharOrRange(in);
+        return in.testAndConsume(']') ? left : Stream.concat(left, parseClass(in));
+    }
+
+    Stream<Character> parseCharOrRange(In in) {
+        in.testAndConsume('\\');
+        char c = in.consume("Unterminated character class");
+        return in.testAndConsume('-') ? range(c, in.consume("Unterminated character range")).mapToObj(i -> (char) i) : of(c);
+    }
+
 
 }

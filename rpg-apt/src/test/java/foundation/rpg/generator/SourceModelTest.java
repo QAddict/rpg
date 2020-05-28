@@ -29,7 +29,6 @@
 
 package foundation.rpg.generator;
 
-import foundation.rpg.parser.generator.SourceModel;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

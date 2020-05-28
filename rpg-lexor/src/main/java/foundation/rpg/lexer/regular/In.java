@@ -27,59 +27,39 @@
  *
  */
 
-package foundation.rpg.parser.context;
+package foundation.rpg.lexer.regular;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeMirror;
-import java.util.Objects;
+public final class In {
+    private final String string;
+    private int pos = 0;
 
-public final class Entry {
-
-    private final Element element;
-    private final TypeMirror type;
-
-    public Entry(Element element, TypeMirror type) {
-        this.element = element;
-        this.type = type;
+    public In(String string) {
+        this.string = string;
     }
 
-    public static Entry entry(ExecutableElement method) {
-        return new Entry(method, method.getReturnType());
+    int get() {
+        return pos < string.length() ? string.charAt(pos) : -1;
     }
 
-    public static Entry entry(VariableElement parameter) {
-        return entry(parameter, parameter.asType());
+    int consume() {
+        return pos < string.length() ? string.charAt(pos++) : -1;
     }
 
-    public static Entry entry(Element parameter, TypeMirror type) {
-        return new Entry(parameter, type);
+    char consume(String errorMessage) {
+        if(pos < string.length()) return string.charAt(pos++);
+        throw new IllegalStateException(errorMessage);
     }
 
-    public static Entry typeEntry(Element type) {
-        return new Entry(type, type.asType());
-    }
-
-    public Element getElement() {
-        return element;
-    }
-
-    public TypeMirror getType() {
-        return type;
+    boolean testAndConsume(char expected) {
+        if(pos < string.length() && string.charAt(pos) == expected) {
+            pos++;
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Entry entry = (Entry) o;
-        return Objects.equals(element, entry.element) &&
-                Objects.equals(type, entry.type);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(element, type);
+    public String toString() {
+        return "" + (pos < string.length() ? string.charAt(pos) : "");
     }
 }

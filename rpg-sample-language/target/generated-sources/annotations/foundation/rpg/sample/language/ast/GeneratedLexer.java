@@ -57,7 +57,7 @@ public class GeneratedLexer implements Lexer<State> {
 				case 7:
 					return visitor -> visitor.visitGt(new foundation.rpg.common.symbols.Gt(builder.build()));
 				case 8:
-					if(symbol == '*') { state = 11; break; }
+					if(Lexer.matchesGroup('*', symbol)) { state = 11; break; }
 					throw new IllegalStateException("");
 				case 9:
 					if(Lexer.matchesGroup('s', symbol)) { state = 9; break; }
@@ -66,26 +66,80 @@ public class GeneratedLexer implements Lexer<State> {
 					if(Lexer.matchesGroup('a', symbol)) { state = 12; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 				case 11:
-					if(symbol == '*') { state = 13; break; }
-					if(symbol < 0) throw new IllegalStateException("");
-					state = 14; break;
+					switch(symbol) {
+						case '*': throw new IllegalStateException("");
+						case '/': state = 13; break;
+						default:
+							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
 				case 12:
 					if(Lexer.matchesGroup('a', symbol)) { state = 12; break; }
 					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
-				case 13:
-					if(symbol == '/') { state = 15; break; }
-					if(symbol < 0) throw new IllegalStateException("");
-					state = 16; break;
-				case 14:
-					if(symbol == '*') { state = 13; break; }
-					if(symbol < 0) throw new IllegalStateException("");
-					state = 14; break;
-				case 15:
-					return visitor -> visitor.visitComment(new foundation.rpg.common.symbols.Comment(builder.build()));
 				case 16:
-					if(symbol == '*') { state = 13; break; }
-					if(symbol < 0) throw new IllegalStateException("");
-					state = 14; break;
+					throw new IllegalStateException("");
+				case 13:
+					switch(symbol) {
+						case '*': throw new IllegalStateException("");
+						case '/': state = 13; break;
+						default:
+							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
+				case 14:
+					switch(symbol) {
+						case '*': state = 17; break;
+						case '/': state = 13; break;
+						default:
+							if(Lexer.matchesGroup('*', symbol)) { state = 18; break; }
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 19; break;
+					}
+					break;
+				case 15:
+					switch(symbol) {
+						case '*': throw new IllegalStateException("");
+						case '/': state = 13; break;
+						default:
+							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
+				case 17:
+					switch(symbol) {
+						case '*': throw new IllegalStateException("");
+						case '/': state = 13; break;
+						default:
+							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
+				case 18:
+					switch(symbol) {
+						case '*': state = 17; break;
+						case '/': state = 13; break;
+						default:
+							if(Lexer.matchesGroup('*', symbol)) { state = 18; break; }
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 19; break;
+					}
+					break;
+				case 19:
+					switch(symbol) {
+						case '*': throw new IllegalStateException("");
+						case '/': state = 13; break;
+						default:
+							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
+							if(symbol < 0) throw new IllegalStateException("");
+							state = 15; break;
+					}
+					break;
 			}
 		}
 	}

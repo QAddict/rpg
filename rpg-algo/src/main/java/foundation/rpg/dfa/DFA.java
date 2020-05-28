@@ -29,6 +29,8 @@
 
 package foundation.rpg.dfa;
 
+import foundation.rpg.util.Bfs;
+
 public class DFA {
     private final StateSet start;
 
@@ -38,5 +40,24 @@ public class DFA {
 
     public StateSet getStart() {
         return start;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        Bfs.withItem(start, (item, queue) -> {
+            builder.append(item.hashCode()).append(": {\n");
+            item.getCharTransitions().forEach((c, s) -> {
+                builder.append("\t'").append(c).append("' -> ").append(s.hashCode()).append("\n");
+                queue.accept(s);
+            });
+            item.getGroupTransitions().forEach((c, s) -> {
+                builder.append("\t\\").append(c).append(" -> ").append(s.hashCode()).append("\n");
+                queue.accept(s);
+            });
+            builder.append("\totherwise -> ").append(item.getDefaultState().hashCode()).append("\n}\n");
+            queue.accept(item.getDefaultState());
+        });
+        return builder.toString();
     }
 }

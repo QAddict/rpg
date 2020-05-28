@@ -27,15 +27,15 @@
  *
  */
 
-package foundation.rpg.parser.context;
+package foundation.rpg.generator.context;
 
 import foundation.rpg.*;
+import foundation.rpg.generator.EnvironmentGenerator;
+import foundation.rpg.generator.TypeUtils;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
 import foundation.rpg.parser.Token;
-import foundation.rpg.parser.generator.EnvironmentGenerator;
-import foundation.rpg.parser.generator.TypeUtils;
 import foundation.rpg.util.Bfs;
 
 import javax.lang.model.element.*;
@@ -49,8 +49,8 @@ import java.util.stream.Stream;
 
 import static foundation.rpg.grammar.Rule.rule;
 import static foundation.rpg.grammar.Symbol.symbol;
-import static foundation.rpg.parser.context.Entry.entry;
-import static foundation.rpg.parser.context.Entry.typeEntry;
+import static foundation.rpg.generator.context.Entry.entry;
+import static foundation.rpg.generator.context.Entry.typeEntry;
 import static java.util.Collections.*;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;

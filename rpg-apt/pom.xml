@@ -41,11 +41,6 @@
     <dependencies>
         <dependency>
             <groupId>foundation.fluent.api</groupId>
-            <artifactId>rpg-apt-parser-only</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>foundation.fluent.api</groupId>
             <artifactId>rpg-lexor</artifactId>
             <version>${project.version}</version>
         </dependency>

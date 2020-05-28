@@ -29,6 +29,7 @@
 
 package foundation.rpg.lexer;
 
+import foundation.rpg.common.Patterns;
 import foundation.rpg.gnfa.Thompson;
 import foundation.rpg.lexer.regular.RegularGenerator;
 import foundation.rpg.lexer.regular.RegularParser;
@@ -59,7 +60,7 @@ public class RegularGeneratorTest {
                 parser.parseText("else"),
                 parser.parseText("extends"),
                 parser.parsePattern("\\w\\a*"),
-                parser.parsePattern("'([^'\\\\]|\\\\['\\\\nrt])*'")
+                parser.parsePattern(Patterns.ANY_QUOTED_STRING)
         );
         Map<Object, Integer> priorities = IntStream.range(0, nodes.size()).boxed().collect(toMap(nodes::get, i -> nodes.size() - i));
         Thompson thompson = new Thompson();

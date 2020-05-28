@@ -30,15 +30,19 @@
 package foundation.rpg.lexer.regular;
 
 import foundation.rpg.common.Patterns;
+import foundation.rpg.dfa.DFA;
+import foundation.rpg.dfa.GNFATransformer;
+import foundation.rpg.gnfa.GNFA;
 import org.testng.annotations.Test;
 
 public class RegularParserTest {
 
     private final RegularParser parser = new RegularParser();
+    private final GNFATransformer transformer = new GNFATransformer(new RegularTypes());
 
     @Test
     public void testParsePattern() {
-        parser.parsePattern(Patterns.ANY_QUOTED_STRING);
+        GNFA gnfa = parser.parsePattern(Patterns.ANY_QUOTED_STRING);
         parser.parsePattern(Patterns.C_COMMENT);
         parser.parsePattern(Patterns.DOUBLE);
         parser.parsePattern(Patterns.INTEGER);
@@ -46,6 +50,8 @@ public class RegularParserTest {
         parser.parsePattern(Patterns.LINE_COMMENT);
         parser.parsePattern(Patterns.UNICODE_IDENTIFIER);
         parser.parseText("");
+        DFA dfa = transformer.transform(gnfa);
+        System.out.println(dfa);
     }
 
     @Test
@@ -53,4 +59,20 @@ public class RegularParserTest {
         parser.parseText("abc");
         parser.parseText("");
     }
+
+    @Test
+    public void testParseAlternation() {
+        GNFA gnfa = parser.parsePattern("a|b");
+        DFA dfa = transformer.transform(gnfa);
+        System.out.println(dfa);
+    }
+
+    @Test
+    public void testParseAlternation2() {
+        GNFA gnfa = parser.parsePattern("c(a|b)");
+        DFA dfa = transformer.transform(gnfa);
+        System.out.println(dfa);
+    }
+
+
 }

@@ -38,7 +38,7 @@ public final class Patterns {
     public static final String QUOTED_STRING = "'([^'\\\\]|\\\\['\\\\rnt])*'";
     public static final String DOUBLE_QUOTED_STRING = "\"([^\"\\\\]|\\\\[\"\\\\rnt])*\"";
     public static final String ANY_QUOTED_STRING = "'([^'\\\\]|\\\\['\\\\rnt])*'|\"([^\"\\\\]|\\\\[\"\\\\rnt])*\"";
-    public static final String C_COMMENT = "/\\*([^*]|\\*[^/])*\\*/";
+    public static final String C_COMMENT = "/\\*([^*]|\\*[^/])*\\**/";
     public static final String LINE_COMMENT = "//[^\r\n][\r\n]";
 
 }
