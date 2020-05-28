@@ -32,9 +32,9 @@ package foundation.rpg.processor;
 import foundation.rpg.StartSymbol;
 import foundation.rpg.lr1.LrParserAutomata;
 import foundation.rpg.lr1.LrParserConstructor;
-import foundation.rpg.generator.context.ClassToGrammarContext;
-import foundation.rpg.generator.CodeGenerator;
-import foundation.rpg.generator.EnvironmentGenerator;
+import foundation.rpg.generator.parser.context.ClassToGrammarContext;
+import foundation.rpg.generator.parser.CodeGenerator;
+import foundation.rpg.generator.parser.EnvironmentGenerator;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

@@ -41,7 +41,12 @@
     <dependencies>
         <dependency>
             <groupId>foundation.fluent.api</groupId>
-            <artifactId>rpg-lexor</artifactId>
+            <artifactId>rpg</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>foundation.fluent.api</groupId>
+            <artifactId>rpg-algo</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

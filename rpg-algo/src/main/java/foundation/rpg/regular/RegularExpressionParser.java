@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.regular;
 
 import foundation.rpg.gnfa.GNFA;
 import foundation.rpg.gnfa.Thompson;
@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 import static java.util.stream.IntStream.range;
 import static java.util.stream.Stream.of;
 
-public class RegularParser {
+public class RegularExpressionParser {
 
     private final Thompson thompson = new Thompson();
 

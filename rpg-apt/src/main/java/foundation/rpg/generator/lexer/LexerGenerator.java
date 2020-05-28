@@ -27,12 +27,10 @@
  *
  */
 
-package foundation.rpg.lexer;
+package foundation.rpg.generator.lexer;
 
 import foundation.rpg.gnfa.State;
 import foundation.rpg.gnfa.Thompson;
-import foundation.rpg.lexer.regular.RegularGenerator;
-import foundation.rpg.lexer.regular.RegularTypes;
 import foundation.rpg.dfa.DFA;
 import foundation.rpg.dfa.GNFATransformer;
 import foundation.rpg.gnfa.GNFA;

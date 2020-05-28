@@ -27,39 +27,31 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.generator.lexer;
 
-public final class In {
-    private final String string;
-    private int pos = 0;
+import foundation.rpg.regular.RegularExpressionParser;
+import org.testng.annotations.Test;
 
-    public In(String string) {
-        this.string = string;
-    }
+import java.io.PrintWriter;
 
-    int get() {
-        return pos < string.length() ? string.charAt(pos) : -1;
-    }
+import static foundation.rpg.generator.lexer.LexerGenerator.*;
+import static java.util.Arrays.asList;
 
-    int consume() {
-        return pos < string.length() ? string.charAt(pos++) : -1;
-    }
+public class LexerGeneratorTest {
 
-    char consume(String errorMessage) {
-        if(pos < string.length()) return string.charAt(pos++);
-        throw new IllegalStateException(errorMessage);
-    }
+    private final RegularExpressionParser parser = new RegularExpressionParser();
 
-    boolean testAndConsume(char expected) {
-        if(pos < string.length() && string.charAt(pos) == expected) {
-            pos++;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return "" + (pos < string.length() ? string.charAt(pos) : "");
+    @Test
+    public void testGenerateLexer() {
+        new LexerGenerator().generateLexer("pkg", "MyLexer", asList(
+                new TokenInfo("TokenTrue", "TokenTrue", parser.parseText("true"), 1),
+                new TokenInfo("TokenFalse", "TokenFalse", parser.parseText("false"), 1),
+                new TokenInfo("TokenThrows", "TokenThrows", parser.parseText("throws"), 1),
+                new TokenInfo("TokenFinal", "TokenFinal", parser.parseText("final"), 1),
+                new TokenInfo("TokenIdentifier", "TokenIdentifier", parser.parsePattern("\\w\\a*"), 0),
+                new TokenInfo("TokenDouble", "TokenDouble", parser.parsePattern("\\d+[.eE]\\d+"), 0),
+                new TokenInfo("TokenInteger", "TokenInteger", parser.parsePattern("\\d+"), 0),
+                new TokenInfo("TokenString", "TokenString", parser.parsePattern("'([^'\\\\]|\\\\[^\\\\nrt])*'"), 0)
+        ), new PrintWriter(System.out), null);
     }
 }

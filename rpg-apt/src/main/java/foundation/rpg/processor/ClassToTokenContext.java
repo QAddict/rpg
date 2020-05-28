@@ -31,11 +31,11 @@ package foundation.rpg.processor;
 
 import foundation.rpg.Match;
 import foundation.rpg.Name;
-import foundation.rpg.lexer.LexerGenerator;
-import foundation.rpg.lexer.regular.RegularParser;
+import foundation.rpg.generator.lexer.LexerGenerator;
+import foundation.rpg.regular.RegularExpressionParser;
 import foundation.rpg.parser.Token;
-import foundation.rpg.generator.context.ClassToGrammarContext;
-import foundation.rpg.generator.EnvironmentGenerator;
+import foundation.rpg.generator.parser.context.ClassToGrammarContext;
+import foundation.rpg.generator.parser.EnvironmentGenerator;
 import foundation.rpg.util.MapOfSets;
 
 import javax.annotation.processing.Filer;
@@ -58,7 +58,7 @@ import static javax.lang.model.util.ElementFilter.constructorsIn;
 
 public class ClassToTokenContext implements EnvironmentGenerator {
 
-    private final RegularParser parser = new RegularParser();
+    private final RegularExpressionParser parser = new RegularExpressionParser();
     private final MapOfSets<TypeMirror, Element> tokenInfo = new MapOfSets<>();
     private boolean isStatic = true;
 

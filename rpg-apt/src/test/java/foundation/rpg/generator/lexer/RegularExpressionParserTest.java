@@ -27,49 +27,38 @@
  *
  */
 
-package foundation.rpg.lexer;
+package foundation.rpg.generator.lexer;
 
-import foundation.rpg.common.Patterns;
-import foundation.rpg.gnfa.Thompson;
-import foundation.rpg.lexer.regular.RegularGenerator;
-import foundation.rpg.lexer.regular.RegularParser;
-import foundation.rpg.lexer.regular.RegularTypes;
 import foundation.rpg.dfa.DFA;
 import foundation.rpg.dfa.GNFATransformer;
 import foundation.rpg.gnfa.GNFA;
+import foundation.rpg.regular.RegularExpressionParser;
 import org.testng.annotations.Test;
 
-import java.io.PrintWriter;
-import java.util.*;
-import java.util.stream.IntStream;
+public class RegularExpressionParserTest {
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.max;
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.toMap;
-
-public class RegularGeneratorTest {
-
-    RegularParser parser = new RegularParser();
-    RegularGenerator generator = new RegularGenerator();
+    private final RegularExpressionParser parser = new RegularExpressionParser();
+    private final GNFATransformer transformer = new GNFATransformer(new RegularTypes());
 
     @Test
-    public void testGnfaFrom() {
-        List<GNFA> nodes = asList(
-                parser.parseText("else"),
-                parser.parseText("extends"),
-                parser.parsePattern("\\w\\a*"),
-                parser.parsePattern(Patterns.ANY_QUOTED_STRING)
-        );
-        Map<Object, Integer> priorities = IntStream.range(0, nodes.size()).boxed().collect(toMap(nodes::get, i -> nodes.size() - i));
-        Thompson thompson = new Thompson();
-        GNFA gnfa = thompson.alternation(nodes.stream());
-        System.out.println(gnfa);
-        DFA dfa = new GNFATransformer(new RegularTypes()).transform(gnfa);
-        System.out.println(dfa);
-        Comparator<Object> comparator = comparingInt(priorities::get);
-        generator.generate("pkg", "MyLexer", dfa, emptyMap(), new PrintWriter(System.out), set -> max(set, comparator).toString(), null);
+    public void testParseText() {
+        parser.parseText("abc");
+        parser.parseText("");
     }
+
+    @Test
+    public void testParseAlternation() {
+        GNFA gnfa = parser.parsePattern("a|b");
+        DFA dfa = transformer.transform(gnfa);
+        System.out.println(dfa);
+    }
+
+    @Test
+    public void testParseAlternation2() {
+        GNFA gnfa = parser.parsePattern("c(a|b)");
+        DFA dfa = transformer.transform(gnfa);
+        System.out.println(dfa);
+    }
+
 
 }

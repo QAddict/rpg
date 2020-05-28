@@ -27,7 +27,7 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.generator.lexer;
 
 import foundation.rpg.dfa.DFA;
 import foundation.rpg.dfa.StateSet;

@@ -27,52 +27,39 @@
  *
  */
 
-package foundation.rpg.lexer.regular;
+package foundation.rpg.regular;
 
-import foundation.rpg.common.Patterns;
-import foundation.rpg.dfa.DFA;
-import foundation.rpg.dfa.GNFATransformer;
-import foundation.rpg.gnfa.GNFA;
-import org.testng.annotations.Test;
+public final class In {
+    private final String string;
+    private int pos = 0;
 
-public class RegularParserTest {
-
-    private final RegularParser parser = new RegularParser();
-    private final GNFATransformer transformer = new GNFATransformer(new RegularTypes());
-
-    @Test
-    public void testParsePattern() {
-        GNFA gnfa = parser.parsePattern(Patterns.ANY_QUOTED_STRING);
-        parser.parsePattern(Patterns.C_COMMENT);
-        parser.parsePattern(Patterns.DOUBLE);
-        parser.parsePattern(Patterns.INTEGER);
-        parser.parsePattern(Patterns.IDENTIFIER);
-        parser.parsePattern(Patterns.LINE_COMMENT);
-        parser.parsePattern(Patterns.UNICODE_IDENTIFIER);
-        parser.parseText("");
-        DFA dfa = transformer.transform(gnfa);
-        System.out.println(dfa);
+    public In(String string) {
+        this.string = string;
     }
 
-    @Test
-    public void testParseText() {
-        parser.parseText("abc");
-        parser.parseText("");
+    int get() {
+        return pos < string.length() ? string.charAt(pos) : -1;
     }
 
-    @Test
-    public void testParseAlternation() {
-        GNFA gnfa = parser.parsePattern("a|b");
-        DFA dfa = transformer.transform(gnfa);
-        System.out.println(dfa);
+    int consume() {
+        return pos < string.length() ? string.charAt(pos++) : -1;
     }
 
-    @Test
-    public void testParseAlternation2() {
-        GNFA gnfa = parser.parsePattern("c(a|b)");
-        DFA dfa = transformer.transform(gnfa);
-        System.out.println(dfa);
+    char consume(String errorMessage) {
+        if(pos < string.length()) return string.charAt(pos++);
+        throw new IllegalStateException(errorMessage);
     }
 
+    boolean testAndConsume(char expected) {
+        if(pos < string.length() && string.charAt(pos) == expected) {
+            pos++;
+            return true;
+        }
+        return false;
+    }
 
+    @Override
+    public String toString() {
+        return "" + (pos < string.length() ? string.charAt(pos) : "");
+    }
 }
