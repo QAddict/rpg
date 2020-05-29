@@ -16,7 +16,7 @@ returning user defined root node of the tree.
 * [Lexer definition](#lexer-definition)
     * [RPG's regular expressions](#rpgs-regular-expressions)
     * [Instructions for Lexer generator](#instructions-for-lexer-generator)
-* [Putting generated parser parts together](#putting-generated-parser-parts-together)
+* [Usage of generated parser](#usage-of-generated-parser)
 * [Generated Parser - Typesafe heterogeneous active stack](#generated-parser---typesafe-heterogeneous-active-stack)
 * [Meta rules](#meta-rules)
 * [Decomposition of grammar definition](#decomposition-of-grammar-definition)
