@@ -33,7 +33,7 @@
 
     <groupId>foundation.fluent.api</groupId>
     <artifactId>rpg-project</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.8</version>
     <packaging>pom</packaging>
     <name>Rapid Parser Generator for Java</name>
 
@@ -97,7 +97,7 @@
         <connection>scm:git:git://github.com/c0stra/rpg.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/c0stra/rpg.git</developerConnection>
         <url>https://github.com/c0stra/rpg</url>
-        <tag>HEAD</tag>
+        <tag>rpg-project-0.8</tag>
     </scm>
 
     <distributionManagement>
