@@ -27,30 +27,17 @@
  *
  */
 
-package foundation.rpg.parser;
+package $package$;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import foundation.rpg.parser.StreamParser;
+
 import java.util.function.Consumer;
 
-public class Compiler<R, S extends StateBase<R>> {
+// Generated token element wrapper for grammar parser.
+public class $class$ extends StreamParser<$result$, State> {
 
-    private final Lexer<S> lexer;
-    private final Parser<R, S> parser;
-    private final Consumer<? super R> consumer;
-
-    public Compiler(Lexer<S> lexer, Parser<R, S> parser, Consumer<? super R> consumer) {
-        this.lexer = lexer;
-        this.parser = parser;
-        this.consumer = consumer;
+    public $class$($factory$ factory) {
+        super(new State1(factory), new GeneratedLexer(factory));
     }
 
-    public void compile(String file) throws IOException, ParseErrorException {
-        consumer.accept(parser.parse(TokenInput.tokenInput(new Input(file, new FileReader(file)), lexer)));
-    }
-
-    public void compile(String name, Reader reader) throws IOException, ParseErrorException {
-        consumer.accept(parser.parse(TokenInput.tokenInput(new Input(name, reader), lexer)));
-    }
 }

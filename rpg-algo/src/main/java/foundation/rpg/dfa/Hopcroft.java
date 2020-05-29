@@ -29,10 +29,24 @@
 
 package foundation.rpg.dfa;
 
+import foundation.rpg.util.Bfs;
+
+import java.util.List;
+import java.util.Map;
+
+import static java.lang.Boolean.TRUE;
+import static java.util.stream.Collectors.groupingBy;
+
 public class Hopcroft {
 
     DFA minimize(DFA dfa) {
+        Map<Boolean, List<StateSet>> collect = dfa.getStates().stream().collect(groupingBy(this::isFinal));
+        Bfs.withCollection(collect.get(TRUE), (item, queue) -> {
+        });
         return dfa;
     }
 
+    boolean isFinal(StateSet stateSet) {
+        return false;
+    }
 }

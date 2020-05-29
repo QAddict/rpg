@@ -27,26 +27,38 @@
  *
  */
 
-package foundation.rpg.sample.json;
+package foundation.rpg.parser;
 
-import foundation.rpg.parser.Input;
-import foundation.rpg.parser.Lexer;
-import foundation.rpg.parser.ParseErrorException;
-import foundation.rpg.parser.Parser;
+import java.io.*;
 
-import java.io.IOException;
-import java.io.StringReader;
+public class StreamParser<R, S extends StateBase<R>> {
 
-import static foundation.rpg.parser.TokenInput.tokenInput;
+    private final TokenInputParser<R, S> parser;
+    private final Lexer<S> lexer;
 
-public class JsonParser {
+    public StreamParser(S initialState, Lexer<S> lexer) {
+        parser = new TokenInputParser<>(initialState);
+        this.lexer = lexer;
+    }
 
-    private final JsonFactory factory = new JsonFactory();
-    private final Parser<Object, State> parser = new Parser<>(new State1(factory));
-    private final Lexer<State> lexer = new GeneratedLexer(factory);
+    public R parse(TokenInput<S> input) throws ParseErrorException {
+        return parser.parse(input);
+    }
 
-    public Object parse(String json) throws IOException, ParseErrorException {
-        return parser.parse(tokenInput(new Input("json", new StringReader(json)), lexer));
+    public R parse(String name, Reader reader) throws IOException, ParseErrorException {
+        return parse(TokenInput.tokenInput(new Input(name, reader), lexer));
+    }
+
+    public R parseFile(String fileName) throws IOException, ParseErrorException {
+        return parse(fileName, new FileReader(fileName));
+    }
+
+    public R parseString(String content) throws IOException, ParseErrorException {
+        return parse("string", new StringReader(content));
+    }
+
+    public R parse(String name, InputStream stream) throws IOException, ParseErrorException {
+        return parse(name, new InputStreamReader(stream));
     }
 
 }

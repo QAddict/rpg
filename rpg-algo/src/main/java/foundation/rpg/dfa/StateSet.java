@@ -46,9 +46,8 @@ public class StateSet {
         this.states = states;
     }
 
-    public StateSet setDefaultState(StateSet defaultState) {
+    public void setDefaultState(StateSet defaultState) {
         this.defaultState = defaultState;
-        return this;
     }
 
     public void add(State state) {
@@ -71,11 +70,11 @@ public class StateSet {
         this.groupTransitions.put(a, set);
     }
 
-    public Map<Object, StateSet> getCharTransitions() {
+    public Map<Object, StateSet> getTransitions() {
         return charTransitions;
     }
 
-    public Map<Object, StateSet> getGroupTransitions() {
+    public Map<Object, StateSet> getGroups() {
         return groupTransitions;
     }
 
@@ -95,4 +94,5 @@ public class StateSet {
     public static boolean isError(StateSet stateSet) {
         return ERROR.equals(stateSet);
     }
+
 }

@@ -69,18 +69,16 @@ public class ClassToGrammarContext {
     private final boolean isStaticFactory;
     private final Element factoryClass;
     private final EnvironmentGenerator tokenContext;
-
-    private Stream<ExecutableElement> methods(Element factory) {
-        return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
-    }
-
-    public boolean isLexerRule(ExecutableElement method) {
-        return method.getParameters().size() == 1 && method.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName());
-    }
+    private final String parserClass;
+    private final String lexerClass;
 
     public ClassToGrammarContext(ExecutableElement startRule, Elements elements, EnvironmentGenerator tokenContext) {
         this.tokenContext = tokenContext;
-        String pkg = startRule.getAnnotation(StartSymbol.class).packageName();
+        StartSymbol startSymbol = startRule.getAnnotation(StartSymbol.class);
+        String pkg = startSymbol.packageName();
+        String resultName = ((DeclaredType) startRule.getReturnType()).asElement().getSimpleName().toString();
+        parserClass = startSymbol.parserClassName().isEmpty() ? resultName + "Parser" : startSymbol.parserClassName();
+        lexerClass = startSymbol.lexerClassName().isEmpty() ? resultName + "Lexer" : startSymbol.parserClassName();
         Set<Rule> rules = new LinkedHashSet<>();
         Set<Symbol> ignored = new LinkedHashSet<>();
         factoryClass = startRule.getEnclosingElement();
@@ -125,6 +123,22 @@ public class ClassToGrammarContext {
                 rules.add(rule);
             }
         });
+    }
+
+    private Stream<ExecutableElement> methods(Element factory) {
+        return Stream.concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())));
+    }
+
+    public boolean isLexerRule(ExecutableElement method) {
+        return method.getParameters().size() == 1 && method.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName());
+    }
+
+    public String getParserClass() {
+        return parserClass;
+    }
+
+    public String getLexerClass() {
+        return lexerClass;
     }
 
     private Element findPrecedence(Element e) {

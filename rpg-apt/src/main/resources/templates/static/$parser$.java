@@ -27,42 +27,17 @@
  *
  */
 
-package foundation.rpg.dfa;
+package $package$;
 
-import foundation.rpg.util.Bfs;
+import foundation.rpg.parser.StreamParser;
 
-import java.util.Set;
+import java.util.function.Consumer;
 
-public class DFA {
-    private final StateSet start;
-    private final Set<StateSet> states;
+// Generated token element wrapper for grammar parser.
+public class $class$ extends StreamParser<$result$, State> {
 
-    public DFA(StateSet start) {
-        this.start = start;
-        states = Bfs.withItem(start, ((item, queue) -> {
-            item.getTransitions().forEach((c, s) -> queue.accept(s));
-            item.getGroups().forEach((c, s) -> queue.accept(s));
-            queue.accept(item.getDefaultState());
-        }));
+    public $class$() {
+        super(new State1(), new GeneratedLexer());
     }
 
-    public StateSet getStart() {
-        return start;
-    }
-
-    public Set<StateSet> getStates() {
-        return states;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        states.forEach(item -> {
-            builder.append(item.hashCode()).append(": {\n");
-            item.getTransitions().forEach((c, s) -> builder.append("\t'").append(c).append("' -> ").append(s.hashCode()).append("\n"));
-            item.getGroups().forEach((c, s) -> builder.append("\t\\").append(c).append(" -> ").append(s.hashCode()).append("\n"));
-            builder.append("\totherwise -> ").append(item.getDefaultState().hashCode()).append("\n}\n");
-        });
-        return builder.toString();
-    }
 }

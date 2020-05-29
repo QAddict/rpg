@@ -39,23 +39,23 @@ import java.util.Map;
 
 public class JsonParserTest {
 
-    private final JsonParser parser = new JsonParser();
+    private final ObjectParser parser = new ObjectParser(new JsonFactory());
 
     @Test
     public void testJson() throws IOException, ParseErrorException {
-        Assert.assertTrue(parser.parse("[]") instanceof List);
-        Assert.assertTrue(parser.parse("[4]") instanceof List);
-        Assert.assertTrue(parser.parse("[5,\"a\"]") instanceof List);
-        Assert.assertTrue(parser.parse("{}") instanceof Map);
-        Assert.assertEquals(parser.parse("1") , 1);
-        Assert.assertEquals(parser.parse("\"1\"") , "1");
-        Assert.assertEquals(1, ((Map) parser.parse("{a:1,b:3}")).get("a"));
+        Assert.assertTrue(parser.parseString("[]") instanceof List);
+        Assert.assertTrue(parser.parseString("[4]") instanceof List);
+        Assert.assertTrue(parser.parseString("[5,\"a\"]") instanceof List);
+        Assert.assertTrue(parser.parseString("{}") instanceof Map);
+        Assert.assertEquals(parser.parseString("1") , 1);
+        Assert.assertEquals(parser.parseString("\"1\"") , "1");
+        Assert.assertEquals(1, ((Map) parser.parseString("{a:1,b:3}")).get("a"));
     }
 
     @Test(expectedExceptions = ParseErrorException.class, expectedExceptionsMessageRegExp = "Parse error: Duplicate key: a\n" +
-            "\tat json: line: 1, character: 9")
+            "\tat string: line: 1, character: 9")
     public void testError() throws IOException, ParseErrorException {
-        Assert.assertEquals(1, ((Map) parser.parse("{a:1,a:3}")).get("a"));
+        Assert.assertEquals(1, ((Map) parser.parseString("{a:1,a:3}")).get("a"));
     }
 
 }

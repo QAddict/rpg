@@ -71,6 +71,8 @@ public class CodeGenerator {
             generateState(lrParser, set);
         Stream.of(lrParser.getGrammar().getTerminals(), lrParser.getGrammar().getIgnored()).flatMap(Collection::stream)
                 .forEach(s -> write(source("Element$name$").set(name, s).set(type, typeOf(s))));
+        SourceModel parserSource = source("$parser$").set("parser", context.getParserClass()).set(result, typeOf(lrParser.getGrammar().getStart()));
+        write(parserSource);
     }
 
     private String chainedType(List<TypeMirror> parameters, int length, int noWildcard) {

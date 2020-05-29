@@ -27,42 +27,18 @@
  *
  */
 
-package foundation.rpg.dfa;
+package foundation.rpg.parser;
 
-import foundation.rpg.util.Bfs;
+public class TokenInputParser<R, S extends StateBase<R>> {
 
-import java.util.Set;
+    private final S initialState;
 
-public class DFA {
-    private final StateSet start;
-    private final Set<StateSet> states;
-
-    public DFA(StateSet start) {
-        this.start = start;
-        states = Bfs.withItem(start, ((item, queue) -> {
-            item.getTransitions().forEach((c, s) -> queue.accept(s));
-            item.getGroups().forEach((c, s) -> queue.accept(s));
-            queue.accept(item.getDefaultState());
-        }));
+    public TokenInputParser(S initialState) {
+        this.initialState = initialState;
     }
 
-    public StateSet getStart() {
-        return start;
+    public R parse(TokenInput<S> input) throws ParseErrorException {
+        return ParserBase.parse(initialState, input);
     }
 
-    public Set<StateSet> getStates() {
-        return states;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        states.forEach(item -> {
-            builder.append(item.hashCode()).append(": {\n");
-            item.getTransitions().forEach((c, s) -> builder.append("\t'").append(c).append("' -> ").append(s.hashCode()).append("\n"));
-            item.getGroups().forEach((c, s) -> builder.append("\t\\").append(c).append(" -> ").append(s.hashCode()).append("\n"));
-            builder.append("\totherwise -> ").append(item.getDefaultState().hashCode()).append("\n}\n");
-        });
-        return builder.toString();
-    }
 }

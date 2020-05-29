@@ -35,4 +35,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface StartSymbol {
     String packageName() default "";
+    String parserClassName() default "";
+    String lexerClassName() default "";
 }

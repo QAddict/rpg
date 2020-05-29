@@ -31,16 +31,9 @@ package foundation.rpg.parser;
 
 import java.io.IOException;
 
-public class Parser<R, S extends StateBase<R>> {
+public final class ParserBase {
 
-    private final S initialState;
-
-    public Parser(S initialState) {
-        this.initialState = initialState;
-    }
-
-    public R parse(TokenInput<S> input) throws ParseErrorException {
-        S state = initialState;
+    public static <R, S extends StateBase<R>> R parse(S state, TokenInput<S> input) throws ParseErrorException {
         Position mark = input.position();
         while(!state.accepted()) try {
             mark = input.position();

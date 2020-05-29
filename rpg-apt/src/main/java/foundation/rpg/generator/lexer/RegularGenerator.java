@@ -85,7 +85,7 @@ public class RegularGenerator {
             w.println("\t\t\tswitch(state) {");
             Bfs.withItem(dfa.getStart(), (item, consumer) -> {
                 Consumer<String> r = pref -> {
-                    item.getGroupTransitions().forEach((atom, nextSet) -> {
+                    item.getGroups().forEach((atom, nextSet) -> {
                         w.println(pref + "\t\t\t\t\tif(Lexer.matchesGroup('" + atom + "', symbol)) { state = " + states.computeIfAbsent(nextSet, k -> states.size()) + "; break; }");
                         consumer.accept(nextSet);
                     });
@@ -102,10 +102,10 @@ public class RegularGenerator {
                     }
                 };
                 w.println("\t\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ":");
-                int cases = item.getCharTransitions().size();
+                int cases = item.getTransitions().size();
                 if (cases > 1) {
                     w.println("\t\t\t\t\tswitch(symbol) {");
-                    item.getCharTransitions().forEach((atom, nextSet) -> {
+                    item.getTransitions().forEach((atom, nextSet) -> {
                         w.println("\t\t\t\t\t\tcase '" + escape(atom) + "': " + stateBranch(nextSet, states));
                         consumer.accept(nextSet);
                     });
@@ -114,7 +114,7 @@ public class RegularGenerator {
                     w.println("\t\t\t\t\t}");
                     w.println("\t\t\t\t\tbreak;");
                 } else {
-                    item.getCharTransitions().forEach((atom, nextSet) -> {
+                    item.getTransitions().forEach((atom, nextSet) -> {
                         w.println("\t\t\t\t\tif(symbol == '" + escape(atom) + "') { " + stateBranch(nextSet, states) + " }");
                         consumer.accept(nextSet);
                     });
