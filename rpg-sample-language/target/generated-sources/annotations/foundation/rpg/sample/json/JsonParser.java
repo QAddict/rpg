@@ -27,38 +27,17 @@
  *
  */
 
-package foundation.rpg.sample.language;
+package foundation.rpg.sample.json;
 
-import foundation.rpg.common.symbols.*;
-import foundation.rpg.parser.*;
-import foundation.rpg.sample.language.ast.Identifier;
-import foundation.rpg.sample.language.ast.Program;
-import foundation.rpg.sample.language.ast.*;
-import org.testng.annotations.Test;
+import foundation.rpg.parser.StreamParser;
 
-import java.io.IOException;
+import java.util.function.Consumer;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+// Generated token element wrapper for grammar parser.
+public class JsonParser extends StreamParser<java.lang.Object, State> {
 
-public class LanguageParserTest {
-
-    @Test
-    public void testParser() throws ParseErrorException, IOException {
-        ProgramParser parser = new ProgramParser(new AstFactory());
-        Token p = new Token("", 0, 0, 0, 0, 0, 0, "");
-        TokenInput<State> lexer = mock(TokenInput.class);
-        when(lexer.next()).thenReturn(
-                new ElementComment(new Comment(p)),
-                new ElementLPar(new LPar(p)),
-                new ElementWhiteSpace(new WhiteSpace(p)),
-                new ElementIdentifier(new Identifier("variable")),
-                new ElementRPar(new RPar(p)),
-                new ElementDot(new Dot(p)),
-                new ElementEnd(new End(p))
-        );
-        Program program = parser.parse(lexer);
-        System.out.println(program);
+    public JsonParser(foundation.rpg.sample.json.JsonFactory factory) {
+        super(new State1(factory), new GeneratedLexer(factory));
     }
 
 }

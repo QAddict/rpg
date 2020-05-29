@@ -39,7 +39,7 @@ import java.util.Map;
 
 public class JsonParserTest {
 
-    private final ObjectParser parser = new ObjectParser(new JsonFactory());
+    private final JsonParser parser = new JsonParser(new JsonFactory());
 
     @Test
     public void testJson() throws IOException, ParseErrorException {
