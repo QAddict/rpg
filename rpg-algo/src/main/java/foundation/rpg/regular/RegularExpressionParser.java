@@ -66,6 +66,11 @@ public class RegularExpressionParser {
             case '+':
             case '?':
             case '\\': return thompson.transition(c);
+            case 'r': return thompson.transition('\r');
+            case 'n': return thompson.transition('\n');
+            case 't': return thompson.transition('\t');
+            case 'b': return thompson.transition('\b');
+            case 'f': return thompson.transition('\f');
             default: return thompson.group(c);
         }
     }

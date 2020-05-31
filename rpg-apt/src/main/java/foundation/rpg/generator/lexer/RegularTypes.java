@@ -29,10 +29,10 @@
 
 package foundation.rpg.generator.lexer;
 
-import foundation.rpg.dfa.GNFATransformer;
+import foundation.rpg.dfa.Groups;
 import foundation.rpg.parser.Lexer;
 
-public class RegularTypes implements GNFATransformer.Types {
+public class RegularTypes implements Groups {
 
     @Override
     public boolean isInGroup(Character group, Character input) {

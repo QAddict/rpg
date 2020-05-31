@@ -38,22 +38,16 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static foundation.rpg.gnfa.Thompson.epsilon;
-import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.*;
 
 public class GNFATransformer {
 
-    public GNFATransformer(Types types) {
-        this.types = types;
+    public GNFATransformer(Groups groups) {
+        this.groups = groups;
     }
 
-    @FunctionalInterface
-    public interface Types {
-        boolean isInGroup(Character group, Character input);
-    }
-
-    private final Types types;
+    private final Groups groups;
 
     public DFA transform(GNFA gnfa) {
         Map<Set<State>, StateSet> cache = new LinkedHashMap<>();
@@ -69,7 +63,7 @@ public class GNFATransformer {
             states.forEach(s -> groupKeys.forEach(k -> groups.add(k, s.getGroup(k))));
             groups.forEach((a, s) -> {
                 trans.forEach((c, as) -> {
-                    if(types.isInGroup(a, c)) as.addAll(s);
+                    if(this.groups.isInGroup(a, c)) as.addAll(s);
                 });
                 set.setGroupTransition(a, stateSet(s, cache, queue));
             });

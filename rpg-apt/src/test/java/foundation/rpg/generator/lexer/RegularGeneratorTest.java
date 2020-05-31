@@ -56,7 +56,7 @@ public class RegularGeneratorTest {
         List<GNFA> nodes = asList(
                 parser.parseText("else"),
                 parser.parseText("extends"),
-                parser.parsePattern("\\w\\a*"),
+                parser.parsePattern("\\i\\w*"),
                 parser.parsePattern("'([^'\\\\]|\\\\['\\\\rnt])*'|\"([^\"\\\\]|\\\\[\"\\\\rnt])*\"")
         );
         Map<Object, Integer> priorities = IntStream.range(0, nodes.size()).boxed().collect(toMap(nodes::get, i -> nodes.size() - i));

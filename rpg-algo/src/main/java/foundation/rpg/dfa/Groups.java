@@ -27,31 +27,11 @@
  *
  */
 
-package foundation.rpg.generator.lexer;
+package foundation.rpg.dfa;
 
-import foundation.rpg.regular.RegularExpressionParser;
-import org.testng.annotations.Test;
+@FunctionalInterface
+public interface Groups {
 
-import java.io.PrintWriter;
+    boolean isInGroup(Character group, Character input);
 
-import static foundation.rpg.generator.lexer.LexerGenerator.*;
-import static java.util.Arrays.asList;
-
-public class LexerGeneratorTest {
-
-    private final RegularExpressionParser parser = new RegularExpressionParser();
-
-    @Test
-    public void testGenerateLexer() {
-        new LexerGenerator().generateLexer("pkg", "MyLexer", asList(
-                new TokenInfo("TokenTrue", "TokenTrue", parser.parseText("true"), 1),
-                new TokenInfo("TokenFalse", "TokenFalse", parser.parseText("false"), 1),
-                new TokenInfo("TokenThrows", "TokenThrows", parser.parseText("throws"), 1),
-                new TokenInfo("TokenFinal", "TokenFinal", parser.parseText("final"), 1),
-                new TokenInfo("TokenIdentifier", "TokenIdentifier", parser.parsePattern("\\i\\w*"), 0),
-                new TokenInfo("TokenDouble", "TokenDouble", parser.parsePattern("\\d+[.eE]\\d+"), 0),
-                new TokenInfo("TokenInteger", "TokenInteger", parser.parsePattern("\\d+"), 0),
-                new TokenInfo("TokenString", "TokenString", parser.parsePattern("'([^'\\\\]|\\\\[^\\\\nrt])*'"), 0)
-        ), new PrintWriter(System.out), null);
-    }
 }
