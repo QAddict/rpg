@@ -27,18 +27,20 @@
  *
  */
 
-package foundation.rpg.generator.lexer;
+package foundation.rpg.regular;
 
 import foundation.rpg.dfa.DFA;
 import foundation.rpg.dfa.GNFATransformer;
 import foundation.rpg.gnfa.GNFA;
-import foundation.rpg.regular.RegularExpressionParser;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class RegularExpressionParserTest {
 
     private final RegularExpressionParser parser = new RegularExpressionParser();
-    private final GNFATransformer transformer = new GNFATransformer(new RegularTypes());
+    private final GNFATransformer transformer = new GNFATransformer((g,c) -> false);
 
     @Test
     public void testParseText() {
@@ -60,5 +62,17 @@ public class RegularExpressionParserTest {
         System.out.println(dfa);
     }
 
+    @Test
+    public void testParseOptional() {
+        GNFA gnfa = parser.parsePattern("c?b");
+        DFA dfa = transformer.transform(gnfa);
+        System.out.println(dfa);
+        assertEquals(dfa.getStart().getTransitions().get('b'), dfa.getStart().getTransitions().get('c').getTransitions().get('b'));
+    }
+
+    @Test
+    public void testParseEsc() {
+        assertTrue(transformer.transform(parser.parsePattern("\\*")).getStart().getTransitions().containsKey('*'));
+    }
 
 }
