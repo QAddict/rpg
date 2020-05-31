@@ -29,17 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-1: {
-	Start -> • Program End []
-	Program -> • List1ListOfStatement [End]
-	List1ListOfStatement -> • [End, Identifier, LPar]
-	List1ListOfStatement -> • List1ListOfStatement Statement [End, Identifier, LPar]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

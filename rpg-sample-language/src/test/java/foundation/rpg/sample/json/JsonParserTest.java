@@ -42,7 +42,7 @@ public class JsonParserTest {
     private final JsonParser parser = new JsonParser(new JsonFactory());
 
     @Test
-    public void testJson() throws IOException, ParseErrorException {
+    public void testJson() throws IOException, ParseException {
         Assert.assertTrue(parser.parseString("[]") instanceof List);
         Assert.assertTrue(parser.parseString("[4]") instanceof List);
         Assert.assertTrue(parser.parseString("[5,\"a\"]") instanceof List);
@@ -52,9 +52,9 @@ public class JsonParserTest {
         Assert.assertEquals(1, ((Map) parser.parseString("{a:1,b:3}")).get("a"));
     }
 
-    @Test(expectedExceptions = ParseErrorException.class, expectedExceptionsMessageRegExp = "Parse error: Duplicate key: a\n" +
+    @Test(expectedExceptions = ParseException.class, expectedExceptionsMessageRegExp = "Parse error: Duplicate key: a\n" +
             "\tat string: line: 1, character: 9")
-    public void testError() throws IOException, ParseErrorException {
+    public void testError() throws IOException, ParseException {
         Assert.assertEquals(1, ((Map) parser.parseString("{a:1,a:3}")).get("a"));
     }
 

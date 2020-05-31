@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-Expression5: {
-	AtomicExpression -> LPar Expression • RPar [RPar, Gt, Plus, Times, Comma]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

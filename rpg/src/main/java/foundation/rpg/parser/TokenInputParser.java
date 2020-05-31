@@ -29,6 +29,8 @@
 
 package foundation.rpg.parser;
 
+import java.io.IOException;
+
 public class TokenInputParser<R, S extends StateBase<R>> {
 
     private final S initialState;
@@ -37,7 +39,7 @@ public class TokenInputParser<R, S extends StateBase<R>> {
         this.initialState = initialState;
     }
 
-    public R parse(TokenInput<S> input) throws ParseErrorException {
+    public R parse(TokenInput<S> input) throws ParseException, IOException {
         return ParserBase.parse(initialState, input);
     }
 

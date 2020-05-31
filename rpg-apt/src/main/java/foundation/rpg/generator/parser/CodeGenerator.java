@@ -143,11 +143,11 @@ public class CodeGenerator {
                 ExecutableElement method = context.methodOf(rule);
                 int size = isNull(method) ? 1 : method.getParameters().size();
                 String state = "this";
-                StringBuilder b = new StringBuilder();
+                StringJoiner b = new StringJoiner("\n\t\t");
                 String[] p = new String[size];
                 for(int i = 1; i <= size; i++) {
                     p[size - i] = state + ".getNode()";
-                    b.append("\n\t\t").append(chainedVar(longestParameters, dot - i)).append(" stack").append(i).append(" = ").append(state).append(".getPrev();");
+                    b.add(chainedVar(longestParameters, dot - i) + " stack" + i + " = " + state + ".getPrev();");
                     state = "stack" + i;
                 }
                 String call = methodName(method) + "(" + join(", ", p) + ")";

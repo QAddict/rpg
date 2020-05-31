@@ -30,20 +30,32 @@
 package foundation.rpg.parser;
 
 import java.io.IOException;
+import java.util.List;
+
+import static java.util.stream.Collectors.joining;
 
 public interface TokenInput<S> {
 
-    Element<S> next() throws ParseErrorException, IOException;
+    Element<S> next() throws ParseException, IOException;
 
     Position position();
 
+    void error(Position mark, String message);
+
+    default void error(Position mark, Object state, List<?> expected, Object unexpectedSymbol) {
+        error(mark, "Expected " + (expected.size() == 1 ? expected.get(0) : expected.stream().map(Object::toString).collect(joining(", ", " one of: ", ""))) + ", but got " + unexpectedSymbol);
+    }
+
     static <S> TokenInput<S> tokenInput(Input input, Lexer<S> lexer) {
         return new TokenInput<S>() {
-            @Override public Element<S> next() throws ParseErrorException, IOException {
+            @Override public Element<S> next() throws ParseException, IOException {
                 return lexer.next(input);
             }
             @Override public Position position() {
                 return input.position();
+            }
+            @Override public void error(Position mark, String message) {
+                //input.error(message);
             }
         };
     }

@@ -29,21 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-Gt2: {
-	RelationalExpression -> RelationalExpression Gt • AdditiveExpression [RPar, Gt]
-	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [RPar, Gt, Plus]
-	AdditiveExpression -> • MultiplicativeExpression [RPar, Gt, Plus]
-	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [RPar, Gt, Plus, Times]
-	MultiplicativeExpression -> • AtomicExpression [RPar, Gt, Plus, Times]
-	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times]
-	AtomicExpression -> • LPar Expression RPar [RPar, Gt, Plus, Times]
-	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

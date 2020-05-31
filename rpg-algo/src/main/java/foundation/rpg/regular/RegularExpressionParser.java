@@ -62,6 +62,7 @@ public class RegularExpressionParser {
             case '(':
             case ')':
             case '|':
+            case '*':
             case '\\': return thompson.transition(c);
             default: return thompson.group(c);
         }

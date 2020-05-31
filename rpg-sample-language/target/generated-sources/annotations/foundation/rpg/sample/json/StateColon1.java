@@ -29,21 +29,6 @@
 
 package foundation.rpg.sample.json;
 
-/*
-
-Colon1: {
-	MapOfObject -> String Colon • Object [RCurl, Comma]
-	Object -> • String [RCurl, Comma]
-	Object -> • Integer [RCurl, Comma]
-	Object -> • Double [RCurl, Comma]
-	Object -> • LBr ListOfObject RBr [RCurl, Comma]
-	Object -> • LBr RBr [RCurl, Comma]
-	Object -> • LCurl MapOfObject RCurl [RCurl, Comma]
-	Object -> • LCurl RCurl [RCurl, Comma]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

@@ -29,38 +29,16 @@
 
 package foundation.rpg.parser;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 
-public class Input {
+public interface Input {
 
-    private final Reader reader;
-    private int lookahead;
-    private final Position position;
+    int lookahead();
 
-    public Input(String fileName, Reader reader) throws IOException {
-        this.reader = reader;
-        this.position = new Position(fileName);
-        move();
-    }
+    Input move() throws IOException;
 
-    public Input(String fileName) throws IOException {
-        this(fileName, new FileReader(fileName));
-    }
+    Position position();
 
-    public int lookahead() {
-        return lookahead;
-    }
-
-    public Input move() throws IOException {
-        lookahead = reader.read();
-        position.move((char) lookahead);
-        return this;
-    }
-
-    public Position position() {
-        return position.copy();
-    }
+    void error(String message);
 
 }

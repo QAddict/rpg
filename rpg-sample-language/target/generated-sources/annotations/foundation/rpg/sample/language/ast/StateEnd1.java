@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-End1: {
-	Start -> Program End • []
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

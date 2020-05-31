@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-Expression1: {
-	Statement -> Expression • Dot [End, Identifier, LPar]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

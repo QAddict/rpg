@@ -29,17 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-Times4: {
-	MultiplicativeExpression -> MultiplicativeExpression Times • AtomicExpression [RPar, Gt, Plus, Times, Comma]
-	AtomicExpression -> • Identifier [RPar, Gt, Plus, Times, Comma]
-	AtomicExpression -> • LPar Expression RPar [RPar, Gt, Plus, Times, Comma]
-	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times, Comma]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

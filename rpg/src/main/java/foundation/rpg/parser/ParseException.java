@@ -27,34 +27,16 @@
  *
  */
 
-package foundation.rpg.sample.json;
+package foundation.rpg.parser;
 
-import foundation.rpg.parser.UnexpectedInputException;
+public class ParseException extends RuntimeException {
 
-// Generated visitor pattern based state for grammar parser.
-public class StateObject2 extends StackState<java.lang.Object, State> {
-
-// NoStack:
-// Stack:
-    public StateObject2(foundation.rpg.sample.json.JsonFactory factory, java.lang.Object node, State prev) {
-        super(factory, node, prev);
+    public ParseException(Position position, String message) {
+        super("Parse error: " + message + "\n\tat " + position);
     }
 
-
-// Reduce:
-    @Override
-    public State visitRBr(foundation.rpg.common.symbols.RBr symbol) throws UnexpectedInputException {
-        State stack1 = this.getPrev();
-        return stack1.visitListOfObject(getFactory().is(this.getNode())).visitRBr(symbol);
+    public ParseException(Position position, Throwable cause) {
+        super("Parse error: " + cause.getMessage() + "\n\tat " + position, cause);
     }
 
-    @Override
-    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
-        State stack1 = this.getPrev();
-        return stack1.visitListOfObject(getFactory().is(this.getNode())).visitComma(symbol);
-    }
-
-
-// Shift:
-// Accept:
 }

@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-Statement1: {
-	List1ListOfStatement -> List1ListOfStatement Statement • [End, Identifier, LPar]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -52,24 +44,21 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
 // Reduce:
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
-        
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+        StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1(stack1.getNode(), this.getNode())).visitEnd(symbol);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
-        
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+        StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1(stack1.getNode(), this.getNode())).visitIdentifier(symbol);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) throws UnexpectedInputException {
-        
-		StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+        StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();
         return stack2.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1(stack1.getNode(), this.getNode())).visitLPar(symbol);
     }

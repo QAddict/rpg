@@ -29,15 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-Identifier6: {
-	AtomicExpression -> Identifier • [RPar, Gt, Plus, Times, Comma]
-	AtomicExpression -> Identifier • LPar List3ListOfExpression RPar [RPar, Gt, Plus, Times, Comma]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -53,36 +44,31 @@ public class StateIdentifier6 extends StackState<foundation.rpg.sample.language.
 // Reduce:
     @Override
     public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitRPar(symbol);
     }
 
     @Override
     public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitGt(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.symbols.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitPlus(symbol);
     }
 
     @Override
     public State visitTimes(foundation.rpg.common.symbols.Times symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitTimes(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitComma(symbol);
     }
 

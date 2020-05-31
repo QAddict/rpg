@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.json;
 
-/*
-
-Object7: {
-	MapOfObject -> MapOfObject Comma String Colon Object • [RCurl, Comma]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -52,8 +44,7 @@ public class StateObject7 extends StackState<java.lang.Object, StackState<founda
 // Reduce:
     @Override
     public State visitRCurl(foundation.rpg.common.symbols.RCurl symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
+        StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
 		StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> stack3 = stack2.getPrev();
 		StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State> stack4 = stack3.getPrev();
@@ -63,8 +54,7 @@ public class StateObject7 extends StackState<java.lang.Object, StackState<founda
 
     @Override
     public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
+        StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> stack1 = this.getPrev();
 		StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>> stack3 = stack2.getPrev();
 		StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State> stack4 = stack3.getPrev();

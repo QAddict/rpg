@@ -30,6 +30,7 @@
 package foundation.rpg.parser;
 
 import java.io.*;
+import java.net.URL;
 
 public class StreamParser<R, S extends StateBase<R>> {
 
@@ -41,24 +42,32 @@ public class StreamParser<R, S extends StateBase<R>> {
         this.lexer = lexer;
     }
 
-    public R parse(TokenInput<S> input) throws ParseErrorException {
+    public R parse(TokenInput<S> input) throws ParseException, IOException {
         return parser.parse(input);
     }
 
-    public R parse(String name, Reader reader) throws IOException, ParseErrorException {
-        return parse(TokenInput.tokenInput(new Input(name, reader), lexer));
+    public R parse(String name, Reader reader) throws IOException, ParseException {
+        return parse(input(name, reader, lexer));
     }
 
-    public R parseFile(String fileName) throws IOException, ParseErrorException {
+    public R parseFile(String fileName) throws IOException, ParseException {
         return parse(fileName, new FileReader(fileName));
     }
 
-    public R parseString(String content) throws IOException, ParseErrorException {
+    public R parseString(String content) throws IOException, ParseException {
         return parse("string", new StringReader(content));
     }
 
-    public R parse(String name, InputStream stream) throws IOException, ParseErrorException {
+    public R parse(String name, InputStream stream) throws IOException, ParseException {
         return parse(name, new InputStreamReader(stream));
+    }
+
+    public R parseUrl(URL resource) throws IOException, ParseException {
+        return parse(resource.toString(), resource.openStream());
+    }
+
+    public TokenInput<S> input(String name, Reader reader, Lexer<S> lexer) throws IOException {
+        return TokenInput.tokenInput(new ReaderInput(name, reader), lexer);
     }
 
 }

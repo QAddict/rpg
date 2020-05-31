@@ -29,12 +29,46 @@
 
 package foundation.rpg.parser;
 
-public class ParseErrorException extends Exception {
-    public ParseErrorException(Position position, String message) {
-        super("Parse error: " + message + "\n\tat " + position);
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+public class ReaderInput implements Input {
+
+    private final Reader reader;
+    private int lookahead;
+    private final Position position;
+
+    public ReaderInput(String fileName, Reader reader) throws IOException {
+        this.reader = reader;
+        this.position = new Position(fileName);
+        move();
     }
 
-    public ParseErrorException(Position position, Throwable cause) {
-        super("Parse error: " + cause.getMessage() + "\n\tat " + position, cause);
+    public ReaderInput(String fileName) throws IOException {
+        this(fileName, new FileReader(fileName));
     }
+
+    @Override
+    public int lookahead() {
+        return lookahead;
+    }
+
+    @Override
+    public Input move() throws IOException {
+        lookahead = reader.read();
+        position.move((char) lookahead);
+        return this;
+    }
+
+    @Override
+    public Position position() {
+        return position.copy();
+    }
+
+    @Override
+    public void error(String message) {
+        throw new ParseException(position(), message);
+    }
+
 }

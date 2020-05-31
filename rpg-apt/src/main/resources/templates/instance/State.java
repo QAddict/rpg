@@ -29,14 +29,6 @@
 
 package $package$;
 
-/*
-
-$grammar$
-
-$automata$
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.StateBase;
 
@@ -52,7 +44,7 @@ public class $class$ extends StateBase<$result$> {
         return factory;
     }
 
-    // Ignored:
+// Ignored:
     public State visit$name$($type$ symbol) {
         return this;
     }

@@ -23,7 +23,7 @@ public class GeneratedLexer implements Lexer<State> {
 		int state = 0;
 		int symbol = input.lookahead();
 		TokenBuilder builder = new TokenBuilder(input);
-		if(symbol < 0) return visitor -> visitor.visitEnd(new End(builder.build()));
+		if(symbol < 0) return new ElementEnd(new End(builder.build()));
 		for(; true; symbol = builder.next()) {
 			switch(state) {
 				case 0:
@@ -40,7 +40,7 @@ public class GeneratedLexer implements Lexer<State> {
 							if(Lexer.matchesGroup('s', symbol)) { state = 9; break; }
 							if(Lexer.matchesGroup('d', symbol)) { state = 10; break; }
 							if(Lexer.matchesGroup('i', symbol)) { state = 11; break; }
-							throw new IllegalStateException("");
+							input.error("Unexpected character: '" + (char) symbol + "'");
 					}
 					break;
 				case 1:
@@ -48,7 +48,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case '"': state = 12; break;
 						case '\\': state = 13; break;
 						default:
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 14; break;
 					}
 					break;
@@ -57,25 +57,25 @@ public class GeneratedLexer implements Lexer<State> {
 						case '\'': state = 15; break;
 						case '\\': state = 16; break;
 						default:
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 17; break;
 					}
 					break;
 				case 3:
-					return visitor -> visitor.visitColon(new foundation.rpg.common.symbols.Colon(builder.build()));
+					return new ElementColon(new foundation.rpg.common.symbols.Colon(builder.build()));
 				case 4:
-					return visitor -> visitor.visitLBr(new foundation.rpg.common.symbols.LBr(builder.build()));
+					return new ElementLBr(new foundation.rpg.common.symbols.LBr(builder.build()));
 				case 5:
-					return visitor -> visitor.visitLCurl(new foundation.rpg.common.symbols.LCurl(builder.build()));
+					return new ElementLCurl(new foundation.rpg.common.symbols.LCurl(builder.build()));
 				case 6:
-					return visitor -> visitor.visitComma(new foundation.rpg.common.symbols.Comma(builder.build()));
+					return new ElementComma(new foundation.rpg.common.symbols.Comma(builder.build()));
 				case 7:
-					return visitor -> visitor.visitRBr(new foundation.rpg.common.symbols.RBr(builder.build()));
+					return new ElementRBr(new foundation.rpg.common.symbols.RBr(builder.build()));
 				case 8:
-					return visitor -> visitor.visitRCurl(new foundation.rpg.common.symbols.RCurl(builder.build()));
+					return new ElementRCurl(new foundation.rpg.common.symbols.RCurl(builder.build()));
 				case 9:
 					if(Lexer.matchesGroup('s', symbol)) { state = 9; break; }
-					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
+					return new ElementWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
 				case 10:
 					switch(symbol) {
 						case 'e': state = 18; break;
@@ -83,14 +83,14 @@ public class GeneratedLexer implements Lexer<State> {
 						case '.': state = 18; break;
 						default:
 							if(Lexer.matchesGroup('d', symbol)) { state = 10; break; }
-							return visitor -> visitor.visitInteger(getFactory().matchInt(builder.build()));
+							return new ElementInteger(getFactory().matchInt(builder.build()));
 					}
 					break;
 				case 11:
 					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
-					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
+					return new ElementString(getFactory().matchIdString(builder.build()));
 				case 12:
-					return visitor -> visitor.visitString(getFactory().matchQuotedString(builder.build()));
+					return new ElementString(getFactory().matchQuotedString(builder.build()));
 				case 13:
 					switch(symbol) {
 						case '"': state = 20; break;
@@ -99,7 +99,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case '\\': state = 20; break;
 						case 'n': state = 20; break;
 						default:
-							throw new IllegalStateException("");
+							input.error("Unexpected character: '" + (char) symbol + "'");
 					}
 					break;
 				case 14:
@@ -107,12 +107,12 @@ public class GeneratedLexer implements Lexer<State> {
 						case '"': state = 12; break;
 						case '\\': state = 13; break;
 						default:
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 14; break;
 					}
 					break;
 				case 15:
-					return visitor -> visitor.visitString(getFactory().matchQuotedString(builder.build()));
+					return new ElementString(getFactory().matchQuotedString(builder.build()));
 				case 16:
 					switch(symbol) {
 						case 'r': state = 21; break;
@@ -121,7 +121,7 @@ public class GeneratedLexer implements Lexer<State> {
 						case '\\': state = 21; break;
 						case 'n': state = 21; break;
 						default:
-							throw new IllegalStateException("");
+							input.error("Unexpected character: '" + (char) symbol + "'");
 					}
 					break;
 				case 17:
@@ -129,22 +129,22 @@ public class GeneratedLexer implements Lexer<State> {
 						case '\'': state = 15; break;
 						case '\\': state = 16; break;
 						default:
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 17; break;
 					}
 					break;
 				case 18:
 					if(Lexer.matchesGroup('d', symbol)) { state = 22; break; }
-					throw new IllegalStateException("");
+					input.error("Unexpected character: '" + (char) symbol + "'");
 				case 19:
 					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
-					return visitor -> visitor.visitString(getFactory().matchIdString(builder.build()));
+					return new ElementString(getFactory().matchIdString(builder.build()));
 				case 20:
 					switch(symbol) {
 						case '"': state = 12; break;
 						case '\\': state = 13; break;
 						default:
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 14; break;
 					}
 					break;
@@ -153,13 +153,13 @@ public class GeneratedLexer implements Lexer<State> {
 						case '\'': state = 15; break;
 						case '\\': state = 16; break;
 						default:
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 17; break;
 					}
 					break;
 				case 22:
 					if(Lexer.matchesGroup('d', symbol)) { state = 22; break; }
-					return visitor -> visitor.visitDouble(getFactory().matchDouble(builder.build()));
+					return new ElementDouble(getFactory().matchDouble(builder.build()));
 			}
 		}
 	}

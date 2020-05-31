@@ -23,7 +23,7 @@ public class GeneratedLexer implements Lexer<State> {
 		int state = 0;
 		int symbol = input.lookahead();
 		TokenBuilder builder = new TokenBuilder(input);
-		if(symbol < 0) return visitor -> visitor.visitEnd(new End(builder.build()));
+		if(symbol < 0) return new ElementEnd(new End(builder.build()));
 		for(; true; symbol = builder.next()) {
 			switch(state) {
 				case 0:
@@ -39,104 +39,88 @@ public class GeneratedLexer implements Lexer<State> {
 						default:
 							if(Lexer.matchesGroup('s', symbol)) { state = 9; break; }
 							if(Lexer.matchesGroup('w', symbol)) { state = 10; break; }
-							throw new IllegalStateException("");
+							input.error("Unexpected character: '" + (char) symbol + "'");
 					}
 					break;
 				case 1:
-					return visitor -> visitor.visitLPar(new foundation.rpg.common.symbols.LPar(builder.build()));
+					return new ElementLPar(new foundation.rpg.common.symbols.LPar(builder.build()));
 				case 2:
-					return visitor -> visitor.visitRPar(new foundation.rpg.common.symbols.RPar(builder.build()));
+					return new ElementRPar(new foundation.rpg.common.symbols.RPar(builder.build()));
 				case 3:
-					return visitor -> visitor.visitTimes(new foundation.rpg.common.symbols.Times(builder.build()));
+					return new ElementTimes(new foundation.rpg.common.symbols.Times(builder.build()));
 				case 4:
-					return visitor -> visitor.visitPlus(new foundation.rpg.common.symbols.Plus(builder.build()));
+					return new ElementPlus(new foundation.rpg.common.symbols.Plus(builder.build()));
 				case 5:
-					return visitor -> visitor.visitComma(new foundation.rpg.common.symbols.Comma(builder.build()));
+					return new ElementComma(new foundation.rpg.common.symbols.Comma(builder.build()));
 				case 6:
-					return visitor -> visitor.visitDot(new foundation.rpg.common.symbols.Dot(builder.build()));
+					return new ElementDot(new foundation.rpg.common.symbols.Dot(builder.build()));
 				case 7:
-					return visitor -> visitor.visitGt(new foundation.rpg.common.symbols.Gt(builder.build()));
+					return new ElementGt(new foundation.rpg.common.symbols.Gt(builder.build()));
 				case 8:
-					if(Lexer.matchesGroup('*', symbol)) { state = 11; break; }
-					throw new IllegalStateException("");
+					if(symbol == '*') { state = 11; break; }
+					input.error("Unexpected character: '" + (char) symbol + "'");
 				case 9:
 					if(Lexer.matchesGroup('s', symbol)) { state = 9; break; }
-					return visitor -> visitor.visitWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
+					return new ElementWhiteSpace(new foundation.rpg.common.symbols.WhiteSpace(builder.build()));
 				case 10:
 					if(Lexer.matchesGroup('a', symbol)) { state = 12; break; }
-					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
+					return new ElementIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 				case 11:
 					switch(symbol) {
-						case '*': throw new IllegalStateException("");
-						case '/': state = 13; break;
+						case '*': state = 13; break;
+						case '/': state = 14; break;
 						default:
-							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 15; break;
 					}
 					break;
 				case 12:
 					if(Lexer.matchesGroup('a', symbol)) { state = 12; break; }
-					return visitor -> visitor.visitIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
-				case 16:
-					throw new IllegalStateException("");
+					return new ElementIdentifier(new foundation.rpg.sample.language.ast.Identifier(builder.build().getContent()));
 				case 13:
 					switch(symbol) {
-						case '*': throw new IllegalStateException("");
-						case '/': state = 13; break;
+						case '*': state = 16; break;
+						case '/': state = 17; break;
 						default:
-							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
-							if(symbol < 0) throw new IllegalStateException("");
-							state = 15; break;
+							if(symbol < 0) input.error("Unexpected end of input");
+							state = 18; break;
 					}
 					break;
 				case 14:
 					switch(symbol) {
-						case '*': state = 17; break;
-						case '/': state = 13; break;
+						case '*': state = 13; break;
+						case '/': state = 14; break;
 						default:
-							if(Lexer.matchesGroup('*', symbol)) { state = 18; break; }
-							if(symbol < 0) throw new IllegalStateException("");
-							state = 19; break;
+							if(symbol < 0) input.error("Unexpected end of input");
+							state = 15; break;
 					}
 					break;
 				case 15:
 					switch(symbol) {
-						case '*': throw new IllegalStateException("");
-						case '/': state = 13; break;
+						case '*': state = 13; break;
+						case '/': state = 14; break;
 						default:
-							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
+							state = 15; break;
+					}
+					break;
+				case 16:
+					switch(symbol) {
+						case '*': state = 13; break;
+						case '/': state = 14; break;
+						default:
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 15; break;
 					}
 					break;
 				case 17:
-					switch(symbol) {
-						case '*': throw new IllegalStateException("");
-						case '/': state = 13; break;
-						default:
-							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
-							if(symbol < 0) throw new IllegalStateException("");
-							state = 15; break;
-					}
-					break;
+					return new ElementComment(new foundation.rpg.common.symbols.Comment(builder.build()));
 				case 18:
 					switch(symbol) {
-						case '*': state = 17; break;
-						case '/': state = 13; break;
+						case '*': state = 13; break;
+						case '/': state = 14; break;
 						default:
-							if(Lexer.matchesGroup('*', symbol)) { state = 18; break; }
-							if(symbol < 0) throw new IllegalStateException("");
-							state = 19; break;
-					}
-					break;
-				case 19:
-					switch(symbol) {
-						case '*': throw new IllegalStateException("");
-						case '/': state = 13; break;
-						default:
-							if(Lexer.matchesGroup('*', symbol)) { state = 14; break; }
-							if(symbol < 0) throw new IllegalStateException("");
+							if(symbol < 0) input.error("Unexpected end of input");
 							state = 15; break;
 					}
 					break;

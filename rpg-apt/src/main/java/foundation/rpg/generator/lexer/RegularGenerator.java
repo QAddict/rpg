@@ -80,7 +80,7 @@ public class RegularGenerator {
             w.println("\t\tint state = " + states.computeIfAbsent(dfa.getStart(), k -> states.size()) + ";");
             w.println("\t\tint symbol = input.lookahead();");
             w.println("\t\tTokenBuilder builder = new TokenBuilder(input);");
-            w.println("\t\tif(symbol < 0) return visitor -> visitor.visitEnd(new End(builder.build()));");
+            w.println("\t\tif(symbol < 0) return new ElementEnd(new End(builder.build()));");
             w.println("\t\tfor(; true; symbol = builder.next()) {");
             w.println("\t\t\tswitch(state) {");
             Bfs.withItem(dfa.getStart(), (item, consumer) -> {
@@ -91,14 +91,14 @@ public class RegularGenerator {
                     });
                     Set<T> results = item.getStates().stream().filter(finalStates::containsKey).map(finalStates::get).collect(toSet());
                     if (!isError(item.getDefaultState())) {
-                        w.println(pref + "\t\t\t\t\tif(symbol < 0) throw new IllegalStateException(\"\");");
+                        w.println(pref + "\t\t\t\t\tif(symbol < 0) input.error(\"Unexpected end of input\");");
                         w.println(pref + "\t\t\t\t\tstate = " + states.computeIfAbsent(item.getDefaultState(), k -> states.size()) + "; break;");
                         consumer.accept(item.getDefaultState());
                     } else if (results.isEmpty()) {
-                        w.println(pref + "\t\t\t\t\tthrow new IllegalStateException(\"\");");
+                        w.println(pref + "\t\t\t\t\tinput.error(\"Unexpected character: '\" + (char) symbol + \"'\");");
                     } else {
                         String type = prioritizer.apply(results);
-                        w.println(pref + "\t\t\t\t\treturn visitor -> visitor." + type + ";");
+                        w.println(pref + "\t\t\t\t\treturn new " + type + ";");
                     }
                 };
                 w.println("\t\t\t\tcase " + states.computeIfAbsent(item, k -> states.size()) + ":");
@@ -130,7 +130,7 @@ public class RegularGenerator {
     }
 
     private String stateBranch(StateSet stateSet, Map<StateSet, Integer> states) {
-        return isError(stateSet) ? "throw new IllegalStateException(\"\");" : "state = " + states.computeIfAbsent(stateSet, k -> states.size()) + "; break;";
+        return isError(stateSet) ? "input.error(\"Unexpected character: '\" + (char) symbol + \"'\");" : "state = " + states.computeIfAbsent(stateSet, k -> states.size()) + "; break;";
     }
 
 }

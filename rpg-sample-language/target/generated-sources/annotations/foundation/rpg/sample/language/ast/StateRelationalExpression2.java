@@ -29,15 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-RelationalExpression2: {
-	Expression -> RelationalExpression • [RPar]
-	RelationalExpression -> RelationalExpression • Gt AdditiveExpression [RPar, Gt]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -53,8 +44,7 @@ public class StateRelationalExpression2 extends StackState<foundation.rpg.sample
 // Reduce:
     @Override
     public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitExpression(getFactory().is(this.getNode())).visitRPar(symbol);
     }
 

@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.json;
 
-/*
-
-Object1: {
-	Start -> Object • End []
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

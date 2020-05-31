@@ -29,15 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-List2ListOfExpression1: {
-	List3ListOfExpression -> List2ListOfExpression • [RPar]
-	List2ListOfExpression -> List2ListOfExpression • Comma Expression [RPar, Comma]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -53,8 +44,7 @@ public class StateList2ListOfExpression1 extends StackState<java.util.List<found
 // Reduce:
     @Override
     public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitList3ListOfExpression(foundation.rpg.common.rules.ListRules.isList3(this.getNode())).visitRPar(symbol);
     }
 

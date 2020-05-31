@@ -43,9 +43,9 @@ import static org.mockito.Mockito.when;
 
 public class LanguageParserTest {
 
+    private final ProgramParser parser = new ProgramParser(new AstFactory());
     @Test
-    public void testParser() throws ParseErrorException, IOException {
-        ProgramParser parser = new ProgramParser(new AstFactory());
+    public void testParser() throws ParseException, IOException {
         Token p = new Token("", 0, 0, 0, 0, 0, 0, "");
         TokenInput<State> lexer = mock(TokenInput.class);
         when(lexer.next()).thenReturn(
@@ -61,4 +61,9 @@ public class LanguageParserTest {
         System.out.println(program);
     }
 
+    @Test
+    public void testSource() throws IOException, ParseException {
+        Program program = parser.parseUrl(getClass().getResource("/sample.src"));
+        System.out.println(program);
+    }
 }

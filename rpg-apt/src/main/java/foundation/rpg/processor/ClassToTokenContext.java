@@ -112,7 +112,7 @@ public class ClassToTokenContext implements EnvironmentGenerator {
 
     public LexerGenerator.TokenInfo tokenInfoFor(ExecutableElement method) {
         DeclaredType returnType = (DeclaredType) method.getReturnType();
-        String call = "visit" + returnType.asElement().getSimpleName() + "(" + (method.getModifiers().contains(STATIC) ? method.getEnclosingElement(): "getFactory()") + "." + method.getSimpleName() + "(builder.build()))";
+        String call = "Element" + returnType.asElement().getSimpleName() + "(" + (method.getModifiers().contains(STATIC) ? method.getEnclosingElement(): "getFactory()") + "." + method.getSimpleName() + "(builder.build()))";
         VariableElement element = method.getParameters().get(0);
         return tokenInfo(returnType, element, call);
     }
@@ -125,7 +125,7 @@ public class ClassToTokenContext implements EnvironmentGenerator {
                 return tokenInfoFor((ExecutableElement) element);
             }
             boolean acceptsPosition = constructorsIn(typeElement.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName()));
-            String call = "visit" + typeElement.getSimpleName() + "(new " + mirror + "(" + (acceptsPosition ? "builder.build()" : "builder.build().getContent()") + "))";
+            String call = "Element" + typeElement.getSimpleName() + "(new " + mirror + "(" + (acceptsPosition ? "builder.build()" : "builder.build().getContent()") + "))";
             return tokenInfo(mirror, element, call);
         }).collect(Collectors.toList());
     }

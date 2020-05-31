@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-AtomicExpression2: {
-	MultiplicativeExpression -> AtomicExpression • [RPar, Gt, Plus, Times]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -52,29 +44,25 @@ public class StateAtomicExpression2 extends StackState<foundation.rpg.sample.lan
 // Reduce:
     @Override
     public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitMultiplicativeExpression((this.getNode())).visitRPar(symbol);
     }
 
     @Override
     public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitMultiplicativeExpression((this.getNode())).visitGt(symbol);
     }
 
     @Override
     public State visitPlus(foundation.rpg.common.symbols.Plus symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitMultiplicativeExpression((this.getNode())).visitPlus(symbol);
     }
 
     @Override
     public State visitTimes(foundation.rpg.common.symbols.Times symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitMultiplicativeExpression((this.getNode())).visitTimes(symbol);
     }
 

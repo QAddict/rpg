@@ -29,26 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-List1ListOfStatement1: {
-	Program -> List1ListOfStatement • [End]
-	List1ListOfStatement -> List1ListOfStatement • Statement [End, Identifier, LPar]
-	Statement -> • Expression Dot [End, Identifier, LPar]
-	Expression -> • RelationalExpression [Dot]
-	RelationalExpression -> • RelationalExpression Gt AdditiveExpression [Dot, Gt]
-	RelationalExpression -> • AdditiveExpression [Dot, Gt]
-	AdditiveExpression -> • AdditiveExpression Plus MultiplicativeExpression [Dot, Gt, Plus]
-	AdditiveExpression -> • MultiplicativeExpression [Dot, Gt, Plus]
-	MultiplicativeExpression -> • MultiplicativeExpression Times AtomicExpression [Dot, Gt, Plus, Times]
-	MultiplicativeExpression -> • AtomicExpression [Dot, Gt, Plus, Times]
-	AtomicExpression -> • Identifier [Dot, Gt, Plus, Times]
-	AtomicExpression -> • LPar Expression RPar [Dot, Gt, Plus, Times]
-	AtomicExpression -> • Identifier LPar List3ListOfExpression RPar [Dot, Gt, Plus, Times]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -64,8 +44,7 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
 // Reduce:
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitProgram(getFactory().is(this.getNode())).visitEnd(symbol);
     }
 

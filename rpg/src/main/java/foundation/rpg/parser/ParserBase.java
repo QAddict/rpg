@@ -33,14 +33,19 @@ import java.io.IOException;
 
 public final class ParserBase {
 
-    public static <R, S extends StateBase<R>> R parse(S state, TokenInput<S> input) throws ParseErrorException {
-        Position mark = input.position();
-        while(!state.accepted()) try {
-            mark = input.position();
+    public static <R, S extends StateBase<R>> R parse(S state, TokenInput<S> input) throws ParseException, IOException {
+        while(!state.accepted()) {
+            Position mark = input.position();
             Element<S> next = input.next();
-            state = next.accept(state);
-        } catch (UnexpectedInputException | IOException | RuntimeException un) {
-            throw new ParseErrorException(mark, un);
+            try {
+                state = next.accept(state);
+            } catch (UnexpectedInputException un) {
+                input.error(mark, un.getState(), un.getExpected(), un.getUnexpectedSymbol());
+                throw new ParseException(mark, un);
+            } catch (RuntimeException | AssertionError e) {
+                input.error(mark, e.getMessage());
+                throw new ParseException(mark, e);
+            }
         }
         return state.result();
     }

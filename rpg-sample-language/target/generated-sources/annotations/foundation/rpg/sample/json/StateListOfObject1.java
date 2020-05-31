@@ -29,15 +29,6 @@
 
 package foundation.rpg.sample.json;
 
-/*
-
-ListOfObject1: {
-	Object -> LBr ListOfObject • RBr [End]
-	ListOfObject -> ListOfObject • Comma Object [RBr, Comma]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.

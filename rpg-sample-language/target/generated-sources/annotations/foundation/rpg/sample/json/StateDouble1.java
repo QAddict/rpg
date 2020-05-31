@@ -29,14 +29,6 @@
 
 package foundation.rpg.sample.json;
 
-/*
-
-Double1: {
-	Object -> Double • [End]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -52,8 +44,7 @@ public class StateDouble1 extends StackState<java.lang.Double, State> {
 // Reduce:
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
-        
-		State stack1 = this.getPrev();
+        State stack1 = this.getPrev();
         return stack1.visitObject(getFactory().is(this.getNode())).visitEnd(symbol);
     }
 

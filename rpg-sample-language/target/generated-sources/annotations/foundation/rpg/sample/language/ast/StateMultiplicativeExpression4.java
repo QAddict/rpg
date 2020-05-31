@@ -29,15 +29,6 @@
 
 package foundation.rpg.sample.language.ast;
 
-/*
-
-MultiplicativeExpression4: {
-	AdditiveExpression -> AdditiveExpression Plus MultiplicativeExpression • [Dot, Gt, Plus]
-	MultiplicativeExpression -> MultiplicativeExpression • Times AtomicExpression [Dot, Gt, Plus, Times]
-}
-
-*/
-
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
@@ -53,8 +44,7 @@ public class StateMultiplicativeExpression4 extends StackState<foundation.rpg.sa
 // Reduce:
     @Override
     public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.symbols.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
+        StackState<foundation.rpg.common.symbols.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitAdditiveExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitDot(symbol);
@@ -62,8 +52,7 @@ public class StateMultiplicativeExpression4 extends StackState<foundation.rpg.sa
 
     @Override
     public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.symbols.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
+        StackState<foundation.rpg.common.symbols.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitAdditiveExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitGt(symbol);
@@ -71,8 +60,7 @@ public class StateMultiplicativeExpression4 extends StackState<foundation.rpg.sa
 
     @Override
     public State visitPlus(foundation.rpg.common.symbols.Plus symbol) throws UnexpectedInputException {
-        
-		StackState<foundation.rpg.common.symbols.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
+        StackState<foundation.rpg.common.symbols.Plus, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
         return stack3.visitAdditiveExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitPlus(symbol);

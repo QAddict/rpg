@@ -38,6 +38,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static foundation.rpg.gnfa.Thompson.epsilon;
+import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.*;
 

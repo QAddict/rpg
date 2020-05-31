@@ -48,4 +48,17 @@ public class UnexpectedInputException extends Exception {
     public String getMessage() {
         return "Expected " + (expected.size() == 1 ? expected.get(0) : expected.stream().map(Object::toString).collect(joining(", ", " one of: ", ""))) + ", but got " + unexpectedSymbol;
     }
+
+    public Object getState() {
+        return state;
+    }
+
+    public Object getUnexpectedSymbol() {
+        return unexpectedSymbol;
+    }
+
+    public List<?> getExpected() {
+        return expected;
+    }
+
 }
