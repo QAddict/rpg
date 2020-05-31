@@ -29,7 +29,9 @@
 
 package foundation.rpg.sample.language.ast;
 
+import foundation.rpg.Match;
 import foundation.rpg.StartSymbol;
+import foundation.rpg.common.Patterns;
 import foundation.rpg.common.precedence.Additive;
 import foundation.rpg.common.precedence.Atomic;
 import foundation.rpg.common.precedence.Multiplicative;
@@ -45,15 +47,16 @@ import java.util.List;
 public class AstFactory implements WhiteSpaceRules, ListRules {
 
     @StartSymbol
-    Program                    is  (@List1 List<Statement> s)                                       { return new Program(s); }
-    Statement                  is  (Expression e, Dot d)                                            { return new ExpressionStatement(e); }
-    Expression                 is  (@Relational Expression e)                                       { return e; }
+    Program                    is  (@List1 List<Statement> s)                                     { return new Program(s); }
+    Statement                  is  (Expression e, Semicolon s)                                          { return new ExpressionStatement(e); }
+    Expression                 is  (@Relational Expression e)                                     { return e; }
     @Relational Expression     is  (@Relational Expression l, Gt o, @Additive Expression r)       { return new BinaryExpression(l, r); }
-    @Additive
-    Expression     is  (@Additive Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
-    @Multiplicative Expression is  (@Multiplicative Expression l, Times o, @Atomic Expression r)    { return new BinaryExpression(l, r); }
-    @Atomic Expression         is  (Identifier i)                                                   { return i; }
-    @Atomic Expression         is  (LPar l, Expression e, RPar r)                                   { return e; }
-    @Atomic Expression         is  (Identifier i, LPar l, @List3 List<Expression> e, RPar r)        { return null; }
+    @Additive Expression       is  (@Additive Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
+    @Multiplicative Expression is  (@Multiplicative Expression l, Times o, @Atomic Expression r)  { return new BinaryExpression(l, r); }
+    @Atomic Expression         is  (Identifier i)                                                 { return i; }
+    @Atomic Expression         is  (@Match(Patterns.INTEGER) Long v)                              { return new Literal<>(v); }
+    @Atomic Expression         is  (@Match(Patterns.DOUBLE_QUOTED_STRING) String v)                      { return new Literal<>(v); }
+    @Atomic Expression         is  (LPar l, Expression e, RPar r)                                 { return e; }
+    @Atomic Expression         is  (Identifier i, LPar l, @List3 List<Expression> e, RPar r)      { return null; }
 
 }

@@ -43,11 +43,11 @@ public class StateAdditiveExpression3 extends StackState<foundation.rpg.sample.l
 
 // Reduce:
     @Override
-    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
+    public State visitSemicolon(foundation.rpg.common.symbols.Semicolon symbol) throws UnexpectedInputException {
         StackState<foundation.rpg.common.symbols.Gt, StackState<foundation.rpg.sample.language.ast.Expression, ? extends State>> stack1 = this.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Expression, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitRelationalExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitDot(symbol);
+        return stack3.visitRelationalExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitSemicolon(symbol);
     }
 
     @Override

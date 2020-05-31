@@ -43,9 +43,9 @@ public class StateMultiplicativeExpression1 extends StackState<foundation.rpg.sa
 
 // Reduce:
     @Override
-    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
+    public State visitSemicolon(foundation.rpg.common.symbols.Semicolon symbol) throws UnexpectedInputException {
         State stack1 = this.getPrev();
-        return stack1.visitAdditiveExpression((this.getNode())).visitDot(symbol);
+        return stack1.visitAdditiveExpression((this.getNode())).visitSemicolon(symbol);
     }
 
     @Override

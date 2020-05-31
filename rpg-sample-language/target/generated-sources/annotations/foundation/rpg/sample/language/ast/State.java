@@ -59,7 +59,7 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
+    public State visitSemicolon(foundation.rpg.common.symbols.Semicolon symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -76,6 +76,14 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitLong(java.lang.Long symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitString(java.lang.String symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

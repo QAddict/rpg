@@ -86,6 +86,16 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
+    public State visitLong(java.lang.Long symbol) {
+        return new StateLong1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitString(java.lang.String symbol) {
+        return new StateString1(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar1(getFactory(), symbol, this);
     }

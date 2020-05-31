@@ -29,24 +29,11 @@
 
 package foundation.rpg.sample.language.ast;
 
-import foundation.rpg.parser.Element;
-import foundation.rpg.parser.UnexpectedInputException;
+public class Literal<T> implements Expression {
+    private final T value;
 
-// Generated token element wrapper for grammar parser.
-public class ElementDot implements Element<State> {
-    private final foundation.rpg.common.symbols.Dot symbol;
-
-    public ElementDot(foundation.rpg.common.symbols.Dot symbol) {
-        this.symbol = symbol;
+    public Literal(T value) {
+        this.value = value;
     }
 
-    @Override
-    public State accept(State state) throws UnexpectedInputException {
-        return state.visitDot(symbol);
-    }
-
-    @Override
-    public String toString() {
-        return symbol.toString();
-    }
 }

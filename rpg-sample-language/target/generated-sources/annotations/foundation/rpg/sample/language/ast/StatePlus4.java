@@ -59,6 +59,16 @@ public class StatePlus4 extends StackState<foundation.rpg.common.symbols.Plus, S
     }
 
     @Override
+    public State visitLong(java.lang.Long symbol) {
+        return new StateLong6(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitString(java.lang.String symbol) {
+        return new StateString6(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar7(getFactory(), symbol, this);
     }

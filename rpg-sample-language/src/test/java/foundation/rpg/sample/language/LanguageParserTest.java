@@ -54,7 +54,7 @@ public class LanguageParserTest {
                 new ElementWhiteSpace(new WhiteSpace(p)),
                 new ElementIdentifier(new Identifier("variable")),
                 new ElementRPar(new RPar(p)),
-                new ElementDot(new Dot(p)),
+                new ElementSemicolon(new Semicolon(p)),
                 new ElementEnd(new End(p))
         );
         Program program = parser.parse(lexer);

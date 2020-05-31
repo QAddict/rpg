@@ -55,6 +55,18 @@ public class State1 extends State {
     }
 
     @Override
+    public State visitLong(java.lang.Long symbol) throws UnexpectedInputException {
+        
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitLong(symbol);
+    }
+
+    @Override
+    public State visitString(java.lang.String symbol) throws UnexpectedInputException {
+        
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitString(symbol);
+    }
+
+    @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) throws UnexpectedInputException {
         
         return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitLPar(symbol);

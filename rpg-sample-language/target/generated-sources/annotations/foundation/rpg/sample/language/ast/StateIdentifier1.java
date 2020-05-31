@@ -43,9 +43,9 @@ public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.
 
 // Reduce:
     @Override
-    public State visitDot(foundation.rpg.common.symbols.Dot symbol) throws UnexpectedInputException {
+    public State visitSemicolon(foundation.rpg.common.symbols.Semicolon symbol) throws UnexpectedInputException {
         State stack1 = this.getPrev();
-        return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitDot(symbol);
+        return stack1.visitAtomicExpression(getFactory().is(this.getNode())).visitSemicolon(symbol);
     }
 
     @Override

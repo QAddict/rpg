@@ -44,8 +44,8 @@ public class StateExpression1 extends StackState<foundation.rpg.sample.language.
 // Reduce:
 // Shift:
     @Override
-    public State visitDot(foundation.rpg.common.symbols.Dot symbol) {
-        return new StateDot1(getFactory(), symbol, this);
+    public State visitSemicolon(foundation.rpg.common.symbols.Semicolon symbol) {
+        return new StateSemicolon1(getFactory(), symbol, this);
     }
 
 
