@@ -63,6 +63,8 @@ public class RegularExpressionParser {
             case ')':
             case '|':
             case '*':
+            case '+':
+            case '?':
             case '\\': return thompson.transition(c);
             default: return thompson.group(c);
         }
@@ -82,6 +84,8 @@ public class RegularExpressionParser {
             return thompson.repetition(factor);
         if(in.testAndConsume('+'))
             return thompson.chain(of(factor, thompson.repetition(factor)));
+        if(in.testAndConsume('?'))
+            return thompson.optional(factor);
         return factor;
     }
 
@@ -96,6 +100,9 @@ public class RegularExpressionParser {
                 GNFA sub = parse(in);
                 if(!in.testAndConsume(')')) throw new IllegalStateException("Missing )");
                 return sub;
+            case '*':
+            case '?':
+            case '+': throw new IllegalStateException("Illegal use of repeating operator: '" + (char) c + "'");
             default: return thompson.transition((char) c);
         }
     }

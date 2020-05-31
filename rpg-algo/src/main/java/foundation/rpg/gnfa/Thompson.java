@@ -109,14 +109,17 @@ public class Thompson {
     }
 
     public GNFA repetition(GNFA gnfa) {
+        gnfa.getEnd().add(epsilon, gnfa.getStart());
+        return optional(gnfa);
+    }
+
+    public GNFA optional(GNFA gnfa) {
         State start = state("rep>");
         State end = state("<rep");
         start.add(epsilon, end);
-        gnfa.getEnd().add(epsilon, gnfa.getStart());
         start.add(epsilon, gnfa.getStart());
         gnfa.getEnd().add(epsilon, end);
         return new GNFA(start, end);
-
     }
 
 }
