@@ -27,11 +27,12 @@
  *
  */
 
-package foundation.rpg.processor;
+package foundation.rpg.generator.parser.context;
 
 import foundation.rpg.Match;
 import foundation.rpg.Name;
 import foundation.rpg.generator.lexer.LexerGenerator;
+import foundation.rpg.generator.parser.context.Entry;
 import foundation.rpg.regular.RegularExpressionParser;
 import foundation.rpg.parser.Token;
 import foundation.rpg.generator.parser.context.ClassToGrammarContext;
@@ -41,6 +42,7 @@ import foundation.rpg.util.MapOfSets;
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
@@ -59,66 +61,58 @@ import static javax.lang.model.util.ElementFilter.constructorsIn;
 public class ClassToTokenContext implements EnvironmentGenerator {
 
     private final RegularExpressionParser parser = new RegularExpressionParser();
-    private final MapOfSets<TypeMirror, Element> tokenInfo = new MapOfSets<>();
+    private final MapOfSets<String, Element> tokenInfo = new MapOfSets<>();
     private boolean isStatic = true;
-
-    public void accept(VariableElement var) {
-        Match match = var.getAnnotation(Match.class);
-        Name name = var.getAnnotation(Name.class);
-        TypeMirror type = var.asType();
-        if(nonNull(match) || nonNull(name)) {
-            if(tokenInfo.get(type) instanceof VariableElement)
-                throw new IllegalStateException("Token info already defined at " + tokenInfo.get(type));
-            tokenInfo.add(type, var);
-            return;
-        }
-        accept(type);
-    }
 
     @Override
     public void generate(ClassToGrammarContext context, Filer filer) throws IOException {
         new LexerGenerator().generateLexer(context.getPackageName(), "GeneratedLexer", concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).flatMap(symbol -> {
-            TypeMirror type = context.symbolType(symbol);
-            return tokenInfoFor(type).stream();
+            Entry entry = context.symbolEntry(symbol);
+            return tokenInfoFor(entry).stream();
         }).collect(toList()), new PrintWriter(filer.createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isStaticFactory() ? null : context.getFactoryClass().asType());
 
     }
 
+    private boolean isToken(Element element) {
+        return nonNull(element.getAnnotation(Match.class)) || nonNull(element.getAnnotation(Name.class));
+    }
+
     @Override
-    public void accept(TypeMirror type) {
-        if(type instanceof DeclaredType) {
-            Element element = ((DeclaredType) type).asElement();
-            Match match = element.getAnnotation(Match.class);
-            Name name = element.getAnnotation(Name.class);
-            if(nonNull(match) || nonNull(name)) {
-                tokenInfo.add(type, element);
+    public void accept(Entry entry) {
+        if(!entry.getElement().getModifiers().contains(STATIC)) {
+            isStatic = false;
+        }
+        if(isToken(entry.getElement())) {
+            /*
+            if(tokenInfo.get(entry.toString()).stream().anyMatch(a -> !(a instanceof TypeElement))) {
+                throw new IllegalStateException("Token info already defined at " + tokenInfo.get(entry.toString()));
+            }*/
+            tokenInfo.add(entry.toString(), entry.getElement());
+            return;
+        }
+        if(entry.getType() instanceof DeclaredType) {
+            Element element = ((DeclaredType) entry.getType()).asElement();
+            if(isToken(element)) {
+                tokenInfo.add(entry.toString(), element);
             }
         }
     }
 
-    @Override
-    public void accept(ExecutableElement method) {
-        if(!method.getModifiers().contains(STATIC)) {
-            isStatic = false;
-        }
-        tokenInfo.add(method.getReturnType(), method);
-    }
-
-    public Set<Element> elementFor(TypeMirror mirror) {
-        return tokenInfo.computeIfAbsent(mirror, k -> {
-            throw new IllegalArgumentException("No token defined for " + mirror + ". Use @Name or @Match annotation on " + mirror + " or in factory method.");
+    public Set<Element> elementFor(Entry mirror) {
+        return tokenInfo.computeIfAbsent(mirror.toString(), k -> {
+            throw new IllegalArgumentException("No token defined for " + mirror.simpleName() + ". Use @Name or @Match annotation on " + mirror.simpleName() + " or in factory.");
         });
     }
 
     public LexerGenerator.TokenInfo tokenInfoFor(ExecutableElement method) {
         DeclaredType returnType = (DeclaredType) method.getReturnType();
         String call = "Element" + returnType.asElement().getSimpleName() + "(" + (method.getModifiers().contains(STATIC) ? method.getEnclosingElement(): "getFactory()") + "." + method.getSimpleName() + "(builder.build()))";
-        VariableElement element = method.getParameters().get(0);
-        return tokenInfo(returnType, element, call);
+        return tokenInfo(returnType, method, call);
     }
 
-    public List<LexerGenerator.TokenInfo> tokenInfoFor(TypeMirror mirror) {
-        Set<Element> elements = elementFor(mirror);
+    public List<LexerGenerator.TokenInfo> tokenInfoFor(Entry entry) {
+        Set<Element> elements = elementFor(entry);
+        TypeMirror mirror = entry.getType();
         Element typeElement = ((DeclaredType) mirror).asElement();
         return elements.stream().map(element -> {
             if(element instanceof ExecutableElement) {

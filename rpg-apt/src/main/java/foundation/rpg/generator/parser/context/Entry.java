@@ -29,11 +29,21 @@
 
 package foundation.rpg.generator.parser.context;
 
+import foundation.rpg.MetaRule;
+import foundation.rpg.Precedence;
+import foundation.rpg.SymbolPart;
+
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.Objects;
+import java.util.stream.Stream;
+
+import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.joining;
 
 public final class Entry {
 
@@ -69,6 +79,14 @@ public final class Entry {
         return type;
     }
 
+    private boolean includeAnnotation(Element e) {
+        return nonNull(e.getAnnotation(MetaRule.class)) || nonNull(e.getAnnotation(SymbolPart.class)) || nonNull(e.getAnnotation(Precedence.class));
+    }
+
+    public Stream<Element> includedAnnotations() {
+        return getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType).map(DeclaredType::asElement).filter(this::includeAnnotation);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,5 +99,14 @@ public final class Entry {
     @Override
     public int hashCode() {
         return Objects.hash(element, type);
+    }
+
+    @Override
+    public String toString() {
+        return includedAnnotations().map(a -> "@" + a).collect(joining(" ")) + " " + getType();
+    }
+
+    public String simpleName() {
+        return includedAnnotations().map(a -> "@" + a.getSimpleName()).collect(joining(" ")) + " " + getType();
     }
 }

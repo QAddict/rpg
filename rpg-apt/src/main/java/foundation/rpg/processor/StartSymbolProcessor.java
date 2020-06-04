@@ -30,6 +30,7 @@
 package foundation.rpg.processor;
 
 import foundation.rpg.StartSymbol;
+import foundation.rpg.generator.parser.context.ClassToTokenContext;
 import foundation.rpg.lr1.LrParserAutomata;
 import foundation.rpg.lr1.LrParserConstructor;
 import foundation.rpg.generator.parser.context.ClassToGrammarContext;

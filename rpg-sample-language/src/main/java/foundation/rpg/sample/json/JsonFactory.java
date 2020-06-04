@@ -47,10 +47,10 @@ import static java.util.Collections.emptyMap;
 @SuppressWarnings("unused")
 public class JsonFactory {
 
-    String  matchQuotedString(@Match(ANY_QUOTED_STRING) Token t)                         { return t.toString().substring(1, t.length() - 1); }
-    String  matchIdString    (@Match(IDENTIFIER) Token t)                                { return t.toString(); }
-    Integer matchInt         (@Match(INTEGER) Token t)                                   { return parseInt(t.toString()); }
-    Double  matchDouble      (@Match(DOUBLE) Token t)                                    { return parseDouble(t.toString()); }
+    @Match(ANY_QUOTED_STRING) String  matchQuotedString(Token t)                         { return t.toString().substring(1, t.length() - 1); }
+    @Match(IDENTIFIER) String  matchIdString    (Token t)                                { return t.toString(); }
+    @Match(INTEGER) Integer matchInt         (Token t)                                   { return parseInt(t.toString()); }
+    @Match(DOUBLE) Double  matchDouble      (Token t)                                    { return parseDouble(t.toString()); }
 
     @StartSymbol(parserClassName = "JsonParser")
     Object              is (String v)                                                    { return v; }

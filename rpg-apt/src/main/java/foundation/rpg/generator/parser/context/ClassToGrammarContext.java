@@ -83,7 +83,7 @@ public class ClassToGrammarContext {
         Set<Symbol> ignored = new LinkedHashSet<>();
         factoryClass = startRule.getEnclosingElement();
         packageName = pkg.isEmpty() ? factoryClass.getEnclosingElement().toString() : pkg;
-        methods(factoryClass).filter(this::isLexerRule).forEach(tokenContext::accept);
+        methods(factoryClass).filter(this::isLexerRule).map(Entry::entry).forEach(tokenContext::accept);
         List<ExecutableElement> methods = methods(factoryClass).filter(m -> !m.getModifiers().contains(PRIVATE)).filter(m -> !isLexerRule(m)).collect(toList());
         Map<String, List<ExecutableElement>> metaRules = methods.stream().filter(this::hasMetaRuleAnnotation).collect(groupingBy(this::getMetaRuleAnnotation));
         Set<ExecutableElement> precedenceRules = new LinkedHashSet<>();
@@ -98,7 +98,7 @@ public class ClassToGrammarContext {
                         DeclaredType l = (DeclaredType) metaSymbol(p.asType(), map);
                         metaRules.getOrDefault(getMetaRuleAnnotation(p), emptyList()).forEach(metaRule -> {
                             map.putAll(TypeUtils.resolveParameters(metaRule, l));
-                            rules.add(ruleOf(metaSymbol(entry(metaRule), map), l, metaSymbols(metaRule, map)));
+                            rules.add(ruleOf(metaSymbol(entry(metaRule), map), metaSymbols(metaRule, map)));
                             q.accept(metaRule);
                         });
                     });
@@ -163,41 +163,35 @@ public class ClassToGrammarContext {
 
     private Entry metaSymbol(Entry t, Map<String, TypeMirror> map) {
         TypeMirror typeMirror = map.getOrDefault(t.getType().toString(), t.getType());
-        tokenContext.accept(typeMirror);
-        return entry(t.getElement(), typeMirror);
+        Entry entry = entry(t.getElement(), typeMirror);
+        tokenContext.accept(entry);
+        return entry;
     }
 
     private TypeMirror metaSymbol(TypeMirror t, Map<String, TypeMirror> map) {
         return map.getOrDefault(t.toString(), t);
     }
 
-    private boolean includeAnnotation(Element e) {
-        return nonNull(e.getAnnotation(MetaRule.class)) || nonNull(e.getAnnotation(SymbolPart.class)) || nonNull(e.getAnnotation(Precedence.class));
-    }
-
-    private Stream<Element> includedAnnotations(Entry element) {
-        return element.getElement().getAnnotationMirrors().stream().map(AnnotationMirror::getAnnotationType).map(DeclaredType::asElement).filter(this::includeAnnotation);
-    }
-
-    public Symbol of(Entry element) {
-        String name = includedAnnotations(element).map(Object::toString).collect(joining()) + element.getType();
+    public Symbol of(Entry entry) {
+        String name = entry.toString();
         return symbolMap.computeIfAbsent(name, key -> {
-            Symbol s = symbol(uniqueName(element));
-            typeMap.put(s, element);
+            Symbol s = symbol(uniqueName(entry));
+            typeMap.put(s, entry);
             return s;
         });
     }
 
     public Rule ruleOf(ExecutableElement method) {
-        return ruleOf(entry(method), method.getReturnType(), method.getParameters().stream().map(this::scanTokens).collect(toList()));
+        return ruleOf(entry(method), method.getParameters().stream().map(this::scanTokens).collect(toList()));
     }
 
     private Entry scanTokens(VariableElement e) {
-        tokenContext.accept(e);
-        return entry(e);
+        Entry entry = entry(e);
+        tokenContext.accept(entry);
+        return entry;
     }
 
-    public Rule ruleOf(Entry method, TypeMirror l, List<? extends Entry> r) {
+    public Rule ruleOf(Entry method, List<? extends Entry> r) {
         Rule rule = rule(of(method), r.stream().map(this::of).collect(toList()));
         ruleAssociation.put(rule, (ExecutableElement) method.getElement());
         return rule;
@@ -208,7 +202,11 @@ public class ClassToGrammarContext {
     }
 
     public TypeMirror symbolType(Symbol symbol) {
-        return typeMap.get(symbol).getType();
+        return symbolEntry(symbol).getType();
+    }
+
+    public Entry symbolEntry(Symbol symbol) {
+        return typeMap.get(symbol);
     }
 
     public ExecutableElement methodOf(Rule rule) {
@@ -220,7 +218,7 @@ public class ClassToGrammarContext {
     }
 
     private String uniqueName(Entry e) {
-        String prefix = includedAnnotations(e).map(a -> a.getSimpleName().toString()).collect(joining());
+        String prefix = e.includedAnnotations().map(a -> a.getSimpleName().toString()).collect(joining());
         return uniqueName(prefix, e.getType());
     }
 
