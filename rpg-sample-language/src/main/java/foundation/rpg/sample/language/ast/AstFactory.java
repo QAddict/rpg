@@ -47,10 +47,11 @@ public class AstFactory implements WhiteSpaceRules, ListRules {
     Program                    is (@List1 List<Statement> s)                                     { return new Program(s); }
     Statement                  is (@Open Statement s)                                            { return s; }
     Statement                  is1(@Closed Statement s)                                          { return s; }
-    @Open Statement            is (If i, Expression c, Then t, @Open Statement s)                                { return s; }
-    @Open Statement            is (If i, Expression c, Then t, @Closed Statement s, Else e, @Open Statement f)   { return s; }
-    @Closed Statement          is2(If i, Expression c, Then t, @Closed Statement s, Else e, @Closed Statement f) { return s; }
+    @Open Statement            is (If i, Expression c, Then t, @Open Statement s)                { return new IfStatement(c, s); }
+    @Open Statement            is (If i, Expression c, Then t, @Closed Statement s, Else e, @Open Statement f)   { return new IfElseStatement(c, s, f); }
+    @Closed Statement          is2(If i, Expression c, Then t, @Closed Statement s, Else e, @Closed Statement f) { return new IfElseStatement(c, s, f); }
     @Closed Statement          is (Expression e, Semicolon s)                                    { return new ExpressionStatement(e); }
+    @Closed Statement          is (Identifier i, Equal o, Expression e, Semicolon s)             { return new ExpressionStatement(e); }
     Expression                 is (@Relational Expression e)                                     { return e; }
     @Relational Expression     is (@Relational Expression l, Gt o, @Additive Expression r)       { return new BinaryExpression(l, r); }
     @Additive Expression       is (@Additive Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }

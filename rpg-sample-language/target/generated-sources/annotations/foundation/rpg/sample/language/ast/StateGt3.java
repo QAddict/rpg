@@ -16,7 +16,7 @@ public class StateGt3 extends StackState<foundation.rpg.common.symbols.Gt, Stack
 // Shift:
     @Override
     public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditiveExpression12(getFactory(), symbol, this);
+        return new StateAdditiveExpression13(getFactory(), symbol, this);
     }
 
     @Override

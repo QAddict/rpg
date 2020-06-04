@@ -46,6 +46,14 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
+    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitEqual(foundation.rpg.common.symbols.Equal symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
     public State visitGt(foundation.rpg.common.symbols.Gt symbol) throws UnexpectedInputException {
         return error(symbol);
     }
@@ -55,10 +63,6 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
     public State visitTimes(foundation.rpg.common.symbols.Times symbol) throws UnexpectedInputException {
-        return error(symbol);
-    }
-
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

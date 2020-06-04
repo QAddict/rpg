@@ -40,6 +40,11 @@ public class StateIdentifier1 extends StackState<foundation.rpg.sample.language.
 
 // Shift:
     @Override
+    public State visitEqual(foundation.rpg.common.symbols.Equal symbol) {
+        return new StateEqual1(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
         return new StateLPar3(getFactory(), symbol, this);
     }

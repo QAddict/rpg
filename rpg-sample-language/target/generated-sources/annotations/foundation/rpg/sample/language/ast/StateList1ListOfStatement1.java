@@ -47,6 +47,11 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
+    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
+        return new StateIdentifier1(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitRelationalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
         return new StateRelationalExpression1(getFactory(), symbol, this);
     }
@@ -64,11 +69,6 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     @Override
     public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
         return new StateAtomicExpression1(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier1(getFactory(), symbol, this);
     }
 
     @Override

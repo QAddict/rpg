@@ -4,3 +4,6 @@
 
 a + 1;
 "Ah\"oj";
+
+if a > 1 then x = 3;
+else x = 5;

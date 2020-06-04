@@ -27,11 +27,15 @@
  *
  */
 
-package foundation.rpg.common.rules;
+package foundation.rpg.sample.language.ast;
 
-public interface DanglingRules {
+public class IfStatement implements Statement {
+    private final Expression condition;
+    private final Statement positiveBlock;
 
-    static <T> @Dangling T isDanglingOpen(@Open T t) { return t; }
-    static <T> @Dangling T isDanglingClose(T t) { return t; }
+    public IfStatement(Expression condition, Statement positiveBlock) {
+        this.condition = condition;
+        this.positiveBlock = positiveBlock;
+    }
 
 }
