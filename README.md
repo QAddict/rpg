@@ -12,7 +12,6 @@ returning user defined root node of the tree.
     * [Code dependencies](#code-dependencies)
     * [Annotation processing dependencies](#annotation-processing-dependencies)
 * [Grammar definition using Java code - re-use AST factory](#rpg---java-rapid-parser-generator)
-* [Solving conflicts using priorities](#solving-conflicts-using-priorities)
 * [Lexer definition](#lexer-definition)
     * [RPG's regular expressions](#rpgs-regular-expressions)
     * [Instructions for Lexer generator](#instructions-for-lexer-generator)
