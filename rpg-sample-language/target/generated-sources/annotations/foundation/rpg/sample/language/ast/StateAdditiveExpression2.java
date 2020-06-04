@@ -14,9 +14,9 @@ public class StateAdditiveExpression2 extends StackState<foundation.rpg.sample.l
 
 // Reduce:
     @Override
-    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
+    public State visitThen(foundation.rpg.common.symbols.Then symbol) throws UnexpectedInputException {
         State stack1 = this.getPrev();
-        return stack1.visitRelationalExpression((this.getNode())).visitRPar(symbol);
+        return stack1.visitRelationalExpression((this.getNode())).visitThen(symbol);
     }
 
     @Override

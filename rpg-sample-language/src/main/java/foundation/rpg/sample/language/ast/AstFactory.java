@@ -36,10 +36,7 @@ import foundation.rpg.common.precedence.Additive;
 import foundation.rpg.common.precedence.Atomic;
 import foundation.rpg.common.precedence.Multiplicative;
 import foundation.rpg.common.precedence.Relational;
-import foundation.rpg.common.rules.List1;
-import foundation.rpg.common.rules.List3;
-import foundation.rpg.common.rules.ListRules;
-import foundation.rpg.common.rules.WhiteSpaceRules;
+import foundation.rpg.common.rules.*;
 import foundation.rpg.common.symbols.*;
 
 import java.util.List;
@@ -48,7 +45,12 @@ public class AstFactory implements WhiteSpaceRules, ListRules {
 
     @StartSymbol
     Program                    is (@List1 List<Statement> s)                                     { return new Program(s); }
-    Statement                  is (Expression e, Semicolon s)                                    { return new ExpressionStatement(e); }
+    Statement                  is (@Open Statement s)                                            { return s; }
+    Statement                  is1(@Closed Statement s)                                          { return s; }
+    @Open Statement            is (If i, Expression c, Then t, @Open Statement s)                                { return s; }
+    @Open Statement            is (If i, Expression c, Then t, @Closed Statement s, Else e, @Open Statement f)   { return s; }
+    @Closed Statement          is2(If i, Expression c, Then t, @Closed Statement s, Else e, @Closed Statement f) { return s; }
+    @Closed Statement          is (Expression e, Semicolon s)                                    { return new ExpressionStatement(e); }
     Expression                 is (@Relational Expression e)                                     { return e; }
     @Relational Expression     is (@Relational Expression l, Gt o, @Additive Expression r)       { return new BinaryExpression(l, r); }
     @Additive Expression       is (@Additive Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }

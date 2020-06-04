@@ -16,7 +16,7 @@ public class StateTimes2 extends StackState<foundation.rpg.common.symbols.Times,
 // Shift:
     @Override
     public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAtomicExpression11(getFactory(), symbol, this);
+        return new StateAtomicExpression13(getFactory(), symbol, this);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class StateTimes2 extends StackState<foundation.rpg.common.symbols.Times,
 
     @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
-        return new StateLPar3(getFactory(), symbol, this);
+        return new StateLPar2(getFactory(), symbol, this);
     }
 
 

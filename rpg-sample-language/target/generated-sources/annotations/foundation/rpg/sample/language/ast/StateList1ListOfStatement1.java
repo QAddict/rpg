@@ -27,6 +27,21 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
+    public State visitOpenStatement(foundation.rpg.sample.language.ast.Statement symbol) {
+        return new StateOpenStatement1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitClosedStatement(foundation.rpg.sample.language.ast.Statement symbol) {
+        return new StateClosedStatement1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitIf(foundation.rpg.common.symbols.If symbol) {
+        return new StateIf1(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
         return new StateExpression1(getFactory(), symbol, this);
     }

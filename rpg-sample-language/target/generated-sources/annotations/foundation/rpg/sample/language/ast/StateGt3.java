@@ -16,37 +16,37 @@ public class StateGt3 extends StackState<foundation.rpg.common.symbols.Gt, Stack
 // Shift:
     @Override
     public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditiveExpression10(getFactory(), symbol, this);
+        return new StateAdditiveExpression12(getFactory(), symbol, this);
     }
 
     @Override
     public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateMultiplicativeExpression5(getFactory(), symbol, this);
+        return new StateMultiplicativeExpression3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAtomicExpression6(getFactory(), symbol, this);
+        return new StateAtomicExpression3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier6(getFactory(), symbol, this);
+        return new StateIdentifier3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLong(java.lang.Long symbol) {
-        return new StateLong6(getFactory(), symbol, this);
+        return new StateLong3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitString(java.lang.String symbol) {
-        return new StateString6(getFactory(), symbol, this);
+        return new StateString3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
-        return new StateLPar7(getFactory(), symbol, this);
+        return new StateLPar4(getFactory(), symbol, this);
     }
 
 

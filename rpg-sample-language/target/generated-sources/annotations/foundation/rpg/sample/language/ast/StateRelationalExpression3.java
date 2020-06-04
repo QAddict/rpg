@@ -19,12 +19,6 @@ public class StateRelationalExpression3 extends StackState<foundation.rpg.sample
         return stack1.visitExpression(getFactory().is(this.getNode())).visitRPar(symbol);
     }
 
-    @Override
-    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
-        State stack1 = this.getPrev();
-        return stack1.visitExpression(getFactory().is(this.getNode())).visitComma(symbol);
-    }
-
 
 // Shift:
     @Override

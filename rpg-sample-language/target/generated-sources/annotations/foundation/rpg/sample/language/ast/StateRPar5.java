@@ -14,12 +14,12 @@ public class StateRPar5 extends StackState<foundation.rpg.common.symbols.RPar, S
 
 // Reduce:
     @Override
-    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
+    public State visitThen(foundation.rpg.common.symbols.Then symbol) throws UnexpectedInputException {
         StackState<java.util.List<foundation.rpg.sample.language.ast.Expression>, StackState<foundation.rpg.common.symbols.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>>> stack1 = this.getPrev();
 		StackState<foundation.rpg.common.symbols.LPar, StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State>> stack2 = stack1.getPrev();
 		StackState<foundation.rpg.sample.language.ast.Identifier, ? extends State> stack3 = stack2.getPrev();
 		State stack4 = stack3.getPrev();
-        return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitRPar(symbol);
+        return stack4.visitAtomicExpression(getFactory().is(stack3.getNode(), stack2.getNode(), stack1.getNode(), this.getNode())).visitThen(symbol);
     }
 
     @Override

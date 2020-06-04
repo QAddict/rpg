@@ -20,6 +20,12 @@ public class State1 extends State {
     }
 
     @Override
+    public State visitIf(foundation.rpg.common.symbols.If symbol) throws UnexpectedInputException {
+        
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitIf(symbol);
+    }
+
+    @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
         return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitIdentifier(symbol);

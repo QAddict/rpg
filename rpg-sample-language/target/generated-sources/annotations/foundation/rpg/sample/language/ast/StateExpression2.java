@@ -3,11 +3,11 @@ package foundation.rpg.sample.language.ast;
 import foundation.rpg.parser.UnexpectedInputException;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateExpression2 extends StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.symbols.LPar, ? extends State>> {
+public class StateExpression2 extends StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.symbols.If, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateExpression2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, StackState<foundation.rpg.common.symbols.LPar, ? extends State> prev) {
+    public StateExpression2(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, StackState<foundation.rpg.common.symbols.If, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -15,8 +15,8 @@ public class StateExpression2 extends StackState<foundation.rpg.sample.language.
 // Reduce:
 // Shift:
     @Override
-    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) {
-        return new StateRPar1(getFactory(), symbol, this);
+    public State visitThen(foundation.rpg.common.symbols.Then symbol) {
+        return new StateThen1(getFactory(), symbol, this);
     }
 
 

@@ -16,47 +16,47 @@ public class StateLPar1 extends StackState<foundation.rpg.common.symbols.LPar, S
 // Shift:
     @Override
     public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression2(getFactory(), symbol, this);
+        return new StateExpression3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitRelationalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateRelationalExpression2(getFactory(), symbol, this);
+        return new StateRelationalExpression3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditiveExpression2(getFactory(), symbol, this);
+        return new StateAdditiveExpression3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateMultiplicativeExpression2(getFactory(), symbol, this);
+        return new StateMultiplicativeExpression3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAtomicExpression2(getFactory(), symbol, this);
+        return new StateAtomicExpression3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier2(getFactory(), symbol, this);
+        return new StateIdentifier3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLong(java.lang.Long symbol) {
-        return new StateLong2(getFactory(), symbol, this);
+        return new StateLong3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitString(java.lang.String symbol) {
-        return new StateString2(getFactory(), symbol, this);
+        return new StateString3(getFactory(), symbol, this);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
-        return new StateLPar3(getFactory(), symbol, this);
+        return new StateLPar4(getFactory(), symbol, this);
     }
 
 

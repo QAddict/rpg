@@ -30,6 +30,18 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
+    public State visitIf(foundation.rpg.common.symbols.If symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitThen(foundation.rpg.common.symbols.Then symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitElse(foundation.rpg.common.symbols.Else symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
     public State visitSemicolon(foundation.rpg.common.symbols.Semicolon symbol) throws UnexpectedInputException {
         return error(symbol);
     }
@@ -79,6 +91,14 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
     public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitOpenStatement(foundation.rpg.sample.language.ast.Statement symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitClosedStatement(foundation.rpg.sample.language.ast.Statement symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

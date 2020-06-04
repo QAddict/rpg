@@ -21,6 +21,13 @@ public class StateStatement1 extends StackState<foundation.rpg.sample.language.a
     }
 
     @Override
+    public State visitIf(foundation.rpg.common.symbols.If symbol) throws UnexpectedInputException {
+        StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return stack2.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1(stack1.getNode(), this.getNode())).visitIf(symbol);
+    }
+
+    @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         StackState<java.util.List<foundation.rpg.sample.language.ast.Statement>, ? extends State> stack1 = this.getPrev();
 		State stack2 = stack1.getPrev();

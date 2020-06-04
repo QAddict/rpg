@@ -16,7 +16,7 @@ public class StateExpression4 extends StackState<foundation.rpg.sample.language.
 // Shift:
     @Override
     public State visitRPar(foundation.rpg.common.symbols.RPar symbol) {
-        return new StateRPar3(getFactory(), symbol, this);
+        return new StateRPar2(getFactory(), symbol, this);
     }
 
 

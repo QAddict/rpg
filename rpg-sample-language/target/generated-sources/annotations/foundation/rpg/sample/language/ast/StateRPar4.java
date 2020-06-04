@@ -45,14 +45,6 @@ public class StateRPar4 extends StackState<foundation.rpg.common.symbols.RPar, S
         return stack3.visitAtomicExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitTimes(symbol);
     }
 
-    @Override
-    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
-        StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.symbols.LPar, ? extends State>> stack1 = this.getPrev();
-		StackState<foundation.rpg.common.symbols.LPar, ? extends State> stack2 = stack1.getPrev();
-		State stack3 = stack2.getPrev();
-        return stack3.visitAtomicExpression(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
-    }
-
 
 // Shift:
 // Accept:
