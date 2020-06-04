@@ -132,28 +132,6 @@ The goal of __RPG__ is to re-use such factory as grammar definition, and generat
 which in turn invokes the factory methods during parsing.
 BTW. the AST factory in fact looks very similar to other parser generators. Yet this is directly Java code.
 
-## Solving conflicts using priorities
-
-Note, that this grammar above is not really LR(1). It contains SHIFT / REDUCE conflict because it would natively allow
-ambigous syntax trees for rule `Expression is(Expression, Plus, Expression)`.
-The parser contains additional feature - priorities.
-
-Default priorities of all actions is 0. Rule priorities can be changed either globally or per rule. Here increasing
-rule (REDUCE) priority over SHIFT priority resolves the SHIFT / REDUCE conflict in favor of REDUCE. The final idea is
-to solve using priorities e.g. operator precedence. E.g. given that multiplication has higher priority than addition,
-then SHIFT in multiplication will be preferred over REDUCE of addition. That in turn allows more "intuitive / naive"
-grammar definition. Instead of defining complex hierarchy of nodes per type of operation and operand, it allows simply:
-
-```java
-@RulePriority(1) static Expression is (Expression l, Plus p, Expression r) { ... }
-@RulePriority(2) static Expression is (Expression l, Star s, Expression r) { ... }
-```
-
-The generated parser will either fail parsing with `ParseErrorException` or return the root of the parse tree,
-represented by the return type of method annotated as start symbol.
-
-One can see, that the generator can be done for any type, inclusing JDK or 3rd party types (see List<Statement>). That
-should make new parser development really rapid.
 
 ## Lexer definition
 As any parser, we also need to have complementary lexer. It should be generated too from yet another additional
