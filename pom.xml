@@ -53,7 +53,7 @@
     <url>https://github.com/c0stra/rpg/wiki/rpg</url>
 
     <properties>
-        <java.version>1.10</java.version>
+        <java.version>1.8</java.version>
         <compiler.plugin.version>3.8.0</compiler.plugin.version>
         <testng.version>7.1.0</testng.version>
         <mockito.version>2.18.3</mockito.version>
@@ -123,9 +123,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler.plugin.version}</version>
                 <configuration>
-                    <release>10</release>
-                    <!--source>${java.version}</source>
-                    <target>${java.version}</target-->
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>

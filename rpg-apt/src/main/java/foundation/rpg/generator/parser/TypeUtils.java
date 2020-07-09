@@ -48,6 +48,10 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
 
 public class TypeUtils {
 
+    public static String typeName(TypeMirror typeMirror) {
+        return typeMirror.toString().replaceAll("@.*? ", "").replaceAll("[ :()]", "");
+    }
+
     public static String getAnnotationValue(AnnotationMirror a) {
         return a.getElementValues().entrySet().stream().filter(k -> k.getKey().getSimpleName().toString().equals("value"))
                 .map(e -> e.getValue().getValue().toString()).findFirst().get();

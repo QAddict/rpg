@@ -29,7 +29,7 @@
 
 package foundation.rpg.generator.parser.context;
 
-import foundation.rpg.generator.parser.context.SymbolEntry;
+import foundation.rpg.generator.parser.TypeUtils;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
@@ -47,7 +47,7 @@ public class Context {
     private final String parserName;
     private final String lexerName;
     private final Map<Rule, ExecutableElement> ruleToMethod;
-    private final Map<Symbol, SymbolEntry> symbolToType;
+    private final Map<Symbol, TypeMirror> symbolToType;
     private final Grammar grammar;
 
     public Context(ExecutableElement startRule,
@@ -56,7 +56,7 @@ public class Context {
                    String parserName,
                    String lexerName,
                    Map<Rule, ExecutableElement> ruleToMethod,
-                   Map<Symbol, SymbolEntry> symbolToType,
+                   Map<Symbol, TypeMirror> symbolToType,
                    Grammar grammar) {
 
         this.startRule = startRule;
@@ -78,7 +78,11 @@ public class Context {
     }
 
     public String typeOf(Symbol symbol) {
-        return symbolToType.get(symbol).toString();
+        return TypeUtils.typeName(typeMirrorOf(symbol));
+    }
+
+    public TypeMirror typeMirrorOf(Symbol symbol) {
+        return symbolToType.get(symbol);
     }
 
     public boolean isFactoryStatic() {
@@ -103,10 +107,6 @@ public class Context {
 
     public String getLexerName() {
         return lexerName;
-    }
-
-    public SymbolEntry symbolEntryOf(Symbol symbol) {
-        return symbolToType.get(symbol);
     }
 
 }

@@ -39,9 +39,10 @@ import foundation.rpg.regular.RegularExpressionParser;
 import foundation.rpg.parser.Token;
 
 import javax.annotation.processing.Filer;
-import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.AnnotatedConstruct;
 import javax.lang.model.element.Element;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,28 +59,29 @@ public class ClassToTokenContext {
 
     public void generate(Context context, Filer filer) throws IOException {
         new LexerGenerator().generateLexer(
-                context.getPackageName(), "GeneratedLexer", concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).map(symbol -> tokenInfoFor(symbol, context.symbolEntryOf(symbol))).collect(toList()),
+                context.getPackageName(), "GeneratedLexer", concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).map(symbol -> tokenInfoFor(symbol, context.typeMirrorOf(symbol))).collect(toList()),
                 new PrintWriter(filer.createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isFactoryStatic() ? null : context.getFactoryClass().asType()
         );
     }
 
-    private Optional<String> annotationValue(List<? extends AnnotationMirror> list, Class<?> t) {
-        return list.stream().filter(a -> a.getAnnotationType().toString().equals(t.getName())).map(TypeUtils::getAnnotationValue).findFirst();
+    private Optional<String> annotationValue(AnnotatedConstruct c, Class<?> t) {
+        return c.getAnnotationMirrors().stream().filter(a -> a.getAnnotationType().toString().equals(t.getName())).map(TypeUtils::getAnnotationValue).findFirst();
     }
 
-    public TokenInfo tokenInfoFor(Symbol symbol, SymbolEntry entry) {
-        Element typeElement = ((DeclaredType) entry.typeMirror()).asElement();
-        String p = Token.class.getName().equals(entry.type())
+    public TokenInfo tokenInfoFor(Symbol symbol, TypeMirror type) {
+        Element element = ((DeclaredType) type).asElement();
+        String name = TypeUtils.typeName(type);
+        String p = Token.class.getName().equals(name)
                 ? "builder.build()"
-                : "new " + entry.type() + "(" + (constructorsIn(typeElement.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName()))
+                : "new " + name + "(" + (constructorsIn(element.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName()))
                 ?  "builder.build()" : "builder.build().getContent()") + ")";
         String call = "Element" + symbol + "(" + p + ")";
 
-        return annotationValue(entry.getAnnotations(), Match.class).map(m -> new TokenInfo(typeElement, call, parser.parsePattern(m), 0))
-                .or(() -> annotationValue(entry.getAnnotations(), Name.class).map(m -> new TokenInfo(typeElement, call, parser.parseText(m), 1)))
-                .or(() -> annotationValue(typeElement.getAnnotationMirrors(), Match.class).map(m -> new TokenInfo(typeElement, call, parser.parsePattern(m), 0)))
-                .or(() -> annotationValue(typeElement.getAnnotationMirrors(), Name.class).map(m -> new TokenInfo(typeElement, call, parser.parseText(m), 1)))
-                .orElseThrow(() -> new IllegalArgumentException("No token defined for " + symbol + ". Use @Name or @Match annotation on " + symbol + " or in factory."));
+        return annotationValue(type, Match.class).map(m -> new TokenInfo(element, call, parser.parsePattern(m), 0))
+                .orElseGet(() -> annotationValue(type, Name.class).map(m -> new TokenInfo(element, call, parser.parseText(m), 1))
+                .orElseGet(() -> annotationValue(element, Match.class).map(m -> new TokenInfo(element, call, parser.parsePattern(m), 0))
+                .orElseGet(() -> annotationValue(element, Name.class).map(m -> new TokenInfo(element, call, parser.parseText(m), 1))
+                .orElseThrow(() -> new IllegalArgumentException("No token defined for " + symbol + ". Use @Name or @Match annotation on " + symbol + " or in factory.")))));
 
     }
 

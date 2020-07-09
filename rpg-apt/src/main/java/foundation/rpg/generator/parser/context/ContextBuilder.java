@@ -46,8 +46,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static foundation.rpg.generator.parser.TypeUtils.*;
-import static foundation.rpg.generator.parser.context.SymbolEntry.symbolEntry;
-import static foundation.rpg.generator.parser.context.SymbolEntry.symbolEntryName;
 import static foundation.rpg.grammar.Grammar.grammar;
 import static foundation.rpg.grammar.Rule.rule;
 import static foundation.rpg.grammar.Symbol.symbol;
@@ -58,7 +56,7 @@ import static javax.lang.model.util.ElementFilter.typesIn;
 public class ContextBuilder {
 
     private final Set<String> usedNames = new LinkedHashSet<>();
-    private final Map<Symbol, SymbolEntry> symbolToType = new HashMap<>();
+    private final Map<Symbol, TypeMirror> symbolToType = new HashMap<>();
     private final Map<String, Symbol> typeToSymbol = new HashMap<>();
 
     public static Context createContext(ExecutableElement startRule, TypeMirror end) {
@@ -70,14 +68,14 @@ public class ContextBuilder {
         TypeElement factoryClassElement = get(startRule, TypeElement.class);
         PackageElement packageElement = get(factoryClassElement, PackageElement.class);
         String generatorPrefix = ((DeclaredType) startRule.getReturnType()).asElement().getSimpleName().toString();
-        symbolToType.put(Symbol.end, symbolEntry(end));
+        symbolToType.put(Symbol.end, end);
         Symbol startSymbol = returnSymbol(startRule);
         symbolToType.put(Symbol.start, symbolToType.get(startSymbol));
         List<ExecutableElement> methods = methods(factoryClassElement).collect(toList());
-        Set<Symbol> ignored = methods.stream().filter(TypeUtils::isVoid).flatMap(m -> m.getParameters().stream()).map(this::parameterSymbol).collect(toUnmodifiableSet());
+        Set<Symbol> ignored = methods.stream().filter(TypeUtils::isVoid).flatMap(m -> m.getParameters().stream()).map(this::parameterSymbol).collect(toSet());
         Map<Rule, ExecutableElement> ruleToMethod = new LinkedHashMap<>();
         methods.stream().filter(TypeUtils::notVoid).peek(ruleMethod -> {
-            ruleToMethod.put(rule(returnSymbol(ruleMethod), ruleMethod.getParameters().stream().map(this::parameterSymbol).collect(toUnmodifiableList())), ruleMethod);
+            ruleToMethod.put(rule(returnSymbol(ruleMethod), ruleMethod.getParameters().stream().map(this::parameterSymbol).collect(toList())), ruleMethod);
             Map<String, TypeMirror> map = new LinkedHashMap<>();
             Bfs.withItem(ruleMethod, (method, queue) -> method.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(parameter -> {
                 DeclaredType l = (DeclaredType) map.getOrDefault(parameter.asType().toString(), parameter.asType());
@@ -125,20 +123,19 @@ public class ContextBuilder {
         return hasAnnotationAnnotatedWith(method.asType(), MetaRule.class);
     }
 
-    private Symbol mapSymbol(TypeMirror type, Element element) {
-        String name = symbolEntryName(type, element);
+    private Symbol mapSymbol(TypeMirror type) {
+        String name = type.toString();
         return typeToSymbol.computeIfAbsent(name, key -> {
-            SymbolEntry entry = symbolEntry(type, element);
-            Symbol symbol = symbol(symbolName(entry));
-            symbolToType.put(symbol, entry);
+            Symbol symbol = symbol(symbolName(type));
+            symbolToType.put(symbol, type);
             return symbol;
         });
     }
 
-    private String symbolName(SymbolEntry entry) {
-        String full = entry.typeMirror().toString().replaceAll(">", "");
-        return entry.typeMirror().getAnnotationMirrors().stream().filter(a -> a.getAnnotationType().toString().equals(Name.class.getName())).flatMap(e -> e.getElementValues().entrySet().stream().filter(k -> k.getKey().getSimpleName().toString().equals("value"))).map(e -> e.getValue().getValue().toString()).findFirst().orElseGet(() -> {
-            String s = entry.getAnnotations().stream().map(a -> a.getAnnotationType().asElement()).filter(TypeUtils::includeInName).map(e -> e.getSimpleName().toString()).collect(joining());
+    private String symbolName(TypeMirror entry) {
+        String full = entry.toString().replaceAll("[>()]", "");
+        return entry.getAnnotationMirrors().stream().filter(a -> a.getAnnotationType().toString().equals(Name.class.getName())).map(TypeUtils::getAnnotationValue).findFirst().orElseGet(() -> {
+            String s = entry.getAnnotationMirrors().stream().map(a -> a.getAnnotationType().asElement()).filter(TypeUtils::includeInName).map(e -> e.getSimpleName().toString()).collect(joining());
             s += Stream.of(full.split("<")).map(p -> p.substring(p.lastIndexOf(".") + 1)).collect(joining("Of"));
             while(!usedNames.add(s)) {
                 s = s + "$";
@@ -147,19 +144,19 @@ public class ContextBuilder {
         });
     }
     private Symbol parameterSymbol(VariableElement v) {
-        return mapSymbol(v.asType(), v);
+        return mapSymbol(v.asType());
     }
 
     private Symbol returnSymbol(ExecutableElement method) {
-        return mapSymbol(method.getReturnType(), method);
+        return mapSymbol(method.getReturnType());
     }
 
     private Symbol returnMetaSymbol(ExecutableElement method, Map<String, TypeMirror> map) {
-        return mapSymbol(map.getOrDefault(method.getReturnType().toString(), method.getReturnType()), method);
+        return mapSymbol(map.getOrDefault(method.getReturnType().toString(), method.getReturnType()));
     }
 
     private List<Symbol> metaSymbols(ExecutableElement method, Map<String, TypeMirror> map) {
-        return method.getParameters().stream().map(p -> mapSymbol(map.getOrDefault(p.asType().toString(), p.asType()), p)).collect(toList());
+        return method.getParameters().stream().map(p -> mapSymbol(map.getOrDefault(p.asType().toString(), p.asType()))).collect(toList());
     }
 
     private static <T extends Element> T get(Element element, Class<T> type) {
