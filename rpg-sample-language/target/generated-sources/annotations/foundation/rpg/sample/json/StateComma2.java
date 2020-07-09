@@ -19,6 +19,16 @@ public class StateComma2 extends StackState<foundation.rpg.common.symbols.Comma,
         return new StateString7(getFactory(), symbol, this);
     }
 
+    @Override
+    public State visitstring(foundation.rpg.parser.Token symbol) {
+        return new Statestring3(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitidentifier(foundation.rpg.parser.Token symbol) {
+        return new Stateidentifier3(getFactory(), symbol, this);
+    }
+
 
 // Accept:
 }

@@ -44,6 +44,26 @@ public class State1 extends State {
         return new StateLCurl1(getFactory(), symbol, this);
     }
 
+    @Override
+    public State visitstring(foundation.rpg.parser.Token symbol) {
+        return new Statestring1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitidentifier(foundation.rpg.parser.Token symbol) {
+        return new Stateidentifier1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitinteger(foundation.rpg.parser.Token symbol) {
+        return new Stateinteger1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitdouble(foundation.rpg.parser.Token symbol) {
+        return new Statedouble1(getFactory(), symbol, this);
+    }
+
 
 // Accept:
 }

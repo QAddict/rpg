@@ -44,6 +44,26 @@ public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma,
         return new StateLCurl2(getFactory(), symbol, this);
     }
 
+    @Override
+    public State visitstring(foundation.rpg.parser.Token symbol) {
+        return new Statestring2(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitidentifier(foundation.rpg.parser.Token symbol) {
+        return new Stateidentifier2(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitinteger(foundation.rpg.parser.Token symbol) {
+        return new Stateinteger2(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitdouble(foundation.rpg.parser.Token symbol) {
+        return new Statedouble2(getFactory(), symbol, this);
+    }
+
 
 // Accept:
 }

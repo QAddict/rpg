@@ -29,18 +29,61 @@
 
 package foundation.rpg.generator.parser;
 
-import javax.lang.model.element.ExecutableElement;
+import foundation.rpg.MetaRule;
+import foundation.rpg.Precedence;
+import foundation.rpg.SymbolPart;
+
+import javax.lang.model.AnnotatedConstruct;
+import javax.lang.model.element.*;
 import javax.lang.model.type.*;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.Objects.nonNull;
+import static java.util.stream.Stream.concat;
+import static javax.lang.model.element.Modifier.PRIVATE;
+import static javax.lang.model.type.TypeKind.VOID;
+import static javax.lang.model.util.ElementFilter.methodsIn;
 
 public class TypeUtils {
+
+    public static String getAnnotationValue(AnnotationMirror a) {
+        return a.getElementValues().entrySet().stream().filter(k -> k.getKey().getSimpleName().toString().equals("value"))
+                .map(e -> e.getValue().getValue().toString()).findFirst().get();
+    }
+
+    public static boolean hasAnnotation(AnnotationMirror annotationMirror, Class<? extends Annotation> annotationType) {
+        return nonNull(annotationMirror.getAnnotationType().asElement().getAnnotation(annotationType));
+    }
+
+    public static boolean hasAnnotationAnnotatedWith(AnnotatedConstruct c, Class<? extends Annotation> annotationType) {
+        return c.getAnnotationMirrors().stream().anyMatch(annotationMirror -> hasAnnotation(annotationMirror, annotationType));
+    }
+
+    public static boolean includeInName(Element annotationElement) {
+        return nonNull(annotationElement.getAnnotation(MetaRule.class)) || nonNull(annotationElement.getAnnotation(SymbolPart.class)) || nonNull(annotationElement.getAnnotation(Precedence.class));
+    }
+
+    public static Element getAnnotationAnnotatedWith(AnnotatedConstruct c, Class<? extends Annotation> annotationType) {
+        return c.getAnnotationMirrors().stream().filter(annotationMirror -> hasAnnotation(annotationMirror, annotationType)).map(a -> a.getAnnotationType().asElement()).findFirst().orElse(null);
+    }
+
+    public static Stream<ExecutableElement> methods(Element factory) {
+        return concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())).filter(m -> !m.getModifiers().contains(PRIVATE)));
+    }
 
     public static Map<String, TypeMirror> resolveParameters(ExecutableElement genericMethod, TypeMirror returnType) {
         return new TypeResolver().visit(genericMethod.getReturnType(), returnType);
     }
 
+    public static boolean isVoid(ExecutableElement method) {
+        return method.getReturnType().getKind() == VOID;
+    }
+
+    public static boolean notVoid(ExecutableElement method) {
+        return !isVoid(method);
+    }
 
     private static class TypeResolver implements TypeVisitor<Map<String, TypeMirror>, TypeMirror> {
         private final Map<String, TypeMirror> map = new LinkedHashMap<>();

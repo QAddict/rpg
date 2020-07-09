@@ -30,12 +30,13 @@
 package foundation.rpg.processor;
 
 import foundation.rpg.StartSymbol;
+import foundation.rpg.generator.parser.context.Context;
+import foundation.rpg.generator.parser.context.ContextBuilder;
 import foundation.rpg.generator.parser.context.ClassToTokenContext;
 import foundation.rpg.lr1.LrParserAutomata;
 import foundation.rpg.lr1.LrParserConstructor;
-import foundation.rpg.generator.parser.context.ClassToGrammarContext;
 import foundation.rpg.generator.parser.CodeGenerator;
-import foundation.rpg.generator.parser.EnvironmentGenerator;
+import foundation.rpg.parser.End;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -62,8 +63,8 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
     public void accept(ExecutableElement element) {
         try {
             long start = currentTimeMillis();
-            EnvironmentGenerator environmentGenerator = new ClassToTokenContext();
-            ClassToGrammarContext context = new ClassToGrammarContext(element, processingEnv.getElementUtils(), environmentGenerator);
+            ClassToTokenContext environmentGenerator = new ClassToTokenContext();
+            Context context = ContextBuilder.createContext(element, processingEnv.getElementUtils().getTypeElement(End.class.getName()).asType());
             long gc = currentTimeMillis();
             System.out.println("Grammar generated from class: " + element.getEnclosingElement() + " in " + (gc - start) + "ms");
             System.out.println(context.getGrammar());

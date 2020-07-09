@@ -42,7 +42,7 @@ import java.lang.annotation.Target;
  * symbol matched by @Name).
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.PARAMETER})
+@Target({ElementType.TYPE_USE, ElementType.TYPE})
 public @interface Name {
 
     /**
@@ -51,13 +51,5 @@ public @interface Name {
      * @return String name of the annotated type.
      */
     String value();
-
-    /**
-     * Priority of the annotated terminal symbol, used in case of match of multiple terminal symbols ion the source
-     * text.
-     *
-     * @return Priority of the annotated symbol.
-     */
-    int priority() default 1;
 
 }

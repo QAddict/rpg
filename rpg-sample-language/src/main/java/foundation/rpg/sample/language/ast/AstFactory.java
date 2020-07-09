@@ -39,19 +39,23 @@ import foundation.rpg.common.precedence.Relational;
 import foundation.rpg.common.rules.*;
 import foundation.rpg.common.symbols.*;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.List;
+
+import static foundation.rpg.common.AstUtils.addTo;
+import static foundation.rpg.common.AstUtils.list;
 
 public class AstFactory implements WhiteSpaceRules, ListRules {
 
     @StartSymbol
-    Program                    is (@List1 List<Statement> s)                                     { return new Program(s); }
-    Statement                  is (@Open Statement s)                                            { return s; }
-    Statement                  is1(@Closed Statement s)                                          { return s; }
+    Program                    is (@List1 List<@Dangling Statement> s)                           { return new Program(s); }
+    @Dangling Statement        is (@Open Statement s) { return s; }
+    @Dangling Statement        is2(Statement s ) { return s; }
     @Open Statement            is (If i, Expression c, Then t, @Open Statement s)                { return new IfStatement(c, s); }
-    @Open Statement            is (If i, Expression c, Then t, @Closed Statement s, Else e, @Open Statement f)   { return new IfElseStatement(c, s, f); }
-    @Closed Statement          is2(If i, Expression c, Then t, @Closed Statement s, Else e, @Closed Statement f) { return new IfElseStatement(c, s, f); }
-    @Closed Statement          is (Expression e, Semicolon s)                                    { return new ExpressionStatement(e); }
-    @Closed Statement          is (Identifier i, Equal o, Expression e, Semicolon s)             { return new ExpressionStatement(e); }
+    @Open Statement            is (If i, Expression c, Then t, Statement s, Else e, @Open Statement f)   { return new IfElseStatement(c, s, f); }
+    Statement                  is2(If i, Expression c, Then t, Statement s, Else e, Statement f) { return new IfElseStatement(c, s, f); }
+    Statement                  is (Expression e, Semicolon s)                                    { return new ExpressionStatement(e); }
+    Statement                  is (Identifier i, Equal o, Expression e, Semicolon s)             { return new ExpressionStatement(e); }
     Expression                 is (@Relational Expression e)                                     { return e; }
     @Relational Expression     is (@Relational Expression l, Gt o, @Additive Expression r)       { return new BinaryExpression(l, r); }
     @Additive Expression       is (@Additive Expression l, Plus o, @Multiplicative Expression r) { return new BinaryExpression(l, r); }
@@ -61,5 +65,6 @@ public class AstFactory implements WhiteSpaceRules, ListRules {
     @Atomic Expression         is (@Match(Patterns.DOUBLE_QUOTED_STRING) String v)               { return new Literal<>(v); }
     @Atomic Expression         is (LPar l, Expression e, RPar r)                                 { return e; }
     @Atomic Expression         is (Identifier i, LPar l, @List3 List<Expression> e, RPar r)      { return null; }
+    //@List3 List<Expression> is3(Expression e) { return list(e); }
 
 }

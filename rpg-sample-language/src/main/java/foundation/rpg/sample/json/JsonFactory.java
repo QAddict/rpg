@@ -30,6 +30,7 @@
 package foundation.rpg.sample.json;
 
 import foundation.rpg.Match;
+import foundation.rpg.Name;
 import foundation.rpg.StartSymbol;
 import foundation.rpg.common.symbols.*;
 import foundation.rpg.parser.Token;
@@ -47,10 +48,10 @@ import static java.util.Collections.emptyMap;
 @SuppressWarnings("unused")
 public class JsonFactory {
 
-    @Match(ANY_QUOTED_STRING) String  matchQuotedString(Token t)                         { return t.toString().substring(1, t.length() - 1); }
-    @Match(IDENTIFIER) String  matchIdString    (Token t)                                { return t.toString(); }
-    @Match(INTEGER) Integer matchInt         (Token t)                                   { return parseInt(t.toString()); }
-    @Match(DOUBLE) Double  matchDouble      (Token t)                                    { return parseDouble(t.toString()); }
+    String  matchQuotedString(@Name("string") @Match(ANY_QUOTED_STRING)  Token t)        { return t.toString().substring(1, t.length() - 1); }
+    String  matchIdString    (@Name("identifier") @Match(IDENTIFIER) Token t)            { return t.toString(); }
+    Integer matchInt         (@Name("integer") @Match(INTEGER)  Token t)                 { return parseInt(t.toString()); }
+    Double  matchDouble      (@Name("double") @Match(DOUBLE)  Token t)                   { return parseDouble(t.toString()); }
 
     @StartSymbol(parserClassName = "JsonParser")
     Object              is (String v)                                                    { return v; }

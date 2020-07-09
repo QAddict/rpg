@@ -27,18 +27,15 @@
  *
  */
 
-package foundation.rpg.generator.parser;
+package foundation.rpg.common.symbols;
 
-import foundation.rpg.generator.parser.context.ClassToGrammarContext;
-import foundation.rpg.generator.parser.context.Entry;
+import foundation.rpg.Name;
+import foundation.rpg.parser.Terminal;
+import foundation.rpg.parser.Token;
 
-import javax.annotation.processing.Filer;
-import java.io.IOException;
-
-public interface EnvironmentGenerator {
-
-    void accept(Entry entry);
-
-    void generate(ClassToGrammarContext context, Filer filer) throws IOException;
-
+@Name("and")
+public final class And extends Terminal {
+    public And(Token position) {
+        super(position);
+    }
 }

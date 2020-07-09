@@ -39,4 +39,4 @@ import java.lang.annotation.Target;
 @Precedence
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_USE})
-public @interface Primary {}
+public @interface Negation {}

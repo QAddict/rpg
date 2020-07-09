@@ -94,7 +94,7 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) throws UnexpectedInputException {
+    public State visitDanglingStatement(foundation.rpg.sample.language.ast.Statement symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -102,7 +102,7 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitClosedStatement(foundation.rpg.sample.language.ast.Statement symbol) throws UnexpectedInputException {
+    public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

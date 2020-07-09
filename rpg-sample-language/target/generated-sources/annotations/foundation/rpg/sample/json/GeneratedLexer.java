@@ -83,14 +83,14 @@ public class GeneratedLexer implements Lexer<State> {
 						case '.': state = 18; break;
 						default:
 							if(Lexer.matchesGroup('d', symbol)) { state = 10; break; }
-							return new ElementInteger(getFactory().matchInt(builder.build()));
+							return new Elementinteger(builder.build());
 					}
 					break;
 				case 11:
 					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
-					return new ElementString(getFactory().matchIdString(builder.build()));
+					return new Elementidentifier(builder.build());
 				case 12:
-					return new ElementString(getFactory().matchQuotedString(builder.build()));
+					return new Elementstring(builder.build());
 				case 13:
 					switch(symbol) {
 						case '"': state = 20; break;
@@ -112,7 +112,7 @@ public class GeneratedLexer implements Lexer<State> {
 					}
 					break;
 				case 15:
-					return new ElementString(getFactory().matchQuotedString(builder.build()));
+					return new Elementstring(builder.build());
 				case 16:
 					switch(symbol) {
 						case 'r': state = 21; break;
@@ -138,7 +138,7 @@ public class GeneratedLexer implements Lexer<State> {
 					input.error("Unexpected character: '" + (char) symbol + "'");
 				case 19:
 					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
-					return new ElementString(getFactory().matchIdString(builder.build()));
+					return new Elementidentifier(builder.build());
 				case 20:
 					switch(symbol) {
 						case '"': state = 12; break;
@@ -159,7 +159,7 @@ public class GeneratedLexer implements Lexer<State> {
 					break;
 				case 22:
 					if(Lexer.matchesGroup('d', symbol)) { state = 22; break; }
-					return new ElementDouble(getFactory().matchDouble(builder.build()));
+					return new Elementdouble(builder.build());
 			}
 		}
 	}

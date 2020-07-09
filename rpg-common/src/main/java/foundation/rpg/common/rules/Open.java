@@ -30,13 +30,14 @@
 package foundation.rpg.common.rules;
 
 import foundation.rpg.MetaRule;
+import foundation.rpg.SymbolPart;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@MetaRule
+@SymbolPart
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
+@Target({ElementType.TYPE_USE})
 public @interface Open {}

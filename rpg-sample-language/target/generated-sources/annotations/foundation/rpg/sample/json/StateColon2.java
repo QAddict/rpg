@@ -44,6 +44,26 @@ public class StateColon2 extends StackState<foundation.rpg.common.symbols.Colon,
         return new StateLCurl5(getFactory(), symbol, this);
     }
 
+    @Override
+    public State visitstring(foundation.rpg.parser.Token symbol) {
+        return new Statestring8(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitidentifier(foundation.rpg.parser.Token symbol) {
+        return new Stateidentifier8(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitinteger(foundation.rpg.parser.Token symbol) {
+        return new Stateinteger5(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitdouble(foundation.rpg.parser.Token symbol) {
+        return new Statedouble5(getFactory(), symbol, this);
+    }
+
 
 // Accept:
 }

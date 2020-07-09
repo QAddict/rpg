@@ -27,16 +27,15 @@
  *
  */
 
-package foundation.rpg.common.precedence;
+package foundation.rpg.common.symbols;
 
-import foundation.rpg.Precedence;
+import foundation.rpg.Name;
+import foundation.rpg.parser.Terminal;
+import foundation.rpg.parser.Token;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Precedence
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE_USE})
-public @interface Primary {}
+@Name("or")
+public class Or extends Terminal {
+    public Or(Token position) {
+        super(position);
+    }
+}

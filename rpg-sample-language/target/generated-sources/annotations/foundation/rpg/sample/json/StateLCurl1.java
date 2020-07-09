@@ -29,6 +29,16 @@ public class StateLCurl1 extends StackState<foundation.rpg.common.symbols.LCurl,
         return new StateString3(getFactory(), symbol, this);
     }
 
+    @Override
+    public State visitstring(foundation.rpg.parser.Token symbol) {
+        return new Statestring3(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitidentifier(foundation.rpg.parser.Token symbol) {
+        return new Stateidentifier3(getFactory(), symbol, this);
+    }
+
 
 // Accept:
 }

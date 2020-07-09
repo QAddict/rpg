@@ -22,8 +22,8 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
 
 // Shift:
     @Override
-    public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) {
-        return new StateStatement1(getFactory(), symbol, this);
+    public State visitDanglingStatement(foundation.rpg.sample.language.ast.Statement symbol) {
+        return new StateDanglingStatement1(getFactory(), symbol, this);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class StateList1ListOfStatement1 extends StackState<java.util.List<founda
     }
 
     @Override
-    public State visitClosedStatement(foundation.rpg.sample.language.ast.Statement symbol) {
-        return new StateClosedStatement1(getFactory(), symbol, this);
+    public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) {
+        return new StateStatement1(getFactory(), symbol, this);
     }
 
     @Override

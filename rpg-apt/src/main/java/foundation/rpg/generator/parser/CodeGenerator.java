@@ -29,6 +29,7 @@
 
 package foundation.rpg.generator.parser;
 
+import foundation.rpg.generator.parser.context.Context;
 import foundation.rpg.lr1.LrAction;
 import foundation.rpg.lr1.LrItem;
 import foundation.rpg.lr1.LrItemSet;
@@ -36,11 +37,9 @@ import foundation.rpg.lr1.LrParserAutomata;
 import foundation.rpg.grammar.Grammar;
 import foundation.rpg.grammar.Rule;
 import foundation.rpg.grammar.Symbol;
-import foundation.rpg.generator.parser.context.ClassToGrammarContext;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
@@ -57,9 +56,9 @@ import static javax.lang.model.element.Modifier.STATIC;
 public class CodeGenerator {
 
     private final Filer filer;
-    private final ClassToGrammarContext context;
+    private final Context context;
 
-    public CodeGenerator(Filer filer, ClassToGrammarContext context) {
+    public CodeGenerator(Filer filer, Context context) {
         this.filer = filer;
         this.context = context;
     }
@@ -71,18 +70,22 @@ public class CodeGenerator {
             generateState(lrParser, set);
         Stream.of(lrParser.getGrammar().getTerminals(), lrParser.getGrammar().getIgnored()).flatMap(Collection::stream)
                 .forEach(s -> write(source("Element$name$").set(name, s).set(type, typeOf(s))));
-        SourceModel parserSource = source("$parser$").set("parser", context.getParserClass()).set(result, typeOf(lrParser.getGrammar().getStart()));
+        SourceModel parserSource = source("$parser$").set("parser", context.getParserName()).set(result, typeOf(lrParser.getGrammar().getStart()));
         write(parserSource);
     }
 
-    private String chainedType(List<TypeMirror> parameters, int length, int noWildcard) {
-        return length > 0 ? "StackState<" + parameters.get(length - 1) + ", " + chainedType(parameters, length - 1, noWildcard - 1) + ">" : noWildcard > 0 ? "State" : "? extends State";
+    private String t(String t) {
+        return t;
+        //return t instanceof Type ? ((Type) t).baseType() : t;
+    }
+    private String chainedType(List<String> parameters, int length, int noWildcard) {
+        return length > 0 ? "StackState<" + t(parameters.get(length - 1)) + ", " + chainedType(parameters, length - 1, noWildcard - 1) + ">" : noWildcard > 0 ? "State" : "? extends State";
     }
 
-    private String chainedVar(List<TypeMirror> parameters, int length) {
+    private String chainedVar(List<String> parameters, int length) {
         return chainedType(parameters, length, 1);
     }
-    private String chainedType(List<TypeMirror> parameters, int length) {
+    private String chainedType(List<String> parameters, int length) {
         return chainedType(parameters, length, 2);
     }
 
@@ -104,25 +107,25 @@ public class CodeGenerator {
     }
 
     private SourceModel source(String name) {
-        return SourceModel.source(context.getPackageName(), context.isStaticFactory(), name).set(factory, context.getFactoryClass());
+        return SourceModel.source(context.getPackageName(), context.isFactoryStatic(), name).set(factory, context.getFactoryClass());
     }
 
     private String methodName(ExecutableElement method) {
         return isNull(method) ? "" : (method.getModifiers().contains(STATIC) ? method.getEnclosingElement() : "getFactory()") + "." + method.getSimpleName();
     }
 
-    private TypeMirror typeOf(Symbol symbol) {
-        return context.symbolType(symbol);
+    private String typeOf(Symbol symbol) {
+        return t(context.typeOf(symbol));
     }
 
     private void generateState(LrParserAutomata parser, LrItemSet set) {
         LrItem longest = max(set.getItems());
         int dot = longest.getDot();
-        List<TypeMirror> longestParameters = longest.getRule().getRight().stream().map(context::symbolType).collect(toList());
+        List<String> longestParameters = longest.getRule().getRight().stream().map(context::typeOf).collect(toList());
         String superClass = dot > 0 ? chainedType(longestParameters, dot) : "State";
         SourceModel code = source("State$item$").set(item, set.getName()).set(lrItem, set).set(parent, superClass);
         if (dot > 0)
-            code.with(Stack).set(node, longestParameters.get(dot - 1)).set(prev, chainedVar(longestParameters, dot - 1));
+            code.with(Stack).set(node, t(longestParameters.get(dot - 1))).set(prev, chainedVar(longestParameters, dot - 1));
         else
             code.with(NoStack);
 

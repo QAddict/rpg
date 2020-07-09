@@ -38,5 +38,5 @@ import java.lang.annotation.Target;
 
 @Precedence
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
+@Target({ElementType.TYPE_USE})
 public @interface Atomic {}
