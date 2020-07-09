@@ -16,7 +16,7 @@ public class StateList3ListOfExpression3 extends StackState<java.util.List<found
 // Shift:
     @Override
     public State visitRPar(foundation.rpg.common.symbols.RPar symbol) {
-        return new StateRPar7(getFactory(), symbol, this);
+        return new StateRPar6(getFactory(), symbol, this);
     }
 
 

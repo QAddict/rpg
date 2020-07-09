@@ -34,8 +34,6 @@ import foundation.rpg.common.symbols.WhiteSpace;
 
 public interface WhiteSpaceRules {
 
-    static void ignore(WhiteSpace w) {}
-
-    static void ignore(Comment c) {}
+    static void ignore(WhiteSpace w, Comment c) {}
 
 }

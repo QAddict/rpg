@@ -30,13 +30,22 @@
 package foundation.rpg.common.rules;
 
 import foundation.rpg.MetaRule;
+import foundation.rpg.common.AstUtils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
 
 @MetaRule
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface List1 {}
+@Target({ElementType.TYPE_USE})
+public @interface List1 {
+
+    interface Rules {
+        static <T> List<T> is ()               { return AstUtils.list();      }
+        static <T> List<T> is (List<T> l, T t) { return AstUtils.addTo(l, t); }
+    }
+
+}

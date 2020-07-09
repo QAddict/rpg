@@ -39,4 +39,8 @@ import java.lang.annotation.Target;
 @MetaRule
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface Opt {}
+public @interface Opt {
+    interface Rules {
+        static <T> T is () { return null; }
+    }
+}

@@ -16,7 +16,7 @@ public class StateLPar3 extends StackState<foundation.rpg.common.symbols.LPar, S
     @Override
     public State visitRPar(foundation.rpg.common.symbols.RPar symbol) throws UnexpectedInputException {
         
-        return this.visitList3ListOfExpression(foundation.rpg.common.rules.ListRules.isList3()).visitRPar(symbol);
+        return this.visitList3ListOfExpression(foundation.rpg.common.rules.List3.Rules.is()).visitRPar(symbol);
     }
 
 
@@ -24,56 +24,6 @@ public class StateLPar3 extends StackState<foundation.rpg.common.symbols.LPar, S
     @Override
     public State visitList3ListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
         return new StateList3ListOfExpression1(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitList2ListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) {
-        return new StateList2ListOfExpression1(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateExpression6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitRelationalExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateRelationalExpression6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitAdditiveExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAdditiveExpression6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateMultiplicativeExpression6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitAtomicExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateAtomicExpression6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) {
-        return new StateIdentifier6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitLong(java.lang.Long symbol) {
-        return new StateLong6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitString(java.lang.String symbol) {
-        return new StateString6(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitLPar(foundation.rpg.common.symbols.LPar symbol) {
-        return new StateLPar8(getFactory(), symbol, this);
     }
 
 

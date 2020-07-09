@@ -39,13 +39,9 @@ import foundation.rpg.common.precedence.Relational;
 import foundation.rpg.common.rules.*;
 import foundation.rpg.common.symbols.*;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.List;
 
-import static foundation.rpg.common.AstUtils.addTo;
-import static foundation.rpg.common.AstUtils.list;
-
-public class AstFactory implements WhiteSpaceRules, ListRules {
+public class AstFactory implements WhiteSpaceRules {
 
     @StartSymbol
     Program                    is (@List1 List<@Dangling Statement> s)                           { return new Program(s); }

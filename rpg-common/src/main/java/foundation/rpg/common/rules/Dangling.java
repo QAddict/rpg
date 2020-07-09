@@ -29,7 +29,6 @@
 
 package foundation.rpg.common.rules;
 
-import foundation.rpg.MetaRule;
 import foundation.rpg.SymbolPart;
 
 import java.lang.annotation.ElementType;

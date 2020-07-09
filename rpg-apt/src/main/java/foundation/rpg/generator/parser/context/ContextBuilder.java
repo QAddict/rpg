@@ -51,10 +51,9 @@ import static foundation.rpg.generator.parser.context.SymbolEntry.symbolEntryNam
 import static foundation.rpg.grammar.Grammar.grammar;
 import static foundation.rpg.grammar.Rule.rule;
 import static foundation.rpg.grammar.Symbol.symbol;
-import static java.util.Collections.emptyList;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;
+import static javax.lang.model.util.ElementFilter.typesIn;
 
 public class ContextBuilder {
 
@@ -76,14 +75,14 @@ public class ContextBuilder {
         symbolToType.put(Symbol.start, symbolToType.get(startSymbol));
         List<ExecutableElement> methods = methods(factoryClassElement).collect(toList());
         Set<Symbol> ignored = methods.stream().filter(TypeUtils::isVoid).flatMap(m -> m.getParameters().stream()).map(this::parameterSymbol).collect(toUnmodifiableSet());
-        Map<String, List<ExecutableElement>> ruleMethods = methods.stream().filter(TypeUtils::notVoid).collect(groupingBy(this::getMetaRuleAnnotation));
         Map<Rule, ExecutableElement> ruleToMethod = new LinkedHashMap<>();
-        ruleMethods.get("").stream().peek(ruleMethod -> {
+        methods.stream().filter(TypeUtils::notVoid).peek(ruleMethod -> {
             ruleToMethod.put(rule(returnSymbol(ruleMethod), ruleMethod.getParameters().stream().map(this::parameterSymbol).collect(toUnmodifiableList())), ruleMethod);
             Map<String, TypeMirror> map = new LinkedHashMap<>();
             Bfs.withItem(ruleMethod, (method, queue) -> method.getParameters().stream().filter(this::hasMetaRuleAnnotation).forEach(parameter -> {
                 DeclaredType l = (DeclaredType) map.getOrDefault(parameter.asType().toString(), parameter.asType());
-                ruleMethods.getOrDefault(getMetaRuleAnnotation(parameter), emptyList()).stream().peek(queue).forEach(metaRuleMethod -> {
+                Element metaRuleAnnotation = getMetaRuleAnnotation(parameter);
+                typesIn(metaRuleAnnotation.getEnclosedElements()).stream().flatMap(TypeUtils::methods).peek(queue).forEach(metaRuleMethod -> {
                     map.putAll(resolveParameters(metaRuleMethod, l));
                     ruleToMethod.put(rule(returnMetaSymbol(metaRuleMethod, map), metaSymbols(metaRuleMethod, map)), metaRuleMethod);
                 });
@@ -114,9 +113,8 @@ public class ContextBuilder {
         return hasAnnotationAnnotatedWith(e.getReturnType(), Precedence.class);
     }
 
-    private String getMetaRuleAnnotation(Element parameter) {
-        Element annotatedWith = getAnnotationAnnotatedWith(parameter, MetaRule.class);
-        return isNull(annotatedWith) ? "" : annotatedWith.toString();
+    private Element getMetaRuleAnnotation(Element parameter) {
+        return getAnnotationAnnotatedWith(parameter.asType(), MetaRule.class);
     }
 
     private Element findPrecedence(AnnotatedConstruct e) {
@@ -124,7 +122,7 @@ public class ContextBuilder {
     }
 
     private boolean hasMetaRuleAnnotation(Element method) {
-        return hasAnnotationAnnotatedWith(method, MetaRule.class);
+        return hasAnnotationAnnotatedWith(method.asType(), MetaRule.class);
     }
 
     private Symbol mapSymbol(TypeMirror type, Element element) {

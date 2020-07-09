@@ -35,8 +35,17 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 @MetaRule
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface List3 {}
+@Target({ElementType.TYPE_USE})
+public @interface List3 {
+    interface Rules {
+        static <T> List<T> is ()               { return emptyList(); }
+    }
+
+}

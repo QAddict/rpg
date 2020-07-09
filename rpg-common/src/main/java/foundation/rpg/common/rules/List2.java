@@ -30,13 +30,23 @@
 package foundation.rpg.common.rules;
 
 import foundation.rpg.MetaRule;
+import foundation.rpg.common.AstUtils;
+import foundation.rpg.common.symbols.Comma;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
 
 @MetaRule
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface List2 {}
+@Target({ElementType.TYPE_USE})
+public @interface List2 {
+
+    interface Rules {
+        static <T> List<T> is (T t)                     { return AstUtils.list(t);     }
+        static <T> List<T> is (List<T> l, Comma c, T t) { return AstUtils.addTo(l, t); }
+    }
+
+}

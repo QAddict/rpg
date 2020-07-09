@@ -16,37 +16,37 @@ public class State1 extends State {
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitEnd(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.List1.Rules.is()).visitEnd(symbol);
     }
 
     @Override
     public State visitIf(foundation.rpg.common.symbols.If symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitIf(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.List1.Rules.is()).visitIf(symbol);
     }
 
     @Override
     public State visitIdentifier(foundation.rpg.sample.language.ast.Identifier symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitIdentifier(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.List1.Rules.is()).visitIdentifier(symbol);
     }
 
     @Override
     public State visitLong(java.lang.Long symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitLong(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.List1.Rules.is()).visitLong(symbol);
     }
 
     @Override
     public State visitString(java.lang.String symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitString(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.List1.Rules.is()).visitString(symbol);
     }
 
     @Override
     public State visitLPar(foundation.rpg.common.symbols.LPar symbol) throws UnexpectedInputException {
         
-        return this.visitList1ListOfStatement(foundation.rpg.common.rules.ListRules.isList1()).visitLPar(symbol);
+        return this.visitList1ListOfStatement(foundation.rpg.common.rules.List1.Rules.is()).visitLPar(symbol);
     }
 
 
