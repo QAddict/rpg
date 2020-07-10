@@ -29,6 +29,7 @@
 
 package foundation.rpg.generator.parser;
 
+import foundation.rpg.Name;
 import foundation.rpg.generator.parser.context.Context;
 import foundation.rpg.lr1.LrAction;
 import foundation.rpg.lr1.LrItem;
@@ -118,6 +119,12 @@ public class CodeGenerator {
         return t(context.typeOf(symbol));
     }
 
+    private String nameOf(Symbol symbol) {
+        return context.typeMirrorOf(symbol).getAnnotationMirrors().stream()
+                .filter(t -> t.getAnnotationType().toString().equals(Name.class.getName()))
+                .map(t -> "@Named(" + TypeUtils.getAnnotationValue(t) + ") ").findFirst().orElse("");
+    }
+
     private void generateState(LrParserAutomata parser, LrItemSet set) {
         LrItem longest = max(set.getItems());
         int dot = longest.getDot();
@@ -136,7 +143,7 @@ public class CodeGenerator {
 
             @Override public void visitReduction(LrItem item) {
                 Rule rule = item.getRule();
-                SourceModel fragment = code.with(Reduce).set(name, symbol).set(type, typeOf(symbol)).set(result, rule.getLeft());
+                SourceModel fragment = code.with(Reduce).set(name, symbol).set(type, nameOf(symbol) + typeOf(symbol)).set(result, rule.getLeft());
                 String state = visitCall(item, fragment);
                 fragment.set(start, state);
             }

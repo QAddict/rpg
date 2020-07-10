@@ -1,6 +1,7 @@
 package foundation.rpg.sample.json;
 
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.Named;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateColon2 extends StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.Map<java.lang.String,java.lang.Object>, ? extends State>>>> {
@@ -45,23 +46,23 @@ public class StateColon2 extends StackState<foundation.rpg.common.symbols.Colon,
     }
 
     @Override
-    public State visitstring(foundation.rpg.parser.Token symbol) {
-        return new Statestring8(getFactory(), symbol, this);
+    public State visitToken(foundation.rpg.parser.Token symbol) {
+        return new StateToken8(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitidentifier(foundation.rpg.parser.Token symbol) {
-        return new Stateidentifier8(getFactory(), symbol, this);
+    public State visitToken$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$8(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitinteger(foundation.rpg.parser.Token symbol) {
-        return new Stateinteger5(getFactory(), symbol, this);
+    public State visitToken$$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$$5(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitdouble(foundation.rpg.parser.Token symbol) {
-        return new Statedouble5(getFactory(), symbol, this);
+    public State visitToken$$$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$$$5(getFactory(), symbol, this);
     }
 
 

@@ -26,19 +26,19 @@ public class State extends StateBase<java.lang.Object> {
         return error(symbol);
     }
 
-    public State visitstring(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
+    public State visitToken(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitidentifier(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
+    public State visitToken$(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitinteger(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
+    public State visitToken$$(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitdouble(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
+    public State visitToken$$$(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

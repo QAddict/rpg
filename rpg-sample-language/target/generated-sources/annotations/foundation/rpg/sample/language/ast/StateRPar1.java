@@ -1,6 +1,7 @@
 package foundation.rpg.sample.language.ast;
 
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.Named;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateRPar1 extends StackState<foundation.rpg.common.symbols.RPar, StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.symbols.LPar, ? extends State>>> {

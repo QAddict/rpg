@@ -134,14 +134,12 @@ public class ContextBuilder {
 
     private String symbolName(TypeMirror entry) {
         String full = entry.toString().replaceAll("[>()]", "");
-        return entry.getAnnotationMirrors().stream().filter(a -> a.getAnnotationType().toString().equals(Name.class.getName())).map(TypeUtils::getAnnotationValue).findFirst().orElseGet(() -> {
-            String s = entry.getAnnotationMirrors().stream().map(a -> a.getAnnotationType().asElement()).filter(TypeUtils::includeInName).map(e -> e.getSimpleName().toString()).collect(joining());
-            s += Stream.of(full.split("<")).map(p -> p.substring(p.lastIndexOf(".") + 1)).collect(joining("Of"));
-            while(!usedNames.add(s)) {
-                s = s + "$";
-            }
-            return s;
-        });
+        String s = entry.getAnnotationMirrors().stream().map(a -> a.getAnnotationType().asElement()).filter(TypeUtils::includeInName).map(e -> e.getSimpleName().toString()).collect(joining());
+        s += Stream.of(full.split("<")).map(p -> p.substring(p.lastIndexOf(".") + 1)).collect(joining("Of"));
+        while(!usedNames.add(s)) {
+            s = s + "$";
+        }
+        return s;
     }
     private Symbol parameterSymbol(VariableElement v) {
         return mapSymbol(v.asType());

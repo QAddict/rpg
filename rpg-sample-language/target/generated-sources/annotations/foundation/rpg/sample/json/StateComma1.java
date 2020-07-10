@@ -1,6 +1,7 @@
 package foundation.rpg.sample.json;
 
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.Named;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.List<java.lang.Object>, ? extends State>> {
@@ -45,23 +46,23 @@ public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma,
     }
 
     @Override
-    public State visitstring(foundation.rpg.parser.Token symbol) {
-        return new Statestring2(getFactory(), symbol, this);
+    public State visitToken(foundation.rpg.parser.Token symbol) {
+        return new StateToken2(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitidentifier(foundation.rpg.parser.Token symbol) {
-        return new Stateidentifier2(getFactory(), symbol, this);
+    public State visitToken$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$2(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitinteger(foundation.rpg.parser.Token symbol) {
-        return new Stateinteger2(getFactory(), symbol, this);
+    public State visitToken$$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$$2(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitdouble(foundation.rpg.parser.Token symbol) {
-        return new Statedouble2(getFactory(), symbol, this);
+    public State visitToken$$$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$$$2(getFactory(), symbol, this);
     }
 
 

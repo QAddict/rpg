@@ -1,6 +1,7 @@
 package foundation.rpg.sample.json;
 
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.Named;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateEnd1 extends StackState<foundation.rpg.parser.End, StackState<java.lang.Object, ? extends State>> {

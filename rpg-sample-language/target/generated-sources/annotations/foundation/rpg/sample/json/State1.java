@@ -1,6 +1,7 @@
 package foundation.rpg.sample.json;
 
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.Named;
 
 // Generated visitor pattern based state for grammar parser.
 public class State1 extends State {
@@ -45,23 +46,23 @@ public class State1 extends State {
     }
 
     @Override
-    public State visitstring(foundation.rpg.parser.Token symbol) {
-        return new Statestring1(getFactory(), symbol, this);
+    public State visitToken(foundation.rpg.parser.Token symbol) {
+        return new StateToken1(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitidentifier(foundation.rpg.parser.Token symbol) {
-        return new Stateidentifier1(getFactory(), symbol, this);
+    public State visitToken$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$1(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitinteger(foundation.rpg.parser.Token symbol) {
-        return new Stateinteger1(getFactory(), symbol, this);
+    public State visitToken$$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$$1(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitdouble(foundation.rpg.parser.Token symbol) {
-        return new Statedouble1(getFactory(), symbol, this);
+    public State visitToken$$$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$$$1(getFactory(), symbol, this);
     }
 
 

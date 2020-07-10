@@ -1,6 +1,7 @@
 package $package$;
 
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.Named;
 
 // Generated visitor pattern based state for grammar parser.
 public class $class$ extends $parent$ {

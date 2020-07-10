@@ -1,6 +1,7 @@
 package foundation.rpg.sample.json;
 
 import foundation.rpg.parser.UnexpectedInputException;
+import foundation.rpg.parser.Named;
 
 // Generated visitor pattern based state for grammar parser.
 public class StateLCurl2 extends StackState<foundation.rpg.common.symbols.LCurl, State> {
@@ -30,13 +31,13 @@ public class StateLCurl2 extends StackState<foundation.rpg.common.symbols.LCurl,
     }
 
     @Override
-    public State visitstring(foundation.rpg.parser.Token symbol) {
-        return new Statestring3(getFactory(), symbol, this);
+    public State visitToken(foundation.rpg.parser.Token symbol) {
+        return new StateToken3(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitidentifier(foundation.rpg.parser.Token symbol) {
-        return new Stateidentifier3(getFactory(), symbol, this);
+    public State visitToken$(foundation.rpg.parser.Token symbol) {
+        return new StateToken$3(getFactory(), symbol, this);
     }
 
 

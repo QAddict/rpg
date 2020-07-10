@@ -29,34 +29,13 @@
 
 package foundation.rpg.parser;
 
-import foundation.rpg.Name;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedType;
-import java.util.stream.Stream;
-
-import static java.util.Objects.isNull;
-import static java.util.stream.Collectors.toList;
-
-public class StateBase<R> {
-
-    public boolean accepted() {
-        return false;
-    }
-
-    public <T> T error(Object symbol) throws UnexpectedInputException {
-        throw new UnexpectedInputException(getClass().getSimpleName(), symbol, Stream.of(getClass().getDeclaredMethods()).filter(m -> m.getName().startsWith("visit") && m.getParameterCount() == 1).map(m -> expected(m.getParameterTypes()[0], m.getParameterAnnotations()[0])).collect(toList()));
-    }
-
-    public R result() {
-        throw new IllegalStateException("End not reached.");
-    }
-
-    private static String expected(Class<?> of, Annotation[] annotations) {
-        return Stream.of(annotations).filter(a -> a.annotationType().equals(Named.class)).map(a -> (Named) a).map(Named::value).findFirst().orElseGet(() -> {
-            Name name = of.getAnnotation(Name.class);
-            return isNull(name) ? "<" + of.getSimpleName() + ">" : name.value();
-        });
-    }
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface Named {
+    String value();
 }
