@@ -46,22 +46,22 @@ public class StateColon2 extends StackState<foundation.rpg.common.symbols.Colon,
     }
 
     @Override
-    public State visitToken(foundation.rpg.parser.Token symbol) {
+    public State visitToken(@Named("string") foundation.rpg.parser.Token symbol) {
         return new StateToken8(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitToken$(foundation.rpg.parser.Token symbol) {
+    public State visitToken$(@Named("identifier") foundation.rpg.parser.Token symbol) {
         return new StateToken$8(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitToken$$(foundation.rpg.parser.Token symbol) {
+    public State visitToken$$(@Named("integer") foundation.rpg.parser.Token symbol) {
         return new StateToken$$5(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitToken$$$(foundation.rpg.parser.Token symbol) {
+    public State visitToken$$$(@Named("double") foundation.rpg.parser.Token symbol) {
         return new StateToken$$$5(getFactory(), symbol, this);
     }
 

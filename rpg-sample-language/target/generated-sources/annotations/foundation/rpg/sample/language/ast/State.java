@@ -16,11 +16,11 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
 // Ignored:
-    public State visitWhiteSpace(foundation.rpg.common.symbols.WhiteSpace symbol) {
+    public State visitComment(foundation.rpg.common.symbols.Comment symbol) {
         return this;
     }
 
-    public State visitComment(foundation.rpg.common.symbols.Comment symbol) {
+    public State visitWhiteSpace(foundation.rpg.common.symbols.WhiteSpace symbol) {
         return this;
     }
 

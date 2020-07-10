@@ -122,7 +122,7 @@ public class CodeGenerator {
     private String nameOf(Symbol symbol) {
         return context.typeMirrorOf(symbol).getAnnotationMirrors().stream()
                 .filter(t -> t.getAnnotationType().toString().equals(Name.class.getName()))
-                .map(t -> "@Named(" + TypeUtils.getAnnotationValue(t) + ") ").findFirst().orElse("");
+                .map(t -> "@Named(\"" + TypeUtils.getAnnotationValue(t) + "\") ").findFirst().orElse("");
     }
 
     private void generateState(LrParserAutomata parser, LrItemSet set) {
@@ -138,7 +138,7 @@ public class CodeGenerator {
 
         parser.actionsFor(set).forEach((symbol, action) -> action.accept(new LrAction.LrActionVisitor() {
             @Override public void visitGoto(LrItemSet set) {
-                code.with(Shift).set(name, symbol).set(type, typeOf(symbol)).set(next, set.getName());
+                code.with(Shift).set(name, symbol).set(type, nameOf(symbol) + typeOf(symbol)).set(next, set.getName());
             }
 
             @Override public void visitReduction(LrItem item) {
