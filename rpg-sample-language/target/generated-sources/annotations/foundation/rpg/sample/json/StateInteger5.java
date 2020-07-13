@@ -3,6 +3,9 @@ package foundation.rpg.sample.json;
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.Named;
 
+import java.util.Arrays;
+import java.util.List;
+
 // Generated visitor pattern based state for grammar parser.
 public class StateInteger5 extends StackState<java.lang.Integer, State> {
 
@@ -29,4 +32,10 @@ public class StateInteger5 extends StackState<java.lang.Integer, State> {
 
 // Shift:
 // Accept:
+    @Override
+    public List<Object> stack() {
+        State stack1 = this.getPrev();
+        return Arrays.asList(this.getNode());
+    }
+
 }

@@ -3,6 +3,9 @@ package $package$;
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.Named;
 
+import java.util.Arrays;
+import java.util.List;
+
 // Generated visitor pattern based state for grammar parser.
 public class $class$ extends $parent$ {
 
@@ -37,6 +40,12 @@ public class $class$ extends $parent$ {
     @Override
     public $result$ result() {
         return getPrev().getNode();
+    }
+
+    @Override
+    public List<Object> stack() {
+        $parameters$
+        return $factoryCall$;
     }
 
 }

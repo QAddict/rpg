@@ -136,6 +136,8 @@ public class CodeGenerator {
         else
             code.with(NoStack);
 
+        parameterUnroll(dot, "Arrays.asList", code, longestParameters, dot);
+
         parser.actionsFor(set).forEach((symbol, action) -> action.accept(new LrAction.LrActionVisitor() {
             @Override public void visitGoto(LrItemSet set) {
                 code.with(Shift).set(name, symbol).set(type, nameOf(symbol) + typeOf(symbol)).set(next, set.getName());
@@ -144,32 +146,36 @@ public class CodeGenerator {
             @Override public void visitReduction(LrItem item) {
                 Rule rule = item.getRule();
                 SourceModel fragment = code.with(Reduce).set(name, symbol).set(type, nameOf(symbol) + typeOf(symbol)).set(result, rule.getLeft());
-                String state = visitCall(item, fragment);
-                fragment.set(start, state);
+                visitCall(item, fragment);
             }
 
-            private String visitCall(LrItem item, SourceModel fragment) {
+            private void visitCall(LrItem item, SourceModel fragment) {
                 Rule rule = item.getRule();
                 ExecutableElement method = context.methodOf(rule);
                 int size = isNull(method) ? 1 : method.getParameters().size();
-                String state = "this";
-                StringJoiner b = new StringJoiner("\n\t\t");
-                String[] p = new String[size];
-                for(int i = 1; i <= size; i++) {
-                    p[size - i] = state + ".getNode()";
-                    b.add(chainedVar(longestParameters, dot - i) + " stack" + i + " = " + state + ".getPrev();");
-                    state = "stack" + i;
-                }
-                String call = methodName(method) + "(" + join(", ", p) + ")";
-                fragment.set(factoryCall, call).set(parameters, b);
-                return state;
+                parameterUnroll(size, methodName(method), fragment, longestParameters, dot);
             }
 
             @Override public void visitAccept(LrItem item) {
                 code.with(Accept).set(result, typeOf(parser.getGrammar().getStart()));
             }
+
         }));
         write(code);
     }
+
+    private void parameterUnroll(int size, String callName, SourceModel fragment, List<String> longestParameters, int dot) {
+        String state = "this";
+        StringJoiner b = new StringJoiner("\n\t\t");
+        String[] p = new String[size];
+        for(int i = 1; i <= size; i++) {
+            p[size - i] = state + ".getNode()";
+            b.add(chainedVar(longestParameters, dot - i) + " stack" + i + " = " + state + ".getPrev();");
+            state = "stack" + i;
+        }
+        String call = callName + "(" + join(", ", p) + ")";
+        fragment.set(start, state).set(factoryCall, call).set(parameters, b);
+    }
+
 
 }

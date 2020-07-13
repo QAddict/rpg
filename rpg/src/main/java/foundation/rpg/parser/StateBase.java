@@ -32,7 +32,8 @@ package foundation.rpg.parser;
 import foundation.rpg.Name;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedType;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
@@ -45,11 +46,15 @@ public class StateBase<R> {
     }
 
     public <T> T error(Object symbol) throws UnexpectedInputException {
-        throw new UnexpectedInputException(getClass().getSimpleName(), symbol, Stream.of(getClass().getDeclaredMethods()).filter(m -> m.getName().startsWith("visit") && m.getParameterCount() == 1).map(m -> expected(m.getParameterTypes()[0], m.getParameterAnnotations()[0])).collect(toList()));
+        throw new UnexpectedInputException(getClass().getSimpleName(), stack(), symbol, Stream.of(getClass().getDeclaredMethods()).filter(m -> m.getName().startsWith("visit") && m.getParameterCount() == 1).map(m -> expected(m.getParameterTypes()[0], m.getParameterAnnotations()[0])).collect(toList()));
     }
 
     public R result() {
         throw new IllegalStateException("End not reached.");
+    }
+
+    public List<Object> stack() {
+        return Collections.emptyList();
     }
 
     private static String expected(Class<?> of, Annotation[] annotations) {

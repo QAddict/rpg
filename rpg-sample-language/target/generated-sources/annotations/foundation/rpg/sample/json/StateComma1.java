@@ -3,6 +3,9 @@ package foundation.rpg.sample.json;
 import foundation.rpg.parser.UnexpectedInputException;
 import foundation.rpg.parser.Named;
 
+import java.util.Arrays;
+import java.util.List;
+
 // Generated visitor pattern based state for grammar parser.
 public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma, StackState<java.util.List<java.lang.Object>, ? extends State>> {
 
@@ -67,4 +70,11 @@ public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma,
 
 
 // Accept:
+    @Override
+    public List<Object> stack() {
+        StackState<java.util.List<java.lang.Object>, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return Arrays.asList(stack1.getNode(), this.getNode());
+    }
+
 }

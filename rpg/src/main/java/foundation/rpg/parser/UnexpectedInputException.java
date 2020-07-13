@@ -35,18 +35,20 @@ import static java.util.stream.Collectors.joining;
 
 public class UnexpectedInputException extends Exception {
     private final Object state;
+    private final List<?> stack;
     private final Object unexpectedSymbol;
     private final List<?> expected;
 
-    public UnexpectedInputException(Object state, Object unexpectedSymbol, List<?> expected) {
+    public UnexpectedInputException(Object state, List<?> stack, Object unexpectedSymbol, List<?> expected) {
         this.state = state;
+        this.stack = stack;
         this.unexpectedSymbol = unexpectedSymbol;
         this.expected = expected;
     }
 
     @Override
     public String getMessage() {
-        return "Expected " + (expected.size() == 1 ? expected.get(0) : expected.stream().map(Object::toString).collect(joining(", ", " one of: ", ""))) + ", but got " + unexpectedSymbol;
+        return "Expected " + (expected.size() == 1 ? expected.get(0) : expected.stream().map(Object::toString).collect(joining(", ", " one of: ", ""))) + ", but got " + unexpectedSymbol + " after " + stack;
     }
 
     public Object getState() {
