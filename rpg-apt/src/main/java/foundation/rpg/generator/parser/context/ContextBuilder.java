@@ -42,6 +42,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static foundation.rpg.generator.parser.TypeUtils.*;
@@ -72,7 +73,7 @@ public class ContextBuilder {
         symbolToType.put(Symbol.end, typeEntry(end));
         symbolToType.put(Symbol.start, symbolToType.get(startSymbol));
         List<ExecutableElement> methods = methods(factoryClassElement).collect(toList());
-        Set<Symbol> ignored = methods.stream().filter(TypeUtils::isVoid).flatMap(m -> m.getParameters().stream()).map(this::parameterSymbol).collect(toSet());
+        Set<Symbol> ignored = methods.stream().filter(TypeUtils::isVoid).flatMap(m -> m.getParameters().stream()).map(this::parameterSymbol).collect(Collectors.toCollection(LinkedHashSet::new));
         Map<Rule, ExecutableElement> ruleToMethod = new LinkedHashMap<>();
         methods.stream().filter(TypeUtils::notVoid).peek(ruleMethod -> {
             ruleToMethod.put(rule(returnSymbol(ruleMethod), ruleMethod.getParameters().stream().map(this::parameterSymbol).collect(toList())), ruleMethod);
