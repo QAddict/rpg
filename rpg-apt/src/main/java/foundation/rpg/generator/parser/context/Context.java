@@ -47,7 +47,7 @@ public class Context {
     private final String parserName;
     private final String lexerName;
     private final Map<Rule, ExecutableElement> ruleToMethod;
-    private final Map<Symbol, TypeMirror> symbolToType;
+    private final Map<Symbol, Entry> symbolToType;
     private final Grammar grammar;
 
     public Context(ExecutableElement startRule,
@@ -56,7 +56,7 @@ public class Context {
                    String parserName,
                    String lexerName,
                    Map<Rule, ExecutableElement> ruleToMethod,
-                   Map<Symbol, TypeMirror> symbolToType,
+                   Map<Symbol, Entry> symbolToType,
                    Grammar grammar) {
 
         this.startRule = startRule;
@@ -82,7 +82,7 @@ public class Context {
     }
 
     public TypeMirror typeMirrorOf(Symbol symbol) {
-        return symbolToType.get(symbol);
+        return symbolToType.get(symbol).getTypeMirror();
     }
 
     public boolean isFactoryStatic() {

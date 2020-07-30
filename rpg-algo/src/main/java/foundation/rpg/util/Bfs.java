@@ -31,8 +31,11 @@ package foundation.rpg.util;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toCollection;
 
 public class Bfs {
 
@@ -41,15 +44,19 @@ public class Bfs {
         void iterate(T item, Consumer<T> consumer);
     }
 
-    public static <T> Set<T> withCollection(Collection<T> input, Iteration<T> iteration) {
-        Queue<T> queue = new LinkedList<>(input);
-        Set<T> visited = new LinkedHashSet<>(input);
+    public static <T> Set<T> withStream(Stream<T> input, Iteration<T> iteration) {
+        Queue<T> queue = input.collect(toCollection(LinkedList::new));
+        Set<T> visited = new LinkedHashSet<>(queue);
         while (!queue.isEmpty()) {
             iteration.iterate(queue.poll(), next -> {
                 if(visited.add(next)) queue.add(next);
             });
         }
         return visited;
+    }
+
+    public static <T> Set<T> withCollection(Collection<T> input, Iteration<T> iteration) {
+        return withStream(input.stream(), iteration);
     }
 
     public static <T> Set<T> withItem(T input, Iteration<T> iteration) {

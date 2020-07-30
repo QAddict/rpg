@@ -41,6 +41,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.type.TypeKind.VOID;
@@ -69,8 +70,8 @@ public class TypeUtils {
         return nonNull(annotationElement.getAnnotation(MetaRule.class)) || nonNull(annotationElement.getAnnotation(SymbolPart.class)) || nonNull(annotationElement.getAnnotation(Precedence.class));
     }
 
-    public static Element getAnnotationAnnotatedWith(AnnotatedConstruct c, Class<? extends Annotation> annotationType) {
-        return c.getAnnotationMirrors().stream().filter(annotationMirror -> hasAnnotation(annotationMirror, annotationType)).map(a -> a.getAnnotationType().asElement()).findFirst().orElse(null);
+    public static List<Element> getAnnotationAnnotatedWith(AnnotatedConstruct c, Class<? extends Annotation> annotationType) {
+        return c.getAnnotationMirrors().stream().filter(annotationMirror -> hasAnnotation(annotationMirror, annotationType)).map(a -> a.getAnnotationType().asElement()).collect(toList());
     }
 
     public static Stream<ExecutableElement> methods(Element factory) {

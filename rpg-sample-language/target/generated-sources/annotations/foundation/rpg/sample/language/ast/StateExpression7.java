@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateExpression7 extends StackState<foundation.rpg.sample.language.ast.Expression, State> {
+public class StateExpression7 extends StackState<foundation.rpg.sample.language.ast.Expression, StackState<foundation.rpg.common.symbols.LPar, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateExpression7(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, State prev) {
+    public StateExpression7(foundation.rpg.sample.language.ast.AstFactory factory, foundation.rpg.sample.language.ast.Expression node, StackState<foundation.rpg.common.symbols.LPar, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -19,16 +19,17 @@ public class StateExpression7 extends StackState<foundation.rpg.sample.language.
 // Reduce:
 // Shift:
     @Override
-    public State visitSemicolon(foundation.rpg.common.symbols.Semicolon symbol) {
-        return new StateSemicolon3(getFactory(), symbol, this);
+    public State visitRPar(foundation.rpg.common.symbols.RPar symbol) {
+        return new StateRPar4(getFactory(), symbol, this);
     }
 
 
 // Accept:
     @Override
     public List<Object> stack() {
-        State stack1 = this.getPrev();
-        return Arrays.asList(this.getNode());
+        StackState<foundation.rpg.common.symbols.LPar, ? extends State> stack1 = this.getPrev();
+		State stack2 = stack1.getPrev();
+        return Arrays.asList(stack1.getNode(), this.getNode());
     }
 
 }

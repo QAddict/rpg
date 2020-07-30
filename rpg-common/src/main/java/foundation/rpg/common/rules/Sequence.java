@@ -41,7 +41,7 @@ import java.util.List;
 @MetaRule
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_USE})
-public @interface List1 {
+public @interface Sequence {
 
     interface Rules {
         static <T> List<T> is ()               { return AstUtils.list();      }

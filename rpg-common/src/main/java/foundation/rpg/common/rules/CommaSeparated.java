@@ -35,8 +35,18 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
+
+import static foundation.rpg.common.AstUtils.list;
 
 @MetaRule
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
-public @interface CommaSeparated {}
+@Target({ElementType.TYPE_USE})
+public @interface CommaSeparated {
+
+    interface Rules {
+        static <T> List<T> is ()                                  { return list(); }
+        static <T> List<T> is (@NonEmpty List<T> l) { return l; }
+    }
+
+}

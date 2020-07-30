@@ -20,7 +20,7 @@ public class StatePlus1 extends StackState<foundation.rpg.common.symbols.Plus, S
 // Shift:
     @Override
     public State visitMultiplicativeExpression(foundation.rpg.sample.language.ast.Expression symbol) {
-        return new StateMultiplicativeExpression7(getFactory(), symbol, this);
+        return new StateMultiplicativeExpression8(getFactory(), symbol, this);
     }
 
     @Override

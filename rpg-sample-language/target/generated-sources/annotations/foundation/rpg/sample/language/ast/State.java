@@ -82,11 +82,15 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
+    public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
     public State visitProgram(foundation.rpg.sample.language.ast.Program symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
-    public State visitList1ListOfStatement(java.util.List<foundation.rpg.sample.language.ast.Statement> symbol) throws UnexpectedInputException {
+    public State visitSequenceListOfStatement(java.util.List<foundation.rpg.sample.language.ast.Statement> symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -122,7 +126,11 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
         return error(symbol);
     }
 
-    public State visitList3ListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) throws UnexpectedInputException {
+    public State visitCommaSeparatedListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitCommaSeparatedNonEmptyListOfExpression(java.util.List<foundation.rpg.sample.language.ast.Expression> symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
