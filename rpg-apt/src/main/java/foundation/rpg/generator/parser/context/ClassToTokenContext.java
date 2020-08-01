@@ -41,13 +41,16 @@ import foundation.rpg.parser.Token;
 import javax.annotation.processing.Filer;
 import javax.lang.model.AnnotatedConstruct;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
@@ -59,8 +62,8 @@ public class ClassToTokenContext {
 
     public void generate(Context context, Filer filer) throws IOException {
         new LexerGenerator().generateLexer(
-                context.getPackageName(), "GeneratedLexer", concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).map(symbol -> tokenInfoFor(symbol, context.typeMirrorOf(symbol))).collect(toList()),
-                new PrintWriter(filer.createSourceFile(context.getPackageName() + ".GeneratedLexer").openWriter()), context.isFactoryStatic() ? null : context.getFactoryClass().asType()
+                context.getPackageName(), context.getLexerName(), concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).map(symbol -> tokenInfoFor(symbol, context.typeMirrorOf(symbol))).collect(toList()),
+                new PrintWriter(filer.createSourceFile(context.getPackageName() + "." + context.getLexerName()).openWriter()), context.isFactoryStatic() ? null : context.getFactoryClass().asType()
         );
     }
 
@@ -73,8 +76,7 @@ public class ClassToTokenContext {
         String name = TypeUtils.typeName(type);
         String p = Token.class.getName().equals(name)
                 ? "builder.build()"
-                : "new " + name + "(" + (constructorsIn(element.getEnclosedElements()).stream().anyMatch(c -> c.getParameters().size() == 1 && c.getParameters().get(0).asType().toString().equals(Token.class.getCanonicalName()))
-                ?  "builder.build()" : "builder.build().getContent()") + ")";
+                : "new " + name + "(" + inject(getInjectableConstructor(constructorsIn(element.getEnclosedElements()))) + ")";
         String call = "Element" + symbol + "(" + p + ")";
 
         return annotationValue(type, Match.class).map(m -> new TokenInfo(element, call, parser.parsePattern(m), 0))
@@ -83,6 +85,30 @@ public class ClassToTokenContext {
                 .orElseGet(() -> annotationValue(element, Name.class).map(m -> new TokenInfo(element, call, parser.parseText(m), 1))
                 .orElseThrow(() -> new IllegalArgumentException("No token defined for " + symbol + ". Use @Name or @Match annotation on " + symbol + " or in factory.")))));
 
+    }
+
+    private final Map<String, String> supportedTypes = new HashMap<String, String>() {{
+        put(Token.class.getCanonicalName(), "builder.build()");
+        put(String.class.getCanonicalName(), "builder.build().getContent()");
+    }};
+
+    private ExecutableElement getInjectableConstructor(List<ExecutableElement> constructors) {
+        return constructors.stream()
+                .filter(c -> c.getParameters().stream().map(p -> p.asType().toString()).allMatch(supportedTypes::containsKey))
+                .max(comparingInt(a -> a.getParameters().size()))
+                .orElseThrow(() -> new IllegalArgumentException("No constructor compatible with Lexer injection (having only String or Token parameters). Available constructors are: " + constructors));
+    }
+
+    private String inject(ExecutableElement e) {
+        return e.getParameters().stream().map(p -> {
+            if(p.asType().toString().equals(Token.class.getName())) {
+                return "builder.build()";
+            }
+            if(p.asType().toString().equals(String.class.getName())) {
+                return "builder.build().getContent()";
+            }
+            throw new IllegalArgumentException();
+        }).collect(Collectors.joining(", "));
     }
 
     public boolean isStatic() {

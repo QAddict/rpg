@@ -13,7 +13,7 @@ public class JsonParser extends StreamParser<java.lang.Object, State> {
     }
 
     public JsonParser(foundation.rpg.sample.json.JsonFactory factory) {
-        this(factory, new GeneratedLexer(factory));
+        this(factory, new ObjectLexer(factory));
     }
 
 }

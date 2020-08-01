@@ -13,7 +13,7 @@ public class ProgramParser extends StreamParser<foundation.rpg.sample.language.a
     }
 
     public ProgramParser(foundation.rpg.sample.language.ast.AstFactory factory) {
-        this(factory, new GeneratedLexer(factory));
+        this(factory, new ProgramLexer(factory));
     }
 
 }

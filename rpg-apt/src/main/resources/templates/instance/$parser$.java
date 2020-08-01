@@ -13,7 +13,7 @@ public class $class$ extends StreamParser<$result$, State> {
     }
 
     public $class$($factory$ factory) {
-        this(factory, new GeneratedLexer(factory));
+        this(factory, new $lexer$(factory));
     }
 
 }

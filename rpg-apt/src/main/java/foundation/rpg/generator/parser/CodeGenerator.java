@@ -71,7 +71,10 @@ public class CodeGenerator {
             generateState(lrParser, set);
         Stream.of(lrParser.getGrammar().getTerminals(), lrParser.getGrammar().getIgnored()).flatMap(Collection::stream)
                 .forEach(s -> write(source("Element$name$").set(name, s).set(type, typeOf(s))));
-        SourceModel parserSource = source("$parser$").set("parser", context.getParserName()).set(result, typeOf(lrParser.getGrammar().getStart()));
+        SourceModel parserSource = source("$parser$")
+                .set("parser", context.getParserName())
+                .set("lexer", context.getLexerName())
+                .set(result, typeOf(lrParser.getGrammar().getStart()));
         write(parserSource);
     }
 
