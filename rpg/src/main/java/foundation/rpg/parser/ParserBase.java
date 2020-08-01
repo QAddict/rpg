@@ -33,7 +33,7 @@ import java.io.IOException;
 
 public final class ParserBase {
 
-    public static <R, S extends StateBase<R>> R parse(S state, TokenInput<S> input) throws ParseException, IOException {
+    public static <R, S extends StateBase<R>> R parse(S state, TokenInput<S> input) throws SyntaxError, IOException {
         while(!state.accepted()) {
             Position mark = input.position();
             Element<S> next = input.next();
@@ -41,10 +41,10 @@ public final class ParserBase {
                 state = next.accept(state);
             } catch (UnexpectedInputException un) {
                 input.error(mark, un.getState(), un.getExpected(), un.getUnexpectedSymbol());
-                throw new ParseException(mark, un);
+                throw new SyntaxError(mark, un);
             } catch (RuntimeException | AssertionError e) {
                 input.error(mark, e.getMessage());
-                throw new ParseException(mark, e);
+                throw new SyntaxError(mark, e);
             }
         }
         return state.result();

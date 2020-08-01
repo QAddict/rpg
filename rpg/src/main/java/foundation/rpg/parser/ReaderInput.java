@@ -68,7 +68,7 @@ public class ReaderInput implements Input {
 
     @Override
     public void error(String message) {
-        throw new ParseException(position(), message);
+        throw new SyntaxError(position(), message);
     }
 
 }

@@ -45,7 +45,7 @@ public class LanguageParserTest {
 
     private final ProgramParser parser = new ProgramParser(new AstFactory());
     @Test
-    public void testParser() throws ParseException, IOException {
+    public void testParser() throws SyntaxError, IOException {
         Token p = new Token("", 0, 0, 0, 0, 0, 0, "");
         TokenInput<State> lexer = mock(TokenInput.class);
         when(lexer.next()).thenReturn(
@@ -62,7 +62,7 @@ public class LanguageParserTest {
     }
 
     @Test
-    public void testSource() throws IOException, ParseException {
+    public void testSource() throws IOException, SyntaxError {
         Program program = parser.parseUrl(getClass().getResource("/sample.src"));
         System.out.println(program);
     }

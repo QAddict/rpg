@@ -29,14 +29,14 @@
 
 package foundation.rpg.parser;
 
-public class ParseException extends RuntimeException {
+public class SyntaxError extends RuntimeException {
 
-    public ParseException(Position position, String message) {
-        super("Parse error: " + message + "\n\tat " + position);
+    public SyntaxError(Position position, String message) {
+        super("Syntax error: " + message + "\n\tat " + position);
     }
 
-    public ParseException(Position position, Throwable cause) {
-        super("Parse error: " + cause.getMessage() + "\n\tat " + position, cause);
+    public SyntaxError(Position position, Throwable cause) {
+        super("Syntax error: " + cause.getMessage() + "\n\tat " + position, cause);
     }
 
 }

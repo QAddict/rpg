@@ -33,7 +33,7 @@ import java.io.IOException;
 
 @FunctionalInterface
 public interface Lexer<S> {
-    Element<S> next(Input input) throws ParseException, IOException;
+    Element<S> next(Input input) throws SyntaxError, IOException;
 
     static boolean matchesGroup(char group, int c) {
         switch (group) {

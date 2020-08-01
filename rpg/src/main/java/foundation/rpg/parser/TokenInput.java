@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.joining;
 
 public interface TokenInput<S> {
 
-    Element<S> next() throws ParseException, IOException;
+    Element<S> next() throws SyntaxError, IOException;
 
     Position position();
 
@@ -48,7 +48,7 @@ public interface TokenInput<S> {
 
     static <S> TokenInput<S> tokenInput(Input input, Lexer<S> lexer) {
         return new TokenInput<S>() {
-            @Override public Element<S> next() throws ParseException, IOException {
+            @Override public Element<S> next() throws SyntaxError, IOException {
                 return lexer.next(input);
             }
             @Override public Position position() {

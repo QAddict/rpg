@@ -39,7 +39,7 @@ public class TokenInputParser<R, S extends StateBase<R>> {
         this.initialState = initialState;
     }
 
-    public R parse(TokenInput<S> input) throws ParseException, IOException {
+    public R parse(TokenInput<S> input) throws SyntaxError, IOException {
         return ParserBase.parse(initialState, input);
     }
 

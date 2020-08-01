@@ -42,27 +42,27 @@ public class StreamParser<R, S extends StateBase<R>> {
         this.lexer = lexer;
     }
 
-    public R parse(TokenInput<S> input) throws ParseException, IOException {
+    public R parse(TokenInput<S> input) throws SyntaxError, IOException {
         return parser.parse(input);
     }
 
-    public R parse(String name, Reader reader) throws IOException, ParseException {
+    public R parse(String name, Reader reader) throws IOException, SyntaxError {
         return parse(input(name, reader, lexer));
     }
 
-    public R parseFile(String fileName) throws IOException, ParseException {
+    public R parseFile(String fileName) throws IOException, SyntaxError {
         return parse(fileName, new FileReader(fileName));
     }
 
-    public R parseString(String content) throws IOException, ParseException {
+    public R parseString(String content) throws IOException, SyntaxError {
         return parse("string", new StringReader(content));
     }
 
-    public R parse(String name, InputStream stream) throws IOException, ParseException {
+    public R parse(String name, InputStream stream) throws IOException, SyntaxError {
         return parse(name, new InputStreamReader(stream));
     }
 
-    public R parseUrl(URL resource) throws IOException, ParseException {
+    public R parseUrl(URL resource) throws IOException, SyntaxError {
         return parse(resource.toString(), resource.openStream());
     }
 
