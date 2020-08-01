@@ -53,6 +53,7 @@ import java.util.stream.Collectors;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
+import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 
 public class ClassToTokenContext {
@@ -76,7 +77,7 @@ public class ClassToTokenContext {
         String name = TypeUtils.typeName(type);
         String p = Token.class.getName().equals(name)
                 ? "builder.build()"
-                : "new " + name + "(" + inject(getInjectableConstructor(constructorsIn(element.getEnclosedElements()))) + ")";
+                : "new " + name + "(" + inject(getInjectableConstructor(constructorsIn(element.getEnclosedElements()).stream().filter(c -> c.getModifiers().contains(PUBLIC)).collect(toList()))) + ")";
         String call = "Element" + symbol + "(" + p + ")";
 
         return annotationValue(type, Match.class).map(m -> new TokenInfo(element, call, parser.parsePattern(m), 0))
@@ -96,7 +97,7 @@ public class ClassToTokenContext {
         return constructors.stream()
                 .filter(c -> c.getParameters().stream().map(p -> p.asType().toString()).allMatch(supportedTypes::containsKey))
                 .max(comparingInt(a -> a.getParameters().size()))
-                .orElseThrow(() -> new IllegalArgumentException("No constructor compatible with Lexer injection (having only String or Token parameters). Available constructors are: " + constructors));
+                .orElseThrow(() -> new IllegalArgumentException("No public constructor compatible with Lexer injection (having only String or Token parameters) found. Available public constructors are: " + constructors));
     }
 
     private String inject(ExecutableElement e) {

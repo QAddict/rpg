@@ -30,6 +30,7 @@
 package foundation.rpg.sample.language.ast;
 
 import foundation.rpg.Match;
+import foundation.rpg.Name;
 import foundation.rpg.StartSymbol;
 import foundation.rpg.common.Patterns;
 import foundation.rpg.common.precedence.Additive;
@@ -40,6 +41,7 @@ import foundation.rpg.common.rules.*;
 import foundation.rpg.common.symbols.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AstFactory implements WhiteSpaceRules {
 
@@ -61,5 +63,7 @@ public class AstFactory implements WhiteSpaceRules {
     @Atomic Expression         is (@Match(Patterns.DOUBLE_QUOTED_STRING) String v)                     { return new Literal<>(v); }
     @Atomic Expression         is (LPar l, Expression e, RPar r)                                       { return e; }
     @Atomic Expression         is (Identifier i, LPar l, @CommaSeparated List<Expression> e, RPar r)   { return null; }
+
+    void is (@Name("optionalstring") Keyword<String> s, @Name("optionalint") Keyword<Integer> i) {}
 
 }

@@ -16,6 +16,14 @@ public class State extends StateBase<foundation.rpg.sample.language.ast.Program>
     }
 
 // Ignored:
+    public State visitKeywordOfString(foundation.rpg.sample.language.ast.Keyword<java.lang.String> symbol) {
+        return this;
+    }
+
+    public State visitKeywordOfInteger(foundation.rpg.sample.language.ast.Keyword<java.lang.Integer> symbol) {
+        return this;
+    }
+
     public State visitWhiteSpace(foundation.rpg.common.symbols.WhiteSpace symbol) {
         return this;
     }
