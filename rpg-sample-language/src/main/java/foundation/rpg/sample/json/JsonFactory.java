@@ -53,7 +53,7 @@ public class JsonFactory {
     Integer matchInt         (@Name("integer") @Match(INTEGER)  Token t)                 { return parseInt(t.toString()); }
     Double  matchDouble      (@Name("double") @Match(DOUBLE)  Token t)                   { return parseDouble(t.toString()); }
 
-    @StartSymbol(parserClassName = "JsonParser")
+    @StartSymbol(parserClassName = "JsonParser", lexerClassName = "JsonLexer")
     Object              is (String v)                                                    { return v; }
     Object              is (Integer v)                                                   { return v; }
     Object              is (Double v)                                                    { return v; }
