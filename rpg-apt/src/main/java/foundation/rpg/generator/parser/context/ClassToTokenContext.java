@@ -44,6 +44,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,17 +54,22 @@ import java.util.stream.Collectors;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
-import static javax.lang.model.element.Modifier.PUBLIC;
+import static javax.lang.model.element.Modifier.*;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 
 public class ClassToTokenContext {
 
+    private final Elements elements;
     private final RegularExpressionParser parser = new RegularExpressionParser();
     private boolean isStatic = true;
 
+    public ClassToTokenContext(Elements elements) {
+        this.elements = elements;
+    }
+
     public void generate(Context context, Filer filer) throws IOException {
         new LexerGenerator().generateLexer(
-                context.getPackageName(), context.getLexerName(), concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).map(symbol -> tokenInfoFor(symbol, context.typeMirrorOf(symbol))).collect(toList()),
+                context.getPackageName(), context.getLexerName(), concat(context.getGrammar().getTerminals().stream(), context.getGrammar().getIgnored().stream()).map(symbol -> tokenInfoFor(symbol, context)).collect(toList()),
                 new PrintWriter(filer.createSourceFile(context.getPackageName() + "." + context.getLexerName()).openWriter()), context.isFactoryStatic() ? null : context.getFactoryClass().asType()
         );
     }
@@ -72,12 +78,13 @@ public class ClassToTokenContext {
         return c.getAnnotationMirrors().stream().filter(a -> a.getAnnotationType().toString().equals(t.getName())).map(TypeUtils::getAnnotationValue).findFirst();
     }
 
-    public TokenInfo tokenInfoFor(Symbol symbol, TypeMirror type) {
+    public TokenInfo tokenInfoFor(Symbol symbol, Context context) {
+        TypeMirror type = context.typeMirrorOf(symbol);
         Element element = ((DeclaredType) type).asElement();
         String name = TypeUtils.typeName(type);
         String p = Token.class.getName().equals(name)
                 ? "builder.build()"
-                : "new " + name + "(" + inject(getInjectableConstructor(constructorsIn(element.getEnclosedElements()).stream().filter(c -> c.getModifiers().contains(PUBLIC)).collect(toList()))) + ")";
+                : "new " + name + "(" + inject(getInjectableConstructor(element, constructorsIn(element.getEnclosedElements()).stream().filter(c -> isVisible(c, context)).collect(toList()))) + ")";
         String call = "Element" + symbol + "(" + p + ")";
 
         return annotationValue(type, Match.class).map(m -> new TokenInfo(element, call, parser.parsePattern(m), 0))
@@ -88,16 +95,21 @@ public class ClassToTokenContext {
 
     }
 
+    private boolean isVisible(ExecutableElement constructor, Context context) {
+        return constructor.getModifiers().contains(PUBLIC) ||
+                !(constructor.getModifiers().contains(PRIVATE) || constructor.getModifiers().contains(PROTECTED)) && context.getPackageName().equals(elements.getPackageOf(constructor).toString());
+    }
+
     private final Map<String, String> supportedTypes = new HashMap<String, String>() {{
         put(Token.class.getCanonicalName(), "builder.build()");
         put(String.class.getCanonicalName(), "builder.build().getContent()");
     }};
 
-    private ExecutableElement getInjectableConstructor(List<ExecutableElement> constructors) {
+    private ExecutableElement getInjectableConstructor(Element element, List<ExecutableElement> constructors) {
         return constructors.stream()
                 .filter(c -> c.getParameters().stream().map(p -> p.asType().toString()).allMatch(supportedTypes::containsKey))
                 .max(comparingInt(a -> a.getParameters().size()))
-                .orElseThrow(() -> new IllegalArgumentException("No public constructor compatible with Lexer injection (having only String or Token parameters) found. Available public constructors are: " + constructors));
+                .orElseThrow(() -> new IllegalArgumentException("No public constructor compatible with Lexer injection (having only String or Token parameters) found for " + element + ". Available public constructors are: " + constructors));
     }
 
     private String inject(ExecutableElement e) {

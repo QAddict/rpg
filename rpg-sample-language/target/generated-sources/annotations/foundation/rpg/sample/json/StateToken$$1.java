@@ -20,7 +20,7 @@ public class StateToken$$1 extends StackState<foundation.rpg.parser.Token, State
     @Override
     public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
         State stack1 = this.getPrev();
-        return stack1.visitInteger(getFactory().matchInt(this.getNode())).visitEnd(symbol);
+        return stack1.visitObject(getFactory().isDouble(this.getNode())).visitEnd(symbol);
     }
 
 

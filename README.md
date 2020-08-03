@@ -112,7 +112,7 @@ import static foundation.rpg.common.AstUtils.list;
 public class AstFactory {
 
     @StartSymbol
-    Program              is (List<Statement> s, End e)                             { return new Program(s); }
+    Program              is (List<Statement> s)                                    { return new Program(s); }
     List<Statement>      is ()                                                     { return list(); }
     List<Statement>      is (List<Statement> l, Statement s)                       { return addTo(l, s); }
     Statement            is (@Additive Expression e, Dot d)                        { return new ExpressionStatement(e); }

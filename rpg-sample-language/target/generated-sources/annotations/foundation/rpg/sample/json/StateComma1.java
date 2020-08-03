@@ -24,18 +24,18 @@ public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma,
     }
 
     @Override
-    public State visitString(java.lang.String symbol) {
-        return new StateString2(getFactory(), symbol, this);
+    public State visitToken(@Named("string") foundation.rpg.parser.Token symbol) {
+        return new StateToken2(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitInteger(java.lang.Integer symbol) {
-        return new StateInteger2(getFactory(), symbol, this);
+    public State visitToken$(@Named("integer") foundation.rpg.parser.Token symbol) {
+        return new StateToken$2(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitDouble(java.lang.Double symbol) {
-        return new StateDouble2(getFactory(), symbol, this);
+    public State visitToken$$(@Named("double") foundation.rpg.parser.Token symbol) {
+        return new StateToken$$2(getFactory(), symbol, this);
     }
 
     @Override
@@ -46,26 +46,6 @@ public class StateComma1 extends StackState<foundation.rpg.common.symbols.Comma,
     @Override
     public State visitLCurl(foundation.rpg.common.symbols.LCurl symbol) {
         return new StateLCurl2(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken(@Named("string") foundation.rpg.parser.Token symbol) {
-        return new StateToken2(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken$(@Named("identifier") foundation.rpg.parser.Token symbol) {
-        return new StateToken$2(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken$$(@Named("integer") foundation.rpg.parser.Token symbol) {
-        return new StateToken$$2(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken$$$(@Named("double") foundation.rpg.parser.Token symbol) {
-        return new StateToken$$$2(getFactory(), symbol, this);
     }
 
 

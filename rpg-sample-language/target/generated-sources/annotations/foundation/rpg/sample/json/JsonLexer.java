@@ -83,12 +83,12 @@ public class JsonLexer implements Lexer<State> {
 						case '.': state = 18; break;
 						default:
 							if(Lexer.matchesGroup('d', symbol)) { state = 10; break; }
-							return new ElementToken$$(builder.build());
+							return new ElementToken$(builder.build());
 					}
 					break;
 				case 11:
 					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
-					return new ElementToken$(builder.build());
+					return new ElementToken$$$(builder.build());
 				case 12:
 					return new ElementToken(builder.build());
 				case 13:
@@ -138,7 +138,7 @@ public class JsonLexer implements Lexer<State> {
 					input.error("Unexpected character: '" + (char) symbol + "'");
 				case 19:
 					if(Lexer.matchesGroup('w', symbol)) { state = 19; break; }
-					return new ElementToken$(builder.build());
+					return new ElementToken$$$(builder.build());
 				case 20:
 					switch(symbol) {
 						case '"': state = 12; break;
@@ -159,7 +159,7 @@ public class JsonLexer implements Lexer<State> {
 					break;
 				case 22:
 					if(Lexer.matchesGroup('d', symbol)) { state = 22; break; }
-					return new ElementToken$$$(builder.build());
+					return new ElementToken$$(builder.build());
 			}
 		}
 	}

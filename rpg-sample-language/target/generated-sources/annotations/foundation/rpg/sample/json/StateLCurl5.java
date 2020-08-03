@@ -30,17 +30,17 @@ public class StateLCurl5 extends StackState<foundation.rpg.common.symbols.LCurl,
 
     @Override
     public State visitString(java.lang.String symbol) {
-        return new StateString3(getFactory(), symbol, this);
+        return new StateString1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitToken$$$(@Named("id") foundation.rpg.parser.Token symbol) {
+        return new StateToken$$$1(getFactory(), symbol, this);
     }
 
     @Override
     public State visitToken(@Named("string") foundation.rpg.parser.Token symbol) {
         return new StateToken3(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken$(@Named("identifier") foundation.rpg.parser.Token symbol) {
-        return new StateToken$3(getFactory(), symbol, this);
     }
 
 

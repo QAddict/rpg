@@ -20,13 +20,13 @@ public class StateToken$$5 extends StackState<foundation.rpg.parser.Token, State
     @Override
     public State visitRCurl(foundation.rpg.common.symbols.RCurl symbol) throws UnexpectedInputException {
         State stack1 = this.getPrev();
-        return stack1.visitInteger(getFactory().matchInt(this.getNode())).visitRCurl(symbol);
+        return stack1.visitObject(getFactory().isDouble(this.getNode())).visitRCurl(symbol);
     }
 
     @Override
     public State visitComma(foundation.rpg.common.symbols.Comma symbol) throws UnexpectedInputException {
         State stack1 = this.getPrev();
-        return stack1.visitInteger(getFactory().matchInt(this.getNode())).visitComma(symbol);
+        return stack1.visitObject(getFactory().isDouble(this.getNode())).visitComma(symbol);
     }
 
 

@@ -24,18 +24,18 @@ public class StateColon2 extends StackState<foundation.rpg.common.symbols.Colon,
     }
 
     @Override
-    public State visitString(java.lang.String symbol) {
-        return new StateString8(getFactory(), symbol, this);
+    public State visitToken(@Named("string") foundation.rpg.parser.Token symbol) {
+        return new StateToken8(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitInteger(java.lang.Integer symbol) {
-        return new StateInteger5(getFactory(), symbol, this);
+    public State visitToken$(@Named("integer") foundation.rpg.parser.Token symbol) {
+        return new StateToken$5(getFactory(), symbol, this);
     }
 
     @Override
-    public State visitDouble(java.lang.Double symbol) {
-        return new StateDouble5(getFactory(), symbol, this);
+    public State visitToken$$(@Named("double") foundation.rpg.parser.Token symbol) {
+        return new StateToken$$5(getFactory(), symbol, this);
     }
 
     @Override
@@ -46,26 +46,6 @@ public class StateColon2 extends StackState<foundation.rpg.common.symbols.Colon,
     @Override
     public State visitLCurl(foundation.rpg.common.symbols.LCurl symbol) {
         return new StateLCurl5(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken(@Named("string") foundation.rpg.parser.Token symbol) {
-        return new StateToken8(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken$(@Named("identifier") foundation.rpg.parser.Token symbol) {
-        return new StateToken$8(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken$$(@Named("integer") foundation.rpg.parser.Token symbol) {
-        return new StateToken$$5(getFactory(), symbol, this);
-    }
-
-    @Override
-    public State visitToken$$$(@Named("double") foundation.rpg.parser.Token symbol) {
-        return new StateToken$$$5(getFactory(), symbol, this);
     }
 
 

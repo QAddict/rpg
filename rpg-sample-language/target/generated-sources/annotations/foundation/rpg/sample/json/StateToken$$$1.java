@@ -18,9 +18,9 @@ public class StateToken$$$1 extends StackState<foundation.rpg.parser.Token, Stat
 
 // Reduce:
     @Override
-    public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
+    public State visitColon(foundation.rpg.common.symbols.Colon symbol) throws UnexpectedInputException {
         State stack1 = this.getPrev();
-        return stack1.visitDouble(getFactory().matchDouble(this.getNode())).visitEnd(symbol);
+        return stack1.visitString(getFactory().isId1(this.getNode())).visitColon(symbol);
     }
 
 

@@ -17,14 +17,13 @@ public class StateString1 extends StackState<java.lang.String, State> {
 
 
 // Reduce:
+// Shift:
     @Override
-    public State visitEnd(foundation.rpg.parser.End symbol) throws UnexpectedInputException {
-        State stack1 = this.getPrev();
-        return stack1.visitObject(getFactory().is(this.getNode())).visitEnd(symbol);
+    public State visitColon(foundation.rpg.common.symbols.Colon symbol) {
+        return new StateColon1(getFactory(), symbol, this);
     }
 
 
-// Shift:
 // Accept:
     @Override
     public List<Object> stack() {

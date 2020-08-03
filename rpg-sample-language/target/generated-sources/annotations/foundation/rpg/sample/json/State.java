@@ -38,10 +38,6 @@ public class State extends StateBase<java.lang.Object> {
         return error(symbol);
     }
 
-    public State visitToken$$$(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
-        return error(symbol);
-    }
-
     public State visitLBr(foundation.rpg.common.symbols.LBr symbol) throws UnexpectedInputException {
         return error(symbol);
     }
@@ -62,19 +58,11 @@ public class State extends StateBase<java.lang.Object> {
         return error(symbol);
     }
 
+    public State visitToken$$$(foundation.rpg.parser.Token symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
     public State visitColon(foundation.rpg.common.symbols.Colon symbol) throws UnexpectedInputException {
-        return error(symbol);
-    }
-
-    public State visitString(java.lang.String symbol) throws UnexpectedInputException {
-        return error(symbol);
-    }
-
-    public State visitInteger(java.lang.Integer symbol) throws UnexpectedInputException {
-        return error(symbol);
-    }
-
-    public State visitDouble(java.lang.Double symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 
@@ -83,6 +71,10 @@ public class State extends StateBase<java.lang.Object> {
     }
 
     public State visitListOfObject(java.util.List<java.lang.Object> symbol) throws UnexpectedInputException {
+        return error(symbol);
+    }
+
+    public State visitString(java.lang.String symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

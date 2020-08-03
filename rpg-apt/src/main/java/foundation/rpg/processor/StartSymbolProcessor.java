@@ -63,7 +63,7 @@ public class StartSymbolProcessor extends AbstractProcessor implements Consumer<
     public void accept(ExecutableElement element) {
         try {
             long start = currentTimeMillis();
-            ClassToTokenContext environmentGenerator = new ClassToTokenContext();
+            ClassToTokenContext environmentGenerator = new ClassToTokenContext(processingEnv.getElementUtils());
             Context context = ContextBuilder.createContext(element, processingEnv.getElementUtils().getTypeElement(End.class.getName()).asType());
             long gc = currentTimeMillis();
             System.out.println("Grammar generated from class: " + element.getEnclosingElement() + " in " + (gc - start) + "ms");

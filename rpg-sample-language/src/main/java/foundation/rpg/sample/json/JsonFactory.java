@@ -48,21 +48,18 @@ import static java.util.Collections.emptyMap;
 @SuppressWarnings("unused")
 public class JsonFactory {
 
-    String  matchQuotedString(@Name("string") @Match(ANY_QUOTED_STRING)  Token t)        { return t.toString().substring(1, t.length() - 1); }
-    String  matchIdString    (@Name("identifier") @Match(IDENTIFIER) Token t)            { return t.toString(); }
-    Integer matchInt         (@Name("integer") @Match(INTEGER)  Token t)                 { return parseInt(t.toString()); }
-    Double  matchDouble      (@Name("double") @Match(DOUBLE)  Token t)                   { return parseDouble(t.toString()); }
-
     @StartSymbol(parserClassName = "JsonParser", lexerClassName = "JsonLexer")
-    Object              is (String v)                                                    { return v; }
-    Object              is (Integer v)                                                   { return v; }
-    Object              is (Double v)                                                    { return v; }
+    Object              isString (@Name("string") @Match(ANY_QUOTED_STRING) Token t)     { return isId2(t); }
+    Object              isInteger (@Name("integer") @Match(INTEGER) Token t)             { return parseInt(t.toString()); }
+    Object              isDouble (@Name("double") @Match(DOUBLE) Token t)                { return parseDouble(t.toString()); }
     Object              is (LBr o, List<Object> l, RBr c)                                { return l; }
     Object              is (LBr o, RBr c)                                                { return emptyList(); }
     Object              is (LCurl o, Map<String, Object> m, RCurl c)                     { return m; }
     Object              is (LCurl o, RCurl c)                                            { return emptyMap(); }
     List<Object>        is (Object v)                                                    { return list(v); }
     List<Object>        is (List<Object> l, Comma c, Object v)                           { return addTo(l, v); }
+    String              isId1 (@Name("id") @Match(IDENTIFIER) Token t)                    { return t.toString(); }
+    String              isId2 (@Name("string") @Match(ANY_QUOTED_STRING) Token t)        { return t.toString().substring(1, t.length() - 1); }
     Map<String, Object> is (String k, Colon c, Object v)                                 { return map(k, v); }
     Map<String, Object> is (Map<String, Object> m, Comma s, String k, Colon c, Object v) { return putUniqueIn(m, k, v, "Duplicate key: " + k); }
 
