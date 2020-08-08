@@ -22,7 +22,7 @@ public class StateObject5 extends StackState<java.lang.Object, StackState<founda
         StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, ? extends State>> stack1 = this.getPrev();
 		StackState<java.lang.String, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitMapOfObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitRCurl(symbol);
+        return stack3.visitMapOfStringObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitRCurl(symbol);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class StateObject5 extends StackState<java.lang.Object, StackState<founda
         StackState<foundation.rpg.common.symbols.Colon, StackState<java.lang.String, ? extends State>> stack1 = this.getPrev();
 		StackState<java.lang.String, ? extends State> stack2 = stack1.getPrev();
 		State stack3 = stack2.getPrev();
-        return stack3.visitMapOfObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
+        return stack3.visitMapOfStringObject(getFactory().is(stack2.getNode(), stack1.getNode(), this.getNode())).visitComma(symbol);
     }
 
 

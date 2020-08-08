@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateMapOfObject2 extends StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.symbols.LCurl, ? extends State>> {
+public class StateMapOfStringObject3 extends StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.symbols.LCurl, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateMapOfObject2(foundation.rpg.sample.json.JsonFactory factory, java.util.Map<java.lang.String,java.lang.Object> node, StackState<foundation.rpg.common.symbols.LCurl, ? extends State> prev) {
+    public StateMapOfStringObject3(foundation.rpg.sample.json.JsonFactory factory, java.util.Map<java.lang.String,java.lang.Object> node, StackState<foundation.rpg.common.symbols.LCurl, ? extends State> prev) {
         super(factory, node, prev);
     }
 
@@ -20,7 +20,7 @@ public class StateMapOfObject2 extends StackState<java.util.Map<java.lang.String
 // Shift:
     @Override
     public State visitRCurl(foundation.rpg.common.symbols.RCurl symbol) {
-        return new StateRCurl4(getFactory(), symbol, this);
+        return new StateRCurl6(getFactory(), symbol, this);
     }
 
     @Override

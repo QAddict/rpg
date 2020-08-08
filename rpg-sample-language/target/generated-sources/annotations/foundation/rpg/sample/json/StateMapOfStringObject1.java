@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 
 // Generated visitor pattern based state for grammar parser.
-public class StateMapOfObject1 extends StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.symbols.LCurl, ? extends State>> {
+public class StateMapOfStringObject1 extends StackState<java.util.Map<java.lang.String,java.lang.Object>, StackState<foundation.rpg.common.symbols.LCurl, ? extends State>> {
 
 // NoStack:
 // Stack:
-    public StateMapOfObject1(foundation.rpg.sample.json.JsonFactory factory, java.util.Map<java.lang.String,java.lang.Object> node, StackState<foundation.rpg.common.symbols.LCurl, ? extends State> prev) {
+    public StateMapOfStringObject1(foundation.rpg.sample.json.JsonFactory factory, java.util.Map<java.lang.String,java.lang.Object> node, StackState<foundation.rpg.common.symbols.LCurl, ? extends State> prev) {
         super(factory, node, prev);
     }
 

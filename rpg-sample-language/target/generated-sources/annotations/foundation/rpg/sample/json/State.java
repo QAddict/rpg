@@ -78,7 +78,7 @@ public class State extends StateBase<java.lang.Object> {
         return error(symbol);
     }
 
-    public State visitMapOfObject(java.util.Map<java.lang.String,java.lang.Object> symbol) throws UnexpectedInputException {
+    public State visitMapOfStringObject(java.util.Map<java.lang.String,java.lang.Object> symbol) throws UnexpectedInputException {
         return error(symbol);
     }
 

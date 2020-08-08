@@ -19,8 +19,8 @@ public class StateLCurl5 extends StackState<foundation.rpg.common.symbols.LCurl,
 // Reduce:
 // Shift:
     @Override
-    public State visitMapOfObject(java.util.Map<java.lang.String,java.lang.Object> symbol) {
-        return new StateMapOfObject3(getFactory(), symbol, this);
+    public State visitMapOfStringObject(java.util.Map<java.lang.String,java.lang.Object> symbol) {
+        return new StateMapOfStringObject3(getFactory(), symbol, this);
     }
 
     @Override

@@ -43,7 +43,6 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static foundation.rpg.generator.parser.TypeUtils.*;
 import static foundation.rpg.generator.parser.context.Entry.*;
@@ -59,6 +58,7 @@ public class ContextBuilder {
     private final Set<String> usedNames = new LinkedHashSet<>();
     private final Map<Symbol, Entry> symbolToType = new HashMap<>();
     private final Map<Entry, Symbol> typeToSymbol = new HashMap<>();
+    private final SymbolNameVisitor symbolNameVisitor = new SymbolNameVisitor();
 
     public static Context createContext(ExecutableElement startRule, TypeMirror end) {
         return new ContextBuilder().build(startRule, end);
@@ -139,9 +139,8 @@ public class ContextBuilder {
     }
 
     private String symbolName(Entry entry) {
-        String full = entry.getTypeMirror().toString().replaceAll("[>()]", "");
         String s = entry.getSymbolPartAnnotations().stream().map(a -> a.getAnnotationType().asElement()).filter(TypeUtils::includeInName).map(e -> e.getSimpleName().toString()).collect(joining());
-        s += Stream.of(full.split("<")).map(p -> p.substring(p.lastIndexOf(".") + 1)).collect(joining("Of"));
+        s += symbolNameVisitor.visit(entry.getTypeMirror());
         while(!usedNames.add(s)) {
             s = s + "$";
         }
