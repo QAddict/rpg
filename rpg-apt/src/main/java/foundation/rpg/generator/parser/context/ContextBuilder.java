@@ -39,7 +39,6 @@ import foundation.rpg.util.Bfs;
 
 import javax.lang.model.AnnotatedConstruct;
 import javax.lang.model.element.*;
-import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -68,7 +67,7 @@ public class ContextBuilder {
         StartSymbol startSymbolAnnotation = startRule.getAnnotation(StartSymbol.class);
         TypeElement factoryClassElement = get(startRule, TypeElement.class);
         PackageElement packageElement = get(factoryClassElement, PackageElement.class);
-        String generatorPrefix = ((DeclaredType) startRule.getReturnType()).asElement().getSimpleName().toString();
+        String generatorPrefix = symbolNameVisitor.visit(startRule.getReturnType());
         Symbol startSymbol = returnSymbol(startRule);
         symbolToType.put(Symbol.end, typeEntry(end));
         symbolToType.put(Symbol.start, symbolToType.get(startSymbol));

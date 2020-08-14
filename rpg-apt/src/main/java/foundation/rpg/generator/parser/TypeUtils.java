@@ -78,97 +78,12 @@ public class TypeUtils {
         return concat(methodsIn(factory.getEnclosedElements()).stream(), ((TypeElement)factory).getInterfaces().stream().flatMap(i -> methods(((DeclaredType) i).asElement())).filter(m -> !m.getModifiers().contains(PRIVATE)));
     }
 
-    public static Map<String, TypeMirror> resolveParameters(ExecutableElement genericMethod, TypeMirror returnType) {
-        return new TypeResolver().visit(genericMethod.getReturnType(), returnType);
-    }
-
     public static boolean isVoid(ExecutableElement method) {
         return method.getReturnType().getKind() == VOID;
     }
 
     public static boolean notVoid(ExecutableElement method) {
         return !isVoid(method);
-    }
-
-    private static class TypeResolver implements TypeVisitor<Map<String, TypeMirror>, TypeMirror> {
-        private final Map<String, TypeMirror> map = new LinkedHashMap<>();
-
-        @Override
-        public Map<String, TypeMirror> visit(TypeMirror t, TypeMirror mirror) {
-            return t.accept(this, mirror);
-        }
-
-        @Override
-        public Map<String, TypeMirror> visit(TypeMirror t) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitPrimitive(PrimitiveType t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitNull(NullType t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitArray(ArrayType t, TypeMirror mirror) {
-            return visit(t.getComponentType(), ((ArrayType) mirror).getComponentType());
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitDeclared(DeclaredType t, TypeMirror mirror) {
-            map.put(t.toString(), mirror);
-            Iterator<? extends TypeMirror> i1 = t.getTypeArguments().iterator();
-            Iterator<? extends TypeMirror> i2 = ((DeclaredType) mirror).getTypeArguments().iterator();
-            while(i1.hasNext() && i2.hasNext()) {
-                visit(i1.next(), i2.next());
-            }
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitError(ErrorType t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitTypeVariable(TypeVariable t, TypeMirror mirror) {
-            map.put(t.toString(), mirror);
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitWildcard(WildcardType t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitExecutable(ExecutableType t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitNoType(NoType t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitUnknown(TypeMirror t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitUnion(UnionType t, TypeMirror mirror) {
-            return map;
-        }
-
-        @Override
-        public Map<String, TypeMirror> visitIntersection(IntersectionType t, TypeMirror mirror) {
-            return map;
-        }
     }
 
 }
