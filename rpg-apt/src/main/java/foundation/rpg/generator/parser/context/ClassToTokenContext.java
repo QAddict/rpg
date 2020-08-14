@@ -61,7 +61,6 @@ public class ClassToTokenContext {
 
     private final Elements elements;
     private final RegularExpressionParser parser = new RegularExpressionParser();
-    private boolean isStatic = true;
 
     public ClassToTokenContext(Elements elements) {
         this.elements = elements;
@@ -124,7 +123,4 @@ public class ClassToTokenContext {
         }).collect(Collectors.joining(", "));
     }
 
-    public boolean isStatic() {
-        return isStatic;
-    }
 }

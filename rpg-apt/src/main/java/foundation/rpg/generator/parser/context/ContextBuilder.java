@@ -80,7 +80,7 @@ public class ContextBuilder {
             Bfs.withStream(ruleMethod.getParameters().stream().filter(this::hasMetaRuleAnnotation).map(VariableElement.class::cast), (parameter, queue) -> {
                 Entry l = entry(map.resolve(parameter), parameter.getAnnotationMirrors());
                 getMetaRuleAnnotations(parameter).forEach(metaRuleAnnotation -> typesIn(metaRuleAnnotation.getEnclosedElements()).stream().flatMap(TypeUtils::methods).forEach(metaRuleMethod -> {
-                    map.populate(metaRuleMethod.getReturnType(), l);
+                    map.visit(metaRuleMethod.getReturnType(), l);
                     List<Symbol> right = metaRuleMethod.getParameters().stream().peek(p -> {
                         if (hasMetaRuleAnnotation(p))
                             queue.accept(p);

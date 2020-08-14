@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class ParameterResolver {
+public class ParameterResolver implements TypeVisitor<Void, Entry> {
 
     private final Map<String, Entry> entryMap = new HashMap<>();
 
@@ -49,87 +49,81 @@ public class ParameterResolver {
         return resolve(Entry.parameterEntry(parameter));
     }
 
-    public void populate(TypeMirror generic, Entry entry) {
-        new TypePopulator().visit(generic, entry);
+    @Override
+    public Void visit(TypeMirror t, Entry entry) {
+        entryMap.put(TypeUtils.typeName(t), entry);
+        return t.accept(this, entry);
     }
 
-    private class TypePopulator implements TypeVisitor<Void, Entry> {
-
-        @Override
-        public Void visit(TypeMirror t, Entry entry) {
-            entryMap.put(TypeUtils.typeName(t), entry);
-            return t.accept(this, entry);
-        }
-
-        @Override
-        public Void visit(TypeMirror t) {
-            return null;
-        }
-
-        @Override
-        public Void visitPrimitive(PrimitiveType t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitNull(NullType t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitArray(ArrayType t, Entry entry) {
-            visit(t.getComponentType(), Entry.typeEntry(((ArrayType) entry.getTypeMirror()).getComponentType()));
-            return null;
-        }
-
-        @Override
-        public Void visitDeclared(DeclaredType t, Entry entry) {
-            Iterator<? extends TypeMirror> i1 = t.getTypeArguments().iterator();
-            Iterator<? extends TypeMirror> i2 = ((DeclaredType) entry.getTypeMirror()).getTypeArguments().iterator();
-            while(i1.hasNext() && i2.hasNext()) {
-                visit(i1.next(), Entry.typeEntry(i2.next()));
-            }
-            return null;
-        }
-
-        @Override
-        public Void visitError(ErrorType t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitTypeVariable(TypeVariable t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitWildcard(WildcardType t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitExecutable(ExecutableType t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitNoType(NoType t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitUnknown(TypeMirror t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitUnion(UnionType t, Entry entry) {
-            return null;
-        }
-
-        @Override
-        public Void visitIntersection(IntersectionType t, Entry entry) {
-            return null;
-        }
+    @Override
+    public Void visit(TypeMirror t) {
+        return null;
     }
+
+    @Override
+    public Void visitPrimitive(PrimitiveType t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitNull(NullType t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitArray(ArrayType t, Entry entry) {
+        visit(t.getComponentType(), Entry.typeEntry(((ArrayType) entry.getTypeMirror()).getComponentType()));
+        return null;
+    }
+
+    @Override
+    public Void visitDeclared(DeclaredType t, Entry entry) {
+        Iterator<? extends TypeMirror> i1 = t.getTypeArguments().iterator();
+        Iterator<? extends TypeMirror> i2 = ((DeclaredType) entry.getTypeMirror()).getTypeArguments().iterator();
+        while(i1.hasNext() && i2.hasNext()) {
+            visit(i1.next(), Entry.typeEntry(i2.next()));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitError(ErrorType t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitTypeVariable(TypeVariable t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitWildcard(WildcardType t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitExecutable(ExecutableType t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitNoType(NoType t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitUnknown(TypeMirror t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitUnion(UnionType t, Entry entry) {
+        return null;
+    }
+
+    @Override
+    public Void visitIntersection(IntersectionType t, Entry entry) {
+        return null;
+    }
+
 }
