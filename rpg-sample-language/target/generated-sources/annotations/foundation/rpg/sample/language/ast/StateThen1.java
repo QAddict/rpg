@@ -19,6 +19,11 @@ public class StateThen1 extends StackState<foundation.rpg.common.symbols.Then, S
 // Reduce:
 // Shift:
     @Override
+    public State visitOpenStatement(foundation.rpg.sample.language.ast.Statement symbol) {
+        return new StateOpenStatement2(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) {
         return new StateStatement2(getFactory(), symbol, this);
     }

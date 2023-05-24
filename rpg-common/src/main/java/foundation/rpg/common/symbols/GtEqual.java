@@ -33,7 +33,7 @@ import foundation.rpg.Name;
 import foundation.rpg.parser.Terminal;
 import foundation.rpg.parser.Token;
 
-@Name(">")
+@Name(">=")
 public final class GtEqual extends Terminal {
     public GtEqual(Token position) {
         super(position);

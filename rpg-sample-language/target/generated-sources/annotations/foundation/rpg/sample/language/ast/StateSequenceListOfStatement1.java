@@ -26,6 +26,16 @@ public class StateSequenceListOfStatement1 extends StackState<java.util.List<fou
 
 // Shift:
     @Override
+    public State visitDanglingStatement(foundation.rpg.sample.language.ast.Statement symbol) {
+        return new StateDanglingStatement1(getFactory(), symbol, this);
+    }
+
+    @Override
+    public State visitOpenStatement(foundation.rpg.sample.language.ast.Statement symbol) {
+        return new StateOpenStatement1(getFactory(), symbol, this);
+    }
+
+    @Override
     public State visitStatement(foundation.rpg.sample.language.ast.Statement symbol) {
         return new StateStatement1(getFactory(), symbol, this);
     }
