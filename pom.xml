@@ -94,9 +94,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/c0stra/rpg.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/c0stra/rpg.git</developerConnection>
-        <url>https://github.com/c0stra/rpg</url>
+        <connection>scm:git:git://github.com:squeletec/rpg.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:squeletec/rpg.git</developerConnection>
+        <url>https://github.com/squeletec/rpg</url>
         <tag>HEAD</tag>
     </scm>
 
