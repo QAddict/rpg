@@ -33,7 +33,7 @@
 
     <groupId>foundation.fluent.api</groupId>
     <artifactId>rpg-project</artifactId>
-    <version>0.16-SNAPSHOT</version>
+    <version>0.15-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Rapid Parser Generator for Java</name>
 
