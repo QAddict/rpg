@@ -94,8 +94,8 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com:squeletec/rpg.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:squeletec/rpg.git</developerConnection>
+        <connection>scm:git:git://github.com/squeletec/rpg.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/squeletec/rpg.git</developerConnection>
         <url>https://github.com/squeletec/rpg</url>
         <tag>rpg-project-0.15</tag>
     </scm>
